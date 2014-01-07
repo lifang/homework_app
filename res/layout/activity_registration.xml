@@ -1,0 +1,83 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+   
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/bj"
+    android:orientation="vertical"
+    android:gravity="center_horizontal"
+    >
+
+    <ImageButton
+        android:id ="@+id/reg_touxiang"
+        android:layout_width="180dp"
+        android:layout_height="180dp"
+        android:background="@drawable/moren"
+        android:layout_marginTop="100dp"
+      />
+
+   
+
+    
+     <TextView
+       
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        
+        android:layout_marginTop="50dp"
+        android:text="@string/nicheng"
+        android:textSize="16sp" />
+     
+          <EditText
+        android:id="@+id/reg_nicheng"
+        android:layout_width="300dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="20dp"
+        android:gravity="center"
+        android:textSize="16sp" />
+           <TextView
+       
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        
+        android:layout_marginTop="20dp"
+        android:text="@string/xingming"
+        android:textSize="16sp" />
+     
+          <EditText
+        android:id="@+id/reg_xingming"
+        android:layout_width="300dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="20dp"
+        android:gravity="center"
+        android:textSize="16sp" />    
+                   <TextView
+       
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        
+        android:layout_marginTop="20dp"
+        android:text="@string/banjiyanzhengma"
+        android:textSize="16sp" />
+     
+          <EditText
+        android:id="@+id/reg_banjiyanzhengma"
+        android:layout_width="300dp"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:layout_marginTop="20dp"
+        android:textSize="16sp" /> 
+                  <Button
+     
+        android:layout_width="300dp"
+        android:layout_height="40dp"
+        android:gravity="center"
+        android:layout_marginTop="50dp"
+        android:background="#FFFF00"
+        android:onClick="reg_queren"
+        android:text="@string/queren"
+        android:textSize="16sp" /> 
+    
+    
+    
+</LinearLayout>
+   
