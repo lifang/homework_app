@@ -22,11 +22,15 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+
         
         <activity
             android:name=".HomeWorkIngActivity"
             android:label="@string/app_name" >
         </activity>
+
+        <activity  android:name=".RegistrationActivity" />
+
     </application>
 
 </manifest>

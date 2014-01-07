@@ -1,15 +1,8 @@
 package com.comdosoft.homework;
 
+import java.io.ByteArrayOutputStream;
 import java.io.File;
 
-import com.comdosoft.homework.tools.HomeWorkTool;
-
-
-
-import android.net.Uri;
-import android.os.Bundle;
-import android.os.Environment;
-import android.provider.MediaStore;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
@@ -17,21 +10,26 @@ import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
-
+import android.net.Uri;
+import android.os.Bundle;
+import android.os.Environment;
+import android.provider.MediaStore;
 import android.view.View;
 import android.view.Window;
 import android.widget.EditText;
 import android.widget.ImageButton;
-
 import android.widget.Toast;
+
+import com.comdosoft.homework.tools.HomeWorkTool;
 
 public class RegistrationActivity extends Activity {
 	private ImageButton faceImage;
 	private EditText reg_nicheng;//
 	private EditText reg_xingming; //
 	private EditText reg_banjiyanzhengma;
-
-	private String[] items = new String[] { "选择本地图片", "拍照" };
+	private View layout;
+	private String tp; // 头像资源
+	
 	/* 头像名称 */
 	private static final String IMAGE_FILE_NAME = "faceImage.jpg";
 
@@ -44,79 +42,58 @@ public class RegistrationActivity extends Activity {
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		requestWindowFeature(Window.FEATURE_NO_TITLE);
-		
+
 		setContentView(R.layout.activity_registration);
-		
+		layout = this.findViewById(R.id.photolayout); // 隐藏内容
 		faceImage = (ImageButton) findViewById(R.id.reg_touxiang);
 		reg_nicheng = (EditText) findViewById(R.id.reg_nicheng);
 		reg_xingming = (EditText) findViewById(R.id.reg_xingming);
 		reg_banjiyanzhengma = (EditText) findViewById(R.id.reg_banjiyanzhengma);
 		// 设置事件监听
 		faceImage.setOnClickListener(listener);
-		
+
 	}
 
 	private View.OnClickListener listener = new View.OnClickListener() {
 
 		@Override
 		public void onClick(View v) {
-			showDialog();
+			layout.setVisibility(View.VISIBLE);
 		}
 	};
 
 	/**
-	 * 显示选择对话框
+	 * 拍照上传
 	 */
-	private void showDialog() {
+	public void sel_paizhaoshangchuan(View v) {
 
-		new AlertDialog.Builder(this)
-				.setTitle("设置头像")
-				.setItems(items, new DialogInterface.OnClickListener() {
+		Intent intentFromCapture = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+		// 判断存储卡是否可以用，可用进行存储
+		if (HomeWorkTool.isHasSdcard()) {
 
-					@Override
-					public void onClick(DialogInterface dialog, int which) {
-						switch (which) {
-						case 0:
-							Intent intentFromGallery = new Intent();
-							intentFromGallery.setType("image/*"); // 设置文件类型
-							intentFromGallery
-									.setAction(Intent.ACTION_GET_CONTENT);
-							startActivityForResult(intentFromGallery,
-									IMAGE_REQUEST_CODE);
-							break;
-						case 1:
+			intentFromCapture.putExtra(MediaStore.EXTRA_OUTPUT, Uri
+					.fromFile(new File(Environment
+							.getExternalStorageDirectory(), IMAGE_FILE_NAME)));
+		}
 
-							Intent intentFromCapture = new Intent(
-									MediaStore.ACTION_IMAGE_CAPTURE);
-							// 判断存储卡是否可以用，可用进行存储
-							if (HomeWorkTool.isHasSdcard()) {
+		startActivityForResult(intentFromCapture, CAMERA_REQUEST_CODE);
 
-								intentFromCapture.putExtra(
-										MediaStore.EXTRA_OUTPUT,
-										Uri.fromFile(new File(Environment
-												.getExternalStorageDirectory(),
-												IMAGE_FILE_NAME)));
-							}
-
-							startActivityForResult(intentFromCapture,
-									CAMERA_REQUEST_CODE);
-							break;
-						}
-					}
-				})
-				.setNegativeButton("取消", new DialogInterface.OnClickListener() {
-
-					@Override
-					public void onClick(DialogInterface dialog, int which) {
-						dialog.dismiss();
-					}
-				}).show();
+	}
+	/**
+	 * 从相册选择
+	 */
+	public void sel_congxiangce(View v) {
+		
+		Intent intentFromGallery = new Intent();
+		intentFromGallery.setType("image/*"); // 设置文件类型
+		intentFromGallery.setAction(Intent.ACTION_GET_CONTENT);
+		startActivityForResult(intentFromGallery, IMAGE_REQUEST_CODE);
 
 	}
 
 	@Override
 	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-		//结果码不等于取消时候
+		// 结果码不等于取消时候
 		if (resultCode != RESULT_CANCELED) {
 
 			switch (requestCode) {
@@ -126,12 +103,12 @@ public class RegistrationActivity extends Activity {
 			case CAMERA_REQUEST_CODE:
 				if (HomeWorkTool.isHasSdcard()) {
 					File tempFile = new File(
-							Environment.getExternalStorageDirectory()
+							Environment.getExternalStorageDirectory()+"/"
 									+ IMAGE_FILE_NAME);
 					startPhotoZoom(Uri.fromFile(tempFile));
 				} else {
-					Toast.makeText(this, "未找到存储卡，无法存储照片！",
-							Toast.LENGTH_LONG).show();
+					Toast.makeText(this, "未找到存储卡，无法存储照片！", Toast.LENGTH_LONG)
+							.show();
 				}
 
 				break;
@@ -177,12 +154,29 @@ public class RegistrationActivity extends Activity {
 			Bitmap photo = extras.getParcelable("data");
 			Drawable drawable = new BitmapDrawable(photo);
 			faceImage.setImageDrawable(drawable);
+			ByteArrayOutputStream stream = new ByteArrayOutputStream();
+			 photo.compress(Bitmap.CompressFormat.JPEG, 60, stream); 
+			 byte[] b = stream.toByteArray(); // 将图片流以字符串形式存储下来
+			  
+			  tp = new String(b);
 		}
 	}
+
 	
-	
-	public String reg_queren(View v) throws Exception
-	{
+	//   确认按钮 点击时触发的方法
+	public String reg_queren(View v) throws Exception {
+		
+		String nicheng = reg_nicheng.getText().toString();
+		String xingming = reg_xingming.getText().toString();
+		String banjiyanzhengma = reg_banjiyanzhengma.getText().toString();
+		if (tp!=null) {
+			
+			//  将数据传给服务器
+			
+		}
+		 
+		
+
 		Toast.makeText(getApplicationContext(), "方法没写", 1).show();
 		return null;
 	}
