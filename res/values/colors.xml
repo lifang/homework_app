@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<resources>
+
+    <color name="white">#FFFFFF</color>
+    <color name="work_date_laytou_bg">#EDE9EA</color>
+    <color name="work_date_textcolor">#ADAAAB</color>
+    <color name="work_content_laytou_bg">#F6F2F3</color>
+    <color name="work_content_textcolor">#A5A2A3</color>
+    <color name="work_content_over_textcolor">#F08629</color>
+
+</resources>
