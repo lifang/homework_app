@@ -12,11 +12,12 @@ public final class R {
     }
     public static final class color {
         public static final int white=0x7f040000;
-        public static final int work_content_laytou_bg=0x7f040003;
-        public static final int work_content_over_textcolor=0x7f040005;
-        public static final int work_content_textcolor=0x7f040004;
+        public static final int work_content_laytou_bg=0x7f040004;
+        public static final int work_content_over_textcolor=0x7f040006;
+        public static final int work_content_textcolor=0x7f040005;
         public static final int work_date_laytou_bg=0x7f040001;
-        public static final int work_date_textcolor=0x7f040002;
+        public static final int work_date_textcolor=0x7f040003;
+        public static final int work_date_untextcolor=0x7f040002;
     }
     public static final class dimen {
         /**  Default screen margins, per the Android Design guidelines. 
@@ -31,24 +32,40 @@ public final class R {
     public static final class drawable {
         public static final int bj=0x7f020000;
         public static final int ic_launcher=0x7f020001;
-        public static final int moren=0x7f020002;
+        public static final int jt=0x7f020002;
+        public static final int jt2=0x7f020003;
+        public static final int ld=0x7f020004;
+        public static final int ld2=0x7f020005;
+        public static final int moren=0x7f020006;
+        public static final int sj=0x7f020007;
+        public static final int tx=0x7f020008;
+        public static final int tx2=0x7f020009;
     }
     public static final class id {
-        public static final int action_settings=0x7f090008;
-        public static final int newwork_img=0x7f090005;
+        public static final int action_settings=0x7f09000f;
+        public static final int newwork_text=0x7f09000c;
         public static final int reg_banjiyanzhengma=0x7f090003;
         public static final int reg_nicheng=0x7f090001;
         public static final int reg_touxiang=0x7f090000;
         public static final int reg_xingming=0x7f090002;
-        public static final int sign_img=0x7f090007;
-        public static final int work_start_date=0x7f090006;
+        public static final int sign_img=0x7f09000e;
+        public static final int title=0x7f090006;
+        public static final int work_content_img=0x7f090005;
+        public static final int work_question_case=0x7f090009;
+        public static final int work_question_end=0x7f09000b;
+        public static final int work_question_img=0x7f090008;
+        public static final int work_question_time=0x7f09000a;
+        public static final int work_start_date=0x7f09000d;
+        public static final int working_content_list=0x7f090007;
         public static final int working_date_list=0x7f090004;
     }
     public static final class layout {
         public static final int activity_main=0x7f030000;
         public static final int activity_registration=0x7f030001;
         public static final int activity_working=0x7f030002;
-        public static final int working_adapter=0x7f030003;
+        public static final int question_speak=0x7f030003;
+        public static final int work_date_adapter=0x7f030004;
+        public static final int work_question_adapter=0x7f030005;
     }
     public static final class menu {
         public static final int main=0x7f080000;
@@ -58,8 +75,10 @@ public final class R {
         public static final int app_name=0x7f060000;
         public static final int banjiyanzhengma=0x7f060005;
         public static final int hello_world=0x7f060002;
+        public static final int newwork_text=0x7f060007;
         public static final int nicheng=0x7f060003;
         public static final int queren=0x7f060006;
+        public static final int work_content_text=0x7f060008;
         public static final int xingming=0x7f060004;
     }
     public static final class style {

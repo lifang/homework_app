@@ -8,4 +8,6 @@
 <string name="xingming">姓名</string>
 <string name="banjiyanzhengma">班级验证码</string>
 <string name="queren">确认</string>
+<string name="newwork_text">new!</string>
+<string name="work_content_text">完成情况:</string>
 </resources>
