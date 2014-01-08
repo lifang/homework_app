@@ -1,0 +1,96 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent" >
+
+    <EditText
+        android:id="@+id/class_left"
+        android:layout_width="3.34dp"
+        android:layout_height="fill_parent"
+        android:background="#FF8C00"
+        android:focusable="false" />
+
+    <EditText
+        android:id="@+id/class_right"
+        android:layout_width="3.34dp"
+        android:layout_height="fill_parent"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentTop="true"
+        android:background="#F18C00"
+        android:focusable="false" />
+
+    <RelativeLayout
+        android:id="@+id/relativeLayout1"
+        android:layout_width="fill_parent"
+        android:layout_height="match_parent"
+        android:layout_marginLeft="@+id/class_left"
+        android:layout_marginRight="@+id/class_right"
+        android:background="#f6f2f3"
+        android:padding="24dp" >
+
+        <EditText
+            android:id="@+id/class_fabiao_content"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:gravity="top"
+            android:hint="@string/class_fabiao_tishi"
+            android:minLines="4" />
+
+        <Button
+            android:id="@+id/button_fabiao"
+            android:layout_width="73.9dp"
+            android:layout_height="32.5dp"
+            android:layout_alignRight="@+id/class_fabiao_content"
+            android:layout_below="@+id/class_fabiao_content"
+            android:layout_marginTop="18.53dp"
+            android:background="#92b81b"
+            android:onClick="class_fabiao"
+            android:text="@string/class_fabiao"
+            android:textColor="#FFFFFF"
+            android:textSize="24sp" />
+
+        <EditText
+            android:id="@+id/class_ed1"
+            android:layout_width="fill_parent"
+            android:layout_height="5dp"
+            android:layout_below="@+id/button_fabiao"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="32dp"
+            android:focusable="false" />
+
+        <Button
+            android:id="@+id/class_button_all"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignBottom="@+id/class_ed1"
+            android:layout_alignLeft="@+id/class_ed1"
+            android:background="@drawable/an"
+            android:onClick="class_button_all"
+            android:text="@string/class_button_all"
+            android:textColor="#FFFFFF"
+            android:textSize="24sp" />
+
+        <Button
+            android:id="@+id/class_button_myself"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignBottom="@+id/class_ed1"
+            android:layout_marginLeft="28dp"
+            android:layout_toRightOf="@+id/class_button_all"
+            android:background="@drawable/an2"
+            android:onClick="class_button_myself"
+            android:text="@string/class_button_myself"
+            android:textColor="#FFFFFF"
+            android:textSize="24sp" />
+        
+         <com.comdosoft.homework.pull.XListView
+        android:id="@+id/pull_refresh_list"
+        android:layout_below="@+id/class_button_myself"
+        android:layout_marginTop="23dp"
+          android:background="#f6f2f3"
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent" />   
+        
+
+    </RelativeLayout>
+
+</RelativeLayout>

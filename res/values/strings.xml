@@ -12,4 +12,15 @@
 <string name="fromphotostore">从相册选择</string>
 <string name="classCodeError">班级验证码错误！</string>
 <string name="reg_fanhui">返回</string>
+<string name="class_fabiao_tishi">提个问题或是分享一下你的心得吧。</string>
+<string name="class_fabiao">发表</string>
+<string name="class_button_all">全部</string>
+<string name="class_button_myself">我的</string>
+ <string name="xlistview_header_hint_normal">下拉刷新</string>
+    <string name="xlistview_header_hint_ready">松开刷新数据</string>
+    <string name="xlistview_header_hint_loading">正在加载</string>
+    <string name="xlistview_header_last_time">上次更新时间：</string>
+    <string name="xlistview_footer_hint_normal">查看更多</string>
+    <string name="xlistview_footer_hint_ready">松开载入更多</string>
+
 </resources>
