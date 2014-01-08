@@ -24,14 +24,15 @@
                 android:id="@+id/work_question_case"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:textColor="@color/work_date_textcolor"
+                android:textColor="@color/work_date_untextcolor"
                 android:textSize="17sp" />
 
             <TextView
                 android:id="@+id/work_question_time"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:textColor="@color/work_date_textcolor"
+                android:textColor="@color/work_date_untextcolor"
+                android:layout_marginLeft="10dp"
                 android:textSize="17sp" />
         </LinearLayout>
 

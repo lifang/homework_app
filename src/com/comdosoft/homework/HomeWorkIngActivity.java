@@ -5,6 +5,7 @@ import java.util.List;
 
 import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -62,6 +63,16 @@ public class HomeWorkIngActivity extends Activity implements Urlinterface {
 							int position, long id) {
 						index = position;
 						working_date_list.setAdapter(date_adapter);
+					}
+				});
+		working_content_list
+				.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+					public void onItemClick(AdapterView<?> parent, View view,
+							int position, long id) {
+						HomeWorkIngActivity.this.finish();
+						Intent intent = new Intent(HomeWorkIngActivity.this,
+								SpeakPrepareActivity.class);
+						startActivity(intent);
 					}
 				});
 	}

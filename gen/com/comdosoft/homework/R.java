@@ -11,6 +11,8 @@ public final class R {
     public static final class attr {
     }
     public static final class color {
+        public static final int question_speak_bg=0x7f040008;
+        public static final int question_title_bg1=0x7f040007;
         public static final int white=0x7f040000;
         public static final int work_content_laytou_bg=0x7f040004;
         public static final int work_content_over_textcolor=0x7f040006;
@@ -34,32 +36,41 @@ public final class R {
         public static final int ic_launcher=0x7f020001;
         public static final int jt=0x7f020002;
         public static final int jt2=0x7f020003;
-        public static final int ld=0x7f020004;
-        public static final int ld2=0x7f020005;
-        public static final int moren=0x7f020006;
-        public static final int sj=0x7f020007;
-        public static final int tx=0x7f020008;
-        public static final int tx2=0x7f020009;
+        public static final int jzlb=0x7f020004;
+        public static final int ld=0x7f020005;
+        public static final int ld2=0x7f020006;
+        public static final int left=0x7f020007;
+        public static final int moren=0x7f020008;
+        public static final int right=0x7f020009;
+        public static final int sdlb=0x7f02000a;
+        public static final int sj=0x7f02000b;
+        public static final int tx=0x7f02000c;
+        public static final int tx2=0x7f02000d;
     }
     public static final class id {
-        public static final int action_settings=0x7f090013;
+        public static final int action_settings=0x7f090018;
         public static final int congxiangce=0x7f090006;
-        public static final int newwork_text=0x7f090010;
+        public static final int newwork_text=0x7f090011;
         public static final int paizhaoshangchuan=0x7f090005;
         public static final int photolayout=0x7f090004;
         public static final int photolayout2=0x7f090007;
+        public static final int question_speak_content=0x7f090010;
+        public static final int question_speak_exit=0x7f09000c;
+        public static final int question_speak_img=0x7f09000f;
+        public static final int question_speak_next=0x7f09000e;
+        public static final int question_speak_title=0x7f09000d;
         public static final int reg_banjiyanzhengma=0x7f090003;
         public static final int reg_nicheng=0x7f090001;
         public static final int reg_touxiang=0x7f090000;
         public static final int reg_xingming=0x7f090002;
-        public static final int sign_img=0x7f090012;
+        public static final int sign_img=0x7f090013;
         public static final int title=0x7f09000a;
         public static final int work_content_img=0x7f090009;
-        public static final int work_question_case=0x7f09000d;
-        public static final int work_question_end=0x7f09000f;
-        public static final int work_question_img=0x7f09000c;
-        public static final int work_question_time=0x7f09000e;
-        public static final int work_start_date=0x7f090011;
+        public static final int work_question_case=0x7f090015;
+        public static final int work_question_end=0x7f090017;
+        public static final int work_question_img=0x7f090014;
+        public static final int work_question_time=0x7f090016;
+        public static final int work_start_date=0x7f090012;
         public static final int working_content_list=0x7f09000b;
         public static final int working_date_list=0x7f090008;
     }
@@ -84,6 +95,9 @@ public final class R {
         public static final int newwork_text=0x7f060007;
         public static final int nicheng=0x7f060003;
         public static final int queren=0x7f060006;
+        public static final int question_speak_exit=0x7f06000d;
+        public static final int question_speak_over=0x7f06000f;
+        public static final int question_speak_start=0x7f06000e;
         public static final int reg_fanhui=0x7f06000c;
         public static final int takephoto=0x7f060009;
         public static final int work_content_text=0x7f060008;

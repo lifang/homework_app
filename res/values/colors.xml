@@ -8,5 +8,6 @@
     <color name="work_content_laytou_bg">#F6F2F3</color>
     <color name="work_content_textcolor">#A5A2A3</color>
     <color name="work_content_over_textcolor">#F08629</color>
-
+	<color name="question_title_bg1">#6E6B6B</color>
+	<color name="question_speak_bg">#F4F4F4</color>
 </resources>

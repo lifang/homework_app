@@ -14,5 +14,7 @@
     <string name="fromphotostore">从相册选择</string>
     <string name="classCodeError">班级验证码错误！</string>
     <string name="reg_fanhui">返回</string>
-
+	<string name="question_speak_exit">退出</string>
+	<string name="question_speak_start">开始</string>
+	<string name="question_speak_over">完成</string>
 </resources>
