@@ -17,6 +17,8 @@
 <string name="class_fabiao">发表</string>
 <string name="class_button_all">全部</string>
 <string name="class_button_myself">我的</string>
+<string name="huifu">回复</string>
+<string name="guanzhu">关注</string>
  <string name="xlistview_header_hint_normal">下拉刷新</string>
     <string name="xlistview_header_hint_ready">松开刷新数据</string>
     <string name="xlistview_header_hint_loading">正在加载</string>
