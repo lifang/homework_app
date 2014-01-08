@@ -14,8 +14,8 @@ public class class_xinxiliu extends Activity {
 		setContentView(R.layout.class_middle);
 		
 
-//		listView = (XListView) findViewById(R.id.pull_refresh_list);
-//		listView.setPullLoadEnable(true);
+		listView = (XListView) findViewById(R.id.pull_refresh_list);
+		listView.setPullLoadEnable(true);
 //		adapter = new MessageAdapter(this, list, R.layout.message_item,height);
 //		listView.setAdapter(adapter);
 ////		listView.setPullLoadEnable(false);
