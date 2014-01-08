@@ -4,10 +4,15 @@
     <string name="app_name">homework_app</string>
     <string name="action_settings">Settings</string>
     <string name="hello_world">Hello world!</string>
-<string name="nicheng">昵称</string>
-<string name="xingming">姓名</string>
-<string name="banjiyanzhengma">班级验证码</string>
-<string name="queren">确认</string>
-<string name="newwork_text">new!</string>
-<string name="work_content_text">完成情况:</string>
+    <string name="nicheng">昵称</string>
+    <string name="xingming">姓名</string>
+    <string name="banjiyanzhengma">班级验证码</string>
+    <string name="queren">确认</string>
+    <string name="newwork_text">new!</string>
+    <string name="work_content_text">完成情况:</string>
+    <string name="takephoto">拍照上传</string>
+    <string name="fromphotostore">从相册选择</string>
+    <string name="classCodeError">班级验证码错误！</string>
+    <string name="reg_fanhui">返回</string>
+
 </resources>

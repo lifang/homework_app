@@ -13,8 +13,8 @@ public class MainActivity extends Activity {
 		setContentView(R.layout.activity_main);
 		
 		this.finish();
-		Intent intent = new Intent(MainActivity.this, HomeWorkIngActivity.class);
-		startActivity(intent);
+//		Intent intent = new Intent(MainActivity.this, HomeWorkIngActivity.class);
+//		startActivity(intent);
 	}
 
 	@Override
