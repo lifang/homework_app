@@ -2,10 +2,10 @@ package com.comdosoft.homework;
 
 import java.io.ByteArrayOutputStream;
 import java.io.File;
+import java.util.HashMap;
+import java.util.Map;
 
 import android.app.Activity;
-import android.app.AlertDialog;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.drawable.BitmapDrawable;
@@ -27,7 +27,8 @@ public class RegistrationActivity extends Activity {
 	private EditText reg_nicheng;//
 	private EditText reg_xingming; //
 	private EditText reg_banjiyanzhengma;
-	private View layout;
+	private View layout;//  选择头像界面
+	private View layout2;//  班级验证码错误  返回界面
 	private String tp; // 头像资源
 	
 	/* 头像名称 */
@@ -45,6 +46,7 @@ public class RegistrationActivity extends Activity {
 
 		setContentView(R.layout.activity_registration);
 		layout = this.findViewById(R.id.photolayout); // 隐藏内容
+		layout2 = this.findViewById(R.id.photolayout2); // 隐藏内容
 		faceImage = (ImageButton) findViewById(R.id.reg_touxiang);
 		reg_nicheng = (EditText) findViewById(R.id.reg_nicheng);
 		reg_xingming = (EditText) findViewById(R.id.reg_xingming);
@@ -161,7 +163,7 @@ public class RegistrationActivity extends Activity {
 			  tp = new String(b);
 		}
 	}
-
+	
 	
 	//   确认按钮 点击时触发的方法
 	public String reg_queren(View v) throws Exception {
@@ -169,6 +171,10 @@ public class RegistrationActivity extends Activity {
 		String nicheng = reg_nicheng.getText().toString();
 		String xingming = reg_xingming.getText().toString();
 		String banjiyanzhengma = reg_banjiyanzhengma.getText().toString();
+		
+		
+		Map<String, String> map=new HashMap<String, String>();
+		
 		if (tp!=null) {
 			
 			//  将数据传给服务器
@@ -176,8 +182,19 @@ public class RegistrationActivity extends Activity {
 		}
 		 
 		
+		
+		//   如果班级验证码错误   layout2.setVisibility(View.VISIBLE);
 
 		Toast.makeText(getApplicationContext(), "方法没写", 1).show();
+		return null;
+	}
+
+	
+//  班级验证码错误   时触发的方法
+	public String reg_fanhui(View v) throws Exception {
+		
+		
+		layout2.setVisibility(View.GONE);
 		return null;
 	}
 
