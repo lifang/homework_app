@@ -7,18 +7,27 @@ import android.app.Activity;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
+import android.view.Window;
 
 import com.comdosoft.homework.adapter.MicropostAdapter;
 import com.comdosoft.homework.pojo.Micropost;
 import com.comdosoft.homework.pull.XListView;
+import com.comdosoft.homework.pull.XListView.IXListViewListener;
 
-public class Class_xinxiliu extends Activity {
+public class Class_xinxiliu extends Activity implements IXListViewListener{
 	private XListView listView;
 	private MicropostAdapter adapter;
 	private List<Micropost> list= new ArrayList<Micropost>();
+	private Handler mHandler;
+	private int start = 0;
+	private static int refreshCnt = 0;
+	
+	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
+		requestWindowFeature(Window.FEATURE_NO_TITLE);
+
 		setContentView(R.layout.class_middle);
 		
 
@@ -63,7 +72,7 @@ public class Class_xinxiliu extends Activity {
 				
 				
 				// mAdapter.notifyDataSetChanged();
-				adapter = new MessageAdapter(Messages.this, list, R.layout.message_item,height);
+				adapter = new MicropostAdapter(Class_xinxiliu.this, list, R.layout.micropost_item);
 				listView.setAdapter(adapter);
 				onLoad();
 			}
@@ -117,9 +126,10 @@ public class Class_xinxiliu extends Activity {
 //								e.printStackTrace();
 //							}	
 //				}
-				list.add(new Message(5,  "student",11,  "张111三", "千万人铅污染却如此热情却像刺猬vr","student",22,
-						(long) 123334556));
+				Micropost m4 = new Micropost("4","12","student","张","若相守","etwevececx2423 sdfd","http://csdnimg.cn/www/images/csdnindex_logo.gif",(long) 234124);
 				
+				
+				list.add(m4);
 				adapter.notifyDataSetChanged();
 				onLoad();
 			}

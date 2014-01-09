@@ -33,6 +33,7 @@
             android:name=".SpeakPrepareActivity"
             android:label="@string/app_name" >
         </activity>
+        <activity android:name=".Class_xinxiliu"></activity>
     </application>
 
 </manifest>
