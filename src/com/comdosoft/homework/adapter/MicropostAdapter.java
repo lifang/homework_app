@@ -6,13 +6,16 @@ import android.content.Context;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.Button;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
 
+import com.comdosoft.homework.Class_xinxiliu;
 import com.comdosoft.homework.R;
 import com.comdosoft.homework.pojo.Micropost;
 
@@ -54,14 +57,14 @@ private Context context1;
 		return position;
 	}
 	@Override
-	public View getView( int position, View convertView, ViewGroup parent) {
+	public View getView( final int position, View convertView, ViewGroup parent) {
 		Log.i("111111111", Micropostlist.size()+"--"); 
 		if(convertView==null){
 			convertView = inflater.inflate(resource, null);//  生成条目界面对象
 		}
 		ImageView face = (ImageView) convertView.findViewById(R.id.user_face);
 		TextView Micropost_whoToWho = (TextView) convertView.findViewById(R.id.message_senderName);
-		Button button1 = (Button) convertView.findViewById(R.id.button1);  //  删除按钮   应该为  
+		ImageButton button1 = (ImageButton) convertView.findViewById(R.id.button1);  //  删除按钮   应该为  
 		TextView Micropost_content = (TextView) convertView.findViewById(R.id.micropost_content);
 		TextView Micropost_date = (TextView) convertView.findViewById(R.id.micropost_date);
 		Button guanzhu = (Button) convertView.findViewById(R.id.micropost_guanzhu);  //  关注  
@@ -80,8 +83,23 @@ private Context context1;
 //		  String a1=dateformat1.format(new Date(mess.getReceiver_date()));
 //
 //		 Micropost_date.setText(a1);
-		
+		 Micropost_whoToWho.setText(mess.getNickname());
+		 button1.setOnClickListener(new OnClickListener() {
+			 @Override
+			public void onClick(View v) {
+				// TODO Auto-generated method stub
+				 Micropostlist.remove(position);  
+				 BaseAdapter adapter = new MicropostAdapter(context1, Micropostlist, R.layout.micropost_item);
+               adapter.notifyDataSetChanged(); 
+			}
+		});
+		 
+		 
+
+	
 		return convertView;
 	}
+
+	
 
 }
