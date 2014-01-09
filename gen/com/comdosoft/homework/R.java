@@ -56,7 +56,7 @@ public final class R {
         public static final int action_settings=0x7f090034;
         public static final int button1=0x7f090000;
         public static final int button_fabiao=0x7f090011;
-        public static final int child_micropost=0x7f09001d;
+        public static final int child_micropost=0x7f09001b;
         public static final int class_button_all=0x7f090013;
         public static final int class_button_myself=0x7f090014;
         public static final int class_ed1=0x7f090012;
@@ -67,9 +67,9 @@ public final class R {
         public static final int message_content=0x7f090017;
         public static final int message_senderName=0x7f090018;
         public static final int micropost_content=0x7f090019;
-        public static final int micropost_date=0x7f09001a;
-        public static final int micropost_guanzhu=0x7f09001b;
-        public static final int micropost_huifu=0x7f09001c;
+        public static final int micropost_date=0x7f09001d;
+        public static final int micropost_guanzhu=0x7f09001c;
+        public static final int micropost_huifu=0x7f09001a;
         public static final int newwork_img=0x7f09002a;
         public static final int newwork_text=0x7f090023;
         public static final int paizhaoshangchuan=0x7f090006;

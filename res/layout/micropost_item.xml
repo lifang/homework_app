@@ -4,21 +4,22 @@
     android:layout_height="wrap_content"
     android:background="#f6f2f3"
     android:orientation="vertical"
-    android:padding="20dp" >
+    android:paddingTop="37dp"
+ >
 
     <ImageView
         android:id="@+id/user_face"
-        android:layout_width="80dp"
-        android:layout_height="80dp"
+        android:layout_width="82dp"
+        android:layout_height="82dp"
         android:background="@drawable/moren" />
-
+
     <RelativeLayout
         android:id="@+id/relativeLayout1"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignRight="@+id/message_content"
         android:layout_alignTop="@+id/user_face"
-        android:layout_marginLeft="16dp"
+        android:layout_marginLeft="19dp"
         android:layout_toRightOf="@+id/user_face" >
 
         <TextView
@@ -27,7 +28,9 @@
             android:layout_height="wrap_content"
             android:layout_alignRight="@+id/message_content"
             android:layout_alignTop="@+id/user_face"
-            android:text="张三  回复  李四" />
+            android:text="张三  回复  李四"
+            android:textColor="#92b81b"
+            android:textSize="24sp" />
 
         <ImageButton
             android:id="@+id/button1"
@@ -35,55 +38,71 @@
             android:layout_height="wrap_content"
             android:layout_alignParentRight="true"
             android:layout_alignParentTop="true"
-            android:onClick="delete_parents"
-            android:background="@drawable/delete" />
+            android:background="@drawable/delete"
+            android:onClick="delete_parents" />
 
         <TextView
             android:id="@+id/micropost_content"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             android:layout_alignParentLeft="true"
-            android:layout_below="@+id/button1"
-            android:text="啊啊啊啊啊啊啊啊啊啊速度等等等等等等等等等等等等等等等等等等等等等等等等等等等等等等等等等等等等" />
+            android:layout_below="@+id/message_senderName"
+            android:paddingRight="10dp"
+            android:text="啊啊啊啊啊啊啊啊啊啊速度等等等等等等等等等等等等等等等等等等等等等等等等等等等等等等等等等等等等"
+            android:textColor="#626060"
+            android:textSize="24sp" />
 
-   <TextView
-       android:id="@+id/micropost_date"
-       android:layout_width="wrap_content"
-       android:layout_height="wrap_content"
-       android:layout_alignParentLeft="true"
-       android:layout_below="@+id/micropost_content"
-       android:layout_marginTop="4dp"
-       android:text="2013/12/06 15:33" />
+        <Button
+            android:id="@+id/micropost_huifu"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:layout_below="@+id/micropost_content"
+            android:text="@string/huifu"
+            android:textColor="#92b81b"
+            android:textSize="24sp" />
 
-                        <Button
-                            android:id="@+id/micropost_guanzhu"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_below="@+id/micropost_content"
-                            android:layout_marginRight="29dp"
-                            android:layout_toLeftOf="@+id/button1"
-                            android:text="@string/guanzhu" />
+        <ListView
+            android:id="@+id/child_micropost"
+            android:layout_width="fill_parent"
+            android:layout_height="23dp"
+            android:layout_below="@+id/micropost_huifu"
+            android:layout_marginTop="23dp"
+            android:background="#f34553" >
+        </ListView>
 
-                        <Button
-                            android:id="@+id/micropost_huifu"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_alignParentRight="true"
-                            android:layout_below="@+id/micropost_content"
-                            android:text="@string/huifu" />
-   
-                        
-                        <ListView 
-                             android:id="@+id/child_micropost"
-       android:layout_below="@+id/micropost_huifu"
-        android:layout_marginTop="23dp"
-          android:background="#f34553"
+        <Button
+            android:id="@+id/micropost_guanzhu"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/micropost_content"
+            android:layout_marginRight="26dp"
+            android:layout_toLeftOf="@+id/micropost_huifu"
+            android:text="@string/guanzhu"
+            android:textColor="#92b81b"
+            android:textSize="24sp" />
+
+        <TextView
+            android:id="@+id/micropost_date"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignBaseline="@+id/micropost_guanzhu"
+            android:layout_alignBottom="@+id/micropost_guanzhu"
+            android:layout_alignParentLeft="true"
+            android:text="2013/12/06 15:33"
+            android:textColor="#c5c2c2"
+            android:textSize="24sp" />
+
+    </RelativeLayout>
+
+    <EditText
         android:layout_width="fill_parent"
-        android:layout_height="wrap_content" 
-        
-                            ></ListView>
-        </RelativeLayout>
-   
-    
+        android:layout_height="5dp"
+        android:layout_alignParentLeft="true"
+        android:layout_below="@+id/relativeLayout1"
+        android:layout_marginTop="22dp"
+       
+        android:focusable="false"
+         />
 
 </RelativeLayout>

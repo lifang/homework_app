@@ -4,24 +4,36 @@ import java.util.ArrayList;
 import java.util.List;
 
 import android.app.Activity;
+import android.content.Context;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
+import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
 import android.view.Window;
+import android.view.View.OnClickListener;
+import android.widget.BaseAdapter;
+import android.widget.Button;
+import android.widget.ImageButton;
+import android.widget.ImageView;
+import android.widget.ListView;
+import android.widget.TextView;
 import android.widget.Toast;
 
-import com.comdosoft.homework.adapter.MicropostAdapter;
+
 import com.comdosoft.homework.pojo.Micropost;
 import com.comdosoft.homework.pull.XListView;
 import com.comdosoft.homework.pull.XListView.IXListViewListener;
 
-public class Class_xinxiliu extends Activity implements IXListViewListener{
+public class Class_xinxiliu extends Activity implements IXListViewListener {
 	private XListView listView;
 	private MicropostAdapter adapter;
 	private List<Micropost> list= new ArrayList<Micropost>();
 	private Handler mHandler;
 	private int start = 0;
+	private int page=1;
 	private static int refreshCnt = 0;
 	
 	
@@ -35,21 +47,21 @@ public class Class_xinxiliu extends Activity implements IXListViewListener{
 
 		listView = (XListView) findViewById(R.id.pull_refresh_list);
 		listView.setPullLoadEnable(true);
-		
+		listView.setDivider(null);
 //		(String id, String user_id, String user_types, String name,
 //				String nickname, String content, String avatar_url, Long created_at) {
 		
-		Micropost m1 = new Micropost("1","12","student","张","若相守","etwevececx2423 sdfd","http://csdnimg.cn/www/images/csdnindex_logo.gif",(long) 234124);
-		Micropost m2 = new Micropost("2","12","student","张","若相守","etwevececx2423 sdfd","http://csdnimg.cn/www/images/csdnindex_logo.gif",(long) 234124);
-		Micropost m3 = new Micropost("3","12","student","张","若相守","etwevececx2423 sdfd","http://csdnimg.cn/www/images/csdnindex_logo.gif",(long) 234124);
+		Micropost m1 = new Micropost("1","12","student","张","若相守1","etwevececx2423 sdfd","http://csdnimg.cn/www/images/csdnindex_logo.gif",(long) 234124);
+		Micropost m2 = new Micropost("2","12","student","张","若相守2","etwevececx2423 sdfd","http://csdnimg.cn/www/images/csdnindex_logo.gif",(long) 234124);
+		Micropost m3 = new Micropost("3","12","student","张","若相守3","etwevececx2423 sdfd","http://csdnimg.cn/www/images/csdnindex_logo.gif",(long) 234124);
 		
 		
 		list.add(m1);list.add(m2);list.add(m3);
 		
-		 adapter = new MicropostAdapter(this, list, R.layout.micropost_item);
+		 adapter = new MicropostAdapter();
 		listView.setAdapter(adapter);
-//		listView.setPullLoadEnable(false);
-//		listView.setPullRefreshEnable(false);
+////		listView.setPullLoadEnable(false);
+////		listView.setPullRefreshEnable(false);
 		listView.setXListViewListener(this);
 		mHandler = new Handler();
 	}
@@ -72,6 +84,8 @@ public class Class_xinxiliu extends Activity implements IXListViewListener{
 			
 			Toast.makeText(getApplicationContext(), "方法没写", 1).show();
 		}
+		
+		
 	private void onLoad() {
 		listView.stopRefresh();
 		listView.stopLoadMore();
@@ -97,7 +111,7 @@ public class Class_xinxiliu extends Activity implements IXListViewListener{
 				list.add(m1);list.add(m2);list.add(m3);
 				
 				// mAdapter.notifyDataSetChanged();
-				adapter = new MicropostAdapter(Class_xinxiliu.this, list, R.layout.micropost_item);
+				adapter = new MicropostAdapter();
 				listView.setAdapter(adapter);
 				onLoad();
 			}
@@ -112,7 +126,7 @@ public class Class_xinxiliu extends Activity implements IXListViewListener{
 				
 
 				
-//				page = page+1;
+				page = page+1;
 //				if (page<=pages_count)
 //				{
 //					
@@ -162,4 +176,95 @@ public class Class_xinxiliu extends Activity implements IXListViewListener{
 	}
 
 
+	public class MicropostAdapter extends BaseAdapter {
+
+//		private List<Micropost> list; //   在绑定的数据 
+//		private int resource;  // 绑定的条目界面
+//		private LayoutInflater inflater;
+//	private Context context1;
+//
+//		
+//
+//		public MicropostAdapter(Context context,List<Micropost> list, int resource) {
+//			
+//			this.list = list;
+//			this.resource = resource;
+//			this.context1= context;
+//		
+//		
+//			inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+//		}
+
+		@Override
+		public int getCount() {
+			// TODO Auto-generated method stub
+			
+			return list.size();//  数据总数
+		}
+
+		@Override
+		public Object getItem(int position) {
+			// TODO Auto-generated method stub
+			return list.get(position);
+		}
+
+		@Override
+		public long getItemId(int position) {
+			// TODO Auto-generated method stub
+			return position;
+		}
+		@Override
+		public View getView( final int position, View convertView, ViewGroup parent) {
+			Log.i("111111111", list.size()+"--"); 
+		    LayoutInflater inflater = Class_xinxiliu.this.getLayoutInflater(); 
+             View view = inflater.inflate(R.layout.micropost_item, null); 
+
+			 ImageView face = (ImageView) view.findViewById(R.id.user_face);
+			TextView Micropost_whoToWho = (TextView) view.findViewById(R.id.message_senderName);
+			ImageButton button1 = (ImageButton) view.findViewById(R.id.button1);  //  删除按钮   应该为  
+			TextView Micropost_content = (TextView) view.findViewById(R.id.micropost_content);
+			TextView Micropost_date = (TextView) view.findViewById(R.id.micropost_date);
+			Button guanzhu = (Button) view.findViewById(R.id.micropost_guanzhu);  //  关注  
+			Button huifu = (Button) view.findViewById(R.id.micropost_huifu);  //  回复
+			
+			ListView listView =(ListView) view.findViewById(R.id.child_micropost); 
+//			
+//		
+//			
+//			
+			 Micropost mess = list.get(position);
+			 
+//			 Micropost_senderName.setText(mess.getSender_name());
+//			 Micropost_content.setText(mess.getSender_content());
+//			 SimpleDateFormat dateformat1=new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+//			  String a1=dateformat1.format(new Date(mess.getReceiver_date()));
+	//
+//			 Micropost_date.setText(a1);
+			 Micropost_whoToWho.setText(mess.getNickname());
+			
+			 button1.setTag( position); 
+
+			 button1.setOnClickListener(new OnClickListener() {
+				 @Override
+				public void onClick(View v) {
+					// TODO Auto-generated method stub
+					 int position = Integer.parseInt(v.getTag().toString()); 
+
+					 list.remove(position);  
+					 MicropostAdapter.this.notifyDataSetChanged(); 
+
+				}
+			});
+//			 
+//			 
+
+		
+			return view;
+		}
+
+		
+
+	}
+	
+	
 }
