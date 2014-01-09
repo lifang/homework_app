@@ -89,8 +89,8 @@ private Context context1;
 			public void onClick(View v) {
 				// TODO Auto-generated method stub
 				 Micropostlist.remove(position);  
-				 BaseAdapter adapter = new MicropostAdapter(context1, Micropostlist, R.layout.micropost_item);
-               adapter.notifyDataSetChanged(); 
+//				 BaseAdapter adapter = new MicropostAdapter(context1, Micropostlist, R.layout.micropost_item);
+//               adapter.notifyDataSetChanged(); 
 			}
 		});
 		 

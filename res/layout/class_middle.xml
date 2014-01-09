@@ -1,12 +1,12 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent" >
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent" >
 
     <EditText
         android:id="@+id/class_left"
         android:layout_width="3.34dp"
         android:layout_height="fill_parent"
-        android:background="#FF8C00"
+        android:background="#FFFFFF"
         android:focusable="false" />
 
     <EditText
@@ -15,15 +15,15 @@
         android:layout_height="fill_parent"
         android:layout_alignParentRight="true"
         android:layout_alignParentTop="true"
-        android:background="#F18C00"
+        android:background="#FFFFFF"
         android:focusable="false" />
 
     <RelativeLayout
         android:id="@+id/relativeLayout1"
         android:layout_width="fill_parent"
         android:layout_height="match_parent"
-        android:layout_marginLeft="@+id/class_left"
-        android:layout_marginRight="@+id/class_right"
+        android:layout_marginLeft="3.34dp"
+        android:layout_marginRight="3.34dp"
         android:background="#f6f2f3"
         android:padding="24dp" >
 
@@ -86,7 +86,7 @@
         android:id="@+id/pull_refresh_list"
         android:layout_below="@+id/class_button_myself"
         android:layout_marginTop="23dp"
-          android:background="#f6f2f3"
+          android:background="#f6fff3"
         android:layout_width="fill_parent"
         android:layout_height="fill_parent" />   
         

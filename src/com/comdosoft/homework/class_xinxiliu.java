@@ -7,7 +7,9 @@ import android.app.Activity;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
+import android.view.View;
 import android.view.Window;
+import android.widget.Toast;
 
 import com.comdosoft.homework.adapter.MicropostAdapter;
 import com.comdosoft.homework.pojo.Micropost;
@@ -52,6 +54,24 @@ public class Class_xinxiliu extends Activity implements IXListViewListener{
 		mHandler = new Handler();
 	}
 
+	
+	
+	//   发表
+	public void class_fabiao(View v) {
+		
+		Toast.makeText(getApplicationContext(), "方法没写", 1).show();
+	}
+
+		//   全部
+		public void class_button_all(View v) {
+			
+			Toast.makeText(getApplicationContext(), "方法没写", 1).show();
+		}
+		//   我的
+		public void class_button_myself(View v) {
+			
+			Toast.makeText(getApplicationContext(), "方法没写", 1).show();
+		}
 	private void onLoad() {
 		listView.stopRefresh();
 		listView.stopLoadMore();
@@ -69,7 +89,12 @@ public class Class_xinxiliu extends Activity implements IXListViewListener{
 				
 				//   获得第一页信息
 				
+				Micropost m1 = new Micropost("1","12","student","张","若相守","etwevececx2423 sdfd","http://csdnimg.cn/www/images/csdnindex_logo.gif",(long) 234124);
+				Micropost m2 = new Micropost("2","12","student","张","若相守","etwevececx2423 sdfd","http://csdnimg.cn/www/images/csdnindex_logo.gif",(long) 234124);
+				Micropost m3 = new Micropost("3","12","student","张","若相守","etwevececx2423 sdfd","http://csdnimg.cn/www/images/csdnindex_logo.gif",(long) 234124);
 				
+				
+				list.add(m1);list.add(m2);list.add(m3);
 				
 				// mAdapter.notifyDataSetChanged();
 				adapter = new MicropostAdapter(Class_xinxiliu.this, list, R.layout.micropost_item);
