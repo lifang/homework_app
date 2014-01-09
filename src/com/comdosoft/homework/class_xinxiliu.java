@@ -4,16 +4,14 @@ import java.util.ArrayList;
 import java.util.List;
 
 import android.app.Activity;
-import android.content.Context;
 import android.os.Bundle;
 import android.os.Handler;
-import android.os.Message;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.view.Window;
-import android.view.View.OnClickListener;
 import android.widget.BaseAdapter;
 import android.widget.Button;
 import android.widget.ImageButton;
@@ -21,7 +19,6 @@ import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
-
 
 import com.comdosoft.homework.pojo.Micropost;
 import com.comdosoft.homework.pull.XListView;
@@ -35,6 +32,7 @@ public class Class_xinxiliu extends Activity implements IXListViewListener {
 	private int start = 0;
 	private int page=1;
 	private static int refreshCnt = 0;
+	private View layout;
 	
 	
 	@Override
@@ -43,7 +41,7 @@ public class Class_xinxiliu extends Activity implements IXListViewListener {
 		requestWindowFeature(Window.FEATURE_NO_TITLE);
 
 		setContentView(R.layout.class_middle);
-		
+		layout = this.findViewById(R.id.child_micropost);  //  回复  隐藏的  内容
 
 		listView = (XListView) findViewById(R.id.pull_refresh_list);
 		listView.setPullLoadEnable(true);
@@ -68,6 +66,8 @@ public class Class_xinxiliu extends Activity implements IXListViewListener {
 
 	
 	
+	
+	
 	//   发表
 	public void class_fabiao(View v) {
 		
@@ -84,7 +84,14 @@ public class Class_xinxiliu extends Activity implements IXListViewListener {
 			
 			Toast.makeText(getApplicationContext(), "方法没写", 1).show();
 		}
-		
+	//  回复
+		int huifu = 0;
+
+		public void partents_huifu(View v)
+		{
+			
+
+		}
 		
 	private void onLoad() {
 		listView.stopRefresh();
@@ -178,22 +185,6 @@ public class Class_xinxiliu extends Activity implements IXListViewListener {
 
 	public class MicropostAdapter extends BaseAdapter {
 
-//		private List<Micropost> list; //   在绑定的数据 
-//		private int resource;  // 绑定的条目界面
-//		private LayoutInflater inflater;
-//	private Context context1;
-//
-//		
-//
-//		public MicropostAdapter(Context context,List<Micropost> list, int resource) {
-//			
-//			this.list = list;
-//			this.resource = resource;
-//			this.context1= context;
-//		
-//		
-//			inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-//		}
 
 		@Override
 		public int getCount() {
@@ -227,7 +218,7 @@ public class Class_xinxiliu extends Activity implements IXListViewListener {
 			Button guanzhu = (Button) view.findViewById(R.id.micropost_guanzhu);  //  关注  
 			Button huifu = (Button) view.findViewById(R.id.micropost_huifu);  //  回复
 			
-			ListView listView =(ListView) view.findViewById(R.id.child_micropost); 
+
 //			
 //		
 //			
@@ -255,6 +246,32 @@ public class Class_xinxiliu extends Activity implements IXListViewListener {
 
 				}
 			});
+			 
+			 final Huifu_num nn= new Huifu_num();
+			 nn.huifu_num=0;
+			 final int huifu_num = 0;
+			 huifu.setOnClickListener(new OnClickListener() {
+				 @Override
+				public void onClick(View v) {
+					// TODO Auto-generated method stub
+					
+					 Toast.makeText(getApplicationContext(), "方法没写", 1).show();
+						
+					 nn.huifu_num=nn.huifu_num+1;
+							if (nn.huifu_num == 1)
+							{
+//								layout.setVisibility(View.GONE);
+								layout.setVisibility(View.VISIBLE);
+							}
+							if (nn.huifu_num == 2)
+							{
+								layout.setVisibility(View.GONE);
+								nn.huifu_num = 0;
+							}
+
+
+				}
+			});
 //			 
 //			 
 
@@ -264,6 +281,11 @@ public class Class_xinxiliu extends Activity implements IXListViewListener {
 
 		
 
+	}
+	
+	class Huifu_num {
+		private int huifu_num;
+		
 	}
 	
 	
