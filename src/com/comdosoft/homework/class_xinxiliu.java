@@ -76,13 +76,40 @@ public class Class_xinxiliu extends Activity implements IXListViewListener {
 
 		//   全部
 		public void class_button_all(View v) {
+			list.clear();
 			
-			Toast.makeText(getApplicationContext(), "方法没写", 1).show();
+			//   获得第一页信息
+			
+			Micropost m1 = new Micropost("1","12","student","张","若相守1","etwevececx2423 sdfd","http://csdnimg.cn/www/images/csdnindex_logo.gif",(long) 234124);
+			Micropost m2 = new Micropost("2","12","student","张","若相守2","etwevececx2423 sdfd","http://csdnimg.cn/www/images/csdnindex_logo.gif",(long) 234124);
+			Micropost m3 = new Micropost("3","12","student","张","若相守3","etwevececx2423 sdfd","http://csdnimg.cn/www/images/csdnindex_logo.gif",(long) 234124);
+			
+			
+			list.add(m1);list.add(m2);list.add(m3);
+			
+			// mAdapter.notifyDataSetChanged();
+			adapter = new MicropostAdapter();
+			listView.setAdapter(adapter);
+//			Toast.makeText(getApplicationContext(), "方法没写", 1).show();
 		}
 		//   我的
 		public void class_button_myself(View v) {
 			
-			Toast.makeText(getApplicationContext(), "方法没写", 1).show();
+			list.clear();
+			
+			//   获得第一页信息
+			
+			Micropost m1 = new Micropost("1","12","student","张","若相守11","etwevececx2423 sdfd","http://csdnimg.cn/www/images/csdnindex_logo.gif",(long) 234124);
+			Micropost m2 = new Micropost("2","12","student","张","若相守22","etwevececx2423 sdfd","http://csdnimg.cn/www/images/csdnindex_logo.gif",(long) 234124);
+			Micropost m3 = new Micropost("3","12","student","张","若相守33","etwevececx2423 sdfd","http://csdnimg.cn/www/images/csdnindex_logo.gif",(long) 234124);
+			
+			
+			list.add(m1);list.add(m2);list.add(m3);
+			
+			// mAdapter.notifyDataSetChanged();
+			adapter = new MicropostAdapter();
+			listView.setAdapter(adapter);
+//			Toast.makeText(getApplicationContext(), "方法没写", 1).show();
 		}
 	//  回复
 		int huifu = 0;
@@ -110,9 +137,9 @@ public class Class_xinxiliu extends Activity implements IXListViewListener {
 				
 				//   获得第一页信息
 				
-				Micropost m1 = new Micropost("1","12","student","张","若相守","etwevececx2423 sdfd","http://csdnimg.cn/www/images/csdnindex_logo.gif",(long) 234124);
-				Micropost m2 = new Micropost("2","12","student","张","若相守","etwevececx2423 sdfd","http://csdnimg.cn/www/images/csdnindex_logo.gif",(long) 234124);
-				Micropost m3 = new Micropost("3","12","student","张","若相守","etwevececx2423 sdfd","http://csdnimg.cn/www/images/csdnindex_logo.gif",(long) 234124);
+				Micropost m1 = new Micropost("1","12","student","张","若相守1","etwevececx2423 sdfd","http://csdnimg.cn/www/images/csdnindex_logo.gif",(long) 234124);
+				Micropost m2 = new Micropost("2","12","student","张","若相守2","etwevececx2423 sdfd","http://csdnimg.cn/www/images/csdnindex_logo.gif",(long) 234124);
+				Micropost m3 = new Micropost("3","12","student","张","若相守3","etwevececx2423 sdfd","http://csdnimg.cn/www/images/csdnindex_logo.gif",(long) 234124);
 				
 				
 				list.add(m1);list.add(m2);list.add(m3);
