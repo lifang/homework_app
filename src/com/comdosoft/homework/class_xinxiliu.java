@@ -20,6 +20,7 @@ import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.comdosoft.homework.adapter.Adapter;
 import com.comdosoft.homework.pojo.Micropost;
 import com.comdosoft.homework.pull.XListView;
 import com.comdosoft.homework.pull.XListView.IXListViewListener;
@@ -41,7 +42,7 @@ public class Class_xinxiliu extends Activity implements IXListViewListener {
 		requestWindowFeature(Window.FEATURE_NO_TITLE);
 
 		setContentView(R.layout.class_middle);
-		layout = this.findViewById(R.id.child_micropost);  //  回复  隐藏的  内容
+//		layout = this.findViewById(R.id.child_micropost);  //  回复  隐藏的  内容
 
 		listView = (XListView) findViewById(R.id.pull_refresh_list);
 		listView.setPullLoadEnable(true);
@@ -212,7 +213,9 @@ public class Class_xinxiliu extends Activity implements IXListViewListener {
 
 	public class MicropostAdapter extends BaseAdapter {
 
-
+int huifu_num=0;
+int position_huifu_num=-1;
+int number=0;
 		@Override
 		public int getCount() {
 			// TODO Auto-generated method stub
@@ -235,7 +238,7 @@ public class Class_xinxiliu extends Activity implements IXListViewListener {
 		public View getView( final int position, View convertView, ViewGroup parent) {
 			Log.i("111111111", list.size()+"--"); 
 		    LayoutInflater inflater = Class_xinxiliu.this.getLayoutInflater(); 
-             View view = inflater.inflate(R.layout.micropost_item, null); 
+             final View view = inflater.inflate(R.layout.micropost_item, null); 
 
 			 ImageView face = (ImageView) view.findViewById(R.id.user_face);
 			TextView Micropost_whoToWho = (TextView) view.findViewById(R.id.message_senderName);
@@ -244,7 +247,7 @@ public class Class_xinxiliu extends Activity implements IXListViewListener {
 			TextView Micropost_date = (TextView) view.findViewById(R.id.micropost_date);
 			Button guanzhu = (Button) view.findViewById(R.id.micropost_guanzhu);  //  关注  
 			Button huifu = (Button) view.findViewById(R.id.micropost_huifu);  //  回复
-			
+			layout = view.findViewById(R.id.child_micropost);  //  回复  隐藏的  内容
 
 //			
 //		
@@ -274,36 +277,55 @@ public class Class_xinxiliu extends Activity implements IXListViewListener {
 				}
 			});
 			 
-			 final Huifu_num nn= new Huifu_num();
-			 nn.huifu_num=0;
-			 final int huifu_num = 0;
+			 
+			
 			 huifu.setOnClickListener(new OnClickListener() {
+				
 				 @Override
 				public void onClick(View v) {
 					// TODO Auto-generated method stub
+					 huifu_num=huifu_num+1;
+					 number=number+1;
+					 View layout1 = view.findViewById(R.id.child_micropost);  //  回复  隐藏的  内容
+//						
+					if (number==1) {// 第一次点击时   确保点击  哪一个       都会显示
+						layout1.setVisibility(View.VISIBLE);
+						ListView listView2 = (ListView) layout1.findViewById(R.id.aa);
+						Adapter ad = new Adapter(layout1.getContext(), list, R.layout.micropost_item);  
+						listView2.setAdapter(ad);
 					
-					 Toast.makeText(getApplicationContext(), "方法没写", 1).show();
+					} 
+					 
+					if (position_huifu_num==position&&number!=1) {// 第一次点击以后的点击   确保连续点击  哪一个   2次时    都会显示正确的效果
 						
-					 nn.huifu_num=nn.huifu_num+1;
-							if (nn.huifu_num == 1)
+					
+							if (huifu_num == 1)
 							{
-//								layout.setVisibility(View.GONE);
-								layout.setVisibility(View.VISIBLE);
+								layout1.setVisibility(View.VISIBLE);
 							}
-							if (nn.huifu_num == 2)
+							if (huifu_num == 2)
 							{
-								layout.setVisibility(View.GONE);
-								nn.huifu_num = 0;
+								layout1.setVisibility(View.GONE);
+								huifu_num = 0;
 							}
+//							 Toast.makeText(getApplicationContext(), huifu_num+"", 0).show();
+							
+					}
+					if (position_huifu_num!=position&&number!=1) {// 第一次点击以后的点击   确保连续点击不同的两个按钮时    都会显示正确的效果
+						
+					
+						layout1.setVisibility(View.VISIBLE);
 
-
+							huifu_num = 1;
+							
+//						 Toast.makeText(getApplicationContext(), huifu_num+"", 0).show();
+						
+				}
+					
+					position_huifu_num=position;
 				}
 			});
-//			 
-//			 
-
-		
-			return view;
+	return view;
 		}
 
 		
