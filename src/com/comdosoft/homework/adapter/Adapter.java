@@ -70,11 +70,7 @@ private Context context1;
 		Button guanzhu = (Button) convertView.findViewById(R.id.micropost_guanzhu);  //  关注  
 		Button huifu = (Button) convertView.findViewById(R.id.micropost_huifu);  //  回复
 		
-//		ListView listView =(ListView) convertView.findViewById(R.id.child_micropost); 
-		
 	
-		
-		
 		 Micropost mess = Micropostlist.get(position);
 		 
 //		 Micropost_senderName.setText(mess.getSender_name());
