@@ -19,7 +19,7 @@ import com.comdosoft.homework.Class_xinxiliu;
 import com.comdosoft.homework.R;
 import com.comdosoft.homework.pojo.Micropost;
 
-public class MicropostAdapter extends BaseAdapter {
+public class Adapter extends BaseAdapter {
 
 	private List<Micropost> Micropostlist; //   在绑定的数据 
 	private int resource;  // 绑定的条目界面
@@ -28,7 +28,7 @@ private Context context1;
 
 	
 
-	public MicropostAdapter(Context context,List<Micropost> Micropostlist, int resource) {
+	public Adapter(Context context,List<Micropost> Micropostlist, int resource) {
 		
 		this.Micropostlist = Micropostlist;
 		this.resource = resource;
@@ -70,7 +70,7 @@ private Context context1;
 		Button guanzhu = (Button) convertView.findViewById(R.id.micropost_guanzhu);  //  关注  
 		Button huifu = (Button) convertView.findViewById(R.id.micropost_huifu);  //  回复
 		
-		ListView listView =(ListView) convertView.findViewById(R.id.child_micropost); 
+//		ListView listView =(ListView) convertView.findViewById(R.id.child_micropost); 
 		
 	
 		
@@ -89,7 +89,7 @@ private Context context1;
 			public void onClick(View v) {
 				// TODO Auto-generated method stub
 				 Micropostlist.remove(position);  
-				 BaseAdapter adapter = new MicropostAdapter(context1, Micropostlist, R.layout.micropost_item);
+				 BaseAdapter adapter = new Adapter(context1, Micropostlist, R.layout.micropost_item);
                adapter.notifyDataSetChanged(); 
 			}
 		});
