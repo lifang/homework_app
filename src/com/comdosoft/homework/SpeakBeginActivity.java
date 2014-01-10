@@ -2,6 +2,7 @@ package com.comdosoft.homework;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.List;
 
 import android.app.Activity;
 import android.app.AlertDialog.Builder;
@@ -12,21 +13,24 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
 import android.speech.RecognizerIntent;
+import android.util.Log;
 import android.view.View;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.comdosoft.homework.tools.HomeWorkTool;
 import com.comdosoft.homework.tools.PredicateLayout;
+import com.comdosoft.homework.tools.Soundex_Levenshtein;
 import com.comdosoft.homework.tools.Urlinterface;
 
 public class SpeakBeginActivity extends Activity implements Urlinterface {
-	public String content = "This is an apple.";
+	public String content = "This is, an apple.";// 正确答案
 	private TextView question_speak_title;
 	private MediaPlayer player;
 	private PredicateLayout PredicateLayout;
 	private static final int VOICE_RECOGNITION_REQUEST_CODE = 1234;// 语音code
-	public String[] str;
+	public List<String> str_list;
+
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.question_speak);
@@ -45,21 +49,8 @@ public class SpeakBeginActivity extends Activity implements Urlinterface {
 
 	// 设置textview
 	public void SetTextView() {
-		str = content.split(" ");
+		String[] str = content.split(" ");
 		for (int i = 0; i < str.length; i++) {
-			// LinearLayout layout = new LinearLayout(SpeakBeginActivity.this);
-			// TextView tv = new TextView(SpeakBeginActivity.this);
-			// tv.setText(str[i].toString());
-			// tv.setTextColor(getResources().getColor(R.color.question_title_bg1));
-			// tv.setTextSize(30);
-			// tv.setTypeface(Typeface.defaultFromStyle(Typeface.BOLD));
-			// layout.addView(tv);
-			// View view = new View(SpeakBeginActivity.this);
-			// PredicateLayout.LayoutParams predicatelp = new LayoutParams(
-			// LayoutParams.MATCH_PARENT, 1);
-			// view.setLayoutParams(predicatelp);
-			// view.setBackgroundColor(getResources().getColor(
-			// R.color.work_date_untextcolor));
 			View view1 = View.inflate(this,
 					R.layout.question_speak_linearlayout, null);
 			LinearLayout layout = (LinearLayout) view1
@@ -160,16 +151,26 @@ public class SpeakBeginActivity extends Activity implements Urlinterface {
 			ArrayList<String> results = data
 					.getStringArrayListExtra(RecognizerIntent.EXTRA_RESULTS);
 
-			String speak = results.get(0); 
-			String[] speak_arr = speak.split(" ");
-//			Log.i(tag, rs);
+			String speak = results.get(0);//用户语音返回的字符串
+			str_list = new ArrayList<String>();
+			String s = content.replaceAll("(?i)[^a-zA-Z0-9\u4E00-\u9FA5]", " ");//去除标点符号
+			String[] item = s.split(" ");
+		 	for (int i = 0; i < item.length; i++) {
+		 		str_list.add(item[i]);
+			}
+			List<int[]> code_list = Soundex_Levenshtein.Engine(speak, str_list);
+			if (code_list.size()>0) {
+				for (int i = 0; i < code_list.size(); i++) {
+					Log.i(tag, str_list.get(code_list.get(i)[0])+"->相似度:"+code_list.get(i)[1]);
+				}
+			}
 		}
-//		else {
-//			rs = "null";
-//		}
+		// else {
+		// rs = "null";
+		// }
 		super.onActivityResult(requestCode, resultCode, data);
 	}
-	
+
 	protected void onStart() {
 		if (player == null)
 			player = new MediaPlayer();
