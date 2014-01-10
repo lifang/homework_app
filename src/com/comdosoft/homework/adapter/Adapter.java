@@ -10,12 +10,9 @@ import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.Button;
-import android.widget.ImageButton;
 import android.widget.ImageView;
-import android.widget.ListView;
 import android.widget.TextView;
 
-import com.comdosoft.homework.Class_xinxiliu;
 import com.comdosoft.homework.R;
 import com.comdosoft.homework.pojo.Micropost;
 
@@ -64,9 +61,9 @@ private Context context1;
 		}
 		ImageView face = (ImageView) convertView.findViewById(R.id.user_face);
 		TextView Micropost_whoToWho = (TextView) convertView.findViewById(R.id.message_senderName);
-		ImageButton button1 = (ImageButton) convertView.findViewById(R.id.button1);  //  删除按钮   应该为  
+		
 		TextView Micropost_content = (TextView) convertView.findViewById(R.id.micropost_content);
-		TextView Micropost_date = (TextView) convertView.findViewById(R.id.micropost_date);
+		
 		Button guanzhu = (Button) convertView.findViewById(R.id.micropost_guanzhu);  //  关注  
 		Button huifu = (Button) convertView.findViewById(R.id.micropost_huifu);  //  回复
 		
@@ -80,15 +77,15 @@ private Context context1;
 //
 //		 Micropost_date.setText(a1);
 		 Micropost_whoToWho.setText(mess.getNickname());
-		 button1.setOnClickListener(new OnClickListener() {
-			 @Override
-			public void onClick(View v) {
-				// TODO Auto-generated method stub
-				 Micropostlist.remove(position);  
-				 BaseAdapter adapter = new Adapter(context1, Micropostlist, R.layout.micropost_item);
-               adapter.notifyDataSetChanged(); 
-			}
-		});
+//		 button1.setOnClickListener(new OnClickListener() {
+//			 @Override
+//			public void onClick(View v) {
+//				// TODO Auto-generated method stub
+//				 Micropostlist.remove(position);  
+//				 BaseAdapter adapter = new Adapter(context1, Micropostlist, R.layout.micropost_item);
+//               adapter.notifyDataSetChanged(); 
+//			}
+//		});
 		 
 		 
 
