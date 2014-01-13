@@ -24,10 +24,11 @@ import com.comdosoft.homework.tools.Soundex_Levenshtein;
 import com.comdosoft.homework.tools.Urlinterface;
 
 public class SpeakBeginActivity extends Activity implements Urlinterface {
-	public String content = "This is, an apple.";// 正确答案
+	public String content = "This is an apple.";// 正确答案
 	private TextView question_speak_title;
 	private MediaPlayer player;
 	private PredicateLayout PredicateLayout;
+	public List<View> view_list;
 	private static final int VOICE_RECOGNITION_REQUEST_CODE = 1234;// 语音code
 	public List<String> str_list;
 
@@ -49,6 +50,7 @@ public class SpeakBeginActivity extends Activity implements Urlinterface {
 
 	// 设置textview
 	public void SetTextView() {
+		view_list = new ArrayList<View>();
 		String[] str = content.split(" ");
 		for (int i = 0; i < str.length; i++) {
 			View view1 = View.inflate(this,
@@ -60,6 +62,7 @@ public class SpeakBeginActivity extends Activity implements Urlinterface {
 			text.setText(str[i].toString());
 			color.setBackgroundColor(getResources().getColor(
 					R.color.work_date_untextcolor));
+			view_list.add(color);
 			PredicateLayout.addView(layout);
 		}
 	}
@@ -162,6 +165,16 @@ public class SpeakBeginActivity extends Activity implements Urlinterface {
 			if (code_list.size()>0) {
 				for (int i = 0; i < code_list.size(); i++) {
 					Log.i(tag, str_list.get(code_list.get(i)[0])+"->相似度:"+code_list.get(i)[1]);
+					if (code_list.get(i)[1]>=8) {
+						view_list.get(code_list.get(i)[0]).setBackgroundColor(getResources().getColor(
+					R.color.question_speak_ok));
+					}else if (code_list.get(i)[1]>=4) {
+						view_list.get(code_list.get(i)[0]).setBackgroundColor(getResources().getColor(
+								R.color.work_content_over_textcolor));
+					}else{
+						view_list.get(code_list.get(i)[0]).setBackgroundColor(getResources().getColor(
+								R.color.work_date_untextcolor));
+					}
 				}
 			}
 		}

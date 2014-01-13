@@ -12,6 +12,7 @@ public final class R {
     }
     public static final class color {
         public static final int question_speak_bg=0x7f040008;
+        public static final int question_speak_ok=0x7f040009;
         public static final int question_title_bg1=0x7f040007;
         public static final int white=0x7f040000;
         public static final int work_content_laytou_bg=0x7f040004;
