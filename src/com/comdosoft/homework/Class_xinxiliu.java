@@ -1,4 +1,4 @@
-package com.comdosoft.homework;
+﻿package com.comdosoft.homework;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -238,6 +238,7 @@ public class Class_xinxiliu extends Activity implements IXListViewListener,
 			public void run() {
 				start = ++refreshCnt;
 				list.clear();
+<<<<<<< HEAD
 
 				// 获得第一页信息
 
@@ -258,6 +259,18 @@ public class Class_xinxiliu extends Activity implements IXListViewListener,
 				list.add(m2);
 				list.add(m3);
 
+=======
+				
+				//   获得第一页信息
+				
+				Micropost m1 = new Micropost("1","12","student","张","若相守1","etwevececx2423as sdfd","http://csdnimg.cn/www/images/csdnindex_logo.gif",(long) 234124);
+				Micropost m2 = new Micropost("2","12","student","张","若相守2","etwevececx2423 sdfd","http://csdnimg.cn/www/images/csdnindex_logo.gif",(long) 234124);
+				Micropost m3 = new Micropost("3","12","student","张","若相守3","etwevececx2423 sdfd","http://csdnimg.cn/www/images/csdnindex_logo.gif",(long) 234124);
+				
+				
+				list.add(m1);list.add(m2);list.add(m3);
+				
+>>>>>>> 7f2e6bd8da4f974e533f4ed51f43a0b3fbf8aced
 				// mAdapter.notifyDataSetChanged();
 				adapter = new MicropostAdapter();
 				listView_mes.setAdapter(adapter);
