@@ -44,6 +44,13 @@
         </activity>
         <activity android:name=".Class_xinxiliu" >
         </activity>
+         <activity android:name="com.comdosoft.homework.Main_classes" >
+             <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
     </application>
 
 </manifest>

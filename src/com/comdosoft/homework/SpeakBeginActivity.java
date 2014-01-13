@@ -37,9 +37,10 @@ public class SpeakBeginActivity extends Activity implements Urlinterface {
 	public List<View> view_list;
 	private static final int VOICE_RECOGNITION_REQUEST_CODE = 1234;// 语音code
 	public List<String> str_list;
-	public int number;//播放次数
+	public int number;// 播放次数
 	private TextView question_speak_tishi;
 	private Map<Integer, String> ok_speak;
+
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.question_speak_begin);
@@ -56,7 +57,7 @@ public class SpeakBeginActivity extends Activity implements Urlinterface {
 		question_speak_tishi = (TextView) findViewById(R.id.question_speak_tishi);
 		question_speak_tishi.setVisibility(View.GONE);
 		player = new MediaPlayer();
-		ok_speak = new HashMap<Integer, String>();//用于记录正确的词
+		ok_speak = new HashMap<Integer, String>();// 用于记录正确的词
 	}
 
 	// 设置textview
@@ -170,14 +171,15 @@ public class SpeakBeginActivity extends Activity implements Urlinterface {
 			for (int i = 0; i < item.length; i++) {
 				str_list.add(item[i]);
 			}
-			//question_speak_tishi
+			// question_speak_tishi
 			List<int[]> code_list = Soundex_Levenshtein.Engine(speak, str_list);
 			if (code_list.size() > 0) {
 				for (int i = 0; i < code_list.size(); i++) {
 					Log.i(tag, str_list.get(code_list.get(i)[0]) + "->相似度:"
 							+ code_list.get(i)[1]);
 					if (code_list.get(i)[1] >= 8) {
-						ok_speak.put(code_list.get(i)[0], str_list.get(code_list.get(i)[0]));
+						ok_speak.put(code_list.get(i)[0],
+								str_list.get(code_list.get(i)[0]));
 						view_list.get(code_list.get(i)[0]).setBackgroundColor(
 								getResources().getColor(R.color.lvse));
 					} else if (code_list.get(i)[1] >= 4) {
@@ -194,10 +196,10 @@ public class SpeakBeginActivity extends Activity implements Urlinterface {
 							getResources().getColor(R.color.shenhui));
 				}
 			}
-			Log.i(tag, ok_speak.size()+"-"+str_list.size());
-			if (ok_speak.size()!=str_list.size()) {
+			Log.i(tag, ok_speak.size() + "-" + str_list.size());
+			if (ok_speak.size() != str_list.size()) {
 				question_speak_tishi.setVisibility(View.VISIBLE);
-			}else{
+			} else {
 				question_speak_tishi.setVisibility(View.GONE);
 			}
 		}
