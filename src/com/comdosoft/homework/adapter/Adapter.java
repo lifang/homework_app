@@ -15,7 +15,6 @@ import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
 
-import com.comdosoft.homework.Class_xinxiliu;
 import com.comdosoft.homework.R;
 import com.comdosoft.homework.pojo.Micropost;
 

@@ -26,7 +26,7 @@ public class MainActivity extends Activity {
 	}
 	public void xinxiliu(View v) {
 		
-		Intent intent = new Intent(MainActivity.this, Class_xinxiliu.class);
+		Intent intent = new Intent(MainActivity.this, class_xinxiliu.class);
 		startActivity(intent);
 		
 	}

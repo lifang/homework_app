@@ -25,7 +25,7 @@ import com.comdosoft.homework.pojo.Micropost;
 import com.comdosoft.homework.pull.XListView;
 import com.comdosoft.homework.pull.XListView.IXListViewListener;
 
-public class Class_xinxiliu extends Activity implements IXListViewListener {
+public class class_xinxiliu extends Activity implements IXListViewListener {
 	private XListView listView;
 	private MicropostAdapter adapter;
 	private List<Micropost> list= new ArrayList<Micropost>();
@@ -36,7 +36,6 @@ public class Class_xinxiliu extends Activity implements IXListViewListener {
 	private View layout;
 	
 	
-	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		requestWindowFeature(Window.FEATURE_NO_TITLE);
@@ -237,7 +236,7 @@ int number=0;
 		@Override
 		public View getView( final int position, View convertView, ViewGroup parent) {
 			Log.i("111111111", list.size()+"--"); 
-		    LayoutInflater inflater = Class_xinxiliu.this.getLayoutInflater(); 
+		    LayoutInflater inflater = class_xinxiliu.this.getLayoutInflater(); 
              final View view = inflater.inflate(R.layout.micropost_item, null); 
 
 			 ImageView face = (ImageView) view.findViewById(R.id.user_face);
