@@ -30,13 +30,16 @@ import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.Environment;
 import android.util.Log;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.ListAdapter;
+import android.widget.ListView;
 
 public class HomeWorkTool implements Urlinterface {
 
 	private static int connectTimeOut = 5000;
 	private static int readTimeOut = 10000;
 	private static String requestEncoding = "UTF-8";
-
 
 	// asses拷贝文件到sd卡
 	public static boolean copyApkFromAssets(Context context, String fileName,
@@ -89,7 +92,7 @@ public class HomeWorkTool implements Urlinterface {
 	// 删除sharedprefs
 	static public void del_Sharedprefs(String filename, String package_name) {
 		File file = new File("/data/data/" + package_name.toString()
-				+ "/shared_prefs",filename + ".xml");
+				+ "/shared_prefs", filename + ".xml");
 		if (file.exists()) {
 			file.delete();
 		}
@@ -386,5 +389,33 @@ public class HomeWorkTool implements Urlinterface {
 			}
 		}
 		return true;
+	}
+
+	// 给 listview 设置高度
+	public static void setListViewHeightBasedOnChildren(ListView listView) {
+		ListAdapter listAdapter = listView.getAdapter();
+		if (listAdapter == null) {
+			// pre-condition
+			return;
+		}
+
+		int totalHeight = 0;
+		for (int i = 0; i < listAdapter.getCount(); i++) {
+			View listItem = listAdapter.getView(i, null, listView);
+			listItem.measure(0, 0); // 计算子项View 的宽高
+
+			totalHeight += listItem.getMeasuredHeight() + 52; // 统计所有子项的总高度.
+																// 网上代码没有 加52
+
+		}
+
+		ViewGroup.LayoutParams params = listView.getLayoutParams();
+		// params.height = totalHeight + (listView.getDividerHeight() *
+		// (listAdapter.getCount() - 1))+157;
+		params.height = totalHeight
+				+ (listView.getDividerHeight() * (listAdapter.getCount()));
+		// listView.getDividerHeight()获取子项间分隔符占用的高度
+
+		listView.setLayoutParams(params);
 	}
 }

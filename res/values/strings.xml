@@ -18,6 +18,7 @@
     <string name="class_button_myself">我的</string>
     <string name="huifu">回复</string>
     <string name="guanzhu">关注</string>
+    <string name="delete">删除</string>
     <string name="xlistview_header_hint_normal">下拉刷新</string>
     <string name="xlistview_header_hint_ready">松开刷新数据</string>
     <string name="xlistview_header_hint_loading">正在加载</string>
@@ -27,6 +28,7 @@
     <string name="question_speak_exit">退出</string>
     <string name="question_speak_start">开始</string>
     <string name="question_speak_over">完成</string>
+    <string name="question_speak_next">继续</string>
     <string name="newwork_text">new!</string>
     <string name="work_content_text">完成情况:</string>
 	<string name="main_class_oneTv1">磊磊</string>

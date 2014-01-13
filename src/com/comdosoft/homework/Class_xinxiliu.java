@@ -1,4 +1,4 @@
-package com.comdosoft.homework;
+﻿package com.comdosoft.homework;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -24,6 +24,7 @@ import com.comdosoft.homework.adapter.Adapter;
 import com.comdosoft.homework.pojo.Micropost;
 import com.comdosoft.homework.pull.XListView;
 import com.comdosoft.homework.pull.XListView.IXListViewListener;
+import com.comdosoft.homework.tools.HomeWorkTool;
 
 public class class_xinxiliu extends Activity implements IXListViewListener {
 	private XListView listView;
@@ -34,7 +35,7 @@ public class class_xinxiliu extends Activity implements IXListViewListener {
 	private int page=1;
 	private static int refreshCnt = 0;
 	private View layout;
-	
+	private ListView listView2;
 	
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -137,7 +138,7 @@ public class class_xinxiliu extends Activity implements IXListViewListener {
 				
 				//   获得第一页信息
 				
-				Micropost m1 = new Micropost("1","12","student","张","若相守1","etwevececx2423 sdfd","http://csdnimg.cn/www/images/csdnindex_logo.gif",(long) 234124);
+				Micropost m1 = new Micropost("1","12","student","张","若相守1","etwevececx2423as sdfd","http://csdnimg.cn/www/images/csdnindex_logo.gif",(long) 234124);
 				Micropost m2 = new Micropost("2","12","student","张","若相守2","etwevececx2423 sdfd","http://csdnimg.cn/www/images/csdnindex_logo.gif",(long) 234124);
 				Micropost m3 = new Micropost("3","12","student","张","若相守3","etwevececx2423 sdfd","http://csdnimg.cn/www/images/csdnindex_logo.gif",(long) 234124);
 				
@@ -239,11 +240,11 @@ int number=0;
 		    LayoutInflater inflater = class_xinxiliu.this.getLayoutInflater(); 
              final View view = inflater.inflate(R.layout.micropost_item, null); 
 
-			 ImageView face = (ImageView) view.findViewById(R.id.user_face);
-			TextView Micropost_whoToWho = (TextView) view.findViewById(R.id.message_senderName);
-			ImageButton button1 = (ImageButton) view.findViewById(R.id.button1);  //  删除按钮   应该为  
-			TextView Micropost_content = (TextView) view.findViewById(R.id.micropost_content);
-			TextView Micropost_date = (TextView) view.findViewById(R.id.micropost_date);
+			 ImageView face = (ImageView) view.findViewById(R.id.user_face); //  头像
+			TextView Micropost_whoToWho = (TextView) view.findViewById(R.id.message_senderName);  // 谁谁   回复  水水
+			ImageButton button1 = (ImageButton) view.findViewById(R.id.button1);  //  删除按钮
+			TextView Micropost_content = (TextView) view.findViewById(R.id.micropost_content);  //  消息内容
+			TextView Micropost_date = (TextView) view.findViewById(R.id.micropost_date);  //   日期
 			Button guanzhu = (Button) view.findViewById(R.id.micropost_guanzhu);  //  关注  
 			Button huifu = (Button) view.findViewById(R.id.micropost_huifu);  //  回复
 			layout = view.findViewById(R.id.child_micropost);  //  回复  隐藏的  内容
@@ -289,9 +290,11 @@ int number=0;
 //						
 					if (number==1) {// 第一次点击时   确保点击  哪一个       都会显示
 						layout1.setVisibility(View.VISIBLE);
-						ListView listView2 = (ListView) layout1.findViewById(R.id.aa);
-						Adapter ad = new Adapter(layout1.getContext(), list, R.layout.micropost_item);  
+						 listView2 = (ListView) layout1.findViewById(R.id.aa);
+						 listView2.setDivider(null);
+						Adapter ad = new Adapter(layout1.getContext(), list, R.layout.child_micropost_item);  
 						listView2.setAdapter(ad);
+						HomeWorkTool.setListViewHeightBasedOnChildren(listView2);
 					
 					} 
 					 
@@ -301,6 +304,11 @@ int number=0;
 							if (huifu_num == 1)
 							{
 								layout1.setVisibility(View.VISIBLE);
+								listView2 = (ListView) layout1.findViewById(R.id.aa);
+								listView2.setDivider(null);
+								Adapter ad = new Adapter(layout1.getContext(), list, R.layout.child_micropost_item);  
+								listView2.setAdapter(ad);
+								HomeWorkTool.setListViewHeightBasedOnChildren(listView2);
 							}
 							if (huifu_num == 2)
 							{
@@ -314,7 +322,11 @@ int number=0;
 						
 					
 						layout1.setVisibility(View.VISIBLE);
-
+						listView2 = (ListView) layout1.findViewById(R.id.aa);
+						listView2.setDivider(null);
+						Adapter ad = new Adapter(layout1.getContext(), list, R.layout.child_micropost_item);  
+						listView2.setAdapter(ad);
+						HomeWorkTool.setListViewHeightBasedOnChildren(listView2);
 							huifu_num = 1;
 							
 //						 Toast.makeText(getApplicationContext(), huifu_num+"", 0).show();
