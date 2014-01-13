@@ -29,6 +29,7 @@
     <string name="question_speak_start">开始</string>
     <string name="question_speak_over">完成</string>
     <string name="question_speak_next">继续</string>
+    <string name="question_speak_tishi">还有几个词你读的还不是很正确哦,再听听录音,正确的朗读出来吧！</string>
     <string name="newwork_text">new!</string>
     <string name="work_content_text">完成情况:</string>
 
