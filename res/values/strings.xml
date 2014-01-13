@@ -29,12 +29,19 @@
     <string name="question_speak_start">开始</string>
     <string name="question_speak_over">完成</string>
     <string name="question_speak_next">继续</string>
+    <string name="question_speak_tishi">还有几个词你读的还不是很正确哦,再听听录音,正确的朗读出来吧！</string>
     <string name="newwork_text">new!</string>
     <string name="work_content_text">完成情况:</string>
+
     
     
         <string name="setting_tishi">点击头像进行修改！</string>
       <string name="saveUpdata">保存更新</string>
        <string name="changeClass">切换班级</string>
        <string name="exit_user">退出用户</string>
+
+	<string name="main_class_oneTv1">磊磊</string>
+	<string name="main_class_oneTv2">张小磊</string>
+	<string name="main_class_classesTv">七年级二班英语</string>
+
 </resources>

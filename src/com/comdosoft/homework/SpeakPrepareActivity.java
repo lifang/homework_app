@@ -3,10 +3,12 @@ package com.comdosoft.homework;
 import java.io.IOException;
 
 import android.app.Activity;
+import android.app.Dialog;
 import android.content.Intent;
 import android.media.MediaPlayer;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
@@ -17,7 +19,7 @@ public class SpeakPrepareActivity extends Activity {
 	private TextView question_speak_title;
 	private TextView question_speak_content;
 	private MediaPlayer player;
-	
+
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.question_speak_prepare);
@@ -38,10 +40,7 @@ public class SpeakPrepareActivity extends Activity {
 		Intent intent = new Intent();
 		switch (v.getId()) {
 		case R.id.question_speak_exit:
-			SpeakPrepareActivity.this.finish();
-			intent.setClass(SpeakPrepareActivity.this,
-					HomeWorkIngActivity.class);
-			startActivity(intent);
+			MyDialog("确认不在继续答题吗？", "确定", "取消");
 			break;
 		case R.id.question_speak_next:
 			SpeakPrepareActivity.this.finish();
@@ -68,6 +67,33 @@ public class SpeakPrepareActivity extends Activity {
 			}
 			break;
 		}
+	}
+
+	private void MyDialog(String title, String btn_one, String Btn_two) {
+		final Intent intent = new Intent();
+		final Dialog dialog = new Dialog(this, R.style.Transparent);
+		dialog.setContentView(R.layout.my_dialog);
+		dialog.setCancelable(true);
+		TextView title_tv = (TextView) dialog.findViewById(R.id.dialog_title);
+		title_tv.setText(title);
+		Button dialog_ok = (Button) dialog.findViewById(R.id.dialog_ok);
+		dialog_ok.setText(btn_one);
+		Button dialog_no = (Button) dialog.findViewById(R.id.dialog_no);
+		dialog_no.setText(Btn_two);
+		dialog_ok.setOnClickListener(new View.OnClickListener() {
+			public void onClick(View v) {
+				SpeakPrepareActivity.this.finish();
+				intent.setClass(SpeakPrepareActivity.this,
+						HomeWorkIngActivity.class);
+				startActivity(intent);
+			}
+		});
+		dialog_no.setOnClickListener(new View.OnClickListener() {
+			public void onClick(View v) {
+				dialog.dismiss();
+			}
+		});
+		dialog.show();
 	}
 
 	protected void onStart() {

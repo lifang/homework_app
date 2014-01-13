@@ -65,7 +65,6 @@ private String sender_types; // 发送类型
 	
 	private EditText Reply_edit;   //  回复    编辑框
 	
-	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		requestWindowFeature(Window.FEATURE_NO_TITLE);
