@@ -260,6 +260,8 @@ public class HomeWorkTool implements Urlinterface {
 		return inputStream;
 	}
 
+	
+	//   上传文件
 	public static String sendPhostimg(String url, MultipartEntity entity) {
 		String json = "";
 		HttpPost post = new HttpPost(url);
