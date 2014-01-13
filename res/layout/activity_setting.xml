@@ -1,0 +1,178 @@
+
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent">
+
+<LinearLayout 
+   
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+  android:background="@drawable/bj"
+    android:orientation="vertical"
+    android:gravity="center_horizontal"
+    >
+
+    <ImageButton
+        android:id ="@+id/set_touxiang"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="@drawable/moren"
+        android:layout_marginTop="91dp"
+      />
+
+        <TextView
+       
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        
+        android:layout_marginTop="30dp"
+        android:text="@string/setting_tishi"
+        android:textSize="19.3dp" />
+
+    
+     <TextView
+       
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        
+        android:layout_marginTop="40dp"
+        android:text="@string/nicheng"
+        android:textSize="24sp" />
+     
+          <EditText
+        android:id="@+id/set_nicheng"
+        android:layout_width="480dp"
+            android:layout_height="47dp"
+        android:layout_marginTop="21dp"
+        android:gravity="center"
+        android:hint="fwefsf"
+        android:textSize="24sp" />
+           <TextView
+       
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        
+        android:layout_marginTop="21dp"
+        android:text="@string/xingming"
+        android:textSize="24sp" />
+     
+          <EditText
+        android:id="@+id/reg_xingming"
+         android:layout_width="480dp"
+            android:layout_height="47dp"
+        android:layout_marginTop="21dp"
+        android:gravity="center"
+        android:hint="马丁"
+        android:textSize="24sp" />    
+                   <TextView
+       
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        
+        android:layout_marginTop="21dp"
+        android:text="@string/banjiyanzhengma"
+        android:textSize="24sp" />
+     
+  
+                  <Button
+     
+       android:layout_width="480dp"
+            android:layout_height="51dp"
+        android:gravity="center"
+        android:layout_marginTop="82dp"
+        android:background="#92b81b"
+        android:onClick="saveUpdata"
+        android:text="@string/saveUpdata"
+        android:textSize="24sp" /> 
+    
+                     <Button
+     
+       android:layout_width="480dp"
+            android:layout_height="51dp"
+        android:gravity="center"
+        android:layout_marginTop="85dp"
+        android:background="#92b81b"
+        android:onClick="changeClass"
+        android:text="@string/changeClass"
+        android:textSize="24sp" /> 
+                         <Button
+     
+       android:layout_width="480dp"
+            android:layout_height="51dp"
+        android:gravity="center"
+        android:layout_marginTop="37dp"
+        android:background="#f08629"
+        android:onClick="set_exit"
+        android:text="@string/exit_user"
+        android:textSize="24sp" /> 
+    
+</LinearLayout>
+   <!-- 下面的内容一开始是隐藏起来的 -->
+
+            <LinearLayout
+                android:id="@+id/photolayout"
+                android:layout_width="fill_parent"
+                android:layout_height="fill_parent"
+                 android:gravity="center_horizontal"
+                android:background="#e0000000"
+                android:orientation="vertical"
+                 android:visibility="gone" 
+                 >
+<Button
+            android:id="@+id/paizhaoshangchuan"
+            android:layout_width="480dp"
+            android:layout_height="51dp"
+        android:layout_marginTop="885dp"
+        android:background="#f08629"
+            android:onClick="sel_paizhaoshangchuan"
+            android:textColor="#FFFFFF"
+            android:textSize="24sp"
+            android:text="@string/takephoto" />
+<Button
+            android:id="@+id/congxiangce"
+           android:layout_width="480dp"
+            android:layout_height="51dp"
+         android:background="#f08629"
+             android:onClick="sel_congxiangce"
+             android:layout_marginTop="28dp"
+            android:textColor="#FFFFFF"
+            android:textSize="24sp"
+            android:text="@string/fromphotostore" />
+            </LinearLayout>
+            <!-- 上面的内容一开始是隐藏起来的 -->
+            
+            
+             <!-- 下面的内容一开始是隐藏起来的 -->
+
+            <LinearLayout
+                android:id="@+id/photolayout2"
+                android:layout_width="fill_parent"
+                android:layout_height="fill_parent"
+                 android:gravity="center_horizontal"
+                android:background="#e0000000"
+                android:orientation="vertical"
+                 android:visibility="gone" 
+                 >
+<TextView
+           
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+        android:layout_marginTop="856dp"
+        android:background="#FF8C00"
+          
+            android:textColor="#FFFFFF"
+            android:textSize="24sp"
+            android:text="@string/classCodeError" />
+<Button
+          
+            android:layout_width="480dp"
+            android:layout_height="51dp"
+         android:background="#f08629"
+             android:onClick="reg_fanhui"
+             android:layout_marginTop="50dp"
+            android:textColor="#FFFFFF"
+            android:textSize="24sp"
+            android:text="@string/reg_fanhui" />
+            </LinearLayout>
+            <!-- 上面的内容一开始是隐藏起来的 -->
+</RelativeLayout>

@@ -30,6 +30,7 @@ public class RegistrationActivity extends Activity {
 	private View layout;//  选择头像界面
 	private View layout2;//  班级验证码错误  返回界面
 	private String tp; // 头像资源
+	private  String qqNumber;  //  qq  号码
 	
 	/* 头像名称 */
 	private static final String IMAGE_FILE_NAME = "faceImage.jpg";
@@ -45,6 +46,11 @@ public class RegistrationActivity extends Activity {
 		requestWindowFeature(Window.FEATURE_NO_TITLE);
 
 		setContentView(R.layout.activity_registration);
+		
+		
+		Intent intent = getIntent();// 
+		qqNumber = intent.getStringExtra("qqNumber");   // 获得上个页面传过来的   QQ  号码 
+
 		layout = this.findViewById(R.id.photolayout); // 隐藏内容
 		layout2 = this.findViewById(R.id.photolayout2); // 隐藏内容
 		faceImage = (ImageButton) findViewById(R.id.reg_touxiang);
@@ -159,8 +165,21 @@ public class RegistrationActivity extends Activity {
 			ByteArrayOutputStream stream = new ByteArrayOutputStream();
 			 photo.compress(Bitmap.CompressFormat.JPEG, 60, stream); 
 			 byte[] b = stream.toByteArray(); // 将图片流以字符串形式存储下来
-			  
-			  tp = new String(b);
+			 tp = new String(b);
+			 
+			//  此处调用方法上传到  服务器     （QQ 号码，图片数据   ） ！！！！！！！！！！！！！后台 添加用户到  学生表
+			 
+			 
+			 
+			
+			// 下面两句是  获得头像的代码，在  后面会用得到
+			 
+			 
+//			 Bitmap dBitmap = BitmapFactory.decodeFile(tp);
+//			 Drawable drawable1= new BitmapDrawable(dBitmap);
+
+			 
+			 
 		}
 	}
 	
@@ -175,11 +194,11 @@ public class RegistrationActivity extends Activity {
 		
 		Map<String, String> map=new HashMap<String, String>();
 		
-		if (tp!=null) {
+		
 			
 			//  将数据传给服务器
 			
-		}
+		
 		 
 		
 		
