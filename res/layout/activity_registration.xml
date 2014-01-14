@@ -14,10 +14,10 @@
 
     <ImageButton
         android:id ="@+id/reg_touxiang"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="176dp"
+        android:layout_height="186dp"
         android:background="@drawable/moren"
-        android:layout_marginTop="494dp"
+        android:layout_marginTop="94dp"
       />
 
    
@@ -103,7 +103,7 @@
             android:id="@+id/paizhaoshangchuan"
             android:layout_width="480dp"
             android:layout_height="51dp"
-        android:layout_marginTop="885dp"
+        android:layout_marginTop="85dp"
         android:background="#f08629"
             android:onClick="sel_paizhaoshangchuan"
             android:textColor="#FFFFFF"

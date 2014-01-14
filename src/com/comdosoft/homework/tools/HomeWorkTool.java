@@ -260,6 +260,8 @@ public class HomeWorkTool implements Urlinterface {
 		return inputStream;
 	}
 
+	
+	//   上传文件
 	public static String sendPhostimg(String url, MultipartEntity entity) {
 		String json = "";
 		HttpPost post = new HttpPost(url);
@@ -311,9 +313,9 @@ public class HomeWorkTool implements Urlinterface {
 			url_con.setRequestMethod("POST");
 			Log.i("linshi", url.toString());
 			System.setProperty("sun.net.client.defaultConnectTimeout",
-					String.valueOf(HomeWorkTool.connectTimeOut));// ����λ�����룩jdk1.4�������,���ӳ�ʱ
+					String.valueOf(HomeWorkTool.connectTimeOut));//
 			System.setProperty("sun.net.client.defaultReadTimeout",
-					String.valueOf(HomeWorkTool.readTimeOut)); // ����λ�����룩jdk1.4�������,��������ʱ
+					String.valueOf(HomeWorkTool.readTimeOut)); // 
 			url_con.setDoOutput(true);
 			byte[] b = params.toString().getBytes();
 			url_con.getOutputStream().write(b, 0, b.length);

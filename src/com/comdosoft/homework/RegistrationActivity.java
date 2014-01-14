@@ -2,8 +2,17 @@ package com.comdosoft.homework;
 
 import java.io.ByteArrayOutputStream;
 import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.UnsupportedEncodingException;
 import java.util.HashMap;
 import java.util.Map;
+
+import org.apache.http.entity.mime.MultipartEntity;
+import org.apache.http.entity.mime.content.FileBody;
+import org.apache.http.entity.mime.content.StringBody;
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import android.app.Activity;
 import android.content.Intent;
@@ -21,6 +30,7 @@ import android.widget.ImageButton;
 import android.widget.Toast;
 
 import com.comdosoft.homework.tools.HomeWorkTool;
+import com.comdosoft.homework.tools.Urlinterface;
 
 public class RegistrationActivity extends Activity {
 	private ImageButton faceImage;
@@ -30,6 +40,9 @@ public class RegistrationActivity extends Activity {
 	private View layout;//  选择头像界面
 	private View layout2;//  班级验证码错误  返回界面
 	private String tp; // 头像资源
+	private  String qqNumber;  //  qq  号码
+	private  String student_id="1";  //   用户  id
+	
 	
 	/* 头像名称 */
 	private static final String IMAGE_FILE_NAME = "faceImage.jpg";
@@ -45,6 +58,11 @@ public class RegistrationActivity extends Activity {
 		requestWindowFeature(Window.FEATURE_NO_TITLE);
 
 		setContentView(R.layout.activity_registration);
+		
+		
+//		Intent intent = getIntent();// 
+//		qqNumber = intent.getStringExtra("qqNumber");   // 获得上个页面传过来的   QQ  号码 
+//		student_id= intent.getStringExtra("student_id");
 		layout = this.findViewById(R.id.photolayout); // 隐藏内容
 		layout2 = this.findViewById(R.id.photolayout2); // 隐藏内容
 		faceImage = (ImageButton) findViewById(R.id.reg_touxiang);
@@ -68,14 +86,32 @@ public class RegistrationActivity extends Activity {
 	 * 拍照上传
 	 */
 	public void sel_paizhaoshangchuan(View v) {
+		
+		layout.setVisibility(View.GONE);
 
 		Intent intentFromCapture = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
 		// 判断存储卡是否可以用，可用进行存储
 		if (HomeWorkTool.isHasSdcard()) {
 
-			intentFromCapture.putExtra(MediaStore.EXTRA_OUTPUT, Uri
-					.fromFile(new File(Environment
-							.getExternalStorageDirectory(), IMAGE_FILE_NAME)));
+		
+				File file = new File(Environment.getExternalStorageDirectory()
+						+ "/" + IMAGE_FILE_NAME);
+
+					if (file.exists()) {
+						file.delete();
+
+					}
+					 file = new File(Environment.getExternalStorageDirectory()
+							+ "/" + IMAGE_FILE_NAME);
+						if (!file.exists()) {
+							intentFromCapture.putExtra(
+									MediaStore.EXTRA_OUTPUT,
+									Uri.fromFile(new File(Environment
+										.getExternalStorageDirectory(),
+											IMAGE_FILE_NAME)));
+
+			}
+
 		}
 
 		startActivityForResult(intentFromCapture, CAMERA_REQUEST_CODE);
@@ -85,6 +121,7 @@ public class RegistrationActivity extends Activity {
 	 * 从相册选择
 	 */
 	public void sel_congxiangce(View v) {
+		layout.setVisibility(View.GONE);
 		
 		Intent intentFromGallery = new Intent();
 		intentFromGallery.setType("image/*"); // 设置文件类型
@@ -139,8 +176,8 @@ public class RegistrationActivity extends Activity {
 		intent.putExtra("aspectX", 1);
 		intent.putExtra("aspectY", 1);
 		// outputX outputY 是裁剪图片宽高
-		intent.putExtra("outputX", 320);
-		intent.putExtra("outputY", 320);
+		intent.putExtra("outputX", 176);
+		intent.putExtra("outputY", 186);
 		intent.putExtra("return-data", true);
 		startActivityForResult(intent, 2);
 	}
@@ -155,12 +192,75 @@ public class RegistrationActivity extends Activity {
 		if (extras != null) {
 			Bitmap photo = extras.getParcelable("data");
 			Drawable drawable = new BitmapDrawable(photo);
-			faceImage.setImageDrawable(drawable);
-			ByteArrayOutputStream stream = new ByteArrayOutputStream();
-			 photo.compress(Bitmap.CompressFormat.JPEG, 60, stream); 
-			 byte[] b = stream.toByteArray(); // 将图片流以字符串形式存储下来
-			  
-			  tp = new String(b);
+			
+			File file = new File(Environment.getExternalStorageDirectory()
+					+ "/" + IMAGE_FILE_NAME);
+
+			try {
+
+				if (file.exists()) {
+					file.delete();
+
+				}
+
+				file.createNewFile();
+				FileOutputStream stream = new FileOutputStream(file);
+				ByteArrayOutputStream stream1 = new ByteArrayOutputStream();
+				photo.compress(Bitmap.CompressFormat.JPEG, 60, stream);
+				byte[] buf = stream1.toByteArray(); // 将图片流以字符串形式存储下来
+				// byte[] buf = s.getBytes();
+				stream.write(buf);
+				stream.close();
+			} catch (IOException e) {
+
+				e.printStackTrace();
+			}
+			 
+			
+			
+			//  此处调用方法上传到  服务器     （student_id，图片数据   ） ！！！！！！！！！！！
+			MultipartEntity entity = new MultipartEntity();
+	
+			 
+			try {
+				entity.addPart("student_id", new StringBody(student_id));
+				entity.addPart("avatar", new FileBody(new File(Environment.getExternalStorageDirectory()
+						+ "/" + IMAGE_FILE_NAME)));
+				
+		
+				String json = HomeWorkTool.sendPhostimg(Urlinterface.UPLOAD_FACE, entity);
+				if (json.length()!=0) {
+					JSONObject array;
+					
+						try {
+							array = new JSONObject(json);
+							String status = array.getString("status");
+							String notice = array.getString("notice");
+							
+							if ("success".equals(status)) {
+								faceImage.setImageDrawable(drawable);
+								Toast.makeText(getApplicationContext(), notice, 0).show();
+							}else{
+								Toast.makeText(getApplicationContext(), notice, 0).show();	
+							}
+						} catch (JSONException e) {
+							// TODO Auto-generated catch block
+							e.printStackTrace();
+						}
+						
+					
+						
+				
+				}
+				Toast.makeText(getApplicationContext(), json, 0).show();
+			} catch (UnsupportedEncodingException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+				
+				
+				
+	 
 		}
 	}
 	
@@ -175,11 +275,11 @@ public class RegistrationActivity extends Activity {
 		
 		Map<String, String> map=new HashMap<String, String>();
 		
-		if (tp!=null) {
+		
 			
 			//  将数据传给服务器
 			
-		}
+		
 		 
 		
 		

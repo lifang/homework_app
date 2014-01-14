@@ -15,21 +15,24 @@ public class Soundex_Levenshtein {
 			ml.add(arrT[i].toString());
 		}
 
-		for (int i = 0; i < ml.size(); i++) {
-			int[] arr = new int[2];
-			int k = 0;
-			int temp = 0;
-			for (int j = 0; j < tl.size(); j++) {
-				int value = dragonEngine(tl.get(j), ml.get(i));
-				if (value >= temp) {
-					temp = value;
-					k = j;
+		if (arrT.length > 1) {
+			for (int i = 0; i < ml.size(); i++) {
+				int[] arr = new int[2];
+				int k = 0;
+				int temp = 0;
+				for (int j = 0; j < tl.size(); j++) {
+					int value = dragonEngine(tl.get(j), ml.get(i));
+					if (value >= temp) {
+						temp = value;
+						k = j;
+					}
 				}
+				arr[0] = k;
+				arr[1] = temp;
+				str.add(arr);
 			}
-			arr[0] = k;
-			arr[1] = temp;
-			str.add(arr);
 		}
+
 		return str;
 	}
 

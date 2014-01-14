@@ -81,10 +81,11 @@
                 >
 
 <EditText
-    android:id="@+id/partents_huifu"
+    android:id="@+id/reply_edit"
     android:layout_width="fill_parent"
     android:layout_height="127dp"
-    android:onClick="chatwith_teacher"
+    
+    android:gravity="top"
      />
 
 <Button
@@ -94,6 +95,7 @@
     android:layout_alignParentRight="true"
     android:layout_below="@+id/partents_huifu"
     android:text="@string/huifu"
+    android:onClick="reply_message"
     android:textColor="#92b81b"
     android:textSize="24sp" />
 

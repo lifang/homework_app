@@ -2,10 +2,13 @@ package com.comdosoft.homework;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import android.app.Activity;
 import android.app.AlertDialog.Builder;
+import android.app.Dialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.media.MediaPlayer;
@@ -15,8 +18,11 @@ import android.os.Environment;
 import android.speech.RecognizerIntent;
 import android.util.Log;
 import android.view.View;
+import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.comdosoft.homework.tools.HomeWorkTool;
 import com.comdosoft.homework.tools.PredicateLayout;
@@ -31,10 +37,13 @@ public class SpeakBeginActivity extends Activity implements Urlinterface {
 	public List<View> view_list;
 	private static final int VOICE_RECOGNITION_REQUEST_CODE = 1234;// 语音code
 	public List<String> str_list;
+	public int number;// 播放次数
+	private TextView question_speak_tishi;
+	private Map<Integer, String> ok_speak;
 
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		setContentView(R.layout.question_speak);
+		setContentView(R.layout.question_speak_begin);
 
 		initialize();
 		question_speak_title.setText("1/2");
@@ -45,7 +54,10 @@ public class SpeakBeginActivity extends Activity implements Urlinterface {
 	public void initialize() {
 		question_speak_title = (TextView) findViewById(R.id.question_speak_title);
 		PredicateLayout = (PredicateLayout) findViewById(R.id.question_speak_content);
+		question_speak_tishi = (TextView) findViewById(R.id.question_speak_tishi);
+		question_speak_tishi.setVisibility(View.GONE);
 		player = new MediaPlayer();
+		ok_speak = new HashMap<Integer, String>();// 用于记录正确的词
 	}
 
 	// 设置textview
@@ -53,15 +65,14 @@ public class SpeakBeginActivity extends Activity implements Urlinterface {
 		view_list = new ArrayList<View>();
 		String[] str = content.split(" ");
 		for (int i = 0; i < str.length; i++) {
-			View view1 = View.inflate(this,
-					R.layout.question_speak_linearlayout, null);
+			View view1 = View.inflate(this, R.layout.question_speak_begin_item,
+					null);
 			LinearLayout layout = (LinearLayout) view1
 					.findViewById(R.id.layout);
 			TextView text = (TextView) view1.findViewById(R.id.text);
 			View color = (View) view1.findViewById(R.id.color);
 			text.setText(str[i].toString());
-			color.setBackgroundColor(getResources().getColor(
-					R.color.work_date_untextcolor));
+			color.setBackgroundColor(getResources().getColor(R.color.shenhui));
 			view_list.add(color);
 			PredicateLayout.addView(layout);
 		}
@@ -71,12 +82,11 @@ public class SpeakBeginActivity extends Activity implements Urlinterface {
 		Intent intent = new Intent();
 		switch (v.getId()) {
 		case R.id.question_speak_exit:
-			SpeakBeginActivity.this.finish();
-			intent.setClass(SpeakBeginActivity.this, HomeWorkIngActivity.class);
-			startActivity(intent);
+			MyDialog("你还没有做完题,确认要退出吗?", "确认", "取消", 0);
 			break;
 		case R.id.question_speak_next:
-
+			// MyDialog("你已经答完本题确认继续下一题吗?", "确认", "取消", 1);
+			MyDialog("恭喜完成今天的朗读作业!", "确认", "取消", 2);
 			break;
 		case R.id.question_speak_img:// 播放音频
 			// 从文件系统播放
@@ -84,6 +94,7 @@ public class SpeakBeginActivity extends Activity implements Urlinterface {
 			try {
 				player.setDataSource(path);
 				if (player.isPlaying()) {// 正在播放
+					Toast.makeText(this, "正在播放..", 0).show();
 					player.pause();
 				} else {
 					player.prepare();
@@ -153,35 +164,107 @@ public class SpeakBeginActivity extends Activity implements Urlinterface {
 			// 取得语音的字符
 			ArrayList<String> results = data
 					.getStringArrayListExtra(RecognizerIntent.EXTRA_RESULTS);
-
-			String speak = results.get(0);//用户语音返回的字符串
+			String speak = results.get(0);// 用户语音返回的字符串
 			str_list = new ArrayList<String>();
-			String s = content.replaceAll("(?i)[^a-zA-Z0-9\u4E00-\u9FA5]", " ");//去除标点符号
+			String s = content.replaceAll("(?i)[^a-zA-Z0-9\u4E00-\u9FA5]", " ");// 去除标点符号
 			String[] item = s.split(" ");
-		 	for (int i = 0; i < item.length; i++) {
-		 		str_list.add(item[i]);
+			for (int i = 0; i < item.length; i++) {
+				str_list.add(item[i]);
 			}
+			// question_speak_tishi
 			List<int[]> code_list = Soundex_Levenshtein.Engine(speak, str_list);
-			if (code_list.size()>0) {
+			if (code_list.size() > 0) {
 				for (int i = 0; i < code_list.size(); i++) {
-					Log.i(tag, str_list.get(code_list.get(i)[0])+"->相似度:"+code_list.get(i)[1]);
-					if (code_list.get(i)[1]>=8) {
-						view_list.get(code_list.get(i)[0]).setBackgroundColor(getResources().getColor(
-					R.color.question_speak_ok));
-					}else if (code_list.get(i)[1]>=4) {
-						view_list.get(code_list.get(i)[0]).setBackgroundColor(getResources().getColor(
-								R.color.work_content_over_textcolor));
-					}else{
-						view_list.get(code_list.get(i)[0]).setBackgroundColor(getResources().getColor(
-								R.color.work_date_untextcolor));
+					Log.i(tag, str_list.get(code_list.get(i)[0]) + "->相似度:"
+							+ code_list.get(i)[1]);
+					if (code_list.get(i)[1] >= 8) {
+						ok_speak.put(code_list.get(i)[0],
+								str_list.get(code_list.get(i)[0]));
+						view_list.get(code_list.get(i)[0]).setBackgroundColor(
+								getResources().getColor(R.color.lvse));
+					} else if (code_list.get(i)[1] >= 4) {
+						view_list.get(code_list.get(i)[0]).setBackgroundColor(
+								getResources().getColor(R.color.juhuang));
+					} else {
+						view_list.get(code_list.get(i)[0]).setBackgroundColor(
+								getResources().getColor(R.color.shenhui));
 					}
 				}
+			} else {
+				for (int i = 0; i < code_list.size(); i++) {
+					view_list.get(code_list.get(i)[0]).setBackgroundColor(
+							getResources().getColor(R.color.shenhui));
+				}
+			}
+			Log.i(tag, ok_speak.size() + "-" + str_list.size());
+			if (ok_speak.size() != str_list.size()) {
+				question_speak_tishi.setVisibility(View.VISIBLE);
+			} else {
+				question_speak_tishi.setVisibility(View.GONE);
 			}
 		}
-		// else {
-		// rs = "null";
-		// }
 		super.onActivityResult(requestCode, resultCode, data);
+	}
+
+	// 自定义dialog设置
+	private void MyDialog(String title, String btn_one, String Btn_two,
+			final int type) {
+		final Intent intent = new Intent();
+		final Dialog dialog = new Dialog(this, R.style.Transparent);
+		dialog.setContentView(R.layout.my_dialog);
+		dialog.setCancelable(true);
+
+		ImageView dialog_img = (ImageView) dialog.findViewById(R.id.dialog_img);
+
+		TextView title_tv = (TextView) dialog.findViewById(R.id.dialog_title);
+		title_tv.setText(title);
+		Button dialog_ok = (Button) dialog.findViewById(R.id.dialog_ok);
+		dialog_ok.setText(btn_one);
+		Button dialog_no = (Button) dialog.findViewById(R.id.dialog_no);
+		dialog_no.setText(Btn_two);
+		dialog_ok.setOnClickListener(new View.OnClickListener() {
+			public void onClick(View v) {
+				switch (type) {
+				case 0:
+					SpeakBeginActivity.this.finish();
+					intent.setClass(SpeakBeginActivity.this,
+							HomeWorkIngActivity.class);
+					startActivity(intent);
+					break;
+				case 1:
+
+					break;
+				case 2:
+					SpeakBeginActivity.this.finish();
+					intent.setClass(SpeakBeginActivity.this,
+							HomeWorkIngActivity.class);
+					startActivity(intent);
+					break;
+				}
+			}
+		});
+		dialog_no.setOnClickListener(new View.OnClickListener() {
+			public void onClick(View v) {
+				switch (type) {
+				case 0:
+					dialog.dismiss();
+					break;
+				case 1:
+					SpeakBeginActivity.this.finish();
+					intent.setClass(SpeakBeginActivity.this,
+							HomeWorkIngActivity.class);
+					startActivity(intent);
+					break;
+				}
+			}
+		});
+		if (type == 2) {
+			dialog_no.setVisibility(View.GONE);
+			dialog_ok.setBackgroundColor(getResources().getColor(R.color.lvse));
+		} else {
+			dialog_img.setVisibility(View.GONE);
+		}
+		dialog.show();
 	}
 
 	protected void onStart() {

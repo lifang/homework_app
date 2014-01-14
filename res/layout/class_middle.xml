@@ -30,10 +30,11 @@
         <EditText
             android:id="@+id/class_fabiao_content"
             android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="154dp"
             android:gravity="top"
+           
             android:hint="@string/class_fabiao_tishi"
-            android:minLines="4" />
+            />
 
         <Button
             android:id="@+id/button_fabiao"
