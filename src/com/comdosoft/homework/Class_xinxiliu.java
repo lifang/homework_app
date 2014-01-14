@@ -865,7 +865,7 @@ private String sender_types; // 发送类型
 			 // TODO Auto-generated method stub
 //			Toast.makeText(getApplicationContext(), position+"", 1).show();
 				 
-				 Reply_edit.setHint("回复  "+child_Micropost.getSender_name()+":");
+				 Reply_edit.setHint("回复  "+child_Micropost.getSender_name()+" :");
 				 micropost_id = child_Micropost.getId();
 					reciver_id = child_Micropost.getSender_id();
 					reciver_types= child_Micropost.getSender_types();
