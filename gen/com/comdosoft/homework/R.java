@@ -50,14 +50,16 @@ public final class R {
         public static final int sdlb=0x7f02000e;
         public static final int shape=0x7f02000f;
         public static final int sj=0x7f020010;
-        public static final int tx=0x7f020011;
-        public static final int tx2=0x7f020012;
-        public static final int unmake=0x7f020013;
-        public static final int xlistview_arrow=0x7f020014;
+        public static final int switchclassimagebutton=0x7f020011;
+        public static final int tx=0x7f020012;
+        public static final int tx2=0x7f020013;
+        public static final int unmake=0x7f020014;
+        public static final int xlistview_arrow=0x7f020015;
     }
     public static final class id {
+        public static final int SwitchClass_Et=0x7f090038;
         public static final int aa=0x7f090029;
-        public static final int action_settings=0x7f090046;
+        public static final int action_settings=0x7f09004c;
         public static final int button1=0x7f090000;
         public static final int button_fabiao=0x7f090017;
         public static final int child_micropost=0x7f090027;
@@ -88,8 +90,8 @@ public final class R {
         public static final int micropost_delete=0x7f090013;
         public static final int micropost_guanzhu=0x7f09002a;
         public static final int micropost_huifu=0x7f090012;
-        public static final int newwork_img=0x7f09003c;
-        public static final int newwork_text=0x7f090035;
+        public static final int newwork_img=0x7f090042;
+        public static final int newwork_text=0x7f09003b;
         public static final int paizhaoshangchuan=0x7f090006;
         public static final int partents_huifu=0x7f090028;
         public static final int photolayout=0x7f090005;
@@ -105,28 +107,33 @@ public final class R {
         public static final int reg_touxiang=0x7f090001;
         public static final int reg_xingming=0x7f090003;
         public static final int relativeLayout1=0x7f09000e;
-        public static final int sign_img=0x7f090037;
+        public static final int sign_img=0x7f09003d;
         public static final int speak=0x7f090031;
+        public static final int switchClassIB=0x7f090039;
+        public static final int switchClassTv=0x7f090035;
+        public static final int switchClassll=0x7f090037;
+        public static final int switchclassLv=0x7f090036;
+        public static final int switchclass_oneTv=0x7f09003a;
         public static final int text=0x7f090033;
         public static final int title=0x7f09000b;
         public static final int user_face=0x7f09000d;
         public static final int work_content_img=0x7f09000a;
-        public static final int work_question_case=0x7f090039;
-        public static final int work_question_end=0x7f09003b;
-        public static final int work_question_img=0x7f090038;
-        public static final int work_question_time=0x7f09003a;
-        public static final int work_start_date=0x7f090036;
+        public static final int work_question_case=0x7f09003f;
+        public static final int work_question_end=0x7f090041;
+        public static final int work_question_img=0x7f09003e;
+        public static final int work_question_time=0x7f090040;
+        public static final int work_start_date=0x7f09003c;
         public static final int working_content_list=0x7f09000c;
         public static final int working_date_list=0x7f090009;
-        public static final int xlistview_footer_content=0x7f09003d;
-        public static final int xlistview_footer_hint_textview=0x7f09003f;
-        public static final int xlistview_footer_progressbar=0x7f09003e;
-        public static final int xlistview_header_arrow=0x7f090044;
-        public static final int xlistview_header_content=0x7f090040;
-        public static final int xlistview_header_hint_textview=0x7f090042;
-        public static final int xlistview_header_progressbar=0x7f090045;
-        public static final int xlistview_header_text=0x7f090041;
-        public static final int xlistview_header_time=0x7f090043;
+        public static final int xlistview_footer_content=0x7f090043;
+        public static final int xlistview_footer_hint_textview=0x7f090045;
+        public static final int xlistview_footer_progressbar=0x7f090044;
+        public static final int xlistview_header_arrow=0x7f09004a;
+        public static final int xlistview_header_content=0x7f090046;
+        public static final int xlistview_header_hint_textview=0x7f090048;
+        public static final int xlistview_header_progressbar=0x7f09004b;
+        public static final int xlistview_header_text=0x7f090047;
+        public static final int xlistview_header_time=0x7f090049;
     }
     public static final class layout {
         public static final int activity_main=0x7f030000;
@@ -140,16 +147,20 @@ public final class R {
         public static final int question_speak=0x7f030008;
         public static final int question_speak_linearlayout=0x7f030009;
         public static final int question_speak_prepare=0x7f03000a;
-        public static final int work_date_adapter=0x7f03000b;
-        public static final int work_question_adapter=0x7f03000c;
-        public static final int working_adapter=0x7f03000d;
-        public static final int xlistview_footer=0x7f03000e;
-        public static final int xlistview_header=0x7f03000f;
+        public static final int switchclass=0x7f03000b;
+        public static final int switchclass_one=0x7f03000c;
+        public static final int work_date_adapter=0x7f03000d;
+        public static final int work_question_adapter=0x7f03000e;
+        public static final int working_adapter=0x7f03000f;
+        public static final int xlistview_footer=0x7f030010;
+        public static final int xlistview_header=0x7f030011;
     }
     public static final class menu {
         public static final int main=0x7f080000;
     }
     public static final class string {
+        public static final int SwitchClass_Et=0x7f060022;
+        public static final int SwitchClass_Tv=0x7f060021;
         public static final int action_settings=0x7f060001;
         public static final int app_name=0x7f060000;
         public static final int banjiyanzhengma=0x7f060005;
