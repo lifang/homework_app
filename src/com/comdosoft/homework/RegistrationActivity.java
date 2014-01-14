@@ -11,6 +11,8 @@ import java.util.Map;
 import org.apache.http.entity.mime.MultipartEntity;
 import org.apache.http.entity.mime.content.FileBody;
 import org.apache.http.entity.mime.content.StringBody;
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import android.app.Activity;
 import android.content.Intent;
@@ -227,7 +229,29 @@ public class RegistrationActivity extends Activity {
 				
 		
 				String json = HomeWorkTool.sendPhostimg(Urlinterface.UPLOAD_FACE, entity);
-			
+				if (json.length()!=0) {
+					JSONObject array;
+					
+						try {
+							array = new JSONObject(json);
+							String status = array.getString("status");
+							String notice = array.getString("notice");
+							
+							if ("success".equals(status)) {
+								faceImage.setImageDrawable(drawable);
+								Toast.makeText(getApplicationContext(), notice, 0).show();
+							}else{
+								Toast.makeText(getApplicationContext(), notice, 0).show();	
+							}
+						} catch (JSONException e) {
+							// TODO Auto-generated catch block
+							e.printStackTrace();
+						}
+						
+					
+						
+				
+				}
 				Toast.makeText(getApplicationContext(), json, 0).show();
 			} catch (UnsupportedEncodingException e) {
 				// TODO Auto-generated catch block
@@ -235,7 +259,7 @@ public class RegistrationActivity extends Activity {
 			}
 				
 				
-				faceImage.setImageDrawable(drawable);
+				
 	 
 		}
 	}

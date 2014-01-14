@@ -180,10 +180,6 @@ private String sender_types; // 发送类型
 
 			try {
 
-//				result = HomeWorkTool
-//						.sendGETRequest(
-//								"http://192.168.199.121:3000/api/students/news_release",
-//								map);
 				 result = HomeWorkTool.sendGETRequest(Urlinterface.NEWS_RELEASE, map);
 				// Toast.makeText(getApplicationContext(), NEWS_RELEASE,
 				// 1).show();
@@ -191,8 +187,8 @@ private String sender_types; // 发送类型
 				// TODO Auto-generated catch block
 				e1.printStackTrace();
 			}
-			Toast.makeText(getApplicationContext(), "方法执行---result：" + result,
-					0).show();
+//			Toast.makeText(getApplicationContext(), "方法执行---result：" + result,
+//					0).show();
 			if (result.equals("error")) {
 				
 			} else {
