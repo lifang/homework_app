@@ -41,9 +41,8 @@ import com.comdosoft.homework.pull.XListView;
 import com.comdosoft.homework.pull.XListView.IXListViewListener;
 import com.comdosoft.homework.tools.HomeWorkTool;
 import com.comdosoft.homework.tools.Urlinterface;
-
 public class Class_xinxiliu extends Activity implements IXListViewListener,
-		Urlinterface {
+Urlinterface {
 	private XListView listView_mes;
 	private MicropostAdapter micropostAdapter;
 	private List<Micropost> list = new ArrayList<Micropost>();
@@ -60,15 +59,19 @@ public class Class_xinxiliu extends Activity implements IXListViewListener,
 	private String user_name = "丁作强";    //  从拿到的班级信息中获取  
 	private String class_id = "";// 班级id，
 	private String micropost_id = "";// 主消息id
-private String sender_types; // 发送类型
-	private String reciver_id ;   // 接收者  id  
-	private String reciver_types;// 接收者 类型
-	
+	private String sender_types=""; // 发送类型
+	private String reciver_id=null ;   // 接收者  id
+	private String user_types=null;
+	private String reciver_types=null;// 接收者 类型
+
 	private EditText Reply_edit;   //  回复    编辑框
+
 	private int pages_count=1; 
 	private int page=1;
 	
 	
+
+
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		requestWindowFeature(Window.FEATURE_NO_TITLE);
@@ -77,14 +80,14 @@ private String sender_types; // 发送类型
 
 		// Intent intent = getIntent();//
 		// user_id = intent.getStringExtra("user_id"); // 获得上个页面传过来的 user_id
+
 		//class_id= intent.getStringExtra("class_id")
-		
-		
-		 fabiao_content = (EditText) findViewById(R.id.class_fabiao_content);
+
+		fabiao_content = (EditText) findViewById(R.id.class_fabiao_content);
 		listView_mes = (XListView) findViewById(R.id.pull_refresh_list);
 		listView_mes.setPullLoadEnable(true);
 		listView_mes.setDivider(null);
-		
+
 		list = new ArrayList<Micropost>();
 		Micropost m1 = new Micropost("1", "12", "student", "张", "若相守1",
 				"etwevececx2423 sdfd",
@@ -111,11 +114,11 @@ private String sender_types; // 发送类型
 			JSONObject array;
 			try {
 				array = new JSONObject(result);
-				
+
 
 				String status = array.getString("status");
 				String notice = array.getString("notice");
-				
+
 				if ("success".equals(status)) {
 					String micropostsListJson = array
 							.getString("microposts");
@@ -128,12 +131,11 @@ private String sender_types; // 发送类型
 					JSONArray jsonArray2 = new JSONArray(details_microposts);
 
 
-					
-//	(String id, String user_id, String user_types, String name, String nickname, String content, String avatar_url, Long created_at)
+					//	(String id, String user_id, String user_types, String name, String nickname, String content, String avatar_url, Long created_at)
 
-//					[{id,content,user_id创建者id,user_types创建者类型，
-//						name主消息的创建者名字，nickname主消息的创建者昵称,
-//						avatar_url创建者头像,created_at创建时间}],
+					//					[{id,content,user_id创建者id,user_types创建者类型，
+					//						name主消息的创建者名字，nickname主消息的创建者昵称,
+					//						avatar_url创建者头像,created_at创建时间}],
 					for (int i = 0; i < jsonArray2.length(); ++i) {
 						JSONObject o = (JSONObject) jsonArray2
 								.get(i);
@@ -160,8 +162,8 @@ private String sender_types; // 发送类型
 			}
 
 		}
-		
-		
+
+
 		micropostAdapter = new MicropostAdapter();
 		listView_mes.setAdapter(micropostAdapter);
 
@@ -176,26 +178,32 @@ private String sender_types; // 发送类型
 		if (fabiaoContent.length() == 0) {
 			Toast.makeText(getApplicationContext(), "内容不能为空", 0).show();
 
-		} else {
+		} else {// http://localhost:3000/api/students/news_release?
+			// content='kkdkdkdk'&
+			// user_id=1&
+			// user_types=1&
+			// school_class_id=1
 
 			Map<String, String> map = new HashMap<String, String>();
 			map.put("content", fabiaoContent);
-			map.put("user_id", "1");
-			map.put("user_types", "1");
-			map.put("school_class_id", "1");
+			map.put("user_id", user_id);
+			map.put("user_types", user_types);
+			map.put("school_class_id", class_id);
 
 			try {
 
-				 result = HomeWorkTool.sendGETRequest(Urlinterface.NEWS_RELEASE, map);
-				
+				result = HomeWorkTool.sendGETRequest(Urlinterface.NEWS_RELEASE, map);
+				// Toast.makeText(getApplicationContext(), NEWS_RELEASE,
+				// 1).show();
+
 			} catch (Exception e1) {
 				// TODO Auto-generated catch block
 				e1.printStackTrace();
 			}
-//			Toast.makeText(getApplicationContext(), "方法执行---result：" + result,
-//					0).show();
+			//			Toast.makeText(getApplicationContext(), "方法执行---result：" + result,
+			//					0).show();
 			if (result.equals("error")) {
-				
+
 			} else {
 				JSONObject array;
 				try {
@@ -205,10 +213,10 @@ private String sender_types; // 发送类型
 
 					if ("success".equals(status)) {
 						Toast.makeText(getApplicationContext(), notice, 1)
-								.show();
+						.show();
 					} else {
 						Toast.makeText(getApplicationContext(), notice, 1)
-								.show();
+						.show();
 					}
 				} catch (JSONException e) {
 					// TODO Auto-generated catch block
@@ -220,7 +228,7 @@ private String sender_types; // 发送类型
 
 	}
 
-	
+
 	//    回复信息
 	public void reply_message(View v) {
 		String result = "";
@@ -229,6 +237,7 @@ private String sender_types; // 发送类型
 			Toast.makeText(getApplicationContext(), "内容不能为空", 0).show();
 
 		} else {
+
 //			sender_id = params[:sender_id]
 //			                   sender_types = params[:sender_types]
 //			                   content = params[:content]
@@ -245,8 +254,9 @@ private String sender_types; // 发送类型
 			map.put("reciver_id", reciver_id);
 			map.put("reciver_types",reciver_types);
 			try {
-				 result = HomeWorkTool.sendGETRequest(Urlinterface.reply_message, map);
-				// Toast.makeText(getApplicationContext(), NEWS_RELEASE,
+							
+				result = HomeWorkTool.sendGETRequest(Urlinterface.NEWS_RELEASE, map);
+// Toast.makeText(getApplicationContext(), NEWS_RELEASE,
 				// 1).show();
 			} catch (Exception e1) {
 				// TODO Auto-generated catch block
@@ -255,7 +265,7 @@ private String sender_types; // 发送类型
 			Toast.makeText(getApplicationContext(), "方法执行---result：" + result,
 					0).show();
 			if (result.equals("error")) {
-				
+
 			} else {
 				JSONObject array;
 				try {
@@ -265,10 +275,10 @@ private String sender_types; // 发送类型
 
 					if ("success".equals(status)) {
 						Toast.makeText(getApplicationContext(), notice, 1)
-								.show();
+						.show();
 					} else {
 						Toast.makeText(getApplicationContext(), notice, 1)
-								.show();
+						.show();
 					}
 				} catch (JSONException e) {
 					// TODO Auto-generated catch block
@@ -279,8 +289,8 @@ private String sender_types; // 发送类型
 		}
 
 	}
-	
-	
+
+
 	// 全部
 	public void class_button_all(View v) {
 		list.clear();
@@ -313,14 +323,15 @@ private String sender_types; // 发送类型
 			JSONObject array;
 			try {
 				array = new JSONObject(result);
-				
+
 
 				String status = array.getString("status");
 				String notice = array.getString("notice");
-				
+
 				if ("success".equals(status)) {
 					String micropostsListJson = array
 							.getString("microposts");
+
 					
 					JSONObject microposts = new JSONObject(micropostsListJson);
 //					page = microposts.getString("page");
@@ -329,9 +340,12 @@ private String sender_types; // 发送类型
 //					page":1,"pages_count":2,"details_microposts":
 					JSONArray jsonArray2 = new JSONArray(details_microposts);
 
-//					[{id,content,user_id创建者id,user_types创建者类型，
-//						name主消息的创建者名字，nickname主消息的创建者昵称,
-//						avatar_url创建者头像,created_at创建时间}],
+
+					//	(String id, String user_id, String user_types, String name, String nickname, String content, String avatar_url, Long created_at)
+
+					//					[{id,content,user_id创建者id,user_types创建者类型，
+					//						name主消息的创建者名字，nickname主消息的创建者昵称,
+					//						avatar_url创建者头像,created_at创建时间}],
 					for (int i = 0; i < jsonArray2.length(); ++i) {
 						JSONObject o = (JSONObject) jsonArray2
 								.get(i);
@@ -358,8 +372,8 @@ private String sender_types; // 发送类型
 			}
 
 		}
-		
-		
+
+
 		// mAdapter.notifyDataSetChanged();
 		micropostAdapter = new MicropostAdapter();
 		listView_mes.setAdapter(micropostAdapter);
@@ -523,7 +537,6 @@ private String sender_types; // 发送类型
 			return position;
 		}
 
-		@Override
 		public View getView(final int position, View convertView,
 				ViewGroup parent) {
 			Log.i("111111111", list.size() + "--");
@@ -552,8 +565,8 @@ private String sender_types; // 发送类型
 			//
 			// Micropost_date.setText(a1);
 			if (HomeWorkTool.isConnect(getApplicationContext())) {
-				
-				
+
+
 				if (mess.getAvatar_url() != null) { // 设置头像
 					HttpClient hc = new DefaultHttpClient();
 
@@ -570,9 +583,12 @@ private String sender_types; // 发送类型
 					Drawable face_drawable = new BitmapDrawable(bm);
 					face.setBackgroundDrawable(face_drawable);	
 				}
+
 					
 				}
 			Micropost_senderName.setText(mess.getName()); // 发消息的人
+
+
 			Micropost_content.setText(mess.getContent()); // 消息内容
 			// 消息日期 到时 根据拿到的数据在修改
 			Micropost_date.setText(mess.getCreated_at() + ""); // 消息日期
@@ -628,10 +644,10 @@ private String sender_types; // 发送类型
 					micropost_id = mess.getId();//  点击    回复  默认 给主消息回复    记录 主消息 id
 					reciver_id = mess.getUser_id();
 					reciver_types= mess.getUser_types();
-//					micropost_id    reciver_id  reciver_types
-//					Toast.makeText(getApplicationContext(), position+"----position", 1).show();
-					
-					
+					//					micropost_id    reciver_id  reciver_types
+					//					Toast.makeText(getApplicationContext(), position+"----position", 1).show();
+
+
 					child_list = new ArrayList<Child_Micropost>();
 					Child_Micropost c1 = new Child_Micropost("1", "12",
 							"student", "张", "若相守1",
@@ -745,10 +761,10 @@ private String sender_types; // 发送类型
 					}
 
 					if (position_huifu_num == position && number != 1) {// 第一次点击以后的点击
-																		// 确保连续点击
-																		// 哪一个
-																		// 2次时
-																		// 都会显示正确的效果
+						// 确保连续点击
+						// 哪一个
+						// 2次时
+						// 都会显示正确的效果
 
 						if (huifu_num == 1) {
 							layout1.setVisibility(View.VISIBLE);
@@ -770,8 +786,8 @@ private String sender_types; // 发送类型
 
 					}
 					if (position_huifu_num != position && number != 1) {// 第一次点击以后的点击
-																		// 确保连续点击不同的两个按钮时
-																		// 都会显示正确的效果
+						// 确保连续点击不同的两个按钮时
+						// 都会显示正确的效果
 
 						layout1.setVisibility(View.VISIBLE);
 						Reply_edit=  (EditText) layout1.findViewById(R.id.reply_edit);
@@ -822,7 +838,7 @@ private String sender_types; // 发送类型
 				ViewGroup parent) {
 			Log.i("111111111", child_list.size() + "--");
 			LayoutInflater inflater = Class_xinxiliu.this.getLayoutInflater();
-			 View child_view = inflater.inflate(R.layout.child_micropost_item, null);
+			View child_view = inflater.inflate(R.layout.child_micropost_item, null);
 
 			ImageView face = (ImageView) child_view
 					.findViewById(R.id.child_user_face);  // 头像
@@ -839,27 +855,28 @@ private String sender_types; // 发送类型
 
 			final Child_Micropost child_Micropost = child_list.get(position);
 			if (HomeWorkTool.isConnect(getApplicationContext())) {
-				
-			if (child_Micropost.getSender_avatar_url() != null) { // 设置头像
-				HttpClient hc = new DefaultHttpClient();
 
-				HttpGet hg = new HttpGet(child_Micropost.getSender_avatar_url());//
-				final Bitmap bm;
-				try {
-					HttpResponse hr = hc.execute(hg);
-					bm = BitmapFactory
-							.decodeStream(hr.getEntity().getContent());
-				} catch (Exception e) {
+				if (child_Micropost.getSender_avatar_url() != null) { // 设置头像
+					HttpClient hc = new DefaultHttpClient();
 
-					return null;
-				}
-				Drawable face_drawable = new BitmapDrawable(bm);
-				face.setBackgroundDrawable(face_drawable);
-			}}
+					HttpGet hg = new HttpGet(child_Micropost.getSender_avatar_url());//
+					final Bitmap bm;
+					try {
+						HttpResponse hr = hc.execute(hg);
+						bm = BitmapFactory
+								.decodeStream(hr.getEntity().getContent());
+					} catch (Exception e) {
+
+						return null;
+					}
+					Drawable face_drawable = new BitmapDrawable(bm);
+					face.setBackgroundDrawable(face_drawable);
+				}}
 			Micropost_whoToWho.setText(child_Micropost.getSender_name() + "  回复   "
 					+ child_Micropost.getReciver_name()); //
 			Micropost_content.setText(child_Micropost.getContent() + " ("
 					+ child_Micropost.getCreated_at() + ")"); // 消息内容
+
 			
 			
 			 delete.setOnClickListener(new OnClickListener() {
@@ -895,7 +912,7 @@ private String sender_types; // 发送类型
 		}
 
 	}
-	
-	
+
+
 
 }

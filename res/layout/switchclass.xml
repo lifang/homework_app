@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:gravity="center"
+    android:orientation="vertical" >
+
+    <TextView
+        android:id="@+id/switchClassTv"
+        android:layout_width="479dp"
+        android:layout_height="55dp"
+        android:text="@string/SwitchClass_Tv" 
+        android:textSize="24sp"
+        android:gravity="center"
+        />
+
+    <ListView
+        android:id="@+id/switchclassLv"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:divider="@null" 
+        >
+    </ListView>
+
+    <LinearLayout
+        android:id="@+id/switchClassll"
+        android:layout_width="479dp"
+        android:layout_height="55dp"
+        android:background="#ffffff"
+        android:orientation="horizontal" >
+        <EditText
+            android:id="@+id/SwitchClass_Et"
+            android:layout_width="400dp"
+            android:layout_height="55dp"
+            android:background="@null"
+            android:hint="@string/SwitchClass_Et"
+            android:gravity="center"
+            android:textSize="24sp" 
+            />
+        <ImageButton
+            android:id="@+id/switchClassIB"
+            android:layout_width="79dp"
+            android:layout_height="55dp" 
+            android:background="#ffffff"
+            android:src="@drawable/switchclassimagebutton"
+            android:contentDescription="@null"
+            android:adjustViewBounds="true"
+            android:padding="0dip"
+            />
+    </LinearLayout>
+
+</LinearLayout>

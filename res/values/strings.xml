@@ -43,5 +43,6 @@
 	<string name="main_class_oneTv1">磊磊</string>
 	<string name="main_class_oneTv2">张小磊</string>
 	<string name="main_class_classesTv">七年级二班英语</string>
-
+	<string name="SwitchClass_Tv">切换班级</string>
+	<string name="SwitchClass_Et">输入班级验证码加入新班级</string>
 </resources>
