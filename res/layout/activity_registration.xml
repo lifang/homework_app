@@ -135,17 +135,16 @@
                  android:visibility="gone" 
                  >
 <TextView
-           
+           android:id="@+id/regerror"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
         android:layout_marginTop="856dp"
         android:background="#FF8C00"
-          
             android:textColor="#FFFFFF"
             android:textSize="24sp"
-            android:text="@string/classCodeError" />
+             />
 <Button
-          
+          android:id="@+id/reg_error"
             android:layout_width="480dp"
             android:layout_height="51dp"
          android:background="#f08629"
