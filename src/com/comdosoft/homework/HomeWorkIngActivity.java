@@ -70,8 +70,15 @@ public class HomeWorkIngActivity extends Activity implements Urlinterface {
 					public void onItemClick(AdapterView<?> parent, View view,
 							int position, long id) {
 						HomeWorkIngActivity.this.finish();
-						Intent intent = new Intent(HomeWorkIngActivity.this,
-								SpeakPrepareActivity.class);
+						Intent intent = new Intent();
+						switch (question_list.get(position).getType()) {
+						case 0:
+							intent.setClass(HomeWorkIngActivity.this, SpeakPrepareActivity.class);
+							break;
+						case 1:
+							intent.setClass(HomeWorkIngActivity.this, DictationPrepareActivity.class);
+							break;
+						}
 						startActivity(intent);
 					}
 				});

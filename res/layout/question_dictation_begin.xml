@@ -2,6 +2,7 @@
     android:layout_width="fill_parent"
     android:layout_height="fill_parent"
     android:background="@color/question_speak_bg"
+    android:gravity="center_horizontal"
     android:orientation="vertical" >
 
     <RelativeLayout
@@ -10,7 +11,7 @@
         android:background="@color/question_title_bg1" >
 
         <LinearLayout
-            android:id="@+id/question_speak_exit"
+            android:id="@+id/question_dictation_exit"
             android:layout_width="100dp"
             android:layout_height="fill_parent"
             android:layout_alignParentLeft="true"
@@ -34,7 +35,7 @@
         </LinearLayout>
 
         <TextView
-            android:id="@+id/question_speak_title"
+            android:id="@+id/question_dictation_title"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_centerInParent="true"
@@ -42,7 +43,7 @@
             android:textSize="18sp" />
 
         <LinearLayout
-            android:id="@+id/question_speak_next"
+            android:id="@+id/question_dictation_check"
             android:layout_width="100dp"
             android:layout_height="fill_parent"
             android:layout_alignParentRight="true"
@@ -52,10 +53,11 @@
             android:orientation="horizontal" >
 
             <TextView
+                android:id="@+id/question_dictation_check_next"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginRight="10dp"
-                android:text="@string/question_speak_start"
+                android:text="@string/question_dictation_check"
                 android:textColor="@color/white"
                 android:textSize="18sp" />
 
@@ -68,29 +70,41 @@
     </RelativeLayout>
 
     <LinearLayout
-        android:layout_width="fill_parent"
-        android:layout_height="fill_parent"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginTop="50dp"
         android:orientation="horizontal"
-        android:padding="30dp" >
-
-        <TextView
-            android:id="@+id/question_speak_content"
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="10dp"
-            android:layout_marginTop="20dp"
-            android:textColor="@color/question_title_bg1"
-            android:textSize="30sp"
-            android:textStyle="bold" />
+        android:paddingLeft="30dp"
+        android:paddingRight="30dp" >
 
         <ImageView
-            android:layout_marginTop="20dp"
             android:id="@+id/question_speak_img"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:contentDescription="@string/app_name"
             android:onClick="onclicks"
             android:src="@drawable/jzlb" />
+
+        <LinearLayout
+            android:id="@+id/question_dictation_linearLayout"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="10dp"
+            android:orientation="vertical" >
+        </LinearLayout>
     </LinearLayout>
+
+    <TextView
+        android:id="@+id/question_dictation_mes"
+        android:layout_width="400dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="30dp"
+        android:background="@drawable/dictation_mes_bg"
+        android:gravity="center_vertical"
+        android:padding="20dp"
+        android:textColor="@color/question_title_bg1"
+        android:textSize="18sp"
+        android:visibility="gone" />
 
 </LinearLayout>
