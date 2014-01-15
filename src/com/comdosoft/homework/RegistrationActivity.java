@@ -269,8 +269,9 @@ public class RegistrationActivity extends Activity {
 							String avatar_url = array.getString("avatar_url");
 							Log.i("aa", avatar_url);
 							if ("success".equals(status)) {
-								Toast.makeText(getApplicationContext(), notice, 0).show();
-			
+								layout2.setVisibility(View.VISIBLE);
+								TextView reg_error = (TextView) layout2.findViewById(R.id.regerror);
+								reg_error.setText(notice);
 							}else{
 							
 								layout2.setVisibility(View.VISIBLE);

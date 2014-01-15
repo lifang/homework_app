@@ -53,7 +53,7 @@ public class SettingActivity extends Activity {
 	
 	
 	private  String student_id="1";  //   用户  id
-private String avatar_url="";   //  用户头像
+private String avatar_url="/homework_system/avatars/students/student_1.jpg";   //  用户头像
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
