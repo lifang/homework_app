@@ -12,12 +12,10 @@ import android.app.Activity;
 import android.app.AlertDialog.Builder;
 import android.app.ProgressDialog;
 import android.content.Context;
-import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -29,7 +27,6 @@ import android.widget.TextView;
 
 import com.comdosoft.homework.pojo.QuestionCasePojo;
 import com.comdosoft.homework.pojo.WorkDatePojo;
-import com.comdosoft.homework.tools.HomeWorkParams;
 import com.comdosoft.homework.tools.HomeWorkTool;
 import com.comdosoft.homework.tools.Urlinterface;
 
@@ -44,6 +41,7 @@ public class HomeWorkIngActivity extends Activity implements Urlinterface {
 	private int index;
 	private ListView working_content_list;
 	private ProgressDialog prodialog;
+	private String message;
 	private Handler handler = new Handler() {
 		public void handleMessage(android.os.Message msg) {
 			prodialog.dismiss();
@@ -51,12 +49,10 @@ public class HomeWorkIngActivity extends Activity implements Urlinterface {
 			builder.setTitle("提示");
 			switch (msg.what) {
 			case 1:
-				builder.setMessage("该Email不存在");
-				builder.setPositiveButton("确定", null);
-				builder.show();
+
 				break;
 			case 2:
-				builder.setMessage("密码错误！");
+				builder.setMessage(message);
 				builder.setPositiveButton("确定", null);
 				builder.show();
 				break;
@@ -71,9 +67,9 @@ public class HomeWorkIngActivity extends Activity implements Urlinterface {
 		initialize();// 初始化
 		index = 0;
 
-		prodialog = new ProgressDialog(HomeWorkIngActivity.this);
-		prodialog.setMessage(HomeWorkParams.PD_CLASS_INFO);
-		prodialog.show();
+		// prodialog = new ProgressDialog(HomeWorkIngActivity.this);
+		// prodialog.setMessage(HomeWorkParams.PD_CLASS_INFO);
+		// prodialog.show();
 		Thread thread = new Thread(new getClassInfo());
 		thread.start();
 
@@ -84,11 +80,11 @@ public class HomeWorkIngActivity extends Activity implements Urlinterface {
 			work_list.add(work);
 		}
 
-		QuestionCasePojo question = new QuestionCasePojo(1, 5, 1, 600,
-				"2014/1/4日", 0);
+		QuestionCasePojo question = new QuestionCasePojo(1, 5, 1, "2014/1/4日",
+				"2014/1/3日", 0);
 		question_list.add(question);
-		QuestionCasePojo question2 = new QuestionCasePojo(1, 5, 5, 500,
-				"2013/1/4日", 1);
+		QuestionCasePojo question2 = new QuestionCasePojo(1, 5, 5, "2013/1/4日",
+				"2014/1/3日", 1);
 		question_list.add(question2);
 
 		final MyWorkDateAdapter date_adapter = new MyWorkDateAdapter(
@@ -110,10 +106,15 @@ public class HomeWorkIngActivity extends Activity implements Urlinterface {
 				.setOnItemClickListener(new AdapterView.OnItemClickListener() {
 					public void onItemClick(AdapterView<?> parent, View view,
 							int position, long id) {
-						HomeWorkIngActivity.this.finish();
-						Intent intent = new Intent(HomeWorkIngActivity.this,
-								SpeakPrepareActivity.class);
-						startActivity(intent);
+						// INTO_DAILY_TASKS
+						Map<String, String> maps = new HashMap<String, String>();
+						maps.put("student_id", student_id+"");
+						maps.put("p_q_package_id", 1+"");
+						new MThread(1, maps);
+//						HomeWorkIngActivity.this.finish();
+//						Intent intent = new Intent(HomeWorkIngActivity.this,
+//								SpeakPrepareActivity.class);
+//						startActivity(intent);
 					}
 				});
 	}
@@ -211,14 +212,6 @@ public class HomeWorkIngActivity extends Activity implements Urlinterface {
 			TextView work_question_end = (TextView) convertView
 					.findViewById(R.id.work_question_end);
 
-			String time = "";
-			if (question_list.get(position).getSecond() > 0) {
-				int minute = question_list.get(position).getSecond() / 60;
-				int second = question_list.get(position).getSecond() % 60;
-				time = minute + ":" + second;
-			} else {
-				time = "00:00";
-			}
 			switch (question_list.get(position).getType()) {
 			case 0:// 0表示听写
 				if (question_list.get(position).getCount_over() == question_list
@@ -258,15 +251,55 @@ public class HomeWorkIngActivity extends Activity implements Urlinterface {
 		}
 	}
 
+	class MThread extends Thread {
+		private int type;
+		private Map<String, String> maps;
+
+		public MThread() {
+		}
+
+		public MThread(int type) {
+			super();
+			this.type = type;
+		}
+
+		public MThread(int type, Map<String, String> maps) {
+			super();
+			this.type = type;
+		}
+
+		public void run() {
+			super.run();
+			switch (type) {
+			case 1:
+				try {
+					String json = HomeWorkTool.sendGETRequest(INTO_DAILY_TASKS, maps);
+					JSONObject obj = new JSONObject(json);
+					if (obj.getBoolean("status")) {
+						obj = obj.getJSONObject("package");
+						
+					}else{
+						message = obj.getString("notice");
+					}
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
+				break;
+			case 2:
+				break;
+			}
+		}
+	}
+
 	class getClassInfo implements Runnable {
 		public void run() {
 			Looper.prepare();
 			Map<String, String> map = new HashMap<String, String>();
 			map.put("school_class_id", school_class_id + "");
 			map.put("student_id", student_id + "");
-			// String json;
+			String json;
 			try {
-				// json = HomeWorkTool.sendGETRequest(CLASS_INFO, map);
+				json = HomeWorkTool.sendGETRequest(CLASS_INFO, map);
 				JSONObject obj = new JSONObject(json);
 				if (obj.getString("status").equals("success")) {
 					JSONObject daily_tasks = obj.getJSONObject("daily_tasks");
@@ -277,15 +310,13 @@ public class HomeWorkIngActivity extends Activity implements Urlinterface {
 					JSONArray finish_tasks = daily_tasks
 							.getJSONArray("finish_tasks");// 已经完成的任务
 					if (dealing_tasks.length() > 0) {
-						
 					}
 					if (unfinish_tasks.length() > 0) {
 						for (int i = 0; i < unfinish_tasks.length(); i++) {
-							
+							JSONObject item = unfinish_tasks.getJSONObject(i);
 						}
 					}
 					if (finish_tasks.length() > 0) {
-						
 					}
 				}
 			} catch (Exception e) {

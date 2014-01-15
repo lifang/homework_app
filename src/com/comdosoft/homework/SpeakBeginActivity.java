@@ -1,20 +1,28 @@
 package com.comdosoft.homework;
 
+import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.json.JSONObject;
+
 import android.app.Activity;
 import android.app.AlertDialog.Builder;
 import android.app.Dialog;
+import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.media.MediaPlayer;
+import android.media.MediaRecorder;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
+import android.os.Handler;
+import android.os.Looper;
+import android.os.Message;
 import android.speech.RecognizerIntent;
 import android.util.Log;
 import android.view.View;
@@ -24,6 +32,7 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.comdosoft.homework.tools.HomeWorkParams;
 import com.comdosoft.homework.tools.HomeWorkTool;
 import com.comdosoft.homework.tools.PredicateLayout;
 import com.comdosoft.homework.tools.Soundex_Levenshtein;
@@ -40,6 +49,29 @@ public class SpeakBeginActivity extends Activity implements Urlinterface {
 	public int number;// 播放次数
 	private TextView question_speak_tishi;
 	private Map<Integer, String> ok_speak;
+	public MediaRecorder mediaRecorder;
+	
+	private int student_id = 1;
+	private int ti_id = 1;
+	private int school_class_id = 1;
+	private int publish_question_package_id = 1;
+	private int question_package_id = 1;
+	
+	
+	private static String SDFile;
+	public List<String> error_list;
+	private ProgressDialog prodialog;
+	private Handler handler = new Handler() {
+		public void handleMessage(Message msg) {
+			switch (msg.what) {
+			case 0:
+				break;
+			case 1:
+				break;
+			}
+			super.handleMessage(msg);
+		}
+	};
 
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -48,6 +80,11 @@ public class SpeakBeginActivity extends Activity implements Urlinterface {
 		initialize();
 		question_speak_title.setText("1/2");
 		SetTextView();
+		SDFile = "/sdcard/homework/" + student_id + "/" + ti_id + "/";
+		File file = new File(SDFile);
+		if (!file.exists()) {
+			file.mkdirs();
+		}
 	}
 
 	// 初始化
@@ -58,6 +95,7 @@ public class SpeakBeginActivity extends Activity implements Urlinterface {
 		question_speak_tishi.setVisibility(View.GONE);
 		player = new MediaPlayer();
 		ok_speak = new HashMap<Integer, String>();// 用于记录正确的词
+		error_list = new ArrayList<String>();
 	}
 
 	// 设置textview
@@ -90,11 +128,11 @@ public class SpeakBeginActivity extends Activity implements Urlinterface {
 			break;
 		case R.id.question_speak_img:// 播放音频
 			// 从文件系统播放
-			String path = "/sdcard/homework/test.mp3";
+			String path = SDFile + "test.mp3";
 			try {
 				player.setDataSource(path);
 				if (player.isPlaying()) {// 正在播放
-					Toast.makeText(this, "正在播放..", 0).show();
+					Toast.makeText(this, "正在播放..", Toast.LENGTH_SHORT).show();
 					player.pause();
 				} else {
 					player.prepare();
@@ -119,8 +157,10 @@ public class SpeakBeginActivity extends Activity implements Urlinterface {
 				// 提示语音开始
 				intent.putExtra(RecognizerIntent.EXTRA_PROMPT, "开始语音");
 				// 开始语音识别
+
 				startActivityForResult(speak_intent,
 						VOICE_RECOGNITION_REQUEST_CODE);
+
 			} catch (Exception e) {
 				Builder builder = new Builder(SpeakBeginActivity.this);
 				builder.setTitle("提示");
@@ -161,6 +201,7 @@ public class SpeakBeginActivity extends Activity implements Urlinterface {
 		// 回调获取从谷歌得到的数据
 		if (requestCode == VOICE_RECOGNITION_REQUEST_CODE
 				&& resultCode == RESULT_OK) {
+			// stopService(service_intent);
 			// 取得语音的字符
 			ArrayList<String> results = data
 					.getStringArrayListExtra(RecognizerIntent.EXTRA_RESULTS);
@@ -183,9 +224,11 @@ public class SpeakBeginActivity extends Activity implements Urlinterface {
 						view_list.get(code_list.get(i)[0]).setBackgroundColor(
 								getResources().getColor(R.color.lvse));
 					} else if (code_list.get(i)[1] >= 4) {
+						error_list.add(str_list.get(code_list.get(i)[0]));// 记录错误信息
 						view_list.get(code_list.get(i)[0]).setBackgroundColor(
 								getResources().getColor(R.color.juhuang));
 					} else {
+						error_list.add(str_list.get(code_list.get(i)[0]));// 记录错误信息
 						view_list.get(code_list.get(i)[0]).setBackgroundColor(
 								getResources().getColor(R.color.shenhui));
 					}
@@ -235,10 +278,15 @@ public class SpeakBeginActivity extends Activity implements Urlinterface {
 
 					break;
 				case 2:
-					SpeakBeginActivity.this.finish();
-					intent.setClass(SpeakBeginActivity.this,
-							HomeWorkIngActivity.class);
-					startActivity(intent);
+					prodialog = new ProgressDialog(SpeakBeginActivity.this);
+					prodialog.setMessage(HomeWorkParams.PD_FINISH_QUESTION);
+					prodialog.show();
+					Thread thread = new Thread(new SendWorkOver());
+					thread.start();
+//					SpeakBeginActivity.this.finish();
+//					intent.setClass(SpeakBeginActivity.this,
+//							HomeWorkIngActivity.class);
+//					startActivity(intent);
 					break;
 				}
 			}
@@ -265,6 +313,54 @@ public class SpeakBeginActivity extends Activity implements Urlinterface {
 			dialog_img.setVisibility(View.GONE);
 		}
 		dialog.show();
+	}
+	
+	class Record_answer_info implements Runnable {
+		public void run() {
+			Looper.prepare();
+			Map<String, String> map = new HashMap<String, String>();
+			map.put("school_class_id", school_class_id + "");
+			map.put("student_id", student_id + "");
+			map.put("question_package_id", question_package_id + "");
+//			map.put("question_id", question_id + "");
+//			map.put("branch_question_id", branch_question_id + "");
+//			map.put("answer", answer);
+//			map.put("question_types", question_types+"");
+			
+			String json;
+			try {
+				json = HomeWorkTool.doPost(RECORD_ANSWER_INFO, map);
+				JSONObject obj = new JSONObject(json);
+				if (obj.getString("status").equals("success")) {
+					
+				}
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+			Looper.loop();
+		}
+	}
+
+	class SendWorkOver implements Runnable {
+		public void run() {
+			Looper.prepare();
+			Map<String, String> map = new HashMap<String, String>();
+			map.put("school_class_id", school_class_id + "");
+			map.put("student_id", student_id + "");
+			map.put("question_package_id", question_package_id + "");
+			map.put("publish_question_package_id", publish_question_package_id + "");
+			String json;
+			try {
+				json = HomeWorkTool.doPost(FINISH_QUESTION_PACKGE, map);
+				JSONObject obj = new JSONObject(json);
+				if (obj.getString("status").equals("success")) {
+					
+				}
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+			Looper.loop();
+		}
 	}
 
 	protected void onStart() {
