@@ -10,7 +10,7 @@
     <string name="queren">确认</string>
     <string name="takephoto">拍照上传</string>
     <string name="fromphotostore">从相册选择</string>
-    <string name="classCodeError">班级验证码错误！</string>
+    
     <string name="reg_fanhui">返回</string>
     <string name="class_fabiao_tishi">提个问题或是分享一下你的心得吧。</string>
     <string name="class_fabiao">发表</string>
@@ -32,8 +32,11 @@
     <string name="question_speak_tishi">还有几个词你读的还不是很正确哦,再听听录音,正确的朗读出来吧！</string>
     <string name="newwork_text">new!</string>
     <string name="work_content_text">完成情况:</string>
+    <string name="question_dictation_check">检查</string>
+    <string name="question_dictation_mes">预听</string>
+    <string name="question_dictation_content">\t在开始本次作业前,请先点击上面的波音按钮,进行音频的预听,以便更好的完成本次作业!</string>
 
-    
+    <string name="edit_null">输入框不能为空！</string>
     
         <string name="setting_tishi">点击头像进行修改！</string>
       <string name="saveUpdata">保存更新</string>

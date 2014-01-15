@@ -14,8 +14,8 @@
 
     <ImageButton
         android:id ="@+id/set_touxiang"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="176dp"
+        android:layout_height="186dp"
         android:background="@drawable/moren"
         android:layout_marginTop="91dp"
       />
@@ -40,7 +40,7 @@
         android:textSize="24sp" />
      
           <EditText
-        android:id="@+id/set_nicheng"
+        android:id="@+id/set_nickname"
         android:layout_width="480dp"
             android:layout_height="47dp"
         android:layout_marginTop="21dp"
@@ -57,7 +57,7 @@
         android:textSize="24sp" />
      
           <EditText
-        android:id="@+id/reg_xingming"
+        android:id="@+id/set_name"
          android:layout_width="480dp"
             android:layout_height="47dp"
         android:layout_marginTop="21dp"
@@ -110,7 +110,7 @@
    <!-- 下面的内容一开始是隐藏起来的 -->
 
             <LinearLayout
-                android:id="@+id/photolayout"
+                android:id="@+id/set_photolayout"
                 android:layout_width="fill_parent"
                 android:layout_height="fill_parent"
                  android:gravity="center_horizontal"
@@ -124,7 +124,7 @@
             android:layout_height="51dp"
         android:layout_marginTop="885dp"
         android:background="#f08629"
-            android:onClick="sel_paizhaoshangchuan"
+            android:onClick="set_paizhaoshangchuan"
             android:textColor="#FFFFFF"
             android:textSize="24sp"
             android:text="@string/takephoto" />
@@ -133,7 +133,7 @@
            android:layout_width="480dp"
             android:layout_height="51dp"
          android:background="#f08629"
-             android:onClick="sel_congxiangce"
+             android:onClick="set_congxiangce"
              android:layout_marginTop="28dp"
             android:textColor="#FFFFFF"
             android:textSize="24sp"
@@ -162,7 +162,7 @@
           
             android:textColor="#FFFFFF"
             android:textSize="24sp"
-            android:text="@string/classCodeError" />
+             />
 <Button
           
             android:layout_width="480dp"
