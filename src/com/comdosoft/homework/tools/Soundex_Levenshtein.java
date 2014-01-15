@@ -15,6 +15,7 @@ public class Soundex_Levenshtein {
 			ml.add(arrT[i].toString());
 		}
 
+		if (arrT.length > 1) {
 			for (int i = 0; i < ml.size(); i++) {
 				int[] arr = new int[2];
 				int k = 0;
@@ -30,7 +31,8 @@ public class Soundex_Levenshtein {
 				arr[1] = temp;
 				str.add(arr);
 			}
-		
+		}
+
 		return str;
 	}
 

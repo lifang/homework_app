@@ -7,7 +7,7 @@ public class QuestionSpeakActivity extends Activity {
 
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		setContentView(R.layout.question_speak);
+		setContentView(R.layout.question_speak_begin);
 		
 		
 	}

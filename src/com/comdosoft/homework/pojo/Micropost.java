@@ -16,12 +16,12 @@ public class Micropost
 	private String  nickname;//主消息的创建者昵称
 	private String  content;  //  消息内容
 	private String avatar_url; //创建者头像
-	private Long  created_at;//创建时间
+	private String  created_at;//创建时间
 	
 	public Micropost(){}
 
 	public Micropost(String id, String user_id, String user_types, String name,
-			String nickname, String content, String avatar_url, Long created_at) {
+			String nickname, String content, String avatar_url, String created_at) {
 		super();
 		this.id = id;
 		this.user_id = user_id;
@@ -89,11 +89,11 @@ public class Micropost
 		this.avatar_url = avatar_url;
 	}
 
-	public Long getCreated_at() {
+	public String getCreated_at() {
 		return created_at;
 	}
 
-	public void setCreated_at(Long created_at) {
+	public void setCreated_at(String created_at) {
 		this.created_at = created_at;
 	}
 	

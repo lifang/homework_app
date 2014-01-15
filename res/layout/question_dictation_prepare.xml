@@ -45,7 +45,7 @@
             android:layout_width="100dp"
             android:layout_height="fill_parent"
             android:layout_alignParentRight="true"
-            android:background="@color/work_content_over_textcolor"
+            android:background="@color/juhuang"
             android:gravity="center"
             android:onClick="onclicks"
             android:orientation="horizontal" >

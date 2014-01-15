@@ -14,10 +14,10 @@
 
     <ImageButton
         android:id ="@+id/reg_touxiang"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="176dp"
+        android:layout_height="186dp"
         android:background="@drawable/moren"
-        android:layout_marginTop="494dp"
+        android:layout_marginTop="94dp"
       />
 
    
@@ -103,8 +103,8 @@
             android:id="@+id/paizhaoshangchuan"
             android:layout_width="480dp"
             android:layout_height="51dp"
-        android:layout_marginTop="885dp"
-        android:background="#f08629"
+        android:layout_marginTop="85dp"
+        android:background="#FF8C00"
             android:onClick="sel_paizhaoshangchuan"
             android:textColor="#FFFFFF"
             android:textSize="24sp"
@@ -113,7 +113,7 @@
             android:id="@+id/congxiangce"
            android:layout_width="480dp"
             android:layout_height="51dp"
-         android:background="#f08629"
+         android:background="#FF8C00"
              android:onClick="sel_congxiangce"
              android:layout_marginTop="28dp"
             android:textColor="#FFFFFF"
@@ -135,20 +135,19 @@
                  android:visibility="gone" 
                  >
 <TextView
-           
+           android:id="@+id/regerror"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
         android:layout_marginTop="856dp"
-        android:background="#FF8C00"
-          
+        android:background="#00000000"
             android:textColor="#FFFFFF"
             android:textSize="24sp"
-            android:text="@string/classCodeError" />
+             />
 <Button
-          
+          android:id="@+id/reg_error"
             android:layout_width="480dp"
             android:layout_height="51dp"
-         android:background="#f08629"
+         android:background="#FF8C00"
              android:onClick="reg_fanhui"
              android:layout_marginTop="50dp"
             android:textColor="#FFFFFF"

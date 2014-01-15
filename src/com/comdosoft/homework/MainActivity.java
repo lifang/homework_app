@@ -24,14 +24,27 @@ public class MainActivity extends Activity {
 		startActivity(intent);
 		
 	}
+	
+	
 	public void xinxiliu(View v) {
 		
-		Intent intent = new Intent(MainActivity.this, Class_xinxiliu.class);
+		Intent intent = new Intent(MainActivity.this, Classxinxiliu.class);
+		startActivity(intent);
+		
+		
+	}
+	public void RegistrationActivity(View v) {
+		
+		Intent intent = new Intent(MainActivity.this, RegistrationActivity.class);
 		startActivity(intent);
 		
 	}
 	
-	
-	
+	public void SettingActivity(View v) {
+		
+		Intent intent = new Intent(MainActivity.this, SettingActivity.class);
+		startActivity(intent);
+		
+	}
 
 }
