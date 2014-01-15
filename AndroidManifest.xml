@@ -52,7 +52,7 @@
 
         <activity android:name=".SettingActivity" android:windowSoftInputMode="adjustUnspecified|stateHidden"/>
         
-        <activity android:name=".Class_xinxiliu" android:windowSoftInputMode="adjustUnspecified|stateHidden"/>
+        <activity android:name=".Classxinxiliu" android:windowSoftInputMode="adjustUnspecified|stateHidden"/>
 
          <activity android:name="com.comdosoft.homework.Main_classes" >
              
