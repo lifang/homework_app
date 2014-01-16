@@ -164,7 +164,7 @@ private String avatar_url="/homework_system/avatars/students/student_1.jpg";   /
 	/**
 	 * 拍照上传
 	 */
-	public void sel_paizhaoshangchuan(View v) {
+	public void set_paizhaoshangchuan(View v) {
 		
 		layout.setVisibility(View.GONE);
 
@@ -199,7 +199,7 @@ private String avatar_url="/homework_system/avatars/students/student_1.jpg";   /
 	/**
 	 * 从相册选择
 	 */
-	public void sel_congxiangce(View v) {
+	public void set_congxiangce(View v) {
 		layout.setVisibility(View.GONE);
 		
 		Intent intentFromGallery = new Intent();

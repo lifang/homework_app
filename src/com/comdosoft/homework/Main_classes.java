@@ -1,13 +1,18 @@
 package com.comdosoft.homework;
 
+import java.io.IOException;
+import java.net.MalformedURLException;
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
-
+import android.graphics.Bitmap;  
+import android.graphics.BitmapFactory;
 import com.comdosoft.homework.adapter.MainClssStuAdapter;
 import com.comdosoft.homework.pojo.ClassStuPojo;
-
 import android.app.Activity;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Message;
 import android.view.Display;
 import android.view.Gravity;
 import android.widget.GridView;
@@ -27,21 +32,64 @@ public class Main_classes extends Activity
 	private TextView main_class_oneTv1;
 	private TextView main_class_oneTv2;
 	private GridView main_class_classGv; 
+	private Bitmap bitamp;
 	private List<ClassStuPojo> stuList=new ArrayList<ClassStuPojo>();
-	private String ceshiJson="{\"status\":\"success\",\"notice\":\"\u767b\u9646\u6210\u529f\uff01\",\"student\":{\"id\":1,\"name\":\"\u5f20\u4e09\",\"nickname\":\"\u4e0a\u5584\u82e5\u6c34\",\"avatar_url\":\"/homework_manage/public/homework_system/avatars/students/student_1.png\"},\"class\":{\"id\":1,\"name\":\"\u73ed\u7ea71\",\"tearcher_name\":\"2222\",\"tearcher_id\":1},\"classmates\":[{\"avatar_url\":\"/homework_manage/public/homework_system/avatars/students/student_1.png\",\"id\":1,\"name\":\"\u5f20\u4e09\",\"nickname\":\"\u4e0a\u5584\u82e5\u6c34\"},{\"avatar_url\":\"homework_system/avatars/students/student_2.png\",\"id\":2,\"name\":\"\u5f20\u4e09\",\"nickname\":\"\u4e0a\u5584\u82e5\u6c341\"},{\"avatar_url\":\"/ulrrr/kkkk\",\"id\":3,\"name\":\"\u5f20\u4e09\",\"nickname\":\"\u4e0a\u5584\u82e5\u6c342\"},{\"avatar_url\":\"/ulrrr/kkkk\",\"id\":4,\"name\":\"\u5f20\u4e09\",\"nickname\":\"\u4e0a\u5584\u82e5\u6c343\"}],\"task_messages\":[],\"microposts\":{\"page\":1,\"pages_count\":2,\"details_microposts\":[{\"avatar_url\":\"121111\",\"content\":\"1\",\"created_at\":\"2014-01-09T10:54:21+08:00\",\"id\":1,\"name\":\"2222\",\"nickname\":null,\"user_id\":1,\"user_types\":0},{\"avatar_url\":\"121111\",\"content\":\"9\",\"created_at\":\"2014-01-09T10:54:21+08:00\",\"id\":9,\"name\":\"2222\",\"nickname\":null,\"user_id\":1,\"user_types\":0},{\"avatar_url\":\"121111\",\"content\":\"10\",\"created_at\":\"2014-01-09T10:54:21+08:00\",\"id\":10,\"name\":\"2222\",\"nickname\":null,\"user_id\":1,\"user_types\":0},{\"avatar_url\":\"avatar_teacher1\",\"content\":\"2\",\"created_at\":\"2014-01-09T10:54:26+08:00\",\"id\":2,\"name\":\"teacher1\",\"nickname\":null,\"user_id\":2,\"user_types\":0},{\"avatar_url\":\"avatar_teacher2\",\"content\":\"3\",\"created_at\":\"2014-01-09T10:54:29+08:00\",\"id\":3,\"name\":\"teacher2\",\"nickname\":null,\"user_id\":3,\"user_types\":0},{\"avatar_url\":\"avatar_teacher3\",\"content\":\"4\",\"created_at\":\"2014-01-09T10:54:30+08:00\",\"id\":4,\"name\":\"teacher3\",\"nickname\":null,\"user_id\":4,\"user_types\":0},{\"avatar_url\":\"avatar_teacher3\",\"content\":\"5\",\"created_at\":\"2014-01-09T10:54:31+08:00\",\"id\":5,\"name\":\"teacher3\",\"nickname\":null,\"user_id\":4,\"user_types\":0},{\"avatar_url\":\"avatar_teacher6\",\"content\":\"6\",\"created_at\":\"2014-01-09T10:54:31+08:00\",\"id\":6,\"name\":\"teacher6\",\"nickname\":null,\"user_id\":7,\"user_types\":0},{\"avatar_url\":\"avatar_teacher5\",\"content\":\"7\",\"created_at\":\"2014-01-09T10:54:32+08:00\",\"id\":7,\"name\":\"teacher5\",\"nickname\":null,\"user_id\":6,\"user_types\":0},{\"avatar_url\":\"121111\",\"content\":\"8\",\"created_at\":\"2014-01-09T10:54:33+08:00\",\"id\":8,\"name\":\"2222\",\"nickname\":null,\"user_id\":1,\"user_types\":0}]},\"daily_tasks\":{\"dealing_tasks\":[],\"unfinish_tasks\":[{\"end_time\":\"2014-01-10T02:35:46+08:00\",\"id\":1,\"name\":\"package1\",\"question_packages_url\":\"31312312313123\",\"status\":0},{\"end_time\":\"2014-01-10T02:35:46+08:00\",\"id\":2,\"name\":\"package2\",\"question_packages_url\":\"1111\",\"status\":0}],\"finish_tasks\":[]}}";
+	String ceshiJson = "{\"status\":\"success\",\"notice\":\"\u767b\u9646\u6210\u529f\uff01\"," +
+			"\"student\":{\"id\":1,\"name\":\"tea\",\"nickname\":\"\u4e0a\u5584\u82e5\u6c34\",\"avatar_url\":\"/homework_system/avatars/students/student_1.jpg\"}," +
+			"\"class\":{\"id\":1,\"name\":\"eeeee\",\"tearcher_name\":\"tea\",\"tearcher_id\":1}," +
+			"\"classmates\":[{\"avatar_url\":\"/homework_system/avatars/students/student_1.jpg\",\"id\":1,\"name\":\"tea\",\"nickname\":\"\u4e0a\u5584\u82e5\u6c34\"}" +
+			",{\"avatar_url\":\"/homework_system/avatars/students/student_1.jpg\",\"id\":2,\"name\":\"tea\",\"nickname\":\"\u4e0a\u5584\u82e5\u6c341\"}," +
+			"{\"avatar_url\":null,\"id\":3,\"name\":null,\"nickname\":\"\u4e0a\u5584\u82e5\u6c342\"}," +
+			"{\"avatar_url\":null,\"id\":4,\"name\":null,\"nickname\":\"\u4e0a\u5584\u82e5\u6c343\"}]}}";
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.main_class_classes);
 		Display display=this.getWindowManager().getDefaultDisplay();
 		width=display.getWidth();
 		height=display.getHeight();
-		stuList.add(new ClassStuPojo(1, "MIA", "192.168.1.125", "蔡莹"));
-		stuList.add(new ClassStuPojo(1, "LIA", "192.168.1.125", "蔡莹"));
-		stuList.add(new ClassStuPojo(1, "LIA", "192.168.1.125", "蔡莹"));
-		stuList.add(new ClassStuPojo(1, "LIA", "192.168.1.125", "蔡莹"));
-		
+		//		analysisjson();
+		stuList.add(new ClassStuPojo(1,"tea","/homework_system/avatars/students/student_1.jpg","u4e0a\u5584\u82e5\u6c34"));
+		stuList.add(new ClassStuPojo(2,"tea","/homework_system/avatars/students/student_2.png","u4e0a\u5584\u82e5\u6c341"));
+		stuList.add(new ClassStuPojo(3,"tea","/homework_system/avatars/students/student_1.jpg","u4e0a\u5584\u82e5\u6c342"));
+		stuList.add(new ClassStuPojo(4,"tea","/homework_system/avatars/students/student_1.jpg","u4e0a\u5584\u82e5\u6c343"));
 		setView();
+		Thread thread = new Thread(new Runnable() {
+			public void run() {
+				try {
+					bitamp=BitmapFactory.decodeStream(new URL("http://192.168.0.101:3004/homework_system/avatars/students/student_1.jpg").openConnection().getInputStream());
+					handler.sendEmptyMessage(0);
+				} catch (MalformedURLException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				} catch (IOException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+			}
+		});
+		thread.start();
 	}
+	//解析json-classmates
+//	public void analysisjson()
+//	{
+//		
+//		try {
+//			
+//			JSONArray jsonArray = jsonObject.getJSONArray("classmates");
+//			for(int i=0;i<jsonArray.length();i++)
+//			{ 
+//				JSONObject jsonObject2 = (JSONObject)jsonArray.opt(i); 
+//				String stu_Url=(String) jsonObject2.get("avatar_url");
+//				int id=jsonObject2.getInt("id");
+//				String name=jsonObject2.getString("name");
+//				String nickname=jsonObject2.getString("nickname");
+//
+//			}
+//		} catch (JSONException e) {
+//			e.printStackTrace();
+//		}
+//
+//	}
 	public void setView()
 	{
 		main_class_oneIVll=(LinearLayout) findViewById(R.id.main_class_classes_include).findViewById(R.id.main_class_oneIVll);
@@ -51,9 +99,9 @@ public class Main_classes extends Activity
 		main_class_oneIV=(ImageView) findViewById(R.id.main_class_classes_include).findViewById(R.id.main_class_oneIV);
 		main_class_oneIV.setLayoutParams(new LinearLayout.LayoutParams(182, 182));
 		main_class_oneTv1=(TextView)findViewById(R.id.main_class_classes_include).findViewById(R.id.main_class_oneTv1);
-		main_class_oneTv1.setText("gg");
+		main_class_oneTv1.setText("tea");
 		main_class_oneTv2=(TextView)findViewById(R.id.main_class_classes_include).findViewById(R.id.main_class_oneTv2);
-		main_class_oneTv2.setText("GSGG");
+		main_class_oneTv2.setText("u4e0a\u5584\u82e5\u6c34");
 		main_class_classesll=(LinearLayout) findViewById(R.id.main_class_classesll);
 		main_class_classesll.setLayoutParams(new LinearLayout.LayoutParams(394, (int)(height*0.75*0.1)));
 		main_class_classesTv=(TextView) findViewById(R.id.main_class_classesTv);
@@ -63,10 +111,17 @@ public class Main_classes extends Activity
 		main_class_classGv=(GridView) findViewById(R.id.main_class_classGv);
 		main_class_classGv.setLayoutParams(new LinearLayout.LayoutParams(394, (int)(height*0.75*0.9)));
 		main_class_classGv.setNumColumns(3);
-		main_class_classGv.setAdapter(new MainClssStuAdapter(getApplicationContext(),stuList,width,height));
+		main_class_classGv.setAdapter(new MainClssStuAdapter(main_class_classGv,getApplicationContext(),stuList,width,height));
 	}
-	public void SwitchClass()
-	{
-		
-	}
+	Handler handler = new Handler(){
+		public void handleMessage(Message msg) {
+			switch(msg.what)
+			{
+			case 0:
+				main_class_oneIV.setImageBitmap(bitamp);
+				break;
+			}
+		}
+	};
 }
+

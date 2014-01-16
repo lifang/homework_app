@@ -6,7 +6,7 @@
         android:id="@+id/class_left"
         android:layout_width="3.34dp"
         android:layout_height="fill_parent"
-        android:background="#FF1FFF"
+        android:background="#FFFFFF"
         android:focusable="false" />
 
     <EditText
@@ -15,7 +15,7 @@
         android:layout_height="fill_parent"
         android:layout_alignParentRight="true"
         android:layout_alignParentTop="true"
-        android:background="#FF1FFF"
+        android:background="#FFFFFF"
         android:focusable="false" >
     </EditText>
  <RelativeLayout
@@ -32,6 +32,8 @@
             android:layout_width="fill_parent"
             android:layout_height="154dp"
             android:gravity="top"
+           android:focusable="true" 
+  android:focusableInTouchMode="true" 
            
             android:hint="@string/class_fabiao_tishi"
             />

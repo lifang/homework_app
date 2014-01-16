@@ -76,7 +76,7 @@
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
                 android:layout_below="@+id/micropost_huifu"
-                android:background="#ede9e0"
+                android:background="@drawable/child_bj"
               android:visibility="gone"
                 >
 
@@ -84,8 +84,11 @@
     android:id="@+id/reply_edit"
     android:layout_width="fill_parent"
     android:layout_height="127dp"
-    
+    android:layout_marginTop="40dp"
     android:gravity="top"
+    android:focusable="true" 
+  android:focusableInTouchMode="true" 
+    
      />
 
 <Button
@@ -93,7 +96,7 @@
     android:layout_width="90dp"
     android:layout_height="wrap_content"
     android:layout_alignParentRight="true"
-    android:layout_below="@+id/partents_huifu"
+    android:layout_below="@+id/reply_edit"
     android:text="@string/huifu"
     android:onClick="reply_message"
     android:textColor="#92b81b"
@@ -105,7 +108,7 @@
                     android:layout_height="127dp"
                      android:fadingEdge="none" 
                     android:layout_below="@+id/micropost_huifu"
-                    android:background="#fd22f3" />
+                    android:background="#ede9ea" />
 
             </RelativeLayout>
             <!-- 上面的内容一开始是隐藏起来的 -->
