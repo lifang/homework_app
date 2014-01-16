@@ -29,6 +29,7 @@ public class SwitchClassActivity extends Activity
 		SwitchClass_Et=(EditText) findViewById(R.id.SwitchClass_Et);
 		SwitchClass_Et.clearFocus();
 		switchclassLv=(ListView) findViewById(R.id.switchclassLv);
+		
 		switchclassLv.setAdapter(new SwitchClassAdapter(getApplication(),classList));
 		
 	}

@@ -6,8 +6,8 @@ import java.util.List;
 public class Soundex_Levenshtein {
 	private static final String SOUNDEX_DIGITS = "01230120022455012623010202";
 
-	public static List<int[]> Engine(String s, List<String> tl) {// s用户输入的文本
-																	// tl正确答案
+	// s:用户输入文本  tl:正确答案
+	public static List<int[]> Engine(String s, List<String> tl) {
 		List<String> ml = new ArrayList<String>();
 		List<int[]> str = new ArrayList<int[]>();
 		String[] arrT = s.split(" ");
@@ -21,7 +21,7 @@ public class Soundex_Levenshtein {
 				int k = 0;
 				int temp = 0;
 				for (int j = 0; j < tl.size(); j++) {
-					int value = dragonEngine(tl.get(j), ml.get(i));
+					int value = dragonEngine(ml.get(i),tl.get(j));
 					if (value >= temp) {
 						temp = value;
 						k = j;

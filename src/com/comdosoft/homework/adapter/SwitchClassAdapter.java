@@ -42,7 +42,6 @@ public class SwitchClassAdapter extends BaseAdapter
 			convertView=inflater.inflate(R.layout.switchclass_one, null);
 			convertView.setPadding(0, 5, 0, 5);
 			scTv=(TextView) convertView.findViewById(R.id.switchclass_oneTv);
-			scTv.setBackgroundColor(R.color.lvse);
 			scTv.setWidth(479);
 			scTv.setHeight(55);
 			scTv.setText(classlist.get(position).getName());

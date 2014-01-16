@@ -73,14 +73,6 @@
         android:orientation="horizontal"
         android:padding="30dp" >
 
-        <ImageView
-            android:id="@+id/question_speak_img"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:contentDescription="@string/app_name"
-            android:onClick="onclicks"
-            android:src="@drawable/jzlb" />
-
         <TextView
             android:id="@+id/question_speak_content"
             android:layout_width="fill_parent"
@@ -90,6 +82,15 @@
             android:textColor="@color/question_title_bg1"
             android:textSize="30sp"
             android:textStyle="bold" />
+
+        <ImageView
+            android:layout_marginTop="20dp"
+            android:id="@+id/question_speak_img"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:contentDescription="@string/app_name"
+            android:onClick="onclicks"
+            android:src="@drawable/jzlb" />
     </LinearLayout>
 
 </LinearLayout>

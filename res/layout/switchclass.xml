@@ -9,44 +9,50 @@
         android:id="@+id/switchClassTv"
         android:layout_width="479dp"
         android:layout_height="55dp"
-        android:text="@string/SwitchClass_Tv" 
-        android:textSize="24sp"
         android:gravity="center"
-        />
-
-    <ListView
-        android:id="@+id/switchclassLv"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:divider="@null" 
-        >
-    </ListView>
+        android:text="@string/SwitchClass_Tv"
+        android:textSize="24sp" />
 
     <LinearLayout
+        android:layout_width="479dp"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:orientation="vertical" >
+
+        <ListView
+            android:id="@+id/switchclassLv"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:divider="@null" >
+        </ListView>
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_marginTop="5dp"
         android:id="@+id/switchClassll"
         android:layout_width="479dp"
         android:layout_height="55dp"
         android:background="#ffffff"
         android:orientation="horizontal" >
+
         <EditText
             android:id="@+id/SwitchClass_Et"
             android:layout_width="400dp"
             android:layout_height="55dp"
             android:background="@null"
-            android:hint="@string/SwitchClass_Et"
             android:gravity="center"
-            android:textSize="24sp" 
-            />
+            android:hint="@string/SwitchClass_Et"
+            android:textSize="24sp" />
+
         <ImageButton
             android:id="@+id/switchClassIB"
             android:layout_width="79dp"
-            android:layout_height="55dp" 
-            android:background="#ffffff"
-            android:src="@drawable/switchclassimagebutton"
-            android:contentDescription="@null"
+            android:layout_height="55dp"
             android:adjustViewBounds="true"
+            android:background="#ffffff"
+            android:contentDescription="@null"
             android:padding="0dip"
-            />
+            android:src="@drawable/switchclassimagebutton" />
     </LinearLayout>
 
 </LinearLayout>

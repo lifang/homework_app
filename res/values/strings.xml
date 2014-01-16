@@ -32,6 +32,9 @@
     <string name="question_speak_tishi">还有几个词你读的还不是很正确哦,再听听录音,正确的朗读出来吧！</string>
     <string name="newwork_text">new!</string>
     <string name="work_content_text">完成情况:</string>
+    <string name="question_dictation_check">检查</string>
+    <string name="question_dictation_mes">预听</string>
+    <string name="question_dictation_content">\t在开始本次作业前,请先点击上面的波音按钮,进行音频的预听,以便更好的完成本次作业!</string>
 
     <string name="edit_null">输入框不能为空！</string>
     <string name="Net_null">未连接网络</string>
