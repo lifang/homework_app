@@ -19,4 +19,8 @@ public class ListeningQuestionMap {
 	public static List<ListeningPojo> getListeningPojoList() {
 		return listeningList;
 	}
+
+	public static void delListeningPojoList(int index) {
+		listeningList.remove(index);
+	}
 }

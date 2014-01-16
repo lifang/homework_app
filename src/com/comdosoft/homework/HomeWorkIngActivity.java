@@ -6,6 +6,7 @@ import java.util.List;
 import java.util.Map;
 
 import org.json.JSONArray;
+import org.json.JSONException;
 import org.json.JSONObject;
 
 import android.app.Activity;
@@ -27,10 +28,13 @@ import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
 
+import com.comdosoft.homework.pojo.ListeningPojo;
 import com.comdosoft.homework.pojo.QuestionCasePojo;
+import com.comdosoft.homework.pojo.QuestionPojo;
 import com.comdosoft.homework.pojo.WorkDatePojo;
 import com.comdosoft.homework.tools.HomeWorkParams;
 import com.comdosoft.homework.tools.HomeWorkTool;
+import com.comdosoft.homework.tools.ListeningQuestionMap;
 import com.comdosoft.homework.tools.Urlinterface;
 
 public class HomeWorkIngActivity extends Activity implements Urlinterface {
@@ -70,12 +74,12 @@ public class HomeWorkIngActivity extends Activity implements Urlinterface {
 
 		initialize();// 初始化
 		index = 0;
-
+		
 		prodialog = new ProgressDialog(HomeWorkIngActivity.this);
 		prodialog.setMessage(HomeWorkParams.PD_CLASS_INFO);
-		prodialog.show();
-		Thread thread = new Thread(new getClassInfo());
-		thread.start();
+		// prodialog.show();
+		// Thread thread = new Thread(new getClassInfo());
+		// thread.start();
 
 		work_list = new ArrayList<WorkDatePojo>();
 		question_list = new ArrayList<QuestionCasePojo>();
@@ -114,10 +118,12 @@ public class HomeWorkIngActivity extends Activity implements Urlinterface {
 						Intent intent = new Intent();
 						switch (question_list.get(position).getType()) {
 						case 0:
-							intent.setClass(HomeWorkIngActivity.this, SpeakPrepareActivity.class);
+							intent.setClass(HomeWorkIngActivity.this,
+									SpeakPrepareActivity.class);
 							break;
 						case 1:
-							intent.setClass(HomeWorkIngActivity.this, DictationPrepareActivity.class);
+							intent.setClass(HomeWorkIngActivity.this,
+									DictationPrepareActivity.class);
 							break;
 						}
 						startActivity(intent);
@@ -130,6 +136,7 @@ public class HomeWorkIngActivity extends Activity implements Urlinterface {
 		working_date_list = (ListView) findViewById(R.id.working_date_list);
 		working_content_list = (ListView) findViewById(R.id.working_content_list);
 	}
+
 
 	public class MyWorkDateAdapter extends BaseAdapter {
 		private LayoutInflater mInflater;
@@ -284,15 +291,15 @@ public class HomeWorkIngActivity extends Activity implements Urlinterface {
 					JSONArray finish_tasks = daily_tasks
 							.getJSONArray("finish_tasks");// 已经完成的任务
 					if (dealing_tasks.length() > 0) {
-						
+
 					}
 					if (unfinish_tasks.length() > 0) {
 						for (int i = 0; i < unfinish_tasks.length(); i++) {
-							
+
 						}
 					}
 					if (finish_tasks.length() > 0) {
-						
+
 					}
 				}
 			} catch (Exception e) {
