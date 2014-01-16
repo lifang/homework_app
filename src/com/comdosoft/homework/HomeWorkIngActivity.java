@@ -6,6 +6,7 @@ import java.util.List;
 import java.util.Map;
 
 import org.json.JSONArray;
+import org.json.JSONException;
 import org.json.JSONObject;
 
 import android.app.Activity;
@@ -26,9 +27,12 @@ import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
 
+import com.comdosoft.homework.pojo.ListeningPojo;
 import com.comdosoft.homework.pojo.QuestionCasePojo;
+import com.comdosoft.homework.pojo.QuestionPojo;
 import com.comdosoft.homework.pojo.WorkDatePojo;
 import com.comdosoft.homework.tools.HomeWorkTool;
+import com.comdosoft.homework.tools.ListeningQuestionMap;
 import com.comdosoft.homework.tools.Urlinterface;
 
 public class HomeWorkIngActivity extends Activity implements Urlinterface {
@@ -128,6 +132,7 @@ public class HomeWorkIngActivity extends Activity implements Urlinterface {
 		working_date_list = (ListView) findViewById(R.id.working_date_list);
 		working_content_list = (ListView) findViewById(R.id.working_content_list);
 	}
+
 
 	public class MyWorkDateAdapter extends BaseAdapter {
 		private LayoutInflater mInflater;
@@ -266,22 +271,7 @@ public class HomeWorkIngActivity extends Activity implements Urlinterface {
 				json = HomeWorkTool.sendGETRequest(CLASS_INFO, map);
 				JSONObject obj = new JSONObject(json);
 				if (obj.getString("status").equals("success")) {
-					JSONObject daily_tasks = obj.getJSONObject("daily_tasks");
-					JSONArray dealing_tasks = daily_tasks
-							.getJSONArray("dealing_tasks");// 正在进行的任务
-					JSONArray unfinish_tasks = daily_tasks
-							.getJSONArray("unfinish_tasks");// 新的任务
-					JSONArray finish_tasks = daily_tasks
-							.getJSONArray("finish_tasks");// 已经完成的任务
-					if (dealing_tasks.length() > 0) {
-					}
-					if (unfinish_tasks.length() > 0) {
-						for (int i = 0; i < unfinish_tasks.length(); i++) {
-							JSONObject item = unfinish_tasks.getJSONObject(i);
-						}
-					}
-					if (finish_tasks.length() > 0) {
-					}
+					
 				}
 			} catch (Exception e) {
 				e.printStackTrace();
