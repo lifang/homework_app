@@ -17,11 +17,11 @@ public class Micropost
 	private String  content;  //  消息内容
 	private String avatar_url; //创建者头像
 	private String  created_at;//创建时间
-	
+	private String reply_microposts_count;
 	public Micropost(){}
 
 	public Micropost(String id, String user_id, String user_types, String name,
-			String nickname, String content, String avatar_url, String created_at) {
+			String nickname, String content, String avatar_url, String created_at,String reply_microposts_count) {
 		super();
 		this.id = id;
 		this.user_id = user_id;
@@ -31,6 +31,16 @@ public class Micropost
 		this.content = content;
 		this.avatar_url = avatar_url;
 		this.created_at = created_at;
+		this.reply_microposts_count= reply_microposts_count;
+	}
+
+	
+	public String getReply_microposts_count() {
+		return reply_microposts_count;
+	}
+
+	public void setReply_microposts_count(String reply_microposts_count) {
+		this.reply_microposts_count = reply_microposts_count;
 	}
 
 	public String getId() {
