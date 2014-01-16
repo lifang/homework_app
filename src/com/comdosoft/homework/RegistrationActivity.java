@@ -2,8 +2,28 @@ package com.comdosoft.homework;
 
 import java.io.ByteArrayOutputStream;
 import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.UnsupportedEncodingException;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
+
+import org.apache.http.HttpResponse;
+import org.apache.http.NameValuePair;
+import org.apache.http.client.ClientProtocolException;
+import org.apache.http.client.entity.UrlEncodedFormEntity;
+import org.apache.http.client.methods.HttpPost;
+import org.apache.http.entity.mime.MultipartEntity;
+import org.apache.http.entity.mime.content.FileBody;
+import org.apache.http.entity.mime.content.StringBody;
+import org.apache.http.impl.client.DefaultHttpClient;
+import org.apache.http.message.BasicNameValuePair;
+import org.apache.http.protocol.HTTP;
+import org.apache.http.util.EntityUtils;
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import android.app.Activity;
 import android.content.Intent;
@@ -14,13 +34,16 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
 import android.provider.MediaStore;
+import android.util.Log;
 import android.view.View;
 import android.view.Window;
 import android.widget.EditText;
 import android.widget.ImageButton;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.comdosoft.homework.tools.HomeWorkTool;
+import com.comdosoft.homework.tools.Urlinterface;
 
 public class RegistrationActivity extends Activity {
 	private ImageButton faceImage;
@@ -31,6 +54,8 @@ public class RegistrationActivity extends Activity {
 	private View layout2;//  班级验证码错误  返回界面
 	private String tp; // 头像资源
 	
+	private String qq_uid;  //   QQ  的   open  id   
+
 	/* 头像名称 */
 	private static final String IMAGE_FILE_NAME = "faceImage.jpg";
 
@@ -45,6 +70,11 @@ public class RegistrationActivity extends Activity {
 		requestWindowFeature(Window.FEATURE_NO_TITLE);
 
 		setContentView(R.layout.activity_registration);
+		
+		
+//		Intent intent = getIntent();// 
+//		qq_uid = intent.getStringExtra("qq_uid");   // 获得上个页面传过来的   QQ  openid
+
 		layout = this.findViewById(R.id.photolayout); // 隐藏内容
 		layout2 = this.findViewById(R.id.photolayout2); // 隐藏内容
 		faceImage = (ImageButton) findViewById(R.id.reg_touxiang);
@@ -68,14 +98,32 @@ public class RegistrationActivity extends Activity {
 	 * 拍照上传
 	 */
 	public void sel_paizhaoshangchuan(View v) {
+		
+		layout.setVisibility(View.GONE);
 
 		Intent intentFromCapture = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
 		// 判断存储卡是否可以用，可用进行存储
 		if (HomeWorkTool.isHasSdcard()) {
 
-			intentFromCapture.putExtra(MediaStore.EXTRA_OUTPUT, Uri
-					.fromFile(new File(Environment
-							.getExternalStorageDirectory(), IMAGE_FILE_NAME)));
+		
+				File file = new File(Environment.getExternalStorageDirectory()
+						+ "/" + IMAGE_FILE_NAME);
+
+					if (file.exists()) {
+						file.delete();
+
+					}
+					 file = new File(Environment.getExternalStorageDirectory()
+							+ "/" + IMAGE_FILE_NAME);
+						if (!file.exists()) {
+							intentFromCapture.putExtra(
+									MediaStore.EXTRA_OUTPUT,
+									Uri.fromFile(new File(Environment
+										.getExternalStorageDirectory(),
+											IMAGE_FILE_NAME)));
+
+			}
+
 		}
 
 		startActivityForResult(intentFromCapture, CAMERA_REQUEST_CODE);
@@ -85,6 +133,7 @@ public class RegistrationActivity extends Activity {
 	 * 从相册选择
 	 */
 	public void sel_congxiangce(View v) {
+		layout.setVisibility(View.GONE);
 		
 		Intent intentFromGallery = new Intent();
 		intentFromGallery.setType("image/*"); // 设置文件类型
@@ -139,8 +188,8 @@ public class RegistrationActivity extends Activity {
 		intent.putExtra("aspectX", 1);
 		intent.putExtra("aspectY", 1);
 		// outputX outputY 是裁剪图片宽高
-		intent.putExtra("outputX", 320);
-		intent.putExtra("outputY", 320);
+		intent.putExtra("outputX", 176);
+		intent.putExtra("outputY", 186);
 		intent.putExtra("return-data", true);
 		startActivityForResult(intent, 2);
 	}
@@ -155,12 +204,31 @@ public class RegistrationActivity extends Activity {
 		if (extras != null) {
 			Bitmap photo = extras.getParcelable("data");
 			Drawable drawable = new BitmapDrawable(photo);
-			faceImage.setImageDrawable(drawable);
-			ByteArrayOutputStream stream = new ByteArrayOutputStream();
-			 photo.compress(Bitmap.CompressFormat.JPEG, 60, stream); 
-			 byte[] b = stream.toByteArray(); // 将图片流以字符串形式存储下来
-			  
-			  tp = new String(b);
+			
+			File file = new File(Environment.getExternalStorageDirectory()
+					+ "/1" + IMAGE_FILE_NAME);
+
+			try {
+
+				if (file.exists()) {
+					file.delete();
+
+				}
+
+				file.createNewFile();
+				FileOutputStream stream = new FileOutputStream(file);
+				ByteArrayOutputStream stream1 = new ByteArrayOutputStream();
+				photo.compress(Bitmap.CompressFormat.JPEG, 60, stream);
+				byte[] buf = stream1.toByteArray(); // 将图片流以字符串形式存储下来
+				// byte[] buf = s.getBytes();
+				stream.write(buf);
+				stream.close();
+				faceImage.setImageDrawable(drawable);
+			} catch (IOException e) {
+
+				e.printStackTrace();
+			}
+		
 		}
 	}
 	
@@ -168,24 +236,64 @@ public class RegistrationActivity extends Activity {
 	//   确认按钮 点击时触发的方法
 	public String reg_queren(View v) throws Exception {
 		
-		String nicheng = reg_nicheng.getText().toString();
-		String xingming = reg_xingming.getText().toString();
-		String banjiyanzhengma = reg_banjiyanzhengma.getText().toString();
-		
-		
-		Map<String, String> map=new HashMap<String, String>();
-		
-		if (tp!=null) {
+		String nickname = reg_nicheng.getText().toString();
+		String name = reg_xingming.getText().toString();
+		String verification_code = reg_banjiyanzhengma.getText().toString();
+		if(nickname.length()==0||name.length()==0||verification_code.length()==0) {
+			layout2.setVisibility(View.VISIBLE);
+			TextView reg_error = (TextView) layout2.findViewById(R.id.regerror);
+			reg_error.setText(R.string.edit_null);
+		}else {
+			MultipartEntity entity = new MultipartEntity();
 			
-			//  将数据传给服务器
+			try {
+				entity.addPart("qq_uid", new StringBody(qq_uid));
+				File f = new File(Environment.getExternalStorageDirectory()
+						+ "/1" + IMAGE_FILE_NAME);
+				if (f.exists()) {
+					entity.addPart("avatar", new FileBody(new File(Environment.getExternalStorageDirectory()
+							+ "/1" + IMAGE_FILE_NAME)));
+				}
+				entity.addPart("nickname", new StringBody(nickname));
+				entity.addPart("name", new StringBody(name));
+				entity.addPart("verification_code", new StringBody(verification_code));
+				
+				String json = HomeWorkTool.sendPhostimg(Urlinterface.RECORD_PERSON_INFO, entity);
+				if (json.length()!=0) {
+					JSONObject array;
+					
+						try {
+							array = new JSONObject(json);
+							String status = array.getString("status");
+							String notice = array.getString("notice");
+							String avatar_url = array.getString("avatar_url");
+							Log.i("aa", avatar_url);
+							if ("success".equals(status)) {
+								layout2.setVisibility(View.VISIBLE);
+								TextView reg_error = (TextView) layout2.findViewById(R.id.regerror);
+								reg_error.setText(notice);
+							}else{
+							
+								layout2.setVisibility(View.VISIBLE);
+								TextView reg_error = (TextView) layout2.findViewById(R.id.regerror);
+								reg_error.setText(notice);
+								
+							}
+						} catch (JSONException e) {
+							// TODO Auto-generated catch block
+							e.printStackTrace();
+						}	
+				}
+//				Toast.makeText(getApplicationContext(), json, 0).show();
+			} catch (UnsupportedEncodingException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
 			
 		}
-		 
 		
 		
-		//   如果班级验证码错误   layout2.setVisibility(View.VISIBLE);
-
-		Toast.makeText(getApplicationContext(), "方法没写", 1).show();
+	
 		return null;
 	}
 

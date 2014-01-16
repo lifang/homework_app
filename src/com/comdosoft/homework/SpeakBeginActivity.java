@@ -32,6 +32,8 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.comdosoft.homework.pojo.QuestionPojo;
+import com.comdosoft.homework.tools.HomeWork;
 import com.comdosoft.homework.tools.HomeWorkParams;
 import com.comdosoft.homework.tools.HomeWorkTool;
 import com.comdosoft.homework.tools.PredicateLayout;
@@ -39,7 +41,7 @@ import com.comdosoft.homework.tools.Soundex_Levenshtein;
 import com.comdosoft.homework.tools.Urlinterface;
 
 public class SpeakBeginActivity extends Activity implements Urlinterface {
-	public String content = "This is an apple.";// 正确答案
+	public String content;// 记录本题正确答案
 	private TextView question_speak_title;
 	private MediaPlayer player;
 	private PredicateLayout PredicateLayout;
@@ -50,14 +52,17 @@ public class SpeakBeginActivity extends Activity implements Urlinterface {
 	private TextView question_speak_tishi;
 	private Map<Integer, String> ok_speak;
 	public MediaRecorder mediaRecorder;
-	
+
 	private int student_id = 1;
 	private int ti_id = 1;
 	private int school_class_id = 1;
 	private int publish_question_package_id = 1;
 	private int question_package_id = 1;
-	
-	
+	private int question_id;
+	private HomeWork homework;
+	private List<QuestionPojo> branch_questions;
+	private int index = 0;
+
 	private static String SDFile;
 	public List<String> error_list;
 	private ProgressDialog prodialog;
@@ -65,6 +70,12 @@ public class SpeakBeginActivity extends Activity implements Urlinterface {
 		public void handleMessage(Message msg) {
 			switch (msg.what) {
 			case 0:
+				index += 1;
+				PredicateLayout.removeAllViews();
+				question_speak_title.setText((index + 1) + "/"
+						+ branch_questions.size());
+				content = branch_questions.get(index).getContent();
+				SetTextView();
 				break;
 			case 1:
 				break;
@@ -76,9 +87,9 @@ public class SpeakBeginActivity extends Activity implements Urlinterface {
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.question_speak_begin);
+		homework = (HomeWork) getApplication();
 
 		initialize();
-		question_speak_title.setText("1/2");
 		SetTextView();
 		SDFile = "/sdcard/homework/" + student_id + "/" + ti_id + "/";
 		File file = new File(SDFile);
@@ -89,7 +100,11 @@ public class SpeakBeginActivity extends Activity implements Urlinterface {
 
 	// 初始化
 	public void initialize() {
+		branch_questions = homework.getBranch_questions();
+		content = branch_questions.get(0).getContent();
 		question_speak_title = (TextView) findViewById(R.id.question_speak_title);
+		question_speak_title.setText((index + 1) + "/"
+				+ branch_questions.size());
 		PredicateLayout = (PredicateLayout) findViewById(R.id.question_speak_content);
 		question_speak_tishi = (TextView) findViewById(R.id.question_speak_tishi);
 		question_speak_tishi.setVisibility(View.GONE);
@@ -123,8 +138,24 @@ public class SpeakBeginActivity extends Activity implements Urlinterface {
 			MyDialog("你还没有做完题,确认要退出吗?", "确认", "取消", 0);
 			break;
 		case R.id.question_speak_next:
-			// MyDialog("你已经答完本题确认继续下一题吗?", "确认", "取消", 1);
-			MyDialog("恭喜完成今天的朗读作业!", "确认", "取消", 2);
+			int ye = homework.getQuestion_index();
+			if ((ye + 1) < homework.getQuestion_allNumber()) {
+				Log.i(tag, ye + "-" + homework.getQuestion_allNumber() + "-"
+						+ index + "-" + branch_questions.size());
+				if ((index + 1) < branch_questions.size()) {
+					question_id = branch_questions.get(index).getId();
+					handler.sendEmptyMessage(0);
+				} else {
+					MyDialog("你已经答完本题确认继续下一题吗?", "确认", "取消", 1);
+				}
+			} else {
+				if ((index + 1) < branch_questions.size()) {
+					question_id = branch_questions.get(index).getId();
+					handler.sendEmptyMessage(0);
+				} else {
+					MyDialog("恭喜完成今天的朗读作业!", "确认", "取消", 2);
+				}
+			}
 			break;
 		case R.id.question_speak_img:// 播放音频
 			// 从文件系统播放
@@ -205,6 +236,10 @@ public class SpeakBeginActivity extends Activity implements Urlinterface {
 			// 取得语音的字符
 			ArrayList<String> results = data
 					.getStringArrayListExtra(RecognizerIntent.EXTRA_RESULTS);
+			for (int i = 0; i < results.size(); i++) {
+				Log.i(tag, results.get(i));
+			}
+
 			String speak = results.get(0);// 用户语音返回的字符串
 			str_list = new ArrayList<String>();
 			String s = content.replaceAll("(?i)[^a-zA-Z0-9\u4E00-\u9FA5]", " ");// 去除标点符号
@@ -218,7 +253,7 @@ public class SpeakBeginActivity extends Activity implements Urlinterface {
 				for (int i = 0; i < code_list.size(); i++) {
 					Log.i(tag, str_list.get(code_list.get(i)[0]) + "->相似度:"
 							+ code_list.get(i)[1]);
-					if (code_list.get(i)[1] >= 8) {
+					if (code_list.get(i)[1] >= 7) {
 						ok_speak.put(code_list.get(i)[0],
 								str_list.get(code_list.get(i)[0]));
 						view_list.get(code_list.get(i)[0]).setBackgroundColor(
@@ -269,24 +304,32 @@ public class SpeakBeginActivity extends Activity implements Urlinterface {
 			public void onClick(View v) {
 				switch (type) {
 				case 0:
+					dialog.dismiss();
 					SpeakBeginActivity.this.finish();
 					intent.setClass(SpeakBeginActivity.this,
 							HomeWorkIngActivity.class);
 					startActivity(intent);
 					break;
 				case 1:
-
+					homework.setQuestion_index(homework.getQuestion_index() + 1);
+					dialog.dismiss();
+					SpeakBeginActivity.this.finish();
+					intent.setClass(SpeakBeginActivity.this,
+							SpeakPrepareActivity.class);
+					startActivity(intent);
 					break;
 				case 2:
+					dialog.dismiss();
+					homework.setQuestion_index(0);
 					prodialog = new ProgressDialog(SpeakBeginActivity.this);
 					prodialog.setMessage(HomeWorkParams.PD_FINISH_QUESTION);
 					prodialog.show();
 					Thread thread = new Thread(new SendWorkOver());
 					thread.start();
-//					SpeakBeginActivity.this.finish();
-//					intent.setClass(SpeakBeginActivity.this,
-//							HomeWorkIngActivity.class);
-//					startActivity(intent);
+					// SpeakBeginActivity.this.finish();
+					// intent.setClass(SpeakBeginActivity.this,
+					// HomeWorkIngActivity.class);
+					// startActivity(intent);
 					break;
 				}
 			}
@@ -298,6 +341,7 @@ public class SpeakBeginActivity extends Activity implements Urlinterface {
 					dialog.dismiss();
 					break;
 				case 1:
+					dialog.dismiss();
 					SpeakBeginActivity.this.finish();
 					intent.setClass(SpeakBeginActivity.this,
 							HomeWorkIngActivity.class);
@@ -314,7 +358,7 @@ public class SpeakBeginActivity extends Activity implements Urlinterface {
 		}
 		dialog.show();
 	}
-	
+
 	class Record_answer_info implements Runnable {
 		public void run() {
 			Looper.prepare();
@@ -322,17 +366,17 @@ public class SpeakBeginActivity extends Activity implements Urlinterface {
 			map.put("school_class_id", school_class_id + "");
 			map.put("student_id", student_id + "");
 			map.put("question_package_id", question_package_id + "");
-//			map.put("question_id", question_id + "");
-//			map.put("branch_question_id", branch_question_id + "");
-//			map.put("answer", answer);
-//			map.put("question_types", question_types+"");
-			
+			map.put("branch_question_id", homework.getBranch_question_id() + "");
+			map.put("question_id", question_id + "");
+			// map.put("answer", answer);
+			// map.put("question_types", question_types+"");
+
 			String json;
 			try {
 				json = HomeWorkTool.doPost(RECORD_ANSWER_INFO, map);
 				JSONObject obj = new JSONObject(json);
 				if (obj.getString("status").equals("success")) {
-					
+
 				}
 			} catch (Exception e) {
 				e.printStackTrace();
@@ -348,13 +392,14 @@ public class SpeakBeginActivity extends Activity implements Urlinterface {
 			map.put("school_class_id", school_class_id + "");
 			map.put("student_id", student_id + "");
 			map.put("question_package_id", question_package_id + "");
-			map.put("publish_question_package_id", publish_question_package_id + "");
+			map.put("publish_question_package_id", publish_question_package_id
+					+ "");
 			String json;
 			try {
 				json = HomeWorkTool.doPost(FINISH_QUESTION_PACKGE, map);
 				JSONObject obj = new JSONObject(json);
 				if (obj.getString("status").equals("success")) {
-					
+
 				}
 			} catch (Exception e) {
 				e.printStackTrace();

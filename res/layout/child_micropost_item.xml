@@ -13,7 +13,7 @@
  >
 
     <ImageView
-        android:id="@+id/user_face"
+        android:id="@+id/child_user_face"
         android:layout_width="82dp"
         android:layout_height="82dp"
         android:background="@drawable/moren" />
@@ -22,17 +22,17 @@
         android:id="@+id/relativeLayout1"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignRight="@+id/message_content"
-        android:layout_alignTop="@+id/user_face"
+    
+        android:layout_alignTop="@+id/child_user_face"
         android:layout_marginLeft="19dp"
-        android:layout_toRightOf="@+id/user_face" >
+        android:layout_toRightOf="@+id/child_user_face" >
 
         <TextView
-            android:id="@+id/message_senderName"
+            android:id="@+id/child_message_senderName"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_alignRight="@+id/message_content"
-            android:layout_alignTop="@+id/user_face"
+           
+            android:layout_alignTop="@+id/child_user_face"
             android:text="张三  回复  李四"
             android:textColor="#92b81b"
             android:textSize="24sp" />
@@ -40,23 +40,24 @@
         
 
         <TextView
-            android:id="@+id/micropost_content"
+            android:id="@+id/child_micropost_content"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             android:layout_alignParentLeft="true"
-            android:layout_below="@+id/message_senderName"
+            android:layout_below="@+id/child_message_senderName"
             android:paddingRight="10dp"
             android:text="啊啊啊啊啊啊啊啊啊啊速度等等等等等等等等等等等等等等等等等等等等等等等等等等等等等等等等等等等等(2013/12/06 15:33)"
             android:textColor="#626060"
             android:textSize="24sp" />
 
         <Button
-            android:id="@+id/micropost_huifu"
+            android:id="@+id/child_micropost_huifu"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentRight="true"
-            android:layout_below="@+id/micropost_content"
+            android:layout_below="@+id/child_micropost_content"
             android:text="@string/huifu"
+            
             android:textColor="#92b81b"
             android:background="#00000000"
             android:textSize="24sp" />
@@ -65,12 +66,12 @@
 
 
         <Button
-            android:id="@+id/micropost_delete"
+            android:id="@+id/child_micropost_delete"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_below="@+id/micropost_content"
+            android:layout_below="@+id/child_micropost_content"
             android:layout_marginRight="26dp"
-            android:layout_toLeftOf="@+id/micropost_huifu"
+            android:layout_toLeftOf="@+id/child_micropost_huifu"
             android:text="@string/delete"
             android:textColor="#92b81b"
             android:background="#00000000"

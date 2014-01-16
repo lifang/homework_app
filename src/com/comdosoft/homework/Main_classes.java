@@ -65,4 +65,8 @@ public class Main_classes extends Activity
 		main_class_classGv.setNumColumns(3);
 		main_class_classGv.setAdapter(new MainClssStuAdapter(getApplicationContext(),stuList,width,height));
 	}
+	public void SwitchClass()
+	{
+		
+	}
 }

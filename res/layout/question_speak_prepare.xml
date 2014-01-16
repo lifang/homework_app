@@ -77,6 +77,7 @@
             android:id="@+id/question_speak_img"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginTop="20dp"
             android:contentDescription="@string/app_name"
             android:onClick="onclicks"
             android:src="@drawable/jzlb" />

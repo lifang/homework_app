@@ -7,13 +7,18 @@
     <uses-sdk
         android:minSdkVersion="10"
         android:targetSdkVersion="10" />
-    <!-- sd卡权限 -->
+
+    <!-- 在SDCard中创建于删除文件的权限 -->
     <uses-permission android:name="android.permission.MOUNT_UNMOUNT_FILESYSTEMS" />
+
+    <!-- 在SDCard中写入数据的权限 -->
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+    <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
+
     <!-- 网络权限 -->
     <uses-permission android:name="android.permission.INTERNET" />
-    <!-- 录音权限 -->
-    <uses-permission android:name="android.permission.RECORD_AUDIO" />
+
 
     <application
         android:name="com.comdosoft.homework.tools.HomeWork"
@@ -23,7 +28,7 @@
         android:screenOrientation="portrait"
         android:theme="@android:style/Theme.NoTitleBar" >
         <activity
-            android:name="com.comdosoft.homework.MainActivity"
+            android:name=".MainActivity"
             android:label="@string/app_name" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -44,6 +49,12 @@
             android:name=".SpeakBeginActivity"
             android:label="@string/app_name" >
         </activity>
+        <activity
+            android:name=".DictationPrepareActivity"
+            android:label="@string/app_name" />
+        <activity
+            android:name=".DictationBeginActivity"
+            android:label="@string/app_name" />
         <activity android:name=".Class_xinxiliu" >
         </activity>
         <activity android:name="com.comdosoft.homework.Main_classes" >
@@ -55,8 +66,13 @@
         </activity>
         <activity
             android:name=".SpeakHistoryActivity"
-            android:label="@string/app_name" >
-        </activity>
+            android:label="@string/app_name" />
+        <activity
+            android:name=".SettingActivity"
+            android:windowSoftInputMode="adjustUnspecified|stateHidden" />
+        <activity
+            android:name=".Classxinxiliu"
+            android:windowSoftInputMode="adjustUnspecified|stateHidden" />
     </application>
 
 </manifest>

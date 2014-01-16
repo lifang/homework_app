@@ -12,6 +12,7 @@ import android.app.Activity;
 import android.app.AlertDialog.Builder;
 import android.app.ProgressDialog;
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.os.Handler;
@@ -41,7 +42,6 @@ public class HomeWorkIngActivity extends Activity implements Urlinterface {
 	private int index;
 	private ListView working_content_list;
 	private ProgressDialog prodialog;
-	private String message;
 	private Handler handler = new Handler() {
 		public void handleMessage(android.os.Message msg) {
 			prodialog.dismiss();
@@ -52,7 +52,7 @@ public class HomeWorkIngActivity extends Activity implements Urlinterface {
 
 				break;
 			case 2:
-				builder.setMessage(message);
+				builder.setMessage("11");
 				builder.setPositiveButton("确定", null);
 				builder.show();
 				break;
@@ -70,8 +70,8 @@ public class HomeWorkIngActivity extends Activity implements Urlinterface {
 		// prodialog = new ProgressDialog(HomeWorkIngActivity.this);
 		// prodialog.setMessage(HomeWorkParams.PD_CLASS_INFO);
 		// prodialog.show();
-		Thread thread = new Thread(new getClassInfo());
-		thread.start();
+		// Thread thread = new Thread(new getClassInfo());
+		// thread.start();
 
 		work_list = new ArrayList<WorkDatePojo>();
 		question_list = new ArrayList<QuestionCasePojo>();
@@ -106,15 +106,19 @@ public class HomeWorkIngActivity extends Activity implements Urlinterface {
 				.setOnItemClickListener(new AdapterView.OnItemClickListener() {
 					public void onItemClick(AdapterView<?> parent, View view,
 							int position, long id) {
-						// INTO_DAILY_TASKS
-						Map<String, String> maps = new HashMap<String, String>();
-						maps.put("student_id", student_id+"");
-						maps.put("p_q_package_id", 1+"");
-						new MThread(1, maps);
-//						HomeWorkIngActivity.this.finish();
-//						Intent intent = new Intent(HomeWorkIngActivity.this,
-//								SpeakPrepareActivity.class);
-//						startActivity(intent);
+						HomeWorkIngActivity.this.finish();
+						Intent intent = new Intent();
+						switch (question_list.get(position).getType()) {
+						case 0:
+							intent.setClass(HomeWorkIngActivity.this,
+									SpeakPrepareActivity.class);
+							break;
+						case 1:
+							intent.setClass(HomeWorkIngActivity.this,
+									DictationPrepareActivity.class);
+							break;
+						}
+						startActivity(intent);
 					}
 				});
 	}
@@ -248,46 +252,6 @@ public class HomeWorkIngActivity extends Activity implements Urlinterface {
 					+ question_list.get(position).getCount_over() + "/"
 					+ question_list.get(position).getCount_all());
 			return convertView;
-		}
-	}
-
-	class MThread extends Thread {
-		private int type;
-		private Map<String, String> maps;
-
-		public MThread() {
-		}
-
-		public MThread(int type) {
-			super();
-			this.type = type;
-		}
-
-		public MThread(int type, Map<String, String> maps) {
-			super();
-			this.type = type;
-		}
-
-		public void run() {
-			super.run();
-			switch (type) {
-			case 1:
-				try {
-					String json = HomeWorkTool.sendGETRequest(INTO_DAILY_TASKS, maps);
-					JSONObject obj = new JSONObject(json);
-					if (obj.getBoolean("status")) {
-						obj = obj.getJSONObject("package");
-						
-					}else{
-						message = obj.getString("notice");
-					}
-				} catch (Exception e) {
-					e.printStackTrace();
-				}
-				break;
-			case 2:
-				break;
-			}
 		}
 	}
 
