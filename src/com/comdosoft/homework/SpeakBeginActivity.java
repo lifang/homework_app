@@ -64,12 +64,13 @@ public class SpeakBeginActivity extends Activity implements Urlinterface {
 	private int index = 0;
 
 	private static String SDFile;
-	public List<String> error_list;
+	public String error_str = "";// 记录错误的词
 	private ProgressDialog prodialog;
 	private Handler handler = new Handler() {
 		public void handleMessage(Message msg) {
 			switch (msg.what) {
 			case 0:
+				new Thread(new Record_answer_info()).start();//发送请求记录错词
 				index += 1;
 				PredicateLayout.removeAllViews();
 				question_speak_title.setText((index + 1) + "/"
@@ -110,7 +111,6 @@ public class SpeakBeginActivity extends Activity implements Urlinterface {
 		question_speak_tishi.setVisibility(View.GONE);
 		player = new MediaPlayer();
 		ok_speak = new HashMap<Integer, String>();// 用于记录正确的词
-		error_list = new ArrayList<String>();
 	}
 
 	// 设置textview
@@ -143,9 +143,12 @@ public class SpeakBeginActivity extends Activity implements Urlinterface {
 				Log.i(tag, ye + "-" + homework.getQuestion_allNumber() + "-"
 						+ index + "-" + branch_questions.size());
 				if ((index + 1) < branch_questions.size()) {
+					Log.i(tag, error_str);
 					question_id = branch_questions.get(index).getId();
+					
 					handler.sendEmptyMessage(0);
 				} else {
+					Log.i(tag, error_str);
 					MyDialog("你已经答完本题确认继续下一题吗?", "确认", "取消", 1);
 				}
 			} else {
@@ -236,9 +239,6 @@ public class SpeakBeginActivity extends Activity implements Urlinterface {
 			// 取得语音的字符
 			ArrayList<String> results = data
 					.getStringArrayListExtra(RecognizerIntent.EXTRA_RESULTS);
-			for (int i = 0; i < results.size(); i++) {
-				Log.i(tag, results.get(i));
-			}
 
 			String speak = results.get(0);// 用户语音返回的字符串
 			str_list = new ArrayList<String>();
@@ -259,11 +259,19 @@ public class SpeakBeginActivity extends Activity implements Urlinterface {
 						view_list.get(code_list.get(i)[0]).setBackgroundColor(
 								getResources().getColor(R.color.lvse));
 					} else if (code_list.get(i)[1] >= 4) {
-						error_list.add(str_list.get(code_list.get(i)[0]));// 记录错误信息
+						if (!error_str
+								.contains(str_list.get(code_list.get(i)[0]))) {
+							error_str += str_list.get(code_list.get(i)[0])
+									+ ";||;";
+						}
 						view_list.get(code_list.get(i)[0]).setBackgroundColor(
 								getResources().getColor(R.color.juhuang));
 					} else {
-						error_list.add(str_list.get(code_list.get(i)[0]));// 记录错误信息
+						if (!error_str
+								.contains(str_list.get(code_list.get(i)[0]))) {
+							error_str += str_list.get(code_list.get(i)[0])
+									+ ";||;";
+						}
 						view_list.get(code_list.get(i)[0]).setBackgroundColor(
 								getResources().getColor(R.color.shenhui));
 					}
@@ -358,7 +366,7 @@ public class SpeakBeginActivity extends Activity implements Urlinterface {
 		}
 		dialog.show();
 	}
-
+	//记录小题的错词
 	class Record_answer_info implements Runnable {
 		public void run() {
 			Looper.prepare();
@@ -368,15 +376,15 @@ public class SpeakBeginActivity extends Activity implements Urlinterface {
 			map.put("question_package_id", question_package_id + "");
 			map.put("branch_question_id", homework.getBranch_question_id() + "");
 			map.put("question_id", question_id + "");
-			// map.put("answer", answer);
-			// map.put("question_types", question_types+"");
+			map.put("answer", error_str);
+			map.put("question_types", 0 + "");
 
 			String json;
 			try {
 				json = HomeWorkTool.doPost(RECORD_ANSWER_INFO, map);
 				JSONObject obj = new JSONObject(json);
 				if (obj.getString("status").equals("success")) {
-
+					
 				}
 			} catch (Exception e) {
 				e.printStackTrace();
@@ -384,7 +392,7 @@ public class SpeakBeginActivity extends Activity implements Urlinterface {
 			Looper.loop();
 		}
 	}
-
+	//记录大题完成情况
 	class SendWorkOver implements Runnable {
 		public void run() {
 			Looper.prepare();
@@ -394,6 +402,7 @@ public class SpeakBeginActivity extends Activity implements Urlinterface {
 			map.put("question_package_id", question_package_id + "");
 			map.put("publish_question_package_id", publish_question_package_id
 					+ "");
+
 			String json;
 			try {
 				json = HomeWorkTool.doPost(FINISH_QUESTION_PACKGE, map);

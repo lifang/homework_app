@@ -9,6 +9,7 @@
         android:targetSdkVersion="10" />
 
     <!-- 在SDCard中创建于删除文件的权限 -->
+
     <uses-permission android:name="android.permission.MOUNT_UNMOUNT_FILESYSTEMS" />
 
     <!-- 在SDCard中写入数据的权限 -->
@@ -18,7 +19,6 @@
 
     <!-- 网络权限 -->
     <uses-permission android:name="android.permission.INTERNET" />
-
 
     <application
         android:name="com.comdosoft.homework.tools.HomeWork"
@@ -49,20 +49,13 @@
             android:name=".SpeakBeginActivity"
             android:label="@string/app_name" >
         </activity>
-        <activity
-            android:name=".DictationPrepareActivity"
-            android:label="@string/app_name" />
+        <activity android:name="com.comdosoft.homework.Main_classes" >
+        </activity>
+        <activity android:name="com.comdosoft.homework.SwitchClassActivity" />
         <activity
             android:name=".DictationBeginActivity"
             android:label="@string/app_name" />
         <activity android:name=".Class_xinxiliu" >
-        </activity>
-        <activity android:name="com.comdosoft.homework.Main_classes" >
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
         </activity>
         <activity
             android:name=".SpeakHistoryActivity"

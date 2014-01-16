@@ -19,8 +19,10 @@ public interface Urlinterface {
 	static final String INTO_DAILY_TASKS = IP
 			+ "/api/students/into_daily_tasks";
 
+	// static final String IP = "http://192.168.0.101:3004";
+
 	// static final String HEADIMG = IP + "/user_head_img/";
-	static final String NEWS_RELEASE = IP + "/api/students/news_release"; // 发表消息
+	String NEWS_RELEASE = IP + "/api/students/news_release"; // 发表消息
 	// String UPLOAD_FACE = IP + "/api/students/upload_avatar"; // 上传头像
 	String get_reply_microposts = IP + "/api/students/get_reply_microposts"; // 获得
 																				// 子信息
@@ -32,5 +34,11 @@ public interface Urlinterface {
 	// 李芳: http://192.168.0.130:3000/api/students/delete_posts
 	String DELETE_POSTS = IP + "/api/students/delete_posts"; // 删除主消息
 	String GET_MICROPOSTS = IP + "/api/students/get_microposts"; // 分页 获取 主消息
+	String DELETE_REPLY_POSTS = IP + "/api/students/delete_reply_microposts"; // 删除
+																				// 子消息
+
+	String MY_MICROPOSTS = IP + "/api/students/my_microposts"; // 分页 获取 子消息
+
+	String get_class = IP + "/api/students/get_my_classes"; // 获得所有班级
 
 }

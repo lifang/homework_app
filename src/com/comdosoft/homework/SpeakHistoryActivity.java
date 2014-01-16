@@ -1,67 +1,142 @@
 package com.comdosoft.homework;
 
+import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.HashMap;
-
-import com.comdosoft.homework.tools.HomeWorkTool;
-import com.comdosoft.homework.tools.PredicateLayout;
+import java.util.List;
 
 import android.app.Activity;
 import android.app.Dialog;
-import android.app.AlertDialog.Builder;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.media.MediaPlayer;
-import android.net.Uri;
+import android.media.MediaRecorder;
 import android.os.Bundle;
-import android.os.Environment;
-import android.speech.RecognizerIntent;
+import android.os.Handler;
+import android.os.Message;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
-public class SpeakHistoryActivity extends Activity {
-	public String content = "This is an apple.";// 正确答案
+import com.comdosoft.homework.pojo.QuestionPojo;
+import com.comdosoft.homework.tools.HomeWork;
+import com.comdosoft.homework.tools.PredicateLayout;
+import com.comdosoft.homework.tools.Urlinterface;
+
+public class SpeakHistoryActivity extends Activity implements Urlinterface {
+
+	public String content;// 记录本题正确答案
 	private TextView question_speak_title;
-	private TextView question_speak_content;
-	private TextView question_speak_tishi;
 	private MediaPlayer player;
-	private ArrayList<String> error_list;
-	private String SDFile;
-	private String uid;
-	private String ti_id;
+	private PredicateLayout PredicateLayout;
+	public List<View> view_list;
+	public List<String> str_list;
+	public int number;// 播放次数
+	private TextView question_speak_tishi;
+	public MediaRecorder mediaRecorder;
+
+	private int student_id = 1;
+	private int ti_id = 1;
+	private HomeWork homework;
+	private List<QuestionPojo> branch_questions;
+	private int index = 0;
+
+	private static String SDFile;
+	public String error_str = "";// 记录错误的词
+	private Handler handler = new Handler() {
+		public void handleMessage(Message msg) {
+			switch (msg.what) {
+			case 0:
+				index += 1;
+				PredicateLayout.removeAllViews();
+				question_speak_title.setText((index + 1) + "/"
+						+ branch_questions.size());
+				content = branch_questions.get(index).getContent();
+				SetTextView();
+				break;
+			case 1:
+				break;
+			}
+			super.handleMessage(msg);
+		}
+	};
 
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		setContentView(R.layout.question_speak_history);
+		setContentView(R.layout.question_speak_begin);
+		homework = (HomeWork) getApplication();
 
 		initialize();
-
+		SetTextView();
+		SDFile = "/sdcard/homework/" + student_id + "/" + ti_id + "/";
+		File file = new File(SDFile);
+		if (!file.exists()) {
+			file.mkdirs();
+		}
 	}
 
 	// 初始化
 	public void initialize() {
-		SDFile = "/sdcard/homework/" + uid + "/" + ti_id + "/";
+		branch_questions = homework.getBranch_questions();
+		content = branch_questions.get(0).getContent();
 		question_speak_title = (TextView) findViewById(R.id.question_speak_title);
-		question_speak_title.setText("1/2");
-		question_speak_content = (TextView) findViewById(R.id.question_speak_content);
-		question_speak_content.setText(content);
+		question_speak_title.setText((index + 1) + "/"
+				+ branch_questions.size());
+		PredicateLayout = (PredicateLayout) findViewById(R.id.question_speak_content);
 		question_speak_tishi = (TextView) findViewById(R.id.question_speak_tishi);
+		question_speak_tishi.setVisibility(View.GONE);
 		player = new MediaPlayer();
-		error_list = new ArrayList<String>();
+	}
+
+	// 设置textview
+	public void SetTextView() {
+		view_list = new ArrayList<View>();
+		String[] str = content.split(" ");
+		for (int i = 0; i < str.length; i++) {
+			View view1 = View.inflate(this, R.layout.question_speak_begin_item,
+					null);
+			LinearLayout layout = (LinearLayout) view1
+					.findViewById(R.id.layout);
+			TextView text = (TextView) view1.findViewById(R.id.text);
+			View color = (View) view1.findViewById(R.id.color);
+			text.setText(str[i].toString());
+			color.setBackgroundColor(getResources().getColor(R.color.shenhui));
+			view_list.add(color);
+			PredicateLayout.addView(layout);
+		}
 	}
 
 	public void onclicks(View v) {
+		Intent intent = new Intent();
 		switch (v.getId()) {
 		case R.id.question_speak_exit:
-			MyDialog("你确认要退出吗?", "确认", "取消", 0);
+			MyDialog("确认要退出吗?", "确认", "取消", 0);
 			break;
 		case R.id.question_speak_next:
-			// MyDialog("你已经答完本题确认继续下一题吗?", "确认", "取消", 1);
-			MyDialog("你已经浏览完本次作业,确认退出吗？", "确认", "取消", 2);
+			int ye = homework.getQuestion_index();
+			if ((ye + 1) < homework.getQuestion_allNumber()) {
+				Log.i(tag, ye + "-" + homework.getQuestion_allNumber() + "-"
+						+ index + "-" + branch_questions.size());
+				if ((index + 1) < branch_questions.size()) {
+					handler.sendEmptyMessage(0);
+				} else {
+					Log.i(tag, error_str);
+					homework.setQuestion_index(homework.getQuestion_index() + 1);
+					SpeakHistoryActivity.this.finish();
+					intent.setClass(SpeakHistoryActivity.this,
+							SpeakPrepareActivity.class);
+					startActivity(intent);
+				}
+			} else {
+				if ((index + 1) < branch_questions.size()) {
+					handler.sendEmptyMessage(0);
+				} else {
+					MyDialog("这已经是最后一题了!", "确认", "取消", 2);
+				}
+			}
 			break;
 		case R.id.question_speak_img:// 播放音频
 			// 从文件系统播放
@@ -106,15 +181,23 @@ public class SpeakHistoryActivity extends Activity {
 			public void onClick(View v) {
 				switch (type) {
 				case 0:
+					dialog.dismiss();
 					SpeakHistoryActivity.this.finish();
 					intent.setClass(SpeakHistoryActivity.this,
 							HomeWorkIngActivity.class);
 					startActivity(intent);
 					break;
 				case 1:
-
+					homework.setQuestion_index(homework.getQuestion_index() + 1);
+					dialog.dismiss();
+					SpeakHistoryActivity.this.finish();
+					intent.setClass(SpeakHistoryActivity.this,
+							SpeakPrepareActivity.class);
+					startActivity(intent);
 					break;
 				case 2:
+					dialog.dismiss();
+					homework.setQuestion_index(0);
 					SpeakHistoryActivity.this.finish();
 					intent.setClass(SpeakHistoryActivity.this,
 							HomeWorkIngActivity.class);
@@ -130,6 +213,7 @@ public class SpeakHistoryActivity extends Activity {
 					dialog.dismiss();
 					break;
 				case 1:
+					dialog.dismiss();
 					SpeakHistoryActivity.this.finish();
 					intent.setClass(SpeakHistoryActivity.this,
 							HomeWorkIngActivity.class);
@@ -145,5 +229,29 @@ public class SpeakHistoryActivity extends Activity {
 			dialog_img.setVisibility(View.GONE);
 		}
 		dialog.show();
+	}
+
+	protected void onStart() {
+		if (player == null)
+			player = new MediaPlayer();
+		super.onStart();
+	}
+
+	// 暂停音频
+	protected void onStop() {
+		if (player.isPlaying()) {// 正在播放
+			player.pause();// 暂停
+		}
+		super.onStop();
+	}
+
+	// 销毁音频
+	protected void onDestroy() {
+		if (player != null) {
+			player.stop();
+			player.release();
+			player = null;
+		}
+		super.onDestroy();
 	}
 }
