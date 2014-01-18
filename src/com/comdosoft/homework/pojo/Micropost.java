@@ -2,12 +2,9 @@ package com.comdosoft.homework.pojo;
 
 
 
-import android.R.integer;
 
 public class Micropost
 {
-	
-
 
 	private String id;  //  信息  id
 	private String  user_id;//创建者id

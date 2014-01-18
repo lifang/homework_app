@@ -10,9 +10,11 @@ import com.comdosoft.homework.pojo.QuestionPojo;
 public class HomeWork extends Application {
 	private int Question_allNumber;
 	private List<QuestionPojo> branch_questions;
+	private List<ListeningPojo> question_list;
 	private int branch_question_id;
 	private int question_index;
-
+	private List<List<String>> question_history;
+	private boolean work_history;//查看历史开关
 	public HomeWork() {
 		this.setQuestion_index(0);
 	}
@@ -24,7 +26,6 @@ public class HomeWork extends Application {
 	public void setQuestion_index(int question_index) {
 		this.question_index = question_index;
 	}
-
 
 	public int getBranch_question_id() {
 		return branch_question_id;
@@ -50,4 +51,30 @@ public class HomeWork extends Application {
 		Question_allNumber = question_allNumber;
 	}
 
+	public List<ListeningPojo> getQuestion_list() {
+		return question_list;
+	}
+
+	public void setQuestion_list(List<ListeningPojo> question_list) {
+		this.question_list = question_list;
+	}
+
+	public List<List<String>> getQuestion_history() {
+		return question_history;
+	}
+
+	public void setQuestion_history(List<List<String>> question_history) {
+		this.question_history = question_history;
+	}
+
+	public boolean isWork_history() {
+		return work_history;
+	}
+
+	public void setWork_history(boolean work_history) {
+		this.work_history = work_history;
+	}
+	
+	
+	
 }

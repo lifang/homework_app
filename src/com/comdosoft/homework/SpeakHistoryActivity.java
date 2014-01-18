@@ -2,28 +2,28 @@ package com.comdosoft.homework;
 
 import java.io.File;
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.List;
 
 import android.app.Activity;
 import android.app.Dialog;
 import android.content.Intent;
+import android.graphics.Color;
 import android.media.MediaPlayer;
-import android.media.MediaRecorder;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.util.Log;
+import android.view.Gravity;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.LinearLayout.LayoutParams;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.comdosoft.homework.pojo.QuestionPojo;
 import com.comdosoft.homework.tools.HomeWork;
-import com.comdosoft.homework.tools.PredicateLayout;
 import com.comdosoft.homework.tools.Urlinterface;
 
 public class SpeakHistoryActivity extends Activity implements Urlinterface {
@@ -31,19 +31,17 @@ public class SpeakHistoryActivity extends Activity implements Urlinterface {
 	public String content;// 记录本题正确答案
 	private TextView question_speak_title;
 	private MediaPlayer player;
-	private PredicateLayout PredicateLayout;
-	public List<View> view_list;
-	public List<String> str_list;
 	public int number;// 播放次数
-	private TextView question_speak_tishi;
-	public MediaRecorder mediaRecorder;
-
+	private LinearLayout question_speak_tishi;
+	private TextView question_speak_content;
+	private List<List<String>> question_history;
 	private int student_id = 1;
 	private int ti_id = 1;
 	private HomeWork homework;
 	private List<QuestionPojo> branch_questions;
 	private int index = 0;
-
+	private int question_history_size;
+	
 	private static String SDFile;
 	public String error_str = "";// 记录错误的词
 	private Handler handler = new Handler() {
@@ -51,11 +49,11 @@ public class SpeakHistoryActivity extends Activity implements Urlinterface {
 			switch (msg.what) {
 			case 0:
 				index += 1;
-				PredicateLayout.removeAllViews();
 				question_speak_title.setText((index + 1) + "/"
 						+ branch_questions.size());
 				content = branch_questions.get(index).getContent();
-				SetTextView();
+				question_speak_content.setText(content);
+				setTishi(question_history.get(homework.getQuestion_index()).get(index));
 				break;
 			case 1:
 				break;
@@ -63,19 +61,27 @@ public class SpeakHistoryActivity extends Activity implements Urlinterface {
 			super.handleMessage(msg);
 		}
 	};
+	
 
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		setContentView(R.layout.question_speak_begin);
+		setContentView(R.layout.question_speak_history);
 		homework = (HomeWork) getApplication();
 
 		initialize();
-		SetTextView();
 		SDFile = "/sdcard/homework/" + student_id + "/" + ti_id + "/";
 		File file = new File(SDFile);
 		if (!file.exists()) {
 			file.mkdirs();
 		}
+
+		Toast.makeText(this, "查看历史信息", Toast.LENGTH_SHORT).show();
+		// for (int j = 0; j <
+		// homework.getQuestion_history().get(homework.getQuestion_index()).get.length;
+		// j++) {
+		//
+		// }
+		// initView(i);
 	}
 
 	// 初始化
@@ -85,28 +91,14 @@ public class SpeakHistoryActivity extends Activity implements Urlinterface {
 		question_speak_title = (TextView) findViewById(R.id.question_speak_title);
 		question_speak_title.setText((index + 1) + "/"
 				+ branch_questions.size());
-		PredicateLayout = (PredicateLayout) findViewById(R.id.question_speak_content);
-		question_speak_tishi = (TextView) findViewById(R.id.question_speak_tishi);
-		question_speak_tishi.setVisibility(View.GONE);
+		question_speak_content = (TextView) findViewById(R.id.question_speak_content);
+		question_speak_content.setText(branch_questions.get(0).getContent());
+		question_speak_tishi = (LinearLayout) findViewById(R.id.question_speak_tishi);
 		player = new MediaPlayer();
-	}
-
-	// 设置textview
-	public void SetTextView() {
-		view_list = new ArrayList<View>();
-		String[] str = content.split(" ");
-		for (int i = 0; i < str.length; i++) {
-			View view1 = View.inflate(this, R.layout.question_speak_begin_item,
-					null);
-			LinearLayout layout = (LinearLayout) view1
-					.findViewById(R.id.layout);
-			TextView text = (TextView) view1.findViewById(R.id.text);
-			View color = (View) view1.findViewById(R.id.color);
-			text.setText(str[i].toString());
-			color.setBackgroundColor(getResources().getColor(R.color.shenhui));
-			view_list.add(color);
-			PredicateLayout.addView(layout);
-		}
+		question_history = homework.getQuestion_history();
+		// 添加错词提示
+		question_history_size = homework.getQuestion_history().size();
+		setTishi(question_history.get(homework.getQuestion_index()).get(0));
 	}
 
 	public void onclicks(View v) {
@@ -159,6 +151,32 @@ public class SpeakHistoryActivity extends Activity implements Urlinterface {
 			}
 			break;
 		}
+	}
+
+	public void setTishi(String str) {
+		Log.i(tag, str);
+		if (str.contains("-->")) {
+			String[] str_arr = str.split("-->");
+			for (int i = 0; i < str_arr.length; i++) {
+				initView(str_arr[i], i);
+			}
+		} else {
+			initView(str, 0);
+		}
+	}
+
+	public void initView(String str, int i) {
+		TextView tv = new TextView(getApplicationContext());
+		LayoutParams lp = new LayoutParams(LayoutParams.FILL_PARENT, 100);
+		tv.setLayoutParams(lp);
+		tv.setText("  " + str);
+		tv.setTextColor(Color.rgb(157, 156, 156));
+		tv.setTextSize(24);
+		tv.setGravity(Gravity.CENTER_VERTICAL);
+		if (i % 2 == 0) {
+			tv.setBackgroundColor(Color.rgb(231, 231, 231));
+		}
+		question_speak_tishi.addView(tv);
 	}
 
 	// 自定义dialog设置

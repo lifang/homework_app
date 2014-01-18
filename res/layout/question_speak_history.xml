@@ -84,25 +84,33 @@
             android:onClick="onclicks"
             android:src="@drawable/jzlb" />
 
-        <com.comdosoft.homework.tools.PredicateLayout
+        <TextView
             android:id="@+id/question_speak_content"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             android:layout_marginLeft="10dp"
-            android:layout_marginTop="20dp" >
-        </com.comdosoft.homework.tools.PredicateLayout>
+            android:layout_marginTop="20dp"
+            android:textColor="@color/question_title_bg1"
+            android:textSize="30sp"
+            android:textStyle="bold" />
     </LinearLayout>
 
-    <TextView 
+    <LinearLayout
         android:id="@+id/question_speak_tishi"
         android:layout_width="400dp"
         android:layout_height="wrap_content"
         android:layout_marginTop="40dp"
-        android:padding="15dp"
         android:background="@drawable/textview_border"
-        android:gravity="center"
-        android:textSize="18sp"
-        android:textColor="#6E6B6B"
-        android:text="@string/question_speak_tishi"
-        android:lineSpacingExtra="15dp"/>
+        android:orientation="vertical">
+
+        <TextView
+            android:layout_width="fill_parent"
+            android:layout_height="50dp"
+            android:textSize="21sp"
+            android:gravity="center_vertical"
+            android:textColor="#9D9C9C"
+            android:paddingLeft="10dp"
+            android:text="@string/question_history_tishi"/>
+    </LinearLayout>
+
 </LinearLayout>
