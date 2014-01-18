@@ -5,23 +5,10 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
 
-import org.apache.http.HttpResponse;
-import org.apache.http.NameValuePair;
-import org.apache.http.client.ClientProtocolException;
-import org.apache.http.client.entity.UrlEncodedFormEntity;
-import org.apache.http.client.methods.HttpPost;
 import org.apache.http.entity.mime.MultipartEntity;
 import org.apache.http.entity.mime.content.FileBody;
 import org.apache.http.entity.mime.content.StringBody;
-import org.apache.http.impl.client.DefaultHttpClient;
-import org.apache.http.message.BasicNameValuePair;
-import org.apache.http.protocol.HTTP;
-import org.apache.http.util.EntityUtils;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -54,7 +41,7 @@ public class RegistrationActivity extends Activity {
 	private View layout2;//  班级验证码错误  返回界面
 	private String tp; // 头像资源
 	
-	private String qq_uid;  //   QQ  的   open  id   
+	private String qq_uid="asf";  //   QQ  的   open  id   
 
 	/* 头像名称 */
 	private static final String IMAGE_FILE_NAME = "faceImage.jpg";
@@ -83,6 +70,9 @@ public class RegistrationActivity extends Activity {
 		reg_banjiyanzhengma = (EditText) findViewById(R.id.reg_banjiyanzhengma);
 		// 设置事件监听
 		faceImage.setOnClickListener(listener);
+		
+//		Toast.makeText(getApplicationContext(), Environment.getExternalStorageDirectory()+"",
+//				 1).show();
 
 	}
 
@@ -248,6 +238,17 @@ public class RegistrationActivity extends Activity {
 			
 			try {
 				entity.addPart("qq_uid", new StringBody(qq_uid));
+//				File f = new File(Environment.getExternalStorageDirectory()
+//					+ "/1" + IMAGE_FILE_NAME);
+//				InputStream is = this.getAssets().open("moren.png");
+//				
+//				
+//				InputStreamBody isb = new InputStreamBody(is, "moren.png");  
+//				if (tp.length()!=0) {
+//					entity.addPart("avatar", isb);
+//				}
+				
+				
 				File f = new File(Environment.getExternalStorageDirectory()
 						+ "/1" + IMAGE_FILE_NAME);
 				if (f.exists()) {
@@ -269,22 +270,26 @@ public class RegistrationActivity extends Activity {
 							String avatar_url = array.getString("avatar_url");
 							Log.i("aa", avatar_url);
 							if ("success".equals(status)) {
-								layout2.setVisibility(View.VISIBLE);
-								TextView reg_error = (TextView) layout2.findViewById(R.id.regerror);
-								reg_error.setText(notice);
+//								layout2.setVisibility(View.VISIBLE);
+//								TextView reg_error = (TextView) layout2.findViewById(R.id.regerror);
+//								reg_error.setText(notice);
+								Toast.makeText(getApplicationContext(), notice, 0).show();
 							}else{
 							
-								layout2.setVisibility(View.VISIBLE);
-								TextView reg_error = (TextView) layout2.findViewById(R.id.regerror);
-								reg_error.setText(notice);
+//								layout2.setVisibility(View.VISIBLE);
+//								TextView reg_error = (TextView) layout2.findViewById(R.id.regerror);
+//								reg_error.setText(notice);
+								Toast.makeText(getApplicationContext(), notice, 0).show();
 								
 							}
 						} catch (JSONException e) {
 							// TODO Auto-generated catch block
 							e.printStackTrace();
 						}	
+				}else {
+					Toast.makeText(getApplicationContext(), "result: 空", 0).show();
 				}
-//				Toast.makeText(getApplicationContext(), json, 0).show();
+				
 			} catch (UnsupportedEncodingException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();

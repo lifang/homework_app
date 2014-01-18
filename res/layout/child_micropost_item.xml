@@ -7,9 +7,10 @@
     >
 <RelativeLayout android:layout_width="fill_parent"
     android:layout_height="wrap_content"
-    android:background="#f6f2f3"
+  
     android:orientation="vertical"
     android:paddingTop="37dp"
+    android:background="#ede9ea"
  >
 
     <ImageView

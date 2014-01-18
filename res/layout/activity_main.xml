@@ -42,10 +42,11 @@
     <Button
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/button1"
-        android:layout_toRightOf="@+id/button1"
-        android:onClick="SettingActivity"
-        android:text="编辑个人信息" />
+        android:layout_alignLeft="@+id/button2"
+        android:layout_below="@+id/button2"
+        android:layout_marginTop="26dp"
+        android:onClick="RegistrationActivity"
+        android:text="登记个人信息" />
 
     <Button
         android:id="@+id/button3"

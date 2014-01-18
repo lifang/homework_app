@@ -47,7 +47,7 @@ public class AsyncImageLoader{
             public void run() {  
                 Bitmap bitmap = null;  
                 try {  
-                    bitmap = BitmapFactory.decodeStream(new URL(strUrl.substring(0,strUrl.length() - 1)).openConnection().getInputStream(), null, opts);   
+                    bitmap = BitmapFactory.decodeStream(new URL(strUrl.substring(0,strUrl.lastIndexOf("g")+1)).openConnection().getInputStream(), null, opts);   
                 } catch (Exception e) {  
                     e.printStackTrace();  
                 }  

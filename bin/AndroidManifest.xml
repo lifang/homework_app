@@ -50,6 +50,11 @@
             android:name=".Class_xinxiliu"
             android:windowSoftInputMode="adjustUnspecified|stateHidden" />
         <activity android:name="com.comdosoft.homework.Main_classes" >
+             <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
         </activity>
         <activity
             android:name="com.comdosoft.homework.SwitchClassActivity"
@@ -57,11 +62,6 @@
             android:windowSoftInputMode="adjustUnspecified|stateHidden" >
         </activity>
         <activity android:name="com.comdosoft.homework.AboutMeActivity" >
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
         </activity>
     </application>
 
