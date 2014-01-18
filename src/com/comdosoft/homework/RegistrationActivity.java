@@ -22,6 +22,8 @@ import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
+import android.os.Handler;
+import android.os.Message;
 import android.provider.MediaStore;
 import android.view.View;
 import android.view.Window;
@@ -227,7 +229,51 @@ private String json="";
 		
 		}
 	}
-	
+	Handler mHandler = new Handler() {
+		public void handleMessage(android.os.Message msg) {
+			switch (msg.what) {
+				case 0:
+					 final String res =  (String) msg.obj;
+					    if (json.length()!=0) {
+							JSONObject array;
+							
+								try {
+									array = new JSONObject(json);
+									String status = array.getString("status");
+									String notice = array.getString("notice");
+									
+									if ("success".equals(status)) {
+										
+									
+//										Toast.makeText(getApplicationContext(), notice, 0).show();
+										//  添加页面跳转   跳到班级页面
+										  Intent intent = new Intent();
+										intent.putExtra("json",json);
+											intent.setClass(RegistrationActivity.this,com.comdosoft.homework.Classxinxiliu.class);//
+											startActivity(intent);
+											RegistrationActivity.this.finish();
+										
+										
+									}else{
+									
+										layout2.setVisibility(View.VISIBLE);
+										TextView reg_error = (TextView) layout2.findViewById(R.id.regerror);
+										reg_error.setText(notice);
+//										Toast.makeText(getApplicationContext(), notice, 0).show();
+										
+									}
+								} catch (JSONException e) {
+									// TODO Auto-generated catch block
+									e.printStackTrace();
+								}	
+						}
+					 break;
+				default:
+					break;
+					
+			}
+		}
+	};
 	
 	//   确认按钮 点击时触发的方法
 	public String reg_queren(View v) throws Exception {
@@ -287,7 +333,10 @@ private String json="";
 						entity.addPart("verification_code", new StringBody(verification_code));
 						
 					 json = HomeWorkTool.sendPhostimg(Urlinterface.RECORD_PERSON_INFO, entity);
-						
+					 Message msg = new Message();//  创建Message 对象
+						msg.what =0 ;
+						msg.obj = json;
+						mHandler.sendMessage(msg);
 						
 					} catch (Exception e) {
 						// TODO Auto-generated catch block
@@ -297,41 +346,7 @@ private String json="";
 			};
 		thread.start();	
  
-	    if (json.length()!=0) {
-					JSONObject array;
-					
-						try {
-							array = new JSONObject(json);
-							String status = array.getString("status");
-							String notice = array.getString("notice");
-							
-							if ("success".equals(status)) {
-								
-							
-//								Toast.makeText(getApplicationContext(), notice, 0).show();
-								//  添加页面跳转   跳到班级页面
-								  Intent intent = new Intent();
-								intent.putExtra("json",json);
-									intent.setClass(this,com.comdosoft.homework.Classxinxiliu.class);//
-									startActivity(intent);
-								    this.finish();
-								
-								
-							}else{
-							
-								layout2.setVisibility(View.VISIBLE);
-								TextView reg_error = (TextView) layout2.findViewById(R.id.regerror);
-								reg_error.setText(notice);
-//								Toast.makeText(getApplicationContext(), notice, 0).show();
-								
-							}
-						} catch (JSONException e) {
-							// TODO Auto-generated catch block
-							e.printStackTrace();
-						}	
-				}else {
-					Toast.makeText(getApplicationContext(), "result: 空", 0).show();
-				}
+
 
 		}
 		return null;
