@@ -70,26 +70,26 @@ public class Main_classes extends Activity
 		thread.start();
 	}
 	//解析json-classmates
-//	public void analysisjson()
-//	{
-//		
-//		try {
-//			
-//			JSONArray jsonArray = jsonObject.getJSONArray("classmates");
-//			for(int i=0;i<jsonArray.length();i++)
-//			{ 
-//				JSONObject jsonObject2 = (JSONObject)jsonArray.opt(i); 
-//				String stu_Url=(String) jsonObject2.get("avatar_url");
-//				int id=jsonObject2.getInt("id");
-//				String name=jsonObject2.getString("name");
-//				String nickname=jsonObject2.getString("nickname");
-//
-//			}
-//		} catch (JSONException e) {
-//			e.printStackTrace();
-//		}
-//
-//	}
+	//	public void analysisjson()
+	//	{
+	//		
+	//		try {
+	//			
+	//			JSONArray jsonArray = jsonObject.getJSONArray("classmates");
+	//			for(int i=0;i<jsonArray.length();i++)
+	//			{ 
+	//				JSONObject jsonObject2 = (JSONObject)jsonArray.opt(i); 
+	//				String stu_Url=(String) jsonObject2.get("avatar_url");
+	//				int id=jsonObject2.getInt("id");
+	//				String name=jsonObject2.getString("name");
+	//				String nickname=jsonObject2.getString("nickname");
+	//
+	//			}
+	//		} catch (JSONException e) {
+	//			e.printStackTrace();
+	//		}
+	//
+	//	}
 	public void setView()
 	{
 		main_class_oneIVll=(LinearLayout) findViewById(R.id.main_class_classes_include).findViewById(R.id.main_class_oneIVll);

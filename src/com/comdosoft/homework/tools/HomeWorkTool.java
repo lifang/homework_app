@@ -207,12 +207,12 @@ public class HomeWorkTool implements Urlinterface {
 			throws Exception {
 		String json = "error";
 		StringBuilder url = new StringBuilder(path);
-		// url.append("?");
-		// for (Map.Entry<String, String> entry : map.entrySet()) {
-		// url.append(entry.getKey()).append("=").append(entry.getValue());
-		// url.append("&");
-		// }
-		// url.deleteCharAt(url.length() - 1);
+		 url.append("?");
+		 for (Map.Entry<String, String> entry : map.entrySet()) {
+		 url.append(entry.getKey()).append("=").append(entry.getValue());
+		 url.append("&");
+		 }
+		 url.deleteCharAt(url.length() - 1);
 		Log.i(tag, url.toString());
 		HttpURLConnection conn = (HttpURLConnection) new URL(url.toString())
 				.openConnection();
@@ -291,6 +291,7 @@ public class HomeWorkTool implements Urlinterface {
 
 	public static String doPost(String reqUrl, Map parameters) {
 		String tempLine = "";
+		Log.i(tag, "doPost方法");
 		HttpURLConnection url_con = null;
 		String responseContent = null;
 		try {
@@ -307,11 +308,10 @@ public class HomeWorkTool implements Urlinterface {
 			if (params.length() > 0) {
 				params = params.deleteCharAt(params.length() - 1);
 			}
-
 			URL url = new URL(reqUrl);
 			url_con = (HttpURLConnection) url.openConnection();
 			url_con.setRequestMethod("POST");
-			Log.i("linshi", url.toString());
+			Log.i(tag, url.toString());
 			System.setProperty("sun.net.client.defaultConnectTimeout",
 					String.valueOf(HomeWorkTool.connectTimeOut));//
 			System.setProperty("sun.net.client.defaultReadTimeout",

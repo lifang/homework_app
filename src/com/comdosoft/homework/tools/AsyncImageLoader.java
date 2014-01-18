@@ -3,7 +3,6 @@ package com.comdosoft.homework.tools;
 import java.lang.ref.SoftReference;  
 import java.net.URL;  
 import java.util.HashMap;  
-import android.annotation.SuppressLint;
 import android.graphics.Bitmap;  
 import android.graphics.BitmapFactory;  
 import android.os.Handler;  
@@ -24,7 +23,6 @@ public class AsyncImageLoader{
         opts.inSampleSize = 0;    //这个的值压缩的倍数（2的整数倍），数值越小，压缩率越小，图片越清晰      
     }  
   
-    @SuppressLint("HandlerLeak")
 	public Bitmap asyncLoadImage(final String strUrl, final int i, final LoadFinishCallBack loadFinishCallBack) {  
         Bitmap bitmap = null;  
         //首先判断Map中是否有这种图片的缓存，若有，直接返回该图片的引用  
