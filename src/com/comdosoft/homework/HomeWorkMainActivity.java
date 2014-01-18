@@ -45,7 +45,7 @@ public class HomeWorkMainActivity extends TabActivity implements Urlinterface {
 				.setContent(intent2);
 		tabhost.addTab(spec2);
 
-		Intent intent3 = new Intent(this, Spec3.class);
+		Intent intent3 = new Intent(this, AboutMeActivity.class);
 		spec3 = tabhost.newTabSpec("spec3")
 				.setIndicator("", res.getDrawable(R.drawable.th3_3))
 				.setContent(intent3);

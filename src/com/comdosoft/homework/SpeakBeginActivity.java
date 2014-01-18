@@ -351,10 +351,6 @@ public class SpeakBeginActivity extends Activity implements Urlinterface {
 					prodialog.show();
 					Thread thread = new Thread(new SendWorkOver());
 					thread.start();
-					// SpeakBeginActivity.this.finish();
-					// intent.setClass(SpeakBeginActivity.this,
-					// HomeWorkIngActivity.class);
-					// startActivity(intent);
 					break;
 				}
 			}

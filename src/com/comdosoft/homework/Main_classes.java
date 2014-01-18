@@ -4,15 +4,26 @@ import java.io.IOException;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import android.graphics.Bitmap;  
 import android.graphics.BitmapFactory;
 import com.comdosoft.homework.adapter.MainClssStuAdapter;
 import com.comdosoft.homework.pojo.ClassStuPojo;
+import com.comdosoft.homework.tools.HomeWorkTool;
+import com.comdosoft.homework.tools.Urlinterface;
+
 import android.app.Activity;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
+import android.util.Log;
 import android.view.Display;
 import android.view.Gravity;
 import android.widget.GridView;
@@ -34,62 +45,71 @@ public class Main_classes extends Activity
 	private GridView main_class_classGv; 
 	private Bitmap bitamp;
 	private List<ClassStuPojo> stuList=new ArrayList<ClassStuPojo>();
-	String ceshiJson = "{\"status\":\"success\",\"notice\":\"\u767b\u9646\u6210\u529f\uff01\"," +
-			"\"student\":{\"id\":1,\"name\":\"tea\",\"nickname\":\"\u4e0a\u5584\u82e5\u6c34\",\"avatar_url\":\"/homework_system/avatars/students/student_1.jpg\"}," +
-			"\"class\":{\"id\":1,\"name\":\"eeeee\",\"tearcher_name\":\"tea\",\"tearcher_id\":1}," +
-			"\"classmates\":[{\"avatar_url\":\"/homework_system/avatars/students/student_1.jpg\",\"id\":1,\"name\":\"tea\",\"nickname\":\"\u4e0a\u5584\u82e5\u6c34\"}" +
-			",{\"avatar_url\":\"/homework_system/avatars/students/student_1.jpg\",\"id\":2,\"name\":\"tea\",\"nickname\":\"\u4e0a\u5584\u82e5\u6c341\"}," +
-			"{\"avatar_url\":null,\"id\":3,\"name\":null,\"nickname\":\"\u4e0a\u5584\u82e5\u6c342\"}," +
-			"{\"avatar_url\":null,\"id\":4,\"name\":null,\"nickname\":\"\u4e0a\u5584\u82e5\u6c343\"}]}}";
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.main_class_classes);
 		Display display=this.getWindowManager().getDefaultDisplay();
 		width=display.getWidth();
 		height=display.getHeight();
-		//		analysisjson();
 		stuList.add(new ClassStuPojo(1,"tea","/homework_system/avatars/students/student_1.jpg","u4e0a\u5584\u82e5\u6c34"));
 		stuList.add(new ClassStuPojo(2,"tea","/homework_system/avatars/students/student_2.png","u4e0a\u5584\u82e5\u6c341"));
 		stuList.add(new ClassStuPojo(3,"tea","/homework_system/avatars/students/student_1.jpg","u4e0a\u5584\u82e5\u6c342"));
 		stuList.add(new ClassStuPojo(4,"tea","/homework_system/avatars/students/student_1.jpg","u4e0a\u5584\u82e5\u6c343"));
 		setView();
-		Thread thread = new Thread(new Runnable() {
-			public void run() {
-				try {
-					bitamp=BitmapFactory.decodeStream(new URL("http://192.168.0.101:3004/homework_system/avatars/students/student_1.jpg").openConnection().getInputStream());
-					handler.sendEmptyMessage(0);
-				} catch (MalformedURLException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				} catch (IOException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				}
-			}
-		});
-		thread.start();
+
+		Map<String, String> map = new HashMap<String, String>();
+		map.put("student_id", "1");
+		map.put("school_class_id", "1");
+		//		if (HomeWorkTool.isConnect(getApplicationContext())) {
+		String result="";
+		try {
+			result = HomeWorkTool.sendGETRequest(Urlinterface.get_class_info, map);
+			Log.i("aa", result);
+		} catch (Exception e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		}
+		//		thread.start();
 	}
-	//解析json-classmates
-//	public void analysisjson()
-//	{
-//		
-//		try {
-//			
-//			JSONArray jsonArray = jsonObject.getJSONArray("classmates");
-//			for(int i=0;i<jsonArray.length();i++)
-//			{ 
-//				JSONObject jsonObject2 = (JSONObject)jsonArray.opt(i); 
-//				String stu_Url=(String) jsonObject2.get("avatar_url");
-//				int id=jsonObject2.getInt("id");
-//				String name=jsonObject2.getString("name");
-//				String nickname=jsonObject2.getString("nickname");
-//
-//			}
-//		} catch (JSONException e) {
-//			e.printStackTrace();
-//		}
-//
-//	}
+	//本人的头像解析
+	//	Thread thread = new Thread(new Runnable() {
+	//		public void run() {
+	//			try {
+	//				bitamp=BitmapFactory.decodeStream(new URL("http://192.168.0.101:3004/homework_system/avatars/students/student_1.jpg").openConnection().getInputStream());
+	//				handler.sendEmptyMessage(0);
+	//			} catch (MalformedURLException e) {
+	//				// TODO Auto-generated catch block
+	//				e.printStackTrace();
+	//			} catch (IOException e) {
+	//				// TODO Auto-generated catch block
+	//				e.printStackTrace();
+	//			}
+	//		}
+	//	});
+	//	解析json-classmates
+	//		public void analysisjson()
+	//		{
+	//			
+	//			try {
+	//	JSONObject jsonobject=new JSONObject("asd");
+	//	String avatar_url=jsonobject.getString("avatar_url");
+	//	String name=jsonobject.getString("name");
+	//	String nick_name=jsonobject.getString("nickname");
+	//				JSONArray jsonArray = jsonObject.getJSONArray("classmates");
+	//				for(int i=0;i<jsonArray.length();i++)
+	//				{ 
+	//					JSONObject jsonObject2 = (JSONObject)jsonArray.opt(i); 
+	//					String stu_Url=(String) jsonObject2.get("avatar_url");
+	//					int id=jsonObject2.getInt("id");
+	//					String name=jsonObject2.getString("name");
+	//					String nickname=jsonObject2.getString("nickname");
+	//					stuList.add(new ClassStuPojo(id,name,stu_Url,nickname));
+	//				}
+	//			} catch (JSONException e) {
+	//				e.printStackTrace();
+	//			}
+	//	
+	//		}
 	public void setView()
 	{
 		main_class_oneIVll=(LinearLayout) findViewById(R.id.main_class_classes_include).findViewById(R.id.main_class_oneIVll);
@@ -99,9 +119,10 @@ public class Main_classes extends Activity
 		main_class_oneIV=(ImageView) findViewById(R.id.main_class_classes_include).findViewById(R.id.main_class_oneIV);
 		main_class_oneIV.setLayoutParams(new LinearLayout.LayoutParams(182, 182));
 		main_class_oneTv1=(TextView)findViewById(R.id.main_class_classes_include).findViewById(R.id.main_class_oneTv1);
-		main_class_oneTv1.setText("tea");
+		//		main_class_oneTv1.setText(name);				设置本名
 		main_class_oneTv2=(TextView)findViewById(R.id.main_class_classes_include).findViewById(R.id.main_class_oneTv2);
-		main_class_oneTv2.setText("u4e0a\u5584\u82e5\u6c34");
+		//		main_class_oneTv2.setText(nick_name);			设置外号
+
 		main_class_classesll=(LinearLayout) findViewById(R.id.main_class_classesll);
 		main_class_classesll.setLayoutParams(new LinearLayout.LayoutParams(394, (int)(height*0.75*0.1)));
 		main_class_classesTv=(TextView) findViewById(R.id.main_class_classesTv);

@@ -291,6 +291,7 @@ public class HomeWorkTool implements Urlinterface {
 
 	public static String doPost(String reqUrl, Map parameters) {
 		String tempLine = "";
+		Log.i(tag, "doPost方法");
 		HttpURLConnection url_con = null;
 		String responseContent = null;
 		try {
@@ -307,7 +308,6 @@ public class HomeWorkTool implements Urlinterface {
 			if (params.length() > 0) {
 				params = params.deleteCharAt(params.length() - 1);
 			}
-
 			URL url = new URL(reqUrl);
 			Log.i("linshi", url.toString());
 			url_con = (HttpURLConnection) url.openConnection();
