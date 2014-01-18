@@ -14,7 +14,6 @@ import android.widget.RelativeLayout;
 import android.widget.TabHost;
 import android.widget.TabHost.OnTabChangeListener;
 import android.widget.TabWidget;
-import android.widget.TextView;
 
 import com.comdosoft.homework.tools.HomeWork;
 import com.comdosoft.homework.tools.Urlinterface;

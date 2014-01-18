@@ -57,21 +57,23 @@ public class SpeakBeginActivity extends Activity implements Urlinterface {
 	private int student_id = 1;
 	private int ti_id = 1;
 	private int school_class_id = 1;
-	private int publish_question_package_id = 1;
+	private int publish_question_package_id ;
 	private int question_package_id;
 	private int question_id;
 	private HomeWork homework;
 	private List<QuestionPojo> branch_questions;
 	private int index = 0;
-
+	private String message;
 	private static String SDFile;
 	public String error_str = "";// 记录错误的词
 	private ProgressDialog prodialog;
 	private Handler handler = new Handler() {
 		public void handleMessage(Message msg) {
+			Intent intent = new Intent();
+			Builder builder = new Builder(SpeakBeginActivity.this);
+			builder.setTitle("提示");
 			switch (msg.what) {
 			case 0:
-				new Thread(new Record_answer_info()).start();//发送请求记录错词
 				index += 1;
 				PredicateLayout.removeAllViews();
 				question_speak_title.setText((index + 1) + "/"
@@ -80,6 +82,20 @@ public class SpeakBeginActivity extends Activity implements Urlinterface {
 				SetTextView();
 				break;
 			case 1:
+				break;
+			case 2:
+				prodialog.dismiss();
+				homework.setQuestion_index(homework.getQuestion_index() + 1);
+				SpeakBeginActivity.this.finish();
+				intent.setClass(SpeakBeginActivity.this,
+						SpeakPrepareActivity.class);
+				startActivity(intent);
+				break;
+			case 3:
+				prodialog.dismiss();
+				builder.setMessage(message);
+				builder.setPositiveButton("确定", null);
+				builder.show();
 				break;
 			}
 			super.handleMessage(msg);
@@ -90,9 +106,10 @@ public class SpeakBeginActivity extends Activity implements Urlinterface {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.question_speak_begin);
 		homework = (HomeWork) getApplication();
-		question_package_id = homework.getP_q_package_id();
 		initialize();
 		SetTextView();
+		publish_question_package_id = homework.getP_q_package_id();
+		question_package_id = homework.getQ_package_id();
 		SDFile = "/sdcard/homework/" + student_id + "/" + ti_id + "/";
 		File file = new File(SDFile);
 		if (!file.exists()) {
@@ -142,18 +159,18 @@ public class SpeakBeginActivity extends Activity implements Urlinterface {
 			int ye = homework.getQuestion_index();
 			if ((ye + 1) < homework.getQuestion_allNumber()) {
 				question_id = branch_questions.get(index).getId();
-				Thread thread = new Thread(new Record_answer_info());
+				Thread thread = new Thread(new Record_answer_info());//记录小题
 				thread.start();
 				if ((index + 1) < branch_questions.size()) {
-					Log.i(tag, error_str);
 					handler.sendEmptyMessage(0);
 				} else {
-					Log.i(tag, error_str);
 					MyDialog("你已经答完本题确认继续下一题吗?", "确认", "取消", 1);
 				}
 			} else {
+				question_id = branch_questions.get(index).getId();
+				Thread thread = new Thread(new Record_answer_info());//记录小题
+				thread.start();
 				if ((index + 1) < branch_questions.size()) {
-					question_id = branch_questions.get(index).getId();
 					handler.sendEmptyMessage(0);
 				} else {
 					MyDialog("恭喜完成今天的朗读作业!", "确认", "取消", 2);
@@ -262,7 +279,7 @@ public class SpeakBeginActivity extends Activity implements Urlinterface {
 						if (!error_str
 								.contains(str_list.get(code_list.get(i)[0]))) {
 							error_str += str_list.get(code_list.get(i)[0])
-									+ ";||;";
+									+ "-->";
 						}
 						view_list.get(code_list.get(i)[0]).setBackgroundColor(
 								getResources().getColor(R.color.juhuang));
@@ -319,12 +336,12 @@ public class SpeakBeginActivity extends Activity implements Urlinterface {
 					startActivity(intent);
 					break;
 				case 1:
-					homework.setQuestion_index(homework.getQuestion_index() + 1);
 					dialog.dismiss();
-					SpeakBeginActivity.this.finish();
-					intent.setClass(SpeakBeginActivity.this,
-							SpeakPrepareActivity.class);
-					startActivity(intent);
+					prodialog = new ProgressDialog(SpeakBeginActivity.this);
+					prodialog.setMessage(HomeWorkParams.PD_FINISH_QUESTION);
+					prodialog.show();
+					new Thread(new SendWorkOver()).start();//记录大題
+					
 					break;
 				case 2:
 					dialog.dismiss();
@@ -366,15 +383,16 @@ public class SpeakBeginActivity extends Activity implements Urlinterface {
 		}
 		dialog.show();
 	}
-	//记录小题的错词
+
+	// 记录小题的错词
 	class Record_answer_info implements Runnable {
 		public void run() {
 			Looper.prepare();
-			Log.i(tag, "错词："+error_str);
+			Log.i(tag, "错词：" + error_str);
 			Map<String, String> map = new HashMap<String, String>();
 			map.put("school_class_id", school_class_id + "");
 			map.put("student_id", student_id + "");
-			map.put("question_package_id", question_package_id + "");
+			map.put("publish_question_package_id", question_package_id + "");
 			map.put("branch_question_id", homework.getBranch_question_id() + "");
 			map.put("question_id", question_id + "");
 			map.put("answer", error_str);
@@ -385,7 +403,7 @@ public class SpeakBeginActivity extends Activity implements Urlinterface {
 				json = HomeWorkTool.doPost(RECORD_ANSWER_INFO, map);
 				JSONObject obj = new JSONObject(json);
 				if (obj.getString("status").equals("success")) {
-					
+
 				}
 			} catch (Exception e) {
 				e.printStackTrace();
@@ -393,7 +411,8 @@ public class SpeakBeginActivity extends Activity implements Urlinterface {
 			Looper.loop();
 		}
 	}
-	//记录大题完成情况
+
+	// 记录大题完成情况
 	class SendWorkOver implements Runnable {
 		public void run() {
 			Looper.prepare();
@@ -403,13 +422,15 @@ public class SpeakBeginActivity extends Activity implements Urlinterface {
 			map.put("question_package_id", question_package_id + "");
 			map.put("publish_question_package_id", publish_question_package_id
 					+ "");
-
 			String json;
 			try {
 				json = HomeWorkTool.doPost(FINISH_QUESTION_PACKGE, map);
 				JSONObject obj = new JSONObject(json);
 				if (obj.getString("status").equals("success")) {
-
+					handler.sendEmptyMessage(2);
+				}else{
+					message = obj.getString("notice");
+					handler.sendEmptyMessage(3);
 				}
 			} catch (Exception e) {
 				e.printStackTrace();
@@ -441,13 +462,12 @@ public class SpeakBeginActivity extends Activity implements Urlinterface {
 		}
 		super.onDestroy();
 	}
-	
+
 	public boolean onKeyDown(int keyCode, KeyEvent event) {
 		Intent intent = new Intent();
 		if (keyCode == KeyEvent.KEYCODE_BACK) {
 			SpeakBeginActivity.this.finish();
-			intent.setClass(SpeakBeginActivity.this,
-					SpeakPrepareActivity.class);
+			intent.setClass(SpeakBeginActivity.this, SpeakPrepareActivity.class);
 			startActivity(intent);
 			return true;
 		}

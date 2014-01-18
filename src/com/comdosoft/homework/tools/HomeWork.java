@@ -15,6 +15,7 @@ public class HomeWork extends Application {
 	private int question_index;
 	private List<List<String>> question_history;
 	private int p_q_package_id;
+	private int q_package_id;
 	private boolean work_history;//查看历史开关
 	private int mainItem;
 	public HomeWork() {
@@ -92,6 +93,14 @@ public class HomeWork extends Application {
 
 	public void setP_q_package_id(int p_q_package_id) {
 		this.p_q_package_id = p_q_package_id;
+	}
+
+	public int getQ_package_id() {
+		return q_package_id;
+	}
+
+	public void setQ_package_id(int q_package_id) {
+		this.q_package_id = q_package_id;
 	}
 	
 	

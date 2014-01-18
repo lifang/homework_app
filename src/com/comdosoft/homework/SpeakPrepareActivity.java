@@ -68,11 +68,13 @@ public class SpeakPrepareActivity extends Activity implements Urlinterface {
 		if (homework.isWork_history()) {// 表示查看历史记录
 			questionlist = list.get(homework.getQuestion_index())
 					.getQuesttionList();
+			homework.setQ_package_id(list.get(homework.getQuestion_index()).getId());
 			for (int i = 0; i < questionlist.size(); i++) {
 				content += questionlist.get(i).getContent() + "\n";
 			}
 		} else {
 			questionlist = list.get(history.size()).getQuesttionList();
+			homework.setQ_package_id(list.get(history.size()).getId());
 			for (int i = 0; i < questionlist.size(); i++) {
 				content += questionlist.get(i).getContent() + "\n";
 			}
