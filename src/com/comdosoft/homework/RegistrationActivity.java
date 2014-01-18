@@ -4,24 +4,13 @@ import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.UnsupportedEncodingException;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.Date;
 
-import org.apache.http.HttpResponse;
-import org.apache.http.NameValuePair;
-import org.apache.http.client.ClientProtocolException;
-import org.apache.http.client.entity.UrlEncodedFormEntity;
-import org.apache.http.client.methods.HttpPost;
 import org.apache.http.entity.mime.MultipartEntity;
 import org.apache.http.entity.mime.content.FileBody;
 import org.apache.http.entity.mime.content.StringBody;
-import org.apache.http.impl.client.DefaultHttpClient;
-import org.apache.http.message.BasicNameValuePair;
-import org.apache.http.protocol.HTTP;
-import org.apache.http.util.EntityUtils;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -34,7 +23,6 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
 import android.provider.MediaStore;
-import android.util.Log;
 import android.view.View;
 import android.view.Window;
 import android.widget.EditText;
@@ -54,7 +42,7 @@ public class RegistrationActivity extends Activity {
 	private View layout2;//  班级验证码错误  返回界面
 	private String tp; // 头像资源
 	
-	private String qq_uid="asf";  //   QQ  的   open  id   
+	private String qq_uid="asfds";  //   QQ  的   open  id   
 
 	/* 头像名称 */
 	private static final String IMAGE_FILE_NAME = "faceImage.jpg";
@@ -63,7 +51,7 @@ public class RegistrationActivity extends Activity {
 	private static final int IMAGE_REQUEST_CODE = 0;
 	private static final int CAMERA_REQUEST_CODE = 1;
 	private static final int RESULT_REQUEST_CODE = 2;
-
+private String json="";
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -72,11 +60,17 @@ public class RegistrationActivity extends Activity {
 		setContentView(R.layout.activity_registration);
 		
 		
+		Date d = new Date();
+		qq_uid = d.toString();
+		//  上面两句代码 用来获得不一样的   qq_uid，，，测试 用，，后期删除
+		
+		
+		
 //		Intent intent = getIntent();// 
 //		qq_uid = intent.getStringExtra("qq_uid");   // 获得上个页面传过来的   QQ  openid
 
-		layout = this.findViewById(R.id.photolayout); // 隐藏内容
-		layout2 = this.findViewById(R.id.photolayout2); // 隐藏内容
+		layout = this.findViewById(R.id.reg_photolayout); // 隐藏内容
+		layout2 = this.findViewById(R.id.reg_photolayout2); // 隐藏内容
 		faceImage = (ImageButton) findViewById(R.id.reg_touxiang);
 		reg_nicheng = (EditText) findViewById(R.id.reg_nicheng);
 		reg_xingming = (EditText) findViewById(R.id.reg_xingming);
@@ -84,8 +78,7 @@ public class RegistrationActivity extends Activity {
 		// 设置事件监听
 		faceImage.setOnClickListener(listener);
 		
-//		Toast.makeText(getApplicationContext(), Environment.getExternalStorageDirectory()+"",
-//				 1).show();
+
 
 	}
 
@@ -100,7 +93,7 @@ public class RegistrationActivity extends Activity {
 	/**
 	 * 拍照上传
 	 */
-	public void sel_paizhaoshangchuan(View v) {
+	public void reg_paizhaoshangchuan(View v) {
 		
 		layout.setVisibility(View.GONE);
 
@@ -135,7 +128,7 @@ public class RegistrationActivity extends Activity {
 	/**
 	 * 从相册选择
 	 */
-	public void sel_congxiangce(View v) {
+	public void reg_congxiangce(View v) {
 		layout.setVisibility(View.GONE);
 		
 		Intent intentFromGallery = new Intent();
@@ -247,52 +240,89 @@ public class RegistrationActivity extends Activity {
 			TextView reg_error = (TextView) layout2.findViewById(R.id.regerror);
 			reg_error.setText(R.string.edit_null);
 		}else {
-			MultipartEntity entity = new MultipartEntity();
 			
-			try {
-				entity.addPart("qq_uid", new StringBody(qq_uid));
-//				File f = new File(Environment.getExternalStorageDirectory()
-//					+ "/1" + IMAGE_FILE_NAME);
-//				InputStream is = this.getAssets().open("moren.png");
-//				
-//				
-//				InputStreamBody isb = new InputStreamBody(is, "moren.png");  
-//				if (tp.length()!=0) {
-//					entity.addPart("avatar", isb);
-//				}
-				
-				
-				File f = new File(Environment.getExternalStorageDirectory()
-						+ "/1" + IMAGE_FILE_NAME);
-				if (f.exists()) {
-					entity.addPart("avatar", new FileBody(new File(Environment.getExternalStorageDirectory()
-							+ "/1" + IMAGE_FILE_NAME)));
+			Thread thread=new Thread()
+			{
+				public void run()
+				{
+					try {
+
+						String nickname = reg_nicheng.getText().toString();
+						String name = reg_xingming.getText().toString();
+						String verification_code = reg_banjiyanzhengma.getText().toString();
+						MultipartEntity entity = new MultipartEntity(); 
+						entity.addPart("qq_uid", new StringBody(qq_uid));
+						File f = new File(Environment.getExternalStorageDirectory()
+								+ "/1" + IMAGE_FILE_NAME);
+						if (f.exists()) {
+							entity.addPart("avatar", new FileBody(new File(Environment.getExternalStorageDirectory()
+									+ "/1" + IMAGE_FILE_NAME)));
+						}else {
+							Drawable normal = getResources().getDrawable(R.drawable.moren); 
+							File file = new File(Environment.getExternalStorageDirectory()
+									+ "/moren.jpg");
+
+								if (file.exists()) {
+									file.delete();
+
+								}
+								Bitmap bitmap = ((BitmapDrawable)normal).getBitmap();  
+								file.createNewFile();
+								FileOutputStream stream = new FileOutputStream(file);
+								ByteArrayOutputStream stream1 = new ByteArrayOutputStream();
+								bitmap.compress(Bitmap.CompressFormat.JPEG, 60, stream);
+								byte[] buf = stream1.toByteArray(); // 将图片流以字符串形式存储下来
+								// byte[] buf = s.getBytes();
+								stream.write(buf);
+								stream.close();
+							
+						
+							entity.addPart("avatar", new FileBody(new File(Environment.getExternalStorageDirectory()
+									+ "/moren.jpg")));
+							
+						}
+
+						entity.addPart("nickname", new StringBody(nickname));
+						entity.addPart("name", new StringBody(name));
+						entity.addPart("verification_code", new StringBody(verification_code));
+						
+					 json = HomeWorkTool.sendPhostimg(Urlinterface.RECORD_PERSON_INFO, entity);
+						
+						
+					} catch (Exception e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
 				}
-				entity.addPart("nickname", new StringBody(nickname));
-				entity.addPart("name", new StringBody(name));
-				entity.addPart("verification_code", new StringBody(verification_code));
-				
-				String json = HomeWorkTool.sendPhostimg(Urlinterface.RECORD_PERSON_INFO, entity);
-				if (json.length()!=0) {
+			};
+		thread.start();	
+ 
+	    if (json.length()!=0) {
 					JSONObject array;
 					
 						try {
 							array = new JSONObject(json);
 							String status = array.getString("status");
 							String notice = array.getString("notice");
-							String avatar_url = array.getString("avatar_url");
-							Log.i("aa", avatar_url);
+							
 							if ("success".equals(status)) {
-//								layout2.setVisibility(View.VISIBLE);
-//								TextView reg_error = (TextView) layout2.findViewById(R.id.regerror);
-//								reg_error.setText(notice);
-								Toast.makeText(getApplicationContext(), notice, 0).show();
+								
+							
+//								Toast.makeText(getApplicationContext(), notice, 0).show();
+								//  添加页面跳转   跳到班级页面
+								  Intent intent = new Intent();
+								intent.putExtra("json",json);
+									intent.setClass(this,com.comdosoft.homework.Classxinxiliu.class);//
+									startActivity(intent);
+								    this.finish();
+								
+								
 							}else{
 							
-//								layout2.setVisibility(View.VISIBLE);
-//								TextView reg_error = (TextView) layout2.findViewById(R.id.regerror);
-//								reg_error.setText(notice);
-								Toast.makeText(getApplicationContext(), notice, 0).show();
+								layout2.setVisibility(View.VISIBLE);
+								TextView reg_error = (TextView) layout2.findViewById(R.id.regerror);
+								reg_error.setText(notice);
+//								Toast.makeText(getApplicationContext(), notice, 0).show();
 								
 							}
 						} catch (JSONException e) {
@@ -302,19 +332,20 @@ public class RegistrationActivity extends Activity {
 				}else {
 					Toast.makeText(getApplicationContext(), "result: 空", 0).show();
 				}
-				
-			} catch (UnsupportedEncodingException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
-			
+
 		}
-		
-		
-	
 		return null;
 	}
 
+	public String inStream2String(InputStream is) throws Exception {  
+	    ByteArrayOutputStream baos = new ByteArrayOutputStream();  
+	    byte[] buf = new byte[1024];  
+	    int len = -1;  
+	    while ((len = is.read(buf)) != -1) {  
+	        baos.write(buf, 0, len);  
+	    }  
+	    return new String(baos.toByteArray());  
+	} 
 	
 //  班级验证码错误   时触发的方法
 	public String reg_fanhui(View v) throws Exception {

@@ -109,7 +109,14 @@
                      android:fadingEdge="none" 
                     android:layout_below="@+id/micropost_huifu"
                     android:background="#ede9ea" />
-
+<Button
+                    android:id="@+id/lookMore"
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                      android:textSize="24sp"
+                    android:layout_below="@+id/aa"
+                    android:text="查看更多"
+                    android:background="#ede9ea" />
             </RelativeLayout>
             <!-- 上面的内容一开始是隐藏起来的 -->
 

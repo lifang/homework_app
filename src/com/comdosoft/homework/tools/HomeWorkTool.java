@@ -207,12 +207,12 @@ public class HomeWorkTool implements Urlinterface {
 			throws Exception {
 		String json = "error";
 		StringBuilder url = new StringBuilder(path);
-		// url.append("?");
-		// for (Map.Entry<String, String> entry : map.entrySet()) {
-		// url.append(entry.getKey()).append("=").append(entry.getValue());
-		// url.append("&");
-		// }
-		// url.deleteCharAt(url.length() - 1);
+		 url.append("?");
+		 for (Map.Entry<String, String> entry : map.entrySet()) {
+		 url.append(entry.getKey()).append("=").append(entry.getValue());
+		 url.append("&");
+		 }
+		 url.deleteCharAt(url.length() - 1);
 		Log.i(tag, url.toString());
 		HttpURLConnection conn = (HttpURLConnection) new URL(url.toString())
 				.openConnection();
@@ -416,4 +416,11 @@ public class HomeWorkTool implements Urlinterface {
 
 		listView.setLayoutParams(params);
 	}
+	
+	
+	
+	
+	
+	
+	
 }

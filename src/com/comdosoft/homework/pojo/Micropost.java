@@ -13,7 +13,7 @@ public class Micropost
 	private String  user_id;//创建者id
 	private String user_types;//创建者类型
 	private String  name;//主消息的创建者名字，
-	private String  nickname;//主消息的创建者昵称
+
 	private String  content;  //  消息内容
 	private String avatar_url; //创建者头像
 	private String  created_at;//创建时间
@@ -21,13 +21,13 @@ public class Micropost
 	public Micropost(){}
 
 	public Micropost(String id, String user_id, String user_types, String name,
-			String nickname, String content, String avatar_url, String created_at,String reply_microposts_count) {
+			 String content, String avatar_url, String created_at,String reply_microposts_count) {
 		super();
 		this.id = id;
 		this.user_id = user_id;
 		this.user_types = user_types;
 		this.name = name;
-		this.nickname = nickname;
+		
 		this.content = content;
 		this.avatar_url = avatar_url;
 		this.created_at = created_at;
@@ -75,13 +75,7 @@ public class Micropost
 		this.name = name;
 	}
 
-	public String getNickname() {
-		return nickname;
-	}
 
-	public void setNickname(String nickname) {
-		this.nickname = nickname;
-	}
 
 	public String getContent() {
 		return content;

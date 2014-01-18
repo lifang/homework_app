@@ -7,7 +7,7 @@ public interface Urlinterface {
 	static final String SHARED = "HW";
 
 //  static final String IP = "http://192.168.0.101:3004";
-	static final String IP = "http://192.168.0.130:3000";
+	  String IP = "http://192.168.0.250:3004";
 
 
 	// static final String HEADIMG = IP + "/user_head_img/";

@@ -5,6 +5,8 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
+import java.util.HashMap;
+import java.util.Map;
 
 import org.apache.http.HttpResponse;
 import org.apache.http.client.HttpClient;
@@ -42,7 +44,7 @@ public class SettingActivity extends Activity {
 	private EditText nickname;//
 	private EditText name; //
 	private View layout;//  选择头像界面
-	
+	private String json="";
 	/* 头像名称 */
 	private static final String IMAGE_FILE_NAME = "faceImage.jpg";
 
@@ -52,15 +54,15 @@ public class SettingActivity extends Activity {
 	private static final int RESULT_REQUEST_CODE = 2;
 	
 	
-	private  String student_id="1";  //   用户  id
-private String avatar_url="/homework_system/avatars/students/student_1.jpg";   //  用户头像
+	private  String id="8";  //   用户  id，，切记  不是  user_id
+private String avatar_url="/homework_system/avatars/students/2014-01/student_5.jpg";   //  用户头像
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_setting);
 		
 //		Intent intent = getIntent();// 
-//		student_id= intent.getStringExtra("student_id");
+//		id= intent.getStringExtra("id");
 //		avatar_url= intent.getStringExtra("avatar_url");
 		layout = this.findViewById(R.id.set_photolayout); // 隐藏内容
 		faceImage = (ImageButton) findViewById(R.id.set_touxiang);
@@ -78,39 +80,72 @@ private String avatar_url="/homework_system/avatars/students/student_1.jpg";   /
 					Bitmap	bm = BitmapFactory.decodeStream(hr.getEntity().getContent());
 					Drawable face_drawable = new BitmapDrawable(bm);
 					faceImage.setBackgroundDrawable(face_drawable);
-				} catch (Exception e) {
-
-					
+				} catch (Exception e) {	
 				}
 		
 			}}
-		
-		
 		faceImage.setOnClickListener(listener);
 	}
 
-	
+	//  保存设置
 	public void saveUpdata(View v) {
-	
 
-		String nicknames = nickname.getText().toString();
-		String names = name.getText().toString();
+		Thread thread=new Thread()
+		{
+			public void run()
+			{
+				try {
 
-		//  此处调用方法上传到  服务器     （student_id，图片数据   ） ！！！！！！！！！！！
-		MultipartEntity entity = new MultipartEntity(); 
-		try {
-			entity.addPart("student_id", new StringBody(student_id));
-			File f = new File(Environment.getExternalStorageDirectory()
-					+ "/1" + IMAGE_FILE_NAME);
-			if (f.exists()) {
-				entity.addPart("avatar", new FileBody(new File(Environment.getExternalStorageDirectory()
-						+ "/1" + IMAGE_FILE_NAME)));
-			}
+					String nicknames = nickname.getText().toString();
+					String names = name.getText().toString();
+					MultipartEntity entity = new MultipartEntity(); 
+
+					entity.addPart("student_id", new StringBody(id));
+					File f = new File(Environment.getExternalStorageDirectory()
+							+ "/1" + IMAGE_FILE_NAME);
+					if (f.exists()) {
+						entity.addPart("avatar", new FileBody(new File(Environment.getExternalStorageDirectory()
+								+ "/1" + IMAGE_FILE_NAME)));
+					}else {
+						Drawable normal = getResources().getDrawable(R.drawable.moren); 
+						File file = new File(Environment.getExternalStorageDirectory()
+								+ "/moren.jpg");
+
+							if (file.exists()) {
+								file.delete();
+
+							}
+							Bitmap bitmap = ((BitmapDrawable)normal).getBitmap();  
+							file.createNewFile();
+							FileOutputStream stream = new FileOutputStream(file);
+							ByteArrayOutputStream stream1 = new ByteArrayOutputStream();
+							bitmap.compress(Bitmap.CompressFormat.JPEG, 60, stream);
+							byte[] buf = stream1.toByteArray(); // 将图片流以字符串形式存储下来
+							// byte[] buf = s.getBytes();
+							stream.write(buf);
+							stream.close();
+						
+					
+						entity.addPart("avatar", new FileBody(new File(Environment.getExternalStorageDirectory()
+								+ "/moren.jpg")));
+						
+					}
+					
+					entity.addPart("nickname", new StringBody(nicknames));
+					entity.addPart("name", new StringBody(names));
 			
-			entity.addPart("nickname", new StringBody(nicknames));
-			entity.addPart("name", new StringBody(names));
-	
-			String json = HomeWorkTool.sendPhostimg(Urlinterface.MODIFY_PERSON_INFO, entity);
+					 json = HomeWorkTool.sendPhostimg(Urlinterface.MODIFY_PERSON_INFO, entity);
+
+				} catch (Exception e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+			}
+		};
+	thread.start();	
+		
+		
+		
 			if (json.length()!=0) {
 				JSONObject array;
 				
@@ -131,14 +166,7 @@ private String avatar_url="/homework_system/avatars/students/student_1.jpg";   /
 					}
 
 			}
-//			Toast.makeText(getApplicationContext(), json, 0).show();
-		} catch (UnsupportedEncodingException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		                      
-		                      
-		
+	
 	}
 	public void changeClass(View v) {
 		

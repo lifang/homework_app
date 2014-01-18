@@ -91,7 +91,7 @@
    <!-- 下面的内容一开始是隐藏起来的 -->
 
             <LinearLayout
-                android:id="@+id/photolayout"
+                android:id="@+id/reg_photolayout"
                 android:layout_width="fill_parent"
                 android:layout_height="fill_parent"
                  android:gravity="center_horizontal"
@@ -103,9 +103,9 @@
             android:id="@+id/paizhaoshangchuan"
             android:layout_width="480dp"
             android:layout_height="51dp"
-        android:layout_marginTop="85dp"
+        android:layout_marginTop="585dp"
         android:background="#FF8C00"
-            android:onClick="sel_paizhaoshangchuan"
+            android:onClick="reg_paizhaoshangchuan"
             android:textColor="#FFFFFF"
             android:textSize="24sp"
             android:text="@string/takephoto" />
@@ -114,7 +114,7 @@
            android:layout_width="480dp"
             android:layout_height="51dp"
          android:background="#FF8C00"
-             android:onClick="sel_congxiangce"
+             android:onClick="reg_congxiangce"
              android:layout_marginTop="28dp"
             android:textColor="#FFFFFF"
             android:textSize="24sp"
@@ -126,7 +126,7 @@
              <!-- 下面的内容一开始是隐藏起来的 -->
 
             <LinearLayout
-                android:id="@+id/photolayout2"
+                android:id="@+id/reg_photolayout2"
                 android:layout_width="fill_parent"
                 android:layout_height="fill_parent"
                  android:gravity="center_horizontal"
