@@ -19,7 +19,7 @@ public class MainActivity extends Activity {
 	
 	public void HomeWorkIngActivity(View v) {
 		
-		Intent intent = new Intent(MainActivity.this, HomeWorkIngActivity.class);
+		Intent intent = new Intent(MainActivity.this, HomeWorkMainActivity.class);
 		startActivity(intent);
 		
 	}

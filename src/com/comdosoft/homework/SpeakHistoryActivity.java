@@ -14,6 +14,7 @@ import android.os.Handler;
 import android.os.Message;
 import android.util.Log;
 import android.view.Gravity;
+import android.view.KeyEvent;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
@@ -41,19 +42,29 @@ public class SpeakHistoryActivity extends Activity implements Urlinterface {
 	private List<QuestionPojo> branch_questions;
 	private int index = 0;
 	private int question_history_size;
-	
+
 	private static String SDFile;
 	public String error_str = "";// 记录错误的词
 	private Handler handler = new Handler() {
 		public void handleMessage(Message msg) {
 			switch (msg.what) {
 			case 0:
+				question_speak_tishi.removeAllViews();
 				index += 1;
 				question_speak_title.setText((index + 1) + "/"
 						+ branch_questions.size());
 				content = branch_questions.get(index).getContent();
 				question_speak_content.setText(content);
-				setTishi(question_history.get(homework.getQuestion_index()).get(index));
+
+				if (question_history_size < (homework.getQuestion_index() + 1)) {
+					setTishi("暂无错误词汇");
+				} else if (question_history.get(homework.getQuestion_index())
+						.size() < branch_questions.size()) {
+					setTishi("暂无错误词汇");
+				} else {
+					setTishi(question_history.get(homework.getQuestion_index())
+							.get(index));
+				}
 				break;
 			case 1:
 				break;
@@ -61,7 +72,6 @@ public class SpeakHistoryActivity extends Activity implements Urlinterface {
 			super.handleMessage(msg);
 		}
 	};
-	
 
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -96,9 +106,13 @@ public class SpeakHistoryActivity extends Activity implements Urlinterface {
 		question_speak_tishi = (LinearLayout) findViewById(R.id.question_speak_tishi);
 		player = new MediaPlayer();
 		question_history = homework.getQuestion_history();
-		// 添加错词提示
 		question_history_size = homework.getQuestion_history().size();
-		setTishi(question_history.get(homework.getQuestion_index()).get(0));
+		// 添加错词提示
+		if (question_history_size < (homework.getQuestion_index() + 1)) {
+			setTishi("暂无错误词汇");
+		} else {
+			setTishi(question_history.get(homework.getQuestion_index()).get(0));
+		}
 	}
 
 	public void onclicks(View v) {
@@ -167,7 +181,7 @@ public class SpeakHistoryActivity extends Activity implements Urlinterface {
 
 	public void initView(String str, int i) {
 		TextView tv = new TextView(getApplicationContext());
-		LayoutParams lp = new LayoutParams(LayoutParams.FILL_PARENT, 100);
+		LayoutParams lp = new LayoutParams(LayoutParams.FILL_PARENT, 80);
 		tv.setLayoutParams(lp);
 		tv.setText("  " + str);
 		tv.setTextColor(Color.rgb(157, 156, 156));
@@ -202,7 +216,7 @@ public class SpeakHistoryActivity extends Activity implements Urlinterface {
 					dialog.dismiss();
 					SpeakHistoryActivity.this.finish();
 					intent.setClass(SpeakHistoryActivity.this,
-							HomeWorkIngActivity.class);
+							HomeWorkMainActivity.class);
 					startActivity(intent);
 					break;
 				case 1:
@@ -218,7 +232,7 @@ public class SpeakHistoryActivity extends Activity implements Urlinterface {
 					homework.setQuestion_index(0);
 					SpeakHistoryActivity.this.finish();
 					intent.setClass(SpeakHistoryActivity.this,
-							HomeWorkIngActivity.class);
+							HomeWorkMainActivity.class);
 					startActivity(intent);
 					break;
 				}
@@ -271,5 +285,16 @@ public class SpeakHistoryActivity extends Activity implements Urlinterface {
 			player = null;
 		}
 		super.onDestroy();
+	}
+
+	public boolean onKeyDown(int keyCode, KeyEvent event) {
+		Intent intent = new Intent();
+		if (keyCode == KeyEvent.KEYCODE_BACK) {
+			SpeakHistoryActivity.this.finish();
+			intent.setClass(SpeakHistoryActivity.this, SpeakPrepareActivity.class);
+			startActivity(intent);
+			return true;
+		}
+		return super.onKeyDown(keyCode, event);
 	}
 }
