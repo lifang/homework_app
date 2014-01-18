@@ -67,6 +67,7 @@ public class SpeakBeginActivity extends Activity implements Urlinterface {
 	private static String SDFile;
 	public String error_str = "";// 记录错误的词
 	private ProgressDialog prodialog;
+	private int type;
 	private Handler handler = new Handler() {
 		public void handleMessage(Message msg) {
 			Intent intent = new Intent();
@@ -96,6 +97,13 @@ public class SpeakBeginActivity extends Activity implements Urlinterface {
 				builder.setMessage(message);
 				builder.setPositiveButton("确定", null);
 				builder.show();
+				break;
+			case 4:
+				prodialog.dismiss();
+				SpeakBeginActivity.this.finish();
+				intent.setClass(SpeakBeginActivity.this,
+						HomeWorkMainActivity.class);
+				startActivity(intent);
 				break;
 			}
 			super.handleMessage(msg);
@@ -312,6 +320,7 @@ public class SpeakBeginActivity extends Activity implements Urlinterface {
 	// 自定义dialog设置
 	private void MyDialog(String title, String btn_one, String Btn_two,
 			final int type) {
+		this.type = type;
 		final Intent intent = new Intent();
 		final Dialog dialog = new Dialog(this, R.style.Transparent);
 		dialog.setContentView(R.layout.my_dialog);
@@ -349,8 +358,7 @@ public class SpeakBeginActivity extends Activity implements Urlinterface {
 					prodialog = new ProgressDialog(SpeakBeginActivity.this);
 					prodialog.setMessage(HomeWorkParams.PD_FINISH_QUESTION);
 					prodialog.show();
-					Thread thread = new Thread(new SendWorkOver());
-					thread.start();
+					new Thread(new SendWorkOver()).start();//记录大題
 					break;
 				}
 			}
@@ -423,7 +431,15 @@ public class SpeakBeginActivity extends Activity implements Urlinterface {
 				json = HomeWorkTool.doPost(FINISH_QUESTION_PACKGE, map);
 				JSONObject obj = new JSONObject(json);
 				if (obj.getString("status").equals("success")) {
-					handler.sendEmptyMessage(2);
+					switch (type) {
+					case 1:
+						handler.sendEmptyMessage(2);
+						break;
+					case 2:
+						handler.sendEmptyMessage(4);
+						break;
+					}
+					
 				}else{
 					message = obj.getString("notice");
 					handler.sendEmptyMessage(3);
