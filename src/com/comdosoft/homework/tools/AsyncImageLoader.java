@@ -23,7 +23,6 @@ public class AsyncImageLoader{
         opts.inSampleSize = 0;    //这个的值压缩的倍数（2的整数倍），数值越小，压缩率越小，图片越清晰      
     }  
   
-    
 	public Bitmap asyncLoadImage(final String strUrl, final int i, final LoadFinishCallBack loadFinishCallBack) {  
         Bitmap bitmap = null;  
         //首先判断Map中是否有这种图片的缓存，若有，直接返回该图片的引用  
@@ -48,7 +47,7 @@ public class AsyncImageLoader{
             public void run() {  
                 Bitmap bitmap = null;  
                 try {  
-                    bitmap = BitmapFactory.decodeStream(new URL(strUrl.substring(0,strUrl.length() - 1)).openConnection().getInputStream(), null, opts);   
+                    bitmap = BitmapFactory.decodeStream(new URL(strUrl.substring(0,strUrl.lastIndexOf("g")+1)).openConnection().getInputStream(), null, opts);   
                 } catch (Exception e) {  
                     e.printStackTrace();  
                 }  

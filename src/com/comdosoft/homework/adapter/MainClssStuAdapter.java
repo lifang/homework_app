@@ -23,7 +23,6 @@ import android.widget.Toast;
 
 public class MainClssStuAdapter extends BaseAdapter
 {
-
 	private  List<ClassStuPojo> stuList;
 	private Context context;
 	private int width;

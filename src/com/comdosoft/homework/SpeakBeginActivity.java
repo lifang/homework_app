@@ -1,22 +1,31 @@
 package com.comdosoft.homework;
 
+import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.json.JSONObject;
+
 import android.app.Activity;
 import android.app.AlertDialog.Builder;
 import android.app.Dialog;
+import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.media.MediaPlayer;
+import android.media.MediaRecorder;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
+import android.os.Handler;
+import android.os.Looper;
+import android.os.Message;
 import android.speech.RecognizerIntent;
 import android.util.Log;
+import android.view.KeyEvent;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
@@ -24,13 +33,16 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.comdosoft.homework.pojo.QuestionPojo;
+import com.comdosoft.homework.tools.HomeWork;
+import com.comdosoft.homework.tools.HomeWorkParams;
 import com.comdosoft.homework.tools.HomeWorkTool;
 import com.comdosoft.homework.tools.PredicateLayout;
 import com.comdosoft.homework.tools.Soundex_Levenshtein;
 import com.comdosoft.homework.tools.Urlinterface;
 
 public class SpeakBeginActivity extends Activity implements Urlinterface {
-	public String content = "This is an apple.";// 正确答案
+	public String content;// 记录本题正确答案
 	private TextView question_speak_title;
 	private MediaPlayer player;
 	private PredicateLayout PredicateLayout;
@@ -40,19 +52,86 @@ public class SpeakBeginActivity extends Activity implements Urlinterface {
 	public int number;// 播放次数
 	private TextView question_speak_tishi;
 	private Map<Integer, String> ok_speak;
+	public MediaRecorder mediaRecorder;
+
+	private int student_id = 1;
+	private int ti_id = 1;
+	private int school_class_id = 1;
+	private int publish_question_package_id ;
+	private int question_package_id;
+	private int question_id;
+	private HomeWork homework;
+	private List<QuestionPojo> branch_questions;
+	private int index = 0;
+	private String message;
+	private static String SDFile;
+	public String error_str = "";// 记录错误的词
+	private ProgressDialog prodialog;
+	private int type;
+	private Handler handler = new Handler() {
+		public void handleMessage(Message msg) {
+			Intent intent = new Intent();
+			Builder builder = new Builder(SpeakBeginActivity.this);
+			builder.setTitle("提示");
+			switch (msg.what) {
+			case 0:
+				index += 1;
+				PredicateLayout.removeAllViews();
+				question_speak_title.setText((index + 1) + "/"
+						+ branch_questions.size());
+				content = branch_questions.get(index).getContent();
+				SetTextView();
+				break;
+			case 1:
+				break;
+			case 2:
+				prodialog.dismiss();
+				homework.setQuestion_index(homework.getQuestion_index() + 1);
+				SpeakBeginActivity.this.finish();
+				intent.setClass(SpeakBeginActivity.this,
+						SpeakPrepareActivity.class);
+				startActivity(intent);
+				break;
+			case 3:
+				prodialog.dismiss();
+				builder.setMessage(message);
+				builder.setPositiveButton("确定", null);
+				builder.show();
+				break;
+			case 4:
+				prodialog.dismiss();
+				SpeakBeginActivity.this.finish();
+				intent.setClass(SpeakBeginActivity.this,
+						HomeWorkMainActivity.class);
+				startActivity(intent);
+				break;
+			}
+			super.handleMessage(msg);
+		}
+	};
 
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.question_speak_begin);
-
+		homework = (HomeWork) getApplication();
 		initialize();
-		question_speak_title.setText("1/2");
 		SetTextView();
+		publish_question_package_id = homework.getP_q_package_id();
+		question_package_id = homework.getQ_package_id();
+		SDFile = "/sdcard/homework/" + student_id + "/" + ti_id + "/";
+		File file = new File(SDFile);
+		if (!file.exists()) {
+			file.mkdirs();
+		}
 	}
 
 	// 初始化
 	public void initialize() {
+		branch_questions = homework.getBranch_questions();
+		content = branch_questions.get(0).getContent();
 		question_speak_title = (TextView) findViewById(R.id.question_speak_title);
+		question_speak_title.setText((index + 1) + "/"
+				+ branch_questions.size());
 		PredicateLayout = (PredicateLayout) findViewById(R.id.question_speak_content);
 		question_speak_tishi = (TextView) findViewById(R.id.question_speak_tishi);
 		question_speak_tishi.setVisibility(View.GONE);
@@ -85,16 +164,34 @@ public class SpeakBeginActivity extends Activity implements Urlinterface {
 			MyDialog("你还没有做完题,确认要退出吗?", "确认", "取消", 0);
 			break;
 		case R.id.question_speak_next:
-			// MyDialog("你已经答完本题确认继续下一题吗?", "确认", "取消", 1);
-			MyDialog("恭喜完成今天的朗读作业!", "确认", "取消", 2);
+			int ye = homework.getQuestion_index();
+			if ((ye + 1) < homework.getQuestion_allNumber()) {
+				question_id = branch_questions.get(index).getId();
+				Thread thread = new Thread(new Record_answer_info());//记录小题
+				thread.start();
+				if ((index + 1) < branch_questions.size()) {
+					handler.sendEmptyMessage(0);
+				} else {
+					MyDialog("你已经答完本题确认继续下一题吗?", "确认", "取消", 1);
+				}
+			} else {
+				question_id = branch_questions.get(index).getId();
+				Thread thread = new Thread(new Record_answer_info());//记录小题
+				thread.start();
+				if ((index + 1) < branch_questions.size()) {
+					handler.sendEmptyMessage(0);
+				} else {
+					MyDialog("恭喜完成今天的朗读作业!", "确认", "取消", 2);
+				}
+			}
 			break;
 		case R.id.question_speak_img:// 播放音频
 			// 从文件系统播放
-			String path = "/sdcard/homework/test.mp3";
+			String path = SDFile + "test.mp3";
 			try {
 				player.setDataSource(path);
 				if (player.isPlaying()) {// 正在播放
-					Toast.makeText(this, "正在播放..", 0).show();
+					Toast.makeText(this, "正在播放..", Toast.LENGTH_SHORT).show();
 					player.pause();
 				} else {
 					player.prepare();
@@ -119,8 +216,10 @@ public class SpeakBeginActivity extends Activity implements Urlinterface {
 				// 提示语音开始
 				intent.putExtra(RecognizerIntent.EXTRA_PROMPT, "开始语音");
 				// 开始语音识别
+
 				startActivityForResult(speak_intent,
 						VOICE_RECOGNITION_REQUEST_CODE);
+
 			} catch (Exception e) {
 				Builder builder = new Builder(SpeakBeginActivity.this);
 				builder.setTitle("提示");
@@ -161,9 +260,11 @@ public class SpeakBeginActivity extends Activity implements Urlinterface {
 		// 回调获取从谷歌得到的数据
 		if (requestCode == VOICE_RECOGNITION_REQUEST_CODE
 				&& resultCode == RESULT_OK) {
+			// stopService(service_intent);
 			// 取得语音的字符
 			ArrayList<String> results = data
 					.getStringArrayListExtra(RecognizerIntent.EXTRA_RESULTS);
+
 			String speak = results.get(0);// 用户语音返回的字符串
 			str_list = new ArrayList<String>();
 			String s = content.replaceAll("(?i)[^a-zA-Z0-9\u4E00-\u9FA5]", " ");// 去除标点符号
@@ -177,15 +278,25 @@ public class SpeakBeginActivity extends Activity implements Urlinterface {
 				for (int i = 0; i < code_list.size(); i++) {
 					Log.i(tag, str_list.get(code_list.get(i)[0]) + "->相似度:"
 							+ code_list.get(i)[1]);
-					if (code_list.get(i)[1] >= 8) {
+					if (code_list.get(i)[1] >= 7) {
 						ok_speak.put(code_list.get(i)[0],
 								str_list.get(code_list.get(i)[0]));
 						view_list.get(code_list.get(i)[0]).setBackgroundColor(
 								getResources().getColor(R.color.lvse));
 					} else if (code_list.get(i)[1] >= 4) {
+						if (!error_str
+								.contains(str_list.get(code_list.get(i)[0]))) {
+							error_str += str_list.get(code_list.get(i)[0])
+									+ "-->";
+						}
 						view_list.get(code_list.get(i)[0]).setBackgroundColor(
 								getResources().getColor(R.color.juhuang));
 					} else {
+						if (!error_str
+								.contains(str_list.get(code_list.get(i)[0]))) {
+							error_str += str_list.get(code_list.get(i)[0])
+									+ ";||;";
+						}
 						view_list.get(code_list.get(i)[0]).setBackgroundColor(
 								getResources().getColor(R.color.shenhui));
 					}
@@ -209,6 +320,7 @@ public class SpeakBeginActivity extends Activity implements Urlinterface {
 	// 自定义dialog设置
 	private void MyDialog(String title, String btn_one, String Btn_two,
 			final int type) {
+		this.type = type;
 		final Intent intent = new Intent();
 		final Dialog dialog = new Dialog(this, R.style.Transparent);
 		dialog.setContentView(R.layout.my_dialog);
@@ -226,19 +338,27 @@ public class SpeakBeginActivity extends Activity implements Urlinterface {
 			public void onClick(View v) {
 				switch (type) {
 				case 0:
+					dialog.dismiss();
 					SpeakBeginActivity.this.finish();
 					intent.setClass(SpeakBeginActivity.this,
-							HomeWorkIngActivity.class);
+							HomeWorkMainActivity.class);
 					startActivity(intent);
 					break;
 				case 1:
-
+					dialog.dismiss();
+					prodialog = new ProgressDialog(SpeakBeginActivity.this);
+					prodialog.setMessage(HomeWorkParams.PD_FINISH_QUESTION);
+					prodialog.show();
+					new Thread(new SendWorkOver()).start();//记录大題
+					
 					break;
 				case 2:
-					SpeakBeginActivity.this.finish();
-					intent.setClass(SpeakBeginActivity.this,
-							HomeWorkIngActivity.class);
-					startActivity(intent);
+					dialog.dismiss();
+					homework.setQuestion_index(0);
+					prodialog = new ProgressDialog(SpeakBeginActivity.this);
+					prodialog.setMessage(HomeWorkParams.PD_FINISH_QUESTION);
+					prodialog.show();
+					new Thread(new SendWorkOver()).start();//记录大題
 					break;
 				}
 			}
@@ -250,9 +370,10 @@ public class SpeakBeginActivity extends Activity implements Urlinterface {
 					dialog.dismiss();
 					break;
 				case 1:
+					dialog.dismiss();
 					SpeakBeginActivity.this.finish();
 					intent.setClass(SpeakBeginActivity.this,
-							HomeWorkIngActivity.class);
+							HomeWorkMainActivity.class);
 					startActivity(intent);
 					break;
 				}
@@ -265,6 +386,69 @@ public class SpeakBeginActivity extends Activity implements Urlinterface {
 			dialog_img.setVisibility(View.GONE);
 		}
 		dialog.show();
+	}
+
+	// 记录小题的错词
+	class Record_answer_info implements Runnable {
+		public void run() {
+			Looper.prepare();
+			Log.i(tag, "错词：" + error_str);
+			Map<String, String> map = new HashMap<String, String>();
+			map.put("school_class_id", school_class_id + "");
+			map.put("student_id", student_id + "");
+			map.put("publish_question_package_id", question_package_id + "");
+			map.put("branch_question_id", homework.getBranch_question_id() + "");
+			map.put("question_id", question_id + "");
+			map.put("answer", error_str);
+			map.put("question_types", 0 + "");
+
+			String json;
+			try {
+				json = HomeWorkTool.doPost(RECORD_ANSWER_INFO, map);
+				JSONObject obj = new JSONObject(json);
+				if (obj.getString("status").equals("success")) {
+
+				}
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+			Looper.loop();
+		}
+	}
+
+	// 记录大题完成情况
+	class SendWorkOver implements Runnable {
+		public void run() {
+			Looper.prepare();
+			Map<String, String> map = new HashMap<String, String>();
+			map.put("school_class_id", school_class_id + "");
+			map.put("student_id", student_id + "");
+			map.put("question_package_id", question_package_id + "");
+			map.put("publish_question_package_id", publish_question_package_id
+					+ "");
+			String json;
+			try {
+				json = HomeWorkTool.doPost(FINISH_QUESTION_PACKGE, map);
+				JSONObject obj = new JSONObject(json);
+				if (obj.getString("status").equals("success")) {
+					switch (type) {
+					case 1:
+						handler.sendEmptyMessage(2);
+						break;
+					case 2:
+						handler.sendEmptyMessage(4);
+						break;
+					}
+					
+				}else{
+					message = obj.getString("notice");
+					handler.sendEmptyMessage(3);
+				}
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+			Looper.loop();
+		}
 	}
 
 	protected void onStart() {
@@ -289,5 +473,16 @@ public class SpeakBeginActivity extends Activity implements Urlinterface {
 			player = null;
 		}
 		super.onDestroy();
+	}
+
+	public boolean onKeyDown(int keyCode, KeyEvent event) {
+		Intent intent = new Intent();
+		if (keyCode == KeyEvent.KEYCODE_BACK) {
+			SpeakBeginActivity.this.finish();
+			intent.setClass(SpeakBeginActivity.this, SpeakPrepareActivity.class);
+			startActivity(intent);
+			return true;
+		}
+		return super.onKeyDown(keyCode, event);
 	}
 }

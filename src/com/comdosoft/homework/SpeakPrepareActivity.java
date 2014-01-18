@@ -1,31 +1,84 @@
 package com.comdosoft.homework;
 
 import java.io.IOException;
+import java.util.List;
 
 import android.app.Activity;
+import android.app.AlertDialog.Builder;
 import android.app.Dialog;
+import android.app.ProgressDialog;
 import android.content.Intent;
 import android.media.MediaPlayer;
 import android.os.Bundle;
+import android.os.Handler;
+import android.view.KeyEvent;
 import android.view.View;
 import android.widget.Button;
-import android.widget.ImageView;
-import android.widget.LinearLayout;
-import android.widget.ListView;
 import android.widget.TextView;
 
-public class SpeakPrepareActivity extends Activity {
-	public String content = "When I was a little girl ,I dreamed to grow up. Because I think a child doesn't has freedam,and can't do anything himself.But now I have grow up,to my surprise,I feel more tired and have more surfrng.Though I can do something myself, I don't feel happy at all.I believe you also have the same thoughs with me. when every us was a child , we wanted to grow up, but when we became a older man,we don't have such nice life as wish.";
+import com.comdosoft.homework.pojo.ListeningPojo;
+import com.comdosoft.homework.pojo.QuestionPojo;
+import com.comdosoft.homework.tools.HomeWork;
+import com.comdosoft.homework.tools.Urlinterface;
+
+public class SpeakPrepareActivity extends Activity implements Urlinterface {
+	private String content = "";
 	private TextView question_speak_title;
 	private TextView question_speak_content;
 	private MediaPlayer player;
+	private String message;
+	private ProgressDialog prodialog;
+	private List<ListeningPojo> list;
+	private HomeWork homework;
+	private List<QuestionPojo> questionlist;
+	private List<List<String>> history;
+	private Handler handler = new Handler() {
+		public void handleMessage(android.os.Message msg) {
+			prodialog.dismiss();
+			Builder builder = new Builder(SpeakPrepareActivity.this);
+			builder.setTitle("提示");
+			switch (msg.what) {
+			case 1:
+				// questionlist =
+				// list.get(homework.getQuestion_index()).getQuesttionList();
+				// for (int i = 0; i < questionlist.size(); i++) {
+				// content += questionlist.get(i).getContent() + "\n";
+				// }
+				// question_speak_content.setText(content);
+				break;
+			case 2:
+				builder.setMessage(message);
+				builder.setPositiveButton("确定", null);
+				builder.show();
+				break;
+			}
+		};
+	};
 
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.question_speak_prepare);
-
+		homework = (HomeWork) getApplication();
 		initialize();
 		question_speak_title.setText("朗读题");
+
+		list = homework.getQuestion_list();
+		history = homework.getQuestion_history();
+
+		if (homework.isWork_history()) {// 表示查看历史记录
+			questionlist = list.get(homework.getQuestion_index())
+					.getQuesttionList();
+			homework.setQ_package_id(list.get(homework.getQuestion_index()).getId());
+			for (int i = 0; i < questionlist.size(); i++) {
+				content += questionlist.get(i).getContent() + "\n";
+			}
+		} else {
+			questionlist = list.get(history.size()).getQuesttionList();
+			homework.setQ_package_id(list.get(history.size()).getId());
+			for (int i = 0; i < questionlist.size(); i++) {
+				content += questionlist.get(i).getContent() + "\n";
+			}
+		}
 		question_speak_content.setText(content);
 	}
 
@@ -44,8 +97,20 @@ public class SpeakPrepareActivity extends Activity {
 			break;
 		case R.id.question_speak_next:
 			SpeakPrepareActivity.this.finish();
-			intent.setClass(SpeakPrepareActivity.this, SpeakBeginActivity.class);
-			startActivity(intent);
+			if (homework.isWork_history()) {// 进入答题历史页面
+				homework.setBranch_questions(list.get(
+						homework.getQuestion_index()).getQuesttionList());
+				intent.setClass(SpeakPrepareActivity.this,
+						SpeakHistoryActivity.class);
+				startActivity(intent);
+			} else {
+				homework.setBranch_questions(list.get(history.size())
+						.getQuesttionList());
+				homework.setBranch_question_id(list.get(history.size()).getId());
+				intent.setClass(SpeakPrepareActivity.this,
+						SpeakBeginActivity.class);
+				startActivity(intent);
+			}
 			break;
 		case R.id.question_speak_img:
 			// 从文件系统播放
@@ -82,9 +147,10 @@ public class SpeakPrepareActivity extends Activity {
 		dialog_no.setText(Btn_two);
 		dialog_ok.setOnClickListener(new View.OnClickListener() {
 			public void onClick(View v) {
+				dialog.dismiss();
 				SpeakPrepareActivity.this.finish();
 				intent.setClass(SpeakPrepareActivity.this,
-						HomeWorkIngActivity.class);
+						HomeWorkMainActivity.class);
 				startActivity(intent);
 			}
 		});
@@ -118,5 +184,17 @@ public class SpeakPrepareActivity extends Activity {
 			player = null;
 		}
 		super.onDestroy();
+	}
+
+	public boolean onKeyDown(int keyCode, KeyEvent event) {
+		Intent intent = new Intent();
+		if (keyCode == KeyEvent.KEYCODE_BACK) {
+			SpeakPrepareActivity.this.finish();
+			intent.setClass(SpeakPrepareActivity.this,
+					HomeWorkMainActivity.class);
+			startActivity(intent);
+			return true;
+		}
+		return super.onKeyDown(keyCode, event);
 	}
 }

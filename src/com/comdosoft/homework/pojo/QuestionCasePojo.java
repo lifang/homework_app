@@ -5,25 +5,30 @@ public class QuestionCasePojo {
 	private int id;
 	private int Count_all;
 	private int Count_over;
-	private int second;
 	private String end_time;
+	private String create_time;
 	private int type;
 
 	public QuestionCasePojo() {
 	}
 
-
-	public QuestionCasePojo(int id, int count_all, int count_over, int second,
-			String end_time, int type) {
-		super();
+	public QuestionCasePojo(int id, int count_all, int count_over,
+			String end_time, String create_time, int type) {
 		this.id = id;
 		Count_all = count_all;
 		Count_over = count_over;
-		this.second = second;
 		this.end_time = end_time;
+		this.create_time = create_time;
 		this.type = type;
 	}
 
+	public String getCreate_time() {
+		return create_time;
+	}
+
+	public void setCreate_time(String create_time) {
+		this.create_time = create_time;
+	}
 
 	public int getId() {
 		return id;
@@ -63,16 +68,6 @@ public class QuestionCasePojo {
 
 	public void setType(int type) {
 		this.type = type;
-	}
-
-
-	public int getSecond() {
-		return second;
-	}
-
-
-	public void setSecond(int second) {
-		this.second = second;
 	}
 
 }
