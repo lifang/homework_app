@@ -10,7 +10,6 @@
     <string name="queren">确认</string>
     <string name="takephoto">拍照上传</string>
     <string name="fromphotostore">从相册选择</string>
-    
     <string name="reg_fanhui">返回</string>
     <string name="class_fabiao_tishi">提个问题或是分享一下你的心得吧。</string>
     <string name="class_fabiao">发表</string>
@@ -34,19 +33,20 @@
     <string name="work_content_text">完成情况:</string>
     <string name="question_dictation_check">检查</string>
     <string name="question_dictation_mes">预听</string>
+    <string name="question_dictation_next">Next</string>
     <string name="question_dictation_content">\t在开始本次作业前,请先点击上面的波音按钮,进行音频的预听,以便更好的完成本次作业!</string>
- 	<string name="question_history_tishi">你需要多读的词：</string>
+    <string name="question_history_tishi">你需要多读的词：</string>
     <string name="edit_null">输入框不能为空！</string>
     <string name="Net_null">未连接网络</string>
-        <string name="setting_tishi">点击头像进行修改！</string>
-      <string name="saveUpdata">保存更新</string>
-       <string name="changeClass">切换班级</string>
-       <string name="exit_user">退出用户</string>
+    <string name="setting_tishi">点击头像进行修改！</string>
+    <string name="saveUpdata">保存更新</string>
+    <string name="changeClass">切换班级</string>
+    <string name="exit_user">退出用户</string>
+    <string name="main_class_oneTv1">磊磊</string>
+    <string name="main_class_oneTv2">张小磊</string>
+    <string name="main_class_classesTv">七年级二班英语</string>
+    <string name="SwitchClass_Tv">切换班级</string>
+    <string name="SwitchClass_Et">输入班级验证码加入新班级</string>
+    <string name="senderError">发表失败</string>
 
-	<string name="main_class_oneTv1">磊磊</string>
-	<string name="main_class_oneTv2">张小磊</string>
-	<string name="main_class_classesTv">七年级二班英语</string>
-	<string name="SwitchClass_Tv">切换班级</string>
-	<string name="SwitchClass_Et">输入班级验证码加入新班级</string>
-	<string name="senderError">发表失败</string>
 </resources>
