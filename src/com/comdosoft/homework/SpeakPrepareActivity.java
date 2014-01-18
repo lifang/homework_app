@@ -11,6 +11,7 @@ import android.content.Intent;
 import android.media.MediaPlayer;
 import android.os.Bundle;
 import android.os.Handler;
+import android.view.KeyEvent;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
@@ -94,20 +95,20 @@ public class SpeakPrepareActivity extends Activity implements Urlinterface {
 			break;
 		case R.id.question_speak_next:
 			SpeakPrepareActivity.this.finish();
-			//if (homework.isWork_history()) {// 进入答题历史页面
+			if (homework.isWork_history()) {// 进入答题历史页面
 				homework.setBranch_questions(list.get(
 						homework.getQuestion_index()).getQuesttionList());
 				intent.setClass(SpeakPrepareActivity.this,
 						SpeakHistoryActivity.class);
 				startActivity(intent);
-//			} else {
-//				homework.setBranch_questions(list.get(history.size())
-//						.getQuesttionList());
-//				homework.setBranch_question_id(list.get(history.size()).getId());
-//				intent.setClass(SpeakPrepareActivity.this,
-//						SpeakBeginActivity.class);
-//				startActivity(intent);
-//			}
+			} else {
+				homework.setBranch_questions(list.get(history.size())
+						.getQuesttionList());
+				homework.setBranch_question_id(list.get(history.size()).getId());
+				intent.setClass(SpeakPrepareActivity.this,
+						SpeakBeginActivity.class);
+				startActivity(intent);
+			}
 			break;
 		case R.id.question_speak_img:
 			// 从文件系统播放
@@ -147,7 +148,7 @@ public class SpeakPrepareActivity extends Activity implements Urlinterface {
 				dialog.dismiss();
 				SpeakPrepareActivity.this.finish();
 				intent.setClass(SpeakPrepareActivity.this,
-						HomeWorkIngActivity.class);
+						HomeWorkMainActivity.class);
 				startActivity(intent);
 			}
 		});
@@ -181,5 +182,17 @@ public class SpeakPrepareActivity extends Activity implements Urlinterface {
 			player = null;
 		}
 		super.onDestroy();
+	}
+
+	public boolean onKeyDown(int keyCode, KeyEvent event) {
+		Intent intent = new Intent();
+		if (keyCode == KeyEvent.KEYCODE_BACK) {
+			SpeakPrepareActivity.this.finish();
+			intent.setClass(SpeakPrepareActivity.this,
+					HomeWorkMainActivity.class);
+			startActivity(intent);
+			return true;
+		}
+		return super.onKeyDown(keyCode, event);
 	}
 }

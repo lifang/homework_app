@@ -25,6 +25,7 @@ import android.os.Looper;
 import android.os.Message;
 import android.speech.RecognizerIntent;
 import android.util.Log;
+import android.view.KeyEvent;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
@@ -57,7 +58,7 @@ public class SpeakBeginActivity extends Activity implements Urlinterface {
 	private int ti_id = 1;
 	private int school_class_id = 1;
 	private int publish_question_package_id = 1;
-	private int question_package_id = 1;
+	private int question_package_id;
 	private int question_id;
 	private HomeWork homework;
 	private List<QuestionPojo> branch_questions;
@@ -89,7 +90,7 @@ public class SpeakBeginActivity extends Activity implements Urlinterface {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.question_speak_begin);
 		homework = (HomeWork) getApplication();
-
+		question_package_id = homework.getP_q_package_id();
 		initialize();
 		SetTextView();
 		SDFile = "/sdcard/homework/" + student_id + "/" + ti_id + "/";
@@ -140,12 +141,11 @@ public class SpeakBeginActivity extends Activity implements Urlinterface {
 		case R.id.question_speak_next:
 			int ye = homework.getQuestion_index();
 			if ((ye + 1) < homework.getQuestion_allNumber()) {
-				Log.i(tag, ye + "-" + homework.getQuestion_allNumber() + "-"
-						+ index + "-" + branch_questions.size());
+				question_id = branch_questions.get(index).getId();
+				Thread thread = new Thread(new Record_answer_info());
+				thread.start();
 				if ((index + 1) < branch_questions.size()) {
 					Log.i(tag, error_str);
-					question_id = branch_questions.get(index).getId();
-					
 					handler.sendEmptyMessage(0);
 				} else {
 					Log.i(tag, error_str);
@@ -315,7 +315,7 @@ public class SpeakBeginActivity extends Activity implements Urlinterface {
 					dialog.dismiss();
 					SpeakBeginActivity.this.finish();
 					intent.setClass(SpeakBeginActivity.this,
-							HomeWorkIngActivity.class);
+							HomeWorkMainActivity.class);
 					startActivity(intent);
 					break;
 				case 1:
@@ -352,7 +352,7 @@ public class SpeakBeginActivity extends Activity implements Urlinterface {
 					dialog.dismiss();
 					SpeakBeginActivity.this.finish();
 					intent.setClass(SpeakBeginActivity.this,
-							HomeWorkIngActivity.class);
+							HomeWorkMainActivity.class);
 					startActivity(intent);
 					break;
 				}
@@ -370,6 +370,7 @@ public class SpeakBeginActivity extends Activity implements Urlinterface {
 	class Record_answer_info implements Runnable {
 		public void run() {
 			Looper.prepare();
+			Log.i(tag, "错词："+error_str);
 			Map<String, String> map = new HashMap<String, String>();
 			map.put("school_class_id", school_class_id + "");
 			map.put("student_id", student_id + "");
@@ -439,5 +440,17 @@ public class SpeakBeginActivity extends Activity implements Urlinterface {
 			player = null;
 		}
 		super.onDestroy();
+	}
+	
+	public boolean onKeyDown(int keyCode, KeyEvent event) {
+		Intent intent = new Intent();
+		if (keyCode == KeyEvent.KEYCODE_BACK) {
+			SpeakBeginActivity.this.finish();
+			intent.setClass(SpeakBeginActivity.this,
+					SpeakPrepareActivity.class);
+			startActivity(intent);
+			return true;
+		}
+		return super.onKeyDown(keyCode, event);
 	}
 }

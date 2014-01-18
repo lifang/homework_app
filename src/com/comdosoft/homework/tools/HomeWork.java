@@ -14,9 +14,12 @@ public class HomeWork extends Application {
 	private int branch_question_id;
 	private int question_index;
 	private List<List<String>> question_history;
+	private int p_q_package_id;
 	private boolean work_history;//查看历史开关
+	private int mainItem;
 	public HomeWork() {
 		this.setQuestion_index(0);
+		this.setMainItem(0);
 	}
 
 	public int getQuestion_index() {
@@ -73,6 +76,22 @@ public class HomeWork extends Application {
 
 	public void setWork_history(boolean work_history) {
 		this.work_history = work_history;
+	}
+
+	public int getMainItem() {
+		return mainItem;
+	}
+
+	public void setMainItem(int mainItem) {
+		this.mainItem = mainItem;
+	}
+
+	public int getP_q_package_id() {
+		return p_q_package_id;
+	}
+
+	public void setP_q_package_id(int p_q_package_id) {
+		this.p_q_package_id = p_q_package_id;
 	}
 	
 	

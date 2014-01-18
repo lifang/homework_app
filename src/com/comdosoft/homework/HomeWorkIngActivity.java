@@ -34,6 +34,7 @@ import com.comdosoft.homework.pojo.QuestionPojo;
 import com.comdosoft.homework.pojo.WorkPojo;
 import com.comdosoft.homework.tools.HomeWork;
 import com.comdosoft.homework.tools.HomeWorkParams;
+import com.comdosoft.homework.tools.HomeWorkTool;
 import com.comdosoft.homework.tools.Urlinterface;
 
 public class HomeWorkIngActivity extends Activity implements Urlinterface {
@@ -54,7 +55,6 @@ public class HomeWorkIngActivity extends Activity implements Urlinterface {
 	private HomeWork homework;
 	private Handler handler = new Handler() {
 		public void handleMessage(android.os.Message msg) {
-			prodialog.dismiss();
 			Builder builder = new Builder(HomeWorkIngActivity.this);
 			builder.setTitle("提示");
 			switch (msg.what) {
@@ -74,6 +74,13 @@ public class HomeWorkIngActivity extends Activity implements Urlinterface {
 				builder.show();
 				break;
 			case 3:
+				prodialog.dismiss();
+				break;
+			case 4:
+				prodialog.dismiss();
+				builder.setMessage(message);
+				builder.setPositiveButton("确定", null);
+				builder.show();
 				break;
 			}
 		};
@@ -86,9 +93,6 @@ public class HomeWorkIngActivity extends Activity implements Urlinterface {
 		initialize();// 初始化
 		index = 0;
 
-		prodialog = new ProgressDialog(HomeWorkIngActivity.this);
-		prodialog.setMessage(HomeWorkParams.PD_CLASS_INFO);
-		prodialog.show();
 		Thread thread = new Thread(new getClassInfo());
 		thread.start();
 
@@ -98,9 +102,9 @@ public class HomeWorkIngActivity extends Activity implements Urlinterface {
 							int position, long id) {
 						index = position;
 						p_q_package_id = list.get(position).getId();
+						homework.setP_q_package_id(p_q_package_id);
 						working_date_list.setAdapter(date_adapter);
 						working_content_list.setAdapter(question_adapter);
-						p_q_package_id = list.get(position).getId();
 						prodialog = new ProgressDialog(HomeWorkIngActivity.this);
 						prodialog.setMessage(HomeWorkParams.PD_QUESTION_INFO);
 						prodialog.show();
@@ -277,9 +281,9 @@ public class HomeWorkIngActivity extends Activity implements Urlinterface {
 			Map<String, String> map = new HashMap<String, String>();
 			map.put("school_class_id", school_class_id + "");
 			map.put("student_id", student_id + "");
-			// String json;
+			 String json;
 			try {
-				// json = HomeWorkTool.sendGETRequest(CLASS_INFO, map);
+				 json = HomeWorkTool.sendGETRequest(CLASS_INFO, map);
 				JSONObject obj = new JSONObject(json);
 				if (obj.getString("status").equals("success")) {
 					analyzeJson(json);
@@ -298,15 +302,15 @@ public class HomeWorkIngActivity extends Activity implements Urlinterface {
 			Map<String, String> maps = new HashMap<String, String>();
 			maps.put("student_id", student_id + "");
 			maps.put("publish_question_package_id", p_q_package_id + "");
-			// String qsjson;
+			 String qsjson;
 			try {
-				// qsjson = HomeWorkTool.sendGETRequest(INTO_DAILY_TASKS, maps);
+				 qsjson = HomeWorkTool.sendGETRequest(INTO_DAILY_TASKS, maps);
 				JSONObject obj = new JSONObject(qsjson);
 				if (obj.getBoolean("status")) {
 					QuestionJson(qsjson);
 				} else {
 					message = obj.getString("notice");
-					handler.sendEmptyMessage(2);
+					handler.sendEmptyMessage(4);
 				}
 			} catch (Exception e) {
 				e.printStackTrace();
@@ -390,12 +394,6 @@ public class HomeWorkIngActivity extends Activity implements Urlinterface {
 						question.add(jb.getString("answer"));
 					}
 					questionhistory.add(question);
-				}
-			}
-			
-			if (questionhistory.size() < questionlist.size()) {
-				for (int i = questionhistory.size(); i < questionlist.size(); i++) {
-					List<String> question = new ArrayList<String>();
 				}
 			}
 
