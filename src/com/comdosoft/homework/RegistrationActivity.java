@@ -5,11 +5,7 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
-import java.io.UnsupportedEncodingException;
-<<<<<<< HEAD
 import java.util.Date;
-=======
->>>>>>> a1e393cd2a159b0c380da738a64c97d771c314c1
 
 import org.apache.http.entity.mime.MultipartEntity;
 import org.apache.http.entity.mime.content.FileBody;
