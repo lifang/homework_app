@@ -8,13 +8,13 @@ import android.content.res.Resources;
 import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.Display;
 import android.view.Gravity;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TabHost;
 import android.widget.TabHost.OnTabChangeListener;
 import android.widget.TabWidget;
-import android.widget.TextView;
 
 import com.comdosoft.homework.tools.HomeWork;
 import com.comdosoft.homework.tools.Urlinterface;
@@ -31,6 +31,10 @@ public class HomeWorkMainActivity extends TabActivity implements Urlinterface {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.homewrok_main);
 		homework = (HomeWork) getApplication();
+		Display display = getWindowManager().getDefaultDisplay();
+		int Height = display.getHeight();
+		int width = display.getWidth();
+		Log.i(tag, width + "/" + Height);
 		Log.i(tag, "1111111111");
 		tabhost = getTabHost();
 		res = getResources();
@@ -46,7 +50,7 @@ public class HomeWorkMainActivity extends TabActivity implements Urlinterface {
 				.setContent(intent2);
 		tabhost.addTab(spec2);
 
-		Intent intent3 = new Intent(this, Spec3.class);
+		Intent intent3 = new Intent(this, AboutMeActivity.class);
 		spec3 = tabhost.newTabSpec("spec3")
 				.setIndicator("", res.getDrawable(R.drawable.th3_3))
 				.setContent(intent3);

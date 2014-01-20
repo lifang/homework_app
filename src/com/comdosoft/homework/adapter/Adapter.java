@@ -106,7 +106,7 @@ private Context context1;
 				 Drawable face_drawable= new BitmapDrawable(bm);
 				 face.setBackgroundDrawable(face_drawable); 
 			}
-			Micropost_whoToWho.setText(mess.getNickname());  //  
+			
 			Micropost_content.setText(mess.getContent());   //   消息内容
 //		 button1.setOnClickListener(new OnClickListener() {
 //			 @Override

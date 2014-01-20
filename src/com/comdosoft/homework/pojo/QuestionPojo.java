@@ -1,11 +1,13 @@
 package com.comdosoft.homework.pojo;
 
+import java.util.List;
+
 public class QuestionPojo {
 
 	private int id;
 	private String content;
 	private String url;
-	
+
 	public QuestionPojo() {
 		super();
 	}
@@ -46,5 +48,5 @@ public class QuestionPojo {
 		return "QuestionPojo [id=" + id + ", content=" + content + ", url="
 				+ url + "]";
 	}
-	
+
 }

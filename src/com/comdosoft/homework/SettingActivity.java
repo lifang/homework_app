@@ -5,6 +5,8 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
+import java.util.HashMap;
+import java.util.Map;
 
 import org.apache.http.HttpResponse;
 import org.apache.http.client.HttpClient;
@@ -26,8 +28,11 @@ import android.graphics.BitmapFactory;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.net.Uri;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Environment;
+import android.os.Handler;
+import android.os.Message;
 import android.provider.MediaStore;
 import android.view.Menu;
 import android.view.View;
@@ -37,12 +42,12 @@ import android.widget.Toast;
 
 public class SettingActivity extends Activity {
 
-	//    设置          界面  
+	// 设置 界面
 	private ImageButton faceImage;
 	private EditText nickname;//
 	private EditText name; //
-	private View layout;//  选择头像界面
-	
+	private View layout;// 选择头像界面
+	private String json = "";
 	/* 头像名称 */
 	private static final String IMAGE_FILE_NAME = "faceImage.jpg";
 
@@ -50,108 +55,183 @@ public class SettingActivity extends Activity {
 	private static final int IMAGE_REQUEST_CODE = 0;
 	private static final int CAMERA_REQUEST_CODE = 1;
 	private static final int RESULT_REQUEST_CODE = 2;
-	
-	
-	private  String student_id="1";  //   用户  id
-private String avatar_url="/homework_system/avatars/students/student_1.jpg";   //  用户头像
+	private Bitmap bm = null;
+	private String nameS = ""; //
+	private String nicknameS = ""; //
+	private String id = "8"; // 用户 id，，切记 不是 user_id
+	private String avatar_url = "/homework_system/avatars/students/2014-01/student_5.jpg"; // 用户头像
+
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_setting);
-		
-//		Intent intent = getIntent();// 
-//		student_id= intent.getStringExtra("student_id");
-//		avatar_url= intent.getStringExtra("avatar_url");
+
+		// Intent intent = getIntent();//
+		// id= intent.getStringExtra("id");
+		// avatar_url= intent.getStringExtra("avatar_url");
+		// nicknameS =intent.getStringExtra("nickname");
+		// name =intent.getStringExtra("name");
+
 		layout = this.findViewById(R.id.set_photolayout); // 隐藏内容
 		faceImage = (ImageButton) findViewById(R.id.set_touxiang);
 		nickname = (EditText) findViewById(R.id.set_nickname);
 		name = (EditText) findViewById(R.id.set_name);
-		if (HomeWorkTool.isConnect(getApplicationContext())) {
-			
-			if (avatar_url!= null||avatar_url.length()!=0) { // 设置头像
-				HttpClient hc = new DefaultHttpClient();
+		name.setText(nameS);
+		nickname.setText(nicknameS);
+		// if (HomeWorkTool.isConnect(getApplicationContext())) {
 
-				HttpGet hg = new HttpGet(Urlinterface.IP+avatar_url);//
-				
-				try {
-					HttpResponse hr = hc.execute(hg);
-					Bitmap	bm = BitmapFactory.decodeStream(hr.getEntity().getContent());
-					Drawable face_drawable = new BitmapDrawable(bm);
-					faceImage.setBackgroundDrawable(face_drawable);
-				} catch (Exception e) {
+		if (avatar_url != null || avatar_url.length() != 0) { // 设置头像
+		// HttpGet hg = new HttpGet(Urlinterface.IP
+		// + avatar_url);//
 
-					
-				}
-		
-			}}
-		
-		
+			GetCSDNLogoTask task = new GetCSDNLogoTask();
+			task.execute(Urlinterface.IP
+					 + avatar_url);//
+
+
 		faceImage.setOnClickListener(listener);
+		
 	}
+	}
+	class GetCSDNLogoTask extends AsyncTask<String, Integer, Drawable> {
 
-	
-	public void saveUpdata(View v) {
-	
+		@Override
+		protected Drawable doInBackground(String... params) {
 
-		String nicknames = nickname.getText().toString();
-		String names = name.getText().toString();
+			HttpClient hc = new DefaultHttpClient();
 
-		//  此处调用方法上传到  服务器     （student_id，图片数据   ） ！！！！！！！！！！！
-		MultipartEntity entity = new MultipartEntity(); 
-		try {
-			entity.addPart("student_id", new StringBody(student_id));
-			File f = new File(Environment.getExternalStorageDirectory()
-					+ "/1" + IMAGE_FILE_NAME);
-			if (f.exists()) {
-				entity.addPart("avatar", new FileBody(new File(Environment.getExternalStorageDirectory()
-						+ "/1" + IMAGE_FILE_NAME)));
+			HttpGet hg = new HttpGet(params[0]);//
+			final Drawable face_drawable;
+			try {
+				HttpResponse hr = hc.execute(hg);
+				Bitmap bm = BitmapFactory.decodeStream(hr.getEntity()
+						.getContent());
+				face_drawable = new BitmapDrawable(bm);
+
+			} catch (Exception e) {
+
+				return null;
 			}
-			
-			entity.addPart("nickname", new StringBody(nicknames));
-			entity.addPart("name", new StringBody(names));
-	
-			String json = HomeWorkTool.sendPhostimg(Urlinterface.MODIFY_PERSON_INFO, entity);
-			if (json.length()!=0) {
-				JSONObject array;
-				
-					try {
-						array = new JSONObject(json);
-						String status = array.getString("status");
-						String notice = array.getString("notice");
-						
-						if ("success".equals(status)) {
-							
-							Toast.makeText(getApplicationContext(), notice, 0).show();
-						}else{
-							Toast.makeText(getApplicationContext(), notice, 0).show();	
+
+			return face_drawable;
+		}
+
+		protected void onPostExecute(Drawable face_drawable) {
+			if (face_drawable != null) {
+
+				faceImage.setBackgroundDrawable(face_drawable);
+			} else {
+
+			}
+		}
+
+	}
+	Handler mHandler = new Handler() {
+		public void handleMessage(android.os.Message msg) {
+			switch (msg.what) {
+				case 0:
+					 final String res =  (String) msg.obj;
+						if (res.length() != 0) {
+							JSONObject array;
+
+							try {
+								array = new JSONObject(res);
+								String status = array.getString("status");
+								String notice = array.getString("notice");
+
+								if ("success".equals(status)) {
+
+									Toast.makeText(getApplicationContext(), notice, 0).show();
+								} else {
+									Toast.makeText(getApplicationContext(), notice, 0).show();
+								}
+							} catch (JSONException e) {
+								// TODO Auto-generated catch block
+								e.printStackTrace();
+							}
+
 						}
-					} catch (JSONException e) {
-						// TODO Auto-generated catch block
-						e.printStackTrace();
+					 break;
+				default:
+					break;
+					
+			}
+		}
+	};
+	// 保存设置
+	public void saveUpdata(View v) {
+
+		Thread thread = new Thread() {
+			public void run() {
+				try {
+
+					String nicknames = nickname.getText().toString();
+					String names = name.getText().toString();
+					MultipartEntity entity = new MultipartEntity();
+
+					entity.addPart("student_id", new StringBody(id));
+					File f = new File(Environment.getExternalStorageDirectory()
+							+ "/1" + IMAGE_FILE_NAME);
+					if (f.exists()) {
+						entity.addPart("avatar", new FileBody(new File(
+								Environment.getExternalStorageDirectory()
+										+ "/1" + IMAGE_FILE_NAME)));
+					} else {
+						Drawable normal = getResources().getDrawable(
+								R.drawable.moren);
+						File file = new File(
+								Environment.getExternalStorageDirectory()
+										+ "/moren.jpg");
+
+						if (file.exists()) {
+							file.delete();
+
+						}
+						Bitmap bitmap = ((BitmapDrawable) normal).getBitmap();
+						file.createNewFile();
+						FileOutputStream stream = new FileOutputStream(file);
+						ByteArrayOutputStream stream1 = new ByteArrayOutputStream();
+						bitmap.compress(Bitmap.CompressFormat.JPEG, 60, stream);
+						byte[] buf = stream1.toByteArray(); // 将图片流以字符串形式存储下来
+						// byte[] buf = s.getBytes();
+						stream.write(buf);
+						stream.close();
+
+						entity.addPart("avatar", new FileBody(new File(
+								Environment.getExternalStorageDirectory()
+										+ "/moren.jpg")));
+
 					}
 
+					entity.addPart("nickname", new StringBody(nicknames));
+					entity.addPart("name", new StringBody(names));
+
+					json = HomeWorkTool.sendPhostimg(
+							Urlinterface.MODIFY_PERSON_INFO, entity);
+					Message msg = new Message();//  创建Message 对象
+					msg.what =0 ;
+					msg.obj = json;
+					mHandler.sendMessage(msg);
+		
+				} catch (Exception e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
 			}
-//			Toast.makeText(getApplicationContext(), json, 0).show();
-		} catch (UnsupportedEncodingException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		                      
-		                      
-		
+		};
+		thread.start();
+
+
+
 	}
+
 	public void changeClass(View v) {
-		
-		
-		
+
 	}
-	
+
 	public void exit_user(View v) {
-		
-		
-		
+
 	}
-	
 
 	private View.OnClickListener listener = new View.OnClickListener() {
 
@@ -165,29 +245,28 @@ private String avatar_url="/homework_system/avatars/students/student_1.jpg";   /
 	 * 拍照上传
 	 */
 	public void set_paizhaoshangchuan(View v) {
-		
+
 		layout.setVisibility(View.GONE);
 
 		Intent intentFromCapture = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
 		// 判断存储卡是否可以用，可用进行存储
 		if (HomeWorkTool.isHasSdcard()) {
 
-		
-				File file = new File(Environment.getExternalStorageDirectory()
-						+ "/" + IMAGE_FILE_NAME);
+			File file = new File(Environment.getExternalStorageDirectory()
+					+ "/" + IMAGE_FILE_NAME);
 
-					if (file.exists()) {
-						file.delete();
+			if (file.exists()) {
+				file.delete();
 
-					}
-					 file = new File(Environment.getExternalStorageDirectory()
-							+ "/" + IMAGE_FILE_NAME);
-						if (!file.exists()) {
-							intentFromCapture.putExtra(
-									MediaStore.EXTRA_OUTPUT,
-									Uri.fromFile(new File(Environment
+			}
+			file = new File(Environment.getExternalStorageDirectory() + "/"
+					+ IMAGE_FILE_NAME);
+			if (!file.exists()) {
+				intentFromCapture
+						.putExtra(MediaStore.EXTRA_OUTPUT, Uri
+								.fromFile(new File(Environment
 										.getExternalStorageDirectory(),
-											IMAGE_FILE_NAME)));
+										IMAGE_FILE_NAME)));
 
 			}
 
@@ -196,12 +275,13 @@ private String avatar_url="/homework_system/avatars/students/student_1.jpg";   /
 		startActivityForResult(intentFromCapture, CAMERA_REQUEST_CODE);
 
 	}
+
 	/**
 	 * 从相册选择
 	 */
 	public void set_congxiangce(View v) {
 		layout.setVisibility(View.GONE);
-		
+
 		Intent intentFromGallery = new Intent();
 		intentFromGallery.setType("image/*"); // 设置文件类型
 		intentFromGallery.setAction(Intent.ACTION_GET_CONTENT);
@@ -221,7 +301,7 @@ private String avatar_url="/homework_system/avatars/students/student_1.jpg";   /
 			case CAMERA_REQUEST_CODE:
 				if (HomeWorkTool.isHasSdcard()) {
 					File tempFile = new File(
-							Environment.getExternalStorageDirectory()+"/"
+							Environment.getExternalStorageDirectory() + "/"
 									+ IMAGE_FILE_NAME);
 					startPhotoZoom(Uri.fromFile(tempFile));
 				} else {
@@ -294,7 +374,6 @@ private String avatar_url="/homework_system/avatars/students/student_1.jpg";   /
 
 				e.printStackTrace();
 			}
-
 
 		}
 	}

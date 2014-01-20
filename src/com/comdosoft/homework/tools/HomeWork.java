@@ -15,8 +15,14 @@ public class HomeWork extends Application {
 	private int question_index;
 	private List<List<String>> question_history;
 	private int p_q_package_id;
-	private boolean work_history;//查看历史开关
+	private int q_package_id;
+	private boolean work_history;// 查看历史开关
 	private int mainItem;
+	private int user_id;
+	private int class_id;
+	private int message_id;
+	
+	
 	public HomeWork() {
 		this.setQuestion_index(0);
 		this.setMainItem(0);
@@ -93,7 +99,37 @@ public class HomeWork extends Application {
 	public void setP_q_package_id(int p_q_package_id) {
 		this.p_q_package_id = p_q_package_id;
 	}
-	
-	
-	
+
+	public int getQ_package_id() {
+		return q_package_id;
+	}
+
+	public void setQ_package_id(int q_package_id) {
+		this.q_package_id = q_package_id;
+	}
+
+	public int getUser_id() {
+		return user_id;
+	}
+
+	public void setUser_id(int user_id) {
+		this.user_id = user_id;
+	}
+
+	public int getClass_id() {
+		return class_id;
+	}
+
+	public void setClass_id(int class_id) {
+		this.class_id = class_id;
+	}
+
+	public int getMessage_id() {
+		return message_id;
+	}
+
+	public void setMessage_id(int message_id) {
+		this.message_id = message_id;
+	}
+
 }
