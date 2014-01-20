@@ -12,12 +12,12 @@ import com.comdosoft.homework.pojo.AboutMePojo;
 import com.comdosoft.homework.tools.HomeWorkTool;
 import com.comdosoft.homework.tools.Urlinterface;
 
+import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
-import android.util.Log;
 import android.view.KeyEvent;
 import android.widget.ListView;
 import android.widget.Toast;
@@ -27,6 +27,7 @@ public class AboutMeActivity extends Activity
 	private ListView listview;
 	List<AboutMePojo> listam ;
 	private int count=0;
+	@SuppressWarnings("unused")
 	private int num;
 	protected void onCreate(Bundle savedInstanceState) {
 		// TODO Auto-generated method stub
@@ -51,6 +52,7 @@ public class AboutMeActivity extends Activity
 			}
 		}
 	};
+	@SuppressLint("HandlerLeak")
 	Handler handler = new Handler(){
 		public void handleMessage(Message msg) {
 			switch(msg.what)
@@ -63,6 +65,7 @@ public class AboutMeActivity extends Activity
 			}
 		}
 	};
+	@SuppressLint("ShowToast")
 	@SuppressWarnings({ "unchecked", "rawtypes" })
 	public void get_News()
 	{

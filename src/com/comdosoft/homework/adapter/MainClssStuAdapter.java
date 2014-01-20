@@ -6,11 +6,10 @@ import com.comdosoft.homework.R;
 import com.comdosoft.homework.pojo.ClassStuPojo;
 import com.comdosoft.homework.tools.AsyncImageLoader;
 import com.comdosoft.homework.tools.AsyncImageLoader.LoadFinishCallBack;
+import com.comdosoft.homework.tools.Urlinterface;
 
 import android.content.Context;
 import android.graphics.Bitmap;
-import android.os.Handler;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -19,12 +18,11 @@ import android.widget.GridView;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
-import android.widget.Toast;
-
 public class MainClssStuAdapter extends BaseAdapter
 {
 	private  List<ClassStuPojo> stuList;
 	private Context context;
+	@SuppressWarnings("unused")
 	private int width;
 	private int height;
 	private GridView gridView;
@@ -68,7 +66,7 @@ public class MainClssStuAdapter extends BaseAdapter
 		{
 			oneView = (OneView) convertView.getTag();
 		}
-		String strUrl="http://192.168.0.101:3004"+stuList.get(position).getHead_portrait_Url();
+		String strUrl=Urlinterface.IP+stuList.get(position).getHead_portrait_Url();
 		oneView.main_class_oneIV.setTag(strUrl+stuList.get(position).getId());
 		Bitmap bm = asyncImageLoader.asyncLoadImage(strUrl+stuList.get(position).getId(), 0, callback);  
 		oneView.main_class_oneIV.setImageBitmap(null);  

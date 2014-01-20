@@ -1,6 +1,5 @@
 package com.comdosoft.homework.pojo;
 
-import java.sql.Date;
 
 public class AboutMePojo 
 {

@@ -6,18 +6,21 @@ import java.util.List;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import com.comdosoft.homework.Classxinxiliu;
 import com.comdosoft.homework.R;
 import com.comdosoft.homework.pojo.AboutMePojo;
 import com.comdosoft.homework.tools.AsyncImageLoader;
 import com.comdosoft.homework.tools.AsyncImageLoader.LoadFinishCallBack;
+import com.comdosoft.homework.tools.HomeWork;
 import com.comdosoft.homework.tools.HomeWorkTool;
 import com.comdosoft.homework.tools.Urlinterface;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.Bitmap;
 import android.os.Handler;
 import android.os.Message;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -36,6 +39,7 @@ public class AboutMeAdapter extends BaseAdapter
 	private ListView listview;
 	private int class_id;
 	AsyncImageLoader asyncImageLoader=new AsyncImageLoader();
+	HomeWork hw=(HomeWork) context.getApplicationContext();
 	public AboutMeAdapter()
 	{
 	}
@@ -77,7 +81,23 @@ public class AboutMeAdapter extends BaseAdapter
 			tv5.setOnClickListener(new OnClickListener()
 			{
 				public void onClick(View v) {
-					Toast.makeText(context, Amlist.get(position).getMicropost_id(), 1).show();
+					new Thread()
+					{
+						@SuppressWarnings({ "unchecked", "rawtypes" })
+						public void run()
+						{
+							HashMap<String, Integer> mp=new HashMap();
+							mp.put("user_id", Integer.valueOf(Amlist.get(position).getUser_id()));
+							mp.put("school_class_id",class_id);
+							mp.put("message_id", Integer.valueOf(Amlist.get(position).getMicropost_id()));
+							String json=HomeWorkTool.doPost(Urlinterface.read_message, mp);
+							Message msg=new Message();
+							msg.what=2;
+							hw.setNoselect_message(json);
+							handler.sendMessage(msg);
+						}
+					}.start();
+
 				}
 			});
 			Ib.setOnClickListener(new OnClickListener()
@@ -95,16 +115,18 @@ public class AboutMeAdapter extends BaseAdapter
 								mp.put("message_id", Integer.valueOf(Amlist.get(position).getId()));
 								String json=HomeWorkTool.doPost(Urlinterface.delete_message, mp);
 								JSONObject jsonobject=new JSONObject(json);
-								String status=(String) jsonobject.get("status");
 								String notice=jsonobject.getString("notice");
+								String status=(String) jsonobject.get("status");
+								Message msg=new Message();
+								msg.what=0;
+								msg.obj=notice;
 								if(status.equals("success"))
 								{
 									Amlist.remove(position);
-									handler.sendEmptyMessage(0);
 								}
 								else
 								{
-									Toast.makeText(context, notice, 0).show();
+									handler.sendEmptyMessage(1);
 								}
 							} catch (JSONException e) {
 								// TODO Auto-generated catch block
@@ -116,7 +138,7 @@ public class AboutMeAdapter extends BaseAdapter
 			});
 
 			ImageView iv=(ImageView) convertView.findViewById(R.id.aboutme_oneIv);
-			String strUrl="http://192.168.0.250:3004"+Amlist.get(position).getSender_avatar_url();
+			String strUrl=Urlinterface.IP+Amlist.get(position).getSender_avatar_url();
 			iv.setTag(strUrl+Amlist.get(position).getId());
 			Bitmap bm = asyncImageLoader.asyncLoadImage(strUrl+Amlist.get(position).getId(), 0, callback);  
 			iv.setImageBitmap(null);  
@@ -127,18 +149,25 @@ public class AboutMeAdapter extends BaseAdapter
 			} 
 			bm=null;
 		}	
-
 		return convertView;
 
 	}
+	@SuppressLint({ "HandlerLeak", "ShowToast" })
 	Handler handler=new Handler()
 	{
 		public void dispatchMessage(Message msg) {
-			// TODO Auto-generated method stub
 			super.dispatchMessage(msg);
 			switch (msg.what) {
 			case 0:
 				notifyDataSetChanged();
+				break;
+			case 1:
+				Toast.makeText(context, msg.obj.toString(), 0).show();
+				break;
+			case 2:
+				Intent intent = new Intent(context,Classxinxiliu.class);
+				intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK); 
+				context.getApplicationContext().startActivity(intent);
 				break;
 			default:
 				break;

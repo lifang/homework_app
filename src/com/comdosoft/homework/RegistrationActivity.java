@@ -33,6 +33,7 @@ import android.widget.Toast;
 
 import com.comdosoft.homework.tools.HomeWorkTool;
 import com.comdosoft.homework.tools.Urlinterface;
+import com.comdosoft.homework.Classxinxiliu;
 
 public class RegistrationActivity extends Activity {
 	private ImageButton faceImage;
@@ -248,7 +249,7 @@ private String json="";
 										//  添加页面跳转   跳到班级页面
 										  Intent intent = new Intent();
 										intent.putExtra("json",json);
-											intent.setClass(RegistrationActivity.this,com.comdosoft.homework.Classxinxiliu.class);//
+											intent.setClass(RegistrationActivity.this,Classxinxiliu.class);//
 											startActivity(intent);
 											RegistrationActivity.this.finish();
 										
