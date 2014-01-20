@@ -30,7 +30,7 @@ import android.widget.Toast;
 import android.widget.LinearLayout.LayoutParams;
 import android.widget.TextView;
 
-// 拼写答题    马龙    2014年1月18日
+// 拼写答题    马龙    2014年1月20日
 public class DictationBeginActivity extends Activity implements
 		OnClickListener, HomeWorkParams, OnPreparedListener, Urlinterface {
 
@@ -62,7 +62,6 @@ public class DictationBeginActivity extends Activity implements
 		findViewById(R.id.question_dictation_exit).setOnClickListener(this);
 		findViewById(R.id.question_dictation_check).setOnClickListener(this);
 		findViewById(R.id.question_dictation_play).setOnClickListener(this);
-
 		init();
 	}
 
@@ -76,8 +75,7 @@ public class DictationBeginActivity extends Activity implements
 		editLinearLayout.removeAllViews();
 
 		// 获取已答过题目记录数
-		// bigIndex = ListeningQuestionList.getRecordCount();
-		bigIndex = 0;
+		bigIndex = ListeningQuestionList.getRecordCount();
 
 		// 获取小题数据
 		qpList = ListeningQuestionList.getListeningPojo(bigIndex)
@@ -150,7 +148,7 @@ public class DictationBeginActivity extends Activity implements
 						dictationList.get(i).setFlag(1);
 						etList.get(i).setTextColor(Color.rgb(146, 184, 27));
 					} else {
-						answer.append(s).append(",||,");
+						answer.append(s).append("-!-");
 						etList.get(i).setTextColor(Color.rgb(240, 134, 41));
 					}
 				}
@@ -180,27 +178,29 @@ public class DictationBeginActivity extends Activity implements
 
 		} else {
 			// Next
-			if (bigIndex < ListeningQuestionList.getListeningPojoList().size() - 1) {
+			if (bigIndex < ListeningQuestionList.getListeningPojoList().size()) {
 				if (smallIndex == qpList.size()) {
 					// 大题里最后一小题
+					bigIndex++;
+					smallIndex = 0;
+					if (bigIndex == ListeningQuestionList
+							.getListeningPojoList().size()) {
+						Toast.makeText(getApplicationContext(), "aaaa", 0)
+								.show();
+						return;
+					}
+
 					// ListeningQuestionList.delListeningPojoList(0);
 					// Intent intnet = new Intent(getApplicationContext(),
 					// HomeWorkIngActivity.class);
 					// startActivity(intnet);
-					bigIndex++;
-					smallIndex = 0;
-					// new MyTrehad().start();
-					check.setText("检查");
-					init();
-				} else {
-					// 切换下一小题
-					if (answer.length() > 0) {
-						answer.delete(answer.length() - 4, answer.length());
-					}
-					// new MyTrehad().start();
-					check.setText("检查");
-					init();
 				}
+				if (answer.length() > 0) {
+					answer.delete(answer.length() - 3, answer.length());
+				}
+				check.setText("检查");
+				new MyTrehad().start();
+				init();
 			}
 		}
 	}

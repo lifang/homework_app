@@ -33,7 +33,7 @@ import android.view.View.OnClickListener;
 import android.widget.ImageView;
 import android.widget.Toast;
 
-// 拼写准备    马龙    2014年1月18日
+// 拼写准备    马龙    2014年1月20日
 public class DictationPrepareActivity extends Activity implements
 		OnClickListener, OnPreparedListener, OnCompletionListener, Urlinterface {
 
@@ -149,7 +149,7 @@ public class DictationPrepareActivity extends Activity implements
 			try {
 				Map<String, String> map = new HashMap<String, String>();
 				map.put("student_id", "1");
-				map.put("publish_question_package_id", "2");
+				map.put("publish_question_package_id", "1");
 				analyzeJson(HomeWorkTool
 						.sendGETRequest(
 								"http://192.168.0.250:3004/api/students/into_daily_tasks",

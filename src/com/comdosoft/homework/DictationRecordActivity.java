@@ -29,12 +29,13 @@ import android.widget.Toast;
 import com.comdosoft.homework.tools.HomeWorkTool;
 import com.comdosoft.homework.tools.ListeningQuestionList;
 
-// 拼写记录    马龙    2014年1月18日
+// 拼写记录    马龙    2014年1月20日
 public class DictationRecordActivity extends Activity implements
 		OnClickListener, OnPreparedListener {
 
 	private int bigIndex = 0;
 	private int smallIndex = 0;
+	private String mp3URL;
 	private LinearLayout linearLayout;
 	private TextView topic;
 	private TextView page;
@@ -68,7 +69,7 @@ public class DictationRecordActivity extends Activity implements
 
 		bigList = ListeningQuestionList.getAnswerList();
 		smallList = bigList.get(bigIndex);
-		String[] sArr = smallList.get(smallIndex).split(";/|/|;");
+		String[] sArr = smallList.get(smallIndex).split("-!-");
 
 		for (int i = 0; i < sArr.length; i++) {
 			if (i == 0 || i % 2 == 0) {
@@ -84,6 +85,8 @@ public class DictationRecordActivity extends Activity implements
 			initView(i);
 		}
 
+		mp3URL = ListeningQuestionList.getListeningPojo(bigIndex)
+				.getQuesttionList().get(smallIndex - 1).getUrl();
 		topic.setText(ListeningQuestionList.getListeningPojo(bigIndex)
 				.getQuesttionList().get(smallIndex - 1).getContent());
 		page.setText(smallIndex + "/" + smallList.size());
@@ -107,7 +110,7 @@ public class DictationRecordActivity extends Activity implements
 	public void playerAmr() {
 		try {
 			mediaPlayer.reset();
-			mediaPlayer.setDataSource("/mnt/sdcard/voice_1.mp3");
+			mediaPlayer.setDataSource(mp3URL);
 			mediaPlayer.prepare();
 			mediaPlayer.setOnPreparedListener(this);
 		} catch (IllegalArgumentException e) {
@@ -129,7 +132,6 @@ public class DictationRecordActivity extends Activity implements
 			if (smallIndex < smallList.size()) {
 				initData();
 			}
-
 			break;
 		case R.id.question_dictation_play:
 			playerAmr();

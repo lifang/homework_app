@@ -18,6 +18,7 @@ import android.os.Handler;
 import android.os.Message;
 import android.widget.Toast;
 
+// 登录    马龙    2014年1月20日
 public class LoginActivity extends Activity implements Urlinterface {
 
 	private static final String SCOPE = "get_user_info";
@@ -105,7 +106,6 @@ public class LoginActivity extends Activity implements Urlinterface {
 		@Override
 		public void run() {
 			super.run();
-			// sp.edit().putString("open_id", openid).commit();
 			Map<String, String> map = new HashMap<String, String>();
 			map.put("open_id", openid);
 			json = HomeWorkTool.doPost(QQ_LOGIN, map);
