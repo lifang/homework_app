@@ -15,7 +15,6 @@
         android:text="@string/hello_world" />
 
     <Button
-        
         android:id="@+id/button1"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -54,5 +53,13 @@
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
         android:text="切换班级" />
+
+    <Button
+        android:id="@+id/qq_login"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_toRightOf="@id/button3"
+        android:text="QQ登陆" />
 
 </RelativeLayout>
