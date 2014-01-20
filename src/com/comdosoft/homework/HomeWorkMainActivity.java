@@ -8,6 +8,7 @@ import android.content.res.Resources;
 import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.Display;
 import android.view.Gravity;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
@@ -30,6 +31,10 @@ public class HomeWorkMainActivity extends TabActivity implements Urlinterface {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.homewrok_main);
 		homework = (HomeWork) getApplication();
+		Display display = getWindowManager().getDefaultDisplay();
+		int Height = display.getHeight();
+		int width = display.getWidth();
+		Log.i(tag, width + "/" + Height);
 		Log.i(tag, "1111111111");
 		tabhost = getTabHost();
 		res = getResources();

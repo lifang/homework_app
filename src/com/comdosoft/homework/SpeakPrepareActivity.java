@@ -1,6 +1,5 @@
 package com.comdosoft.homework;
 
-import java.io.IOException;
 import java.util.List;
 
 import android.app.Activity;
@@ -51,6 +50,11 @@ public class SpeakPrepareActivity extends Activity implements Urlinterface {
 				builder.setPositiveButton("确定", null);
 				builder.show();
 				break;
+			case 3:
+				player.stop();
+				player.release();
+				player = null;
+				break;
 			}
 		};
 	};
@@ -68,7 +72,8 @@ public class SpeakPrepareActivity extends Activity implements Urlinterface {
 		if (homework.isWork_history()) {// 表示查看历史记录
 			questionlist = list.get(homework.getQuestion_index())
 					.getQuesttionList();
-			homework.setQ_package_id(list.get(homework.getQuestion_index()).getId());
+			homework.setQ_package_id(list.get(homework.getQuestion_index())
+					.getId());
 			for (int i = 0; i < questionlist.size(); i++) {
 				content += questionlist.get(i).getContent() + "\n";
 			}
@@ -96,6 +101,7 @@ public class SpeakPrepareActivity extends Activity implements Urlinterface {
 			MyDialog("确认不在继续答题吗？", "确定", "取消");
 			break;
 		case R.id.question_speak_next:
+			stop();
 			SpeakPrepareActivity.this.finish();
 			if (homework.isWork_history()) {// 进入答题历史页面
 				homework.setBranch_questions(list.get(
@@ -115,20 +121,10 @@ public class SpeakPrepareActivity extends Activity implements Urlinterface {
 		case R.id.question_speak_img:
 			// 从文件系统播放
 			String path = "/sdcard/homework/test.mp3";
-			try {
-				player.setDataSource(path);
-				if (player.isPlaying()) {// 正在播放
-					player.pause();
-				} else {
-					player.prepare();
-					player.start();
-				}
-			} catch (IllegalArgumentException e) {
-				e.printStackTrace();
-			} catch (IllegalStateException e) {
-				e.printStackTrace();
-			} catch (IOException e) {
-				e.printStackTrace();
+			if (player.isPlaying()) {// 正在播放
+				stop();
+			} else {
+				play(path);
 			}
 			break;
 		}
@@ -160,6 +156,54 @@ public class SpeakPrepareActivity extends Activity implements Urlinterface {
 			}
 		});
 		dialog.show();
+	}
+
+	/**
+	 * 播放音乐
+	 * 
+	 * @param playPosition
+	 */
+	private void play(String path) {
+		try {
+			player.reset();// 把各项参数恢复到初始状态
+			/**
+			 * 通过MediaPlayer.setDataSource()
+			 * 的方法,将URL或文件路径以字符串的方式传入.使用setDataSource ()方法时,要注意以下三点:
+			 * 1.构建完成的MediaPlayer 必须实现Null 对像的检查.
+			 * 2.必须实现接收IllegalArgumentException 与IOException
+			 * 等异常,在很多情况下,你所用的文件当下并不存在. 3.若使用URL 来播放在线媒体文件,该文件应该要能支持pragressive
+			 * 下载.
+			 */
+			player.setDataSource(path);
+			player.prepare();// 进行缓冲
+			player.setOnPreparedListener(new MyPreparedListener(0));
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
+
+	private final class MyPreparedListener implements
+			android.media.MediaPlayer.OnPreparedListener {
+		private int playPosition;
+
+		public MyPreparedListener(int playPosition) {
+			this.playPosition = playPosition;
+		}
+
+		@Override
+		public void onPrepared(MediaPlayer mp) {
+			player.start();// 开始播放
+			if (playPosition > 0) {
+				player.seekTo(playPosition);
+			}
+		}
+
+	}
+
+	public void stop() {
+		if (player.isPlaying()) {
+			player.stop();
+		}
 	}
 
 	protected void onStart() {

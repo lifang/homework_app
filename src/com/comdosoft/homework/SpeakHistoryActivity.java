@@ -1,7 +1,5 @@
 package com.comdosoft.homework;
 
-import java.io.File;
-import java.io.IOException;
 import java.util.List;
 
 import android.app.Activity;
@@ -37,13 +35,11 @@ public class SpeakHistoryActivity extends Activity implements Urlinterface {
 	private TextView question_speak_content;
 	private List<List<String>> question_history;
 	private int student_id = 1;
-	private int ti_id = 1;
 	private HomeWork homework;
 	private List<QuestionPojo> branch_questions;
 	private int index = 0;
 	private int question_history_size;
 
-	private static String SDFile;
 	public String error_str = "";// 记录错误的词
 	private Handler handler = new Handler() {
 		public void handleMessage(Message msg) {
@@ -79,11 +75,6 @@ public class SpeakHistoryActivity extends Activity implements Urlinterface {
 		homework = (HomeWork) getApplication();
 
 		initialize();
-		SDFile = "/sdcard/homework/" + student_id + "/" + ti_id + "/";
-		File file = new File(SDFile);
-		if (!file.exists()) {
-			file.mkdirs();
-		}
 
 		Toast.makeText(this, "查看历史信息", Toast.LENGTH_SHORT).show();
 		// for (int j = 0; j <
@@ -122,6 +113,7 @@ public class SpeakHistoryActivity extends Activity implements Urlinterface {
 			MyDialog("确认要退出吗?", "确认", "取消", 0);
 			break;
 		case R.id.question_speak_next:
+			stop();
 			int ye = homework.getQuestion_index();
 			if ((ye + 1) < homework.getQuestion_allNumber()) {
 				Log.i(tag, ye + "-" + homework.getQuestion_allNumber() + "-"
@@ -146,22 +138,11 @@ public class SpeakHistoryActivity extends Activity implements Urlinterface {
 			break;
 		case R.id.question_speak_img:// 播放音频
 			// 从文件系统播放
-			String path = SDFile + "test.mp3";
-			try {
-				player.setDataSource(path);
-				if (player.isPlaying()) {// 正在播放
-					Toast.makeText(this, "正在播放..", Toast.LENGTH_SHORT).show();
-					player.pause();
-				} else {
-					player.prepare();
-					player.start();
-				}
-			} catch (IllegalArgumentException e) {
-				e.printStackTrace();
-			} catch (IllegalStateException e) {
-				e.printStackTrace();
-			} catch (IOException e) {
-				e.printStackTrace();
+			String path = IP + branch_questions.get(index).getUrl();
+			if (player.isPlaying()) {// 正在播放
+				stop();
+			} else {
+				play(path);
 			}
 			break;
 		}
@@ -263,6 +244,53 @@ public class SpeakHistoryActivity extends Activity implements Urlinterface {
 		dialog.show();
 	}
 
+	/**
+	 * 播放音乐
+	 * 
+	 * @param playPosition
+	 */
+	private void play(String path) {
+		try {
+			player.reset();// 把各项参数恢复到初始状态
+			/**
+			 * 通过MediaPlayer.setDataSource()
+			 * 的方法,将URL或文件路径以字符串的方式传入.使用setDataSource ()方法时,要注意以下三点:
+			 * 1.构建完成的MediaPlayer 必须实现Null 对像的检查.
+			 * 2.必须实现接收IllegalArgumentException 与IOException
+			 * 等异常,在很多情况下,你所用的文件当下并不存在. 3.若使用URL 来播放在线媒体文件,该文件应该要能支持pragressive
+			 * 下载.
+			 */
+			player.setDataSource(path);
+			player.prepare();// 进行缓冲
+			player.setOnPreparedListener(new MyPreparedListener(0));
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
+
+	private final class MyPreparedListener implements
+			android.media.MediaPlayer.OnPreparedListener {
+		private int playPosition;
+
+		public MyPreparedListener(int playPosition) {
+			this.playPosition = playPosition;
+		}
+
+		public void onPrepared(MediaPlayer mp) {
+			player.start();// 开始播放
+			if (playPosition > 0) {
+				player.seekTo(playPosition);
+			}
+		}
+
+	}
+
+	public void stop() {
+		if (player.isPlaying()) {
+			player.stop();
+		}
+	}
+
 	protected void onStart() {
 		if (player == null)
 			player = new MediaPlayer();
@@ -291,7 +319,8 @@ public class SpeakHistoryActivity extends Activity implements Urlinterface {
 		Intent intent = new Intent();
 		if (keyCode == KeyEvent.KEYCODE_BACK) {
 			SpeakHistoryActivity.this.finish();
-			intent.setClass(SpeakHistoryActivity.this, SpeakPrepareActivity.class);
+			intent.setClass(SpeakHistoryActivity.this,
+					SpeakPrepareActivity.class);
 			startActivity(intent);
 			return true;
 		}
