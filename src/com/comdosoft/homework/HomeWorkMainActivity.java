@@ -35,7 +35,6 @@ public class HomeWorkMainActivity extends TabActivity implements Urlinterface {
 		int Height = display.getHeight();
 		int width = display.getWidth();
 		Log.i(tag, width + "/" + Height);
-		Log.i(tag, "1111111111");
 		tabhost = getTabHost();
 		res = getResources();
 		Intent intent1 = new Intent(this, Spec1.class);

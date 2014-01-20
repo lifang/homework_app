@@ -35,6 +35,7 @@ import com.comdosoft.homework.pojo.WorkPojo;
 import com.comdosoft.homework.tools.HomeWork;
 import com.comdosoft.homework.tools.HomeWorkParams;
 import com.comdosoft.homework.tools.HomeWorkTool;
+import com.comdosoft.homework.tools.ListeningQuestionList;
 import com.comdosoft.homework.tools.Urlinterface;
 
 public class HomeWorkIngActivity extends Activity implements Urlinterface {
@@ -99,12 +100,12 @@ public class HomeWorkIngActivity extends Activity implements Urlinterface {
 		// Thread thread = new Thread(new getClassInfo());
 		// thread.start();
 
-//		work_list = new ArrayList<WorkDatePojo>();
-//		question_list = new ArrayList<QuestionCasePojo>();
-//		for (int i = 0; i < 5; i++) {
-//			WorkDatePojo work = new WorkDatePojo(1, "2014年1月3日", 1);
-//			work_list.add(work);
-//		}
+		// work_list = new ArrayList<WorkDatePojo>();
+		// question_list = new ArrayList<QuestionCasePojo>();
+		// for (int i = 0; i < 5; i++) {
+		// WorkDatePojo work = new WorkDatePojo(1, "2014年1月3日", 1);
+		// work_list.add(work);
+		// }
 
 		Thread thread = new Thread(new getClassInfo());
 		thread.start();
@@ -374,6 +375,7 @@ public class HomeWorkIngActivity extends Activity implements Urlinterface {
 	// 解析题目json
 	public void QuestionJson(String json) {
 		try {
+			// 阅读
 			questionlist = new ArrayList<ListeningPojo>();
 			JSONArray ja = new JSONObject(json).getJSONObject("package")
 					.getJSONArray("reading");
@@ -392,9 +394,10 @@ public class HomeWorkIngActivity extends Activity implements Urlinterface {
 			homework.setQuestion_list(questionlist);
 			homework.setQuestion_allNumber(questionlist.size());
 
-			// 加載阅读历史信息
+			// 加載历史信息
 			List<List<String>> questionhistory = new ArrayList<List<String>>();
 			if (!new JSONObject(json).getString("user_answers").equals("")) {
+				// 解析阅读记录
 				JSONArray user_answers = new JSONObject(json).getJSONObject(
 						"user_answers").getJSONArray("reading");
 
@@ -408,9 +411,43 @@ public class HomeWorkIngActivity extends Activity implements Urlinterface {
 					}
 					questionhistory.add(question);
 				}
+
+				// 解析听写记录
+				JSONArray answer = new JSONObject(json).getJSONObject(
+						"user_answers").getJSONArray("listening");
+				for (int i = 0; i < answer.length(); i++) {
+					JSONObject jn = answer.getJSONObject(i);
+					JSONArray jArr = jn.getJSONArray("branch_questions");
+					List<String> smallList = new ArrayList<String>();
+					for (int j = 0; j < jArr.length(); j++) {
+						JSONObject jb = jArr.getJSONObject(j);
+						smallList.add(jb.getString("answer"));
+					}
+					ListeningQuestionList.addAnswer(smallList);
+				}
 			}
 
 			homework.setQuestion_history(questionhistory);
+
+			// ↑张秀楠------------↓马龙
+
+			// 解析听写题目
+			JSONArray jarray = new JSONObject(json).getJSONObject("package")
+					.getJSONArray("listening");
+			for (int i = 0; i < jarray.length(); i++) {
+				JSONObject jn = jarray.getJSONObject(i);
+				JSONArray jArr = jn.getJSONArray("branch_questions");
+				int id = jn.getInt("id");
+				List<QuestionPojo> question = new ArrayList<QuestionPojo>();
+				for (int j = 0; j < jArr.length(); j++) {
+					JSONObject jb = jArr.getJSONObject(j);
+					question.add(new QuestionPojo(jb.getInt("id"), jb
+							.getString("content"), jb.getString("resource_url")));
+				}
+				ListeningQuestionList.addListeningPojo(new ListeningPojo(id,
+						question));
+			}
+
 			handler.sendEmptyMessage(3);
 		} catch (JSONException e) {
 			e.printStackTrace();
