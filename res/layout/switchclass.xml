@@ -8,14 +8,14 @@
 
     <TextView
         android:id="@+id/switchClassTv"
-        android:layout_width="479dp"
-        android:layout_height="55dp"
+        android:layout_width="479px"
+        android:layout_height="55px"
         android:gravity="center"
         android:text="@string/SwitchClass_Tv"
-        android:textSize="24sp" />
+        android:textSize="24px" />
 
     <LinearLayout
-        android:layout_width="479dp"
+        android:layout_width="479px"
         android:layout_height="wrap_content"
         android:gravity="center"
         android:orientation="vertical" >
@@ -29,26 +29,26 @@
     </LinearLayout>
 
     <LinearLayout
-        android:layout_marginTop="5dp"
+        android:layout_marginTop="5px"
         android:id="@+id/switchClassll"
-        android:layout_width="479dp"
-        android:layout_height="55dp"
+        android:layout_width="479px"
+        android:layout_height="55px"
         android:background="#ffffff"
         android:orientation="horizontal" >
 
         <EditText
             android:id="@+id/SwitchClass_Et"
-            android:layout_width="400dp"
-            android:layout_height="55dp"
+            android:layout_width="400px"
+            android:layout_height="55px"
             android:background="@null"
             android:gravity="center"
             android:hint="@string/SwitchClass_Et"
-            android:textSize="24sp" />
+            android:textSize="24px" />
 
         <ImageButton
             android:id="@+id/switchClassIB"
-            android:layout_width="79dp"
-            android:layout_height="55dp"
+            android:layout_width="79px"
+            android:layout_height="55px"
             android:adjustViewBounds="true"
             android:background="#ffffff"
             android:contentDescription="@null"

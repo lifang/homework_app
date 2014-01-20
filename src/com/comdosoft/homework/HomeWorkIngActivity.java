@@ -13,6 +13,7 @@ import android.app.AlertDialog.Builder;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.os.Handler;
@@ -32,12 +33,13 @@ import com.comdosoft.homework.pojo.WorkPojo;
 import com.comdosoft.homework.tools.HomeWork;
 import com.comdosoft.homework.tools.HomeWorkParams;
 import com.comdosoft.homework.tools.HomeWorkTool;
+import com.comdosoft.homework.tools.ListeningQuestionList;
 import com.comdosoft.homework.tools.Urlinterface;
 
 public class HomeWorkIngActivity extends Activity implements Urlinterface {
 	private String json = "{\"status\":\"success\",\"notice\":\"\u767b\u9646\u6210\u529f\uff01\",\"student\":{\"id\":111,\"name\":\"nameeeeee\",\"user_id\":15,\"nickname\":\"11111nickname\",\"avatar_url\":\"/homework_system/avatars/students/2014-01-/student_111.png\"},\"class\":{\"id\":1,\"name\":\"eeeee\",\"tearcher_name\":\"tea\",\"tearcher_id\":1},\"classmates\":[{\"avatar_url\":\"/homework_system/avatars/students/2014-01/student_1.png\",\"id\":1,\"name\":\"tea\",\"nickname\":\"\u4e0a\u5584\u82e5\u6c34\"}],\"task_messages\":[],\"microposts\":{\"page\":1,\"pages_count\":11,\"details_microposts\":[{\"avatar_url\":\"/homework_system/avatars/students/2014-01/student_1.png\",\"content\":\"KKK\",\"created_at\":\"2014-01-16T15:50:47+08:00\",\"micropost_id\":22,\"name\":\"tea\",\"reply_microposts_count\":null,\"user_id\":1,\"user_types\":1},{\"avatar_url\":\"/homework_system/avatars/students/2014-01/student_1.png\",\"content\":\"65469855655\",\"created_at\":\"2014-01-16T15:19:26+08:00\",\"micropost_id\":21,\"name\":\"tea\",\"reply_microposts_count\":null,\"user_id\":1,\"user_types\":1}]},\"daily_tasks\":[{\"id\":1,\"name\":\"package1\",\"start_time\":\"2014-01-14T18:35:46+08:00\",\"end_time\":\"2014-01-30T02:35:46+08:00\",\"question_packages_url\":\"31312312313123\",\"listening_schedule\":\"0/4\",\"reading_schedule\":\"0/5\"},{\"id\":2,\"name\":\"package2\",\"start_time\":\"2014-01-14T18:35:46+08:00\",\"end_time\":\"2014-01-10T02:35:46+08:00\",\"question_packages_url\":\"1111\",\"listening_schedule\":\"0/6\",\"reading_schedule\":\"7/7\"}],\"follow_microposts_id\":[]}";
 	private String qsjson = "{\"status\":true,\"notice\":\"\",\"package\":{\"listening\":[{\"id\":\"1\",\"branch_questions\":[{\"id\":\"2\",\"content\":\"This is an apple.\",\"resource_url\":\"/question_packages_1/resource2.mp3\"},{\"id\":\"3\",\"content\":\"Why is Google undertaking such a venture?\",\"resource_url\":\"/question_packages_1/resource3.mp3\"}]},{\"id\":\"2\",\"branch_questions\":[{\"id\":\"4\",\"content\":\"The company likes to present itself as having lofty aspirations.\",\"resource_url\":\"/question_packages_2/resource4.mp3\"},{\"id\":\"5\",\"content\":\"At its centre, however, is one simple issue: that of copyright.\",\"resource_url\":\"/question_packages_2/resource5.mp3\"}]}],\"reading\":[{\"id\":\"3\",\"branch_questions\":[{\"id\":\"2\",\"content\":\"This is an apple.\",\"resource_url\":\"/question_packages_1/resource2.mp3\"},{\"id\":\"3\",\"content\":\"Why is Google undertaking such a venture?\",\"resource_url\":\"/question_packages_1/resource3.mp3\"}]},{\"id\":\"4\",\"branch_questions\":[{\"id\":\"4\",\"content\":\"The company likes to present itself as having lofty aspirations.\",\"resource_url\":\"/question_packages_2/resource4.mp3\"},{\"id\":\"5\",\"content\":\"At its centre, however, is one simple issue: that of copyright.\",\"resource_url\":\"/question_packages_2/resource5.mp3\"}]}]},\"user_answers\":{\"listening\":[{\"id\":\"1\",\"branch_questions\":[{\"id\":\"2\",\"answer\":\"This is-->This is an -->This is an apple\"},{\"id\":\"3\",\"answer\":\"Why is Google-->Why is Google __ venture-->Why is Google undertaking such a venture?\"}]}],\"reading\":[{\"id\":\"1\",\"branch_questions\":[{\"id\":\"2\",\"answer\":\"/test.mp3-->/test.mp3\"}]}]}}";
-	public int school_class_id = 1;
+	public int school_class_id;
 	public int student_id = 1;
 	private ListView working_date_list;
 	private int index;
@@ -86,22 +88,28 @@ public class HomeWorkIngActivity extends Activity implements Urlinterface {
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_working);
-		homework = (HomeWork) getApplication();
+		homework = (HomeWork) getApplication();//初始化
 		initialize();// 初始化
 		index = 0;
 
+		SharedPreferences sp = getSharedPreferences(SHARED, 0);
+		student_id = sp.getInt("user_id", 0);
+		school_class_id = sp.getInt("class_id", 0);
+		homework.setClass_id(school_class_id);
+		homework.setUser_id(student_id);
+		
 		prodialog = new ProgressDialog(HomeWorkIngActivity.this);
 		prodialog.setMessage(HomeWorkParams.PD_CLASS_INFO);
 		// prodialog.show();
 		// Thread thread = new Thread(new getClassInfo());
 		// thread.start();
 
-//		work_list = new ArrayList<WorkDatePojo>();
-//		question_list = new ArrayList<QuestionCasePojo>();
-//		for (int i = 0; i < 5; i++) {
-//			WorkDatePojo work = new WorkDatePojo(1, "2014年1月3日", 1);
-//			work_list.add(work);
-//		}
+		// work_list = new ArrayList<WorkDatePojo>();
+		// question_list = new ArrayList<QuestionCasePojo>();
+		// for (int i = 0; i < 5; i++) {
+		// WorkDatePojo work = new WorkDatePojo(1, "2014年1月3日", 1);
+		// work_list.add(work);
+		// }
 
 		Thread thread = new Thread(new getClassInfo());
 		thread.start();
@@ -371,6 +379,7 @@ public class HomeWorkIngActivity extends Activity implements Urlinterface {
 	// 解析题目json
 	public void QuestionJson(String json) {
 		try {
+			// 阅读
 			questionlist = new ArrayList<ListeningPojo>();
 			JSONArray ja = new JSONObject(json).getJSONObject("package")
 					.getJSONArray("reading");
@@ -389,9 +398,10 @@ public class HomeWorkIngActivity extends Activity implements Urlinterface {
 			homework.setQuestion_list(questionlist);
 			homework.setQuestion_allNumber(questionlist.size());
 
-			// 加載阅读历史信息
+			// 加載历史信息
 			List<List<String>> questionhistory = new ArrayList<List<String>>();
 			if (!new JSONObject(json).getString("user_answers").equals("")) {
+				// 解析阅读记录
 				JSONArray user_answers = new JSONObject(json).getJSONObject(
 						"user_answers").getJSONArray("reading");
 
@@ -405,9 +415,43 @@ public class HomeWorkIngActivity extends Activity implements Urlinterface {
 					}
 					questionhistory.add(question);
 				}
+
+				// 解析听写记录
+				JSONArray answer = new JSONObject(json).getJSONObject(
+						"user_answers").getJSONArray("listening");
+				for (int i = 0; i < answer.length(); i++) {
+					JSONObject jn = answer.getJSONObject(i);
+					JSONArray jArr = jn.getJSONArray("branch_questions");
+					List<String> smallList = new ArrayList<String>();
+					for (int j = 0; j < jArr.length(); j++) {
+						JSONObject jb = jArr.getJSONObject(j);
+						smallList.add(jb.getString("answer"));
+					}
+					ListeningQuestionList.addAnswer(smallList);
+				}
 			}
 
 			homework.setQuestion_history(questionhistory);
+
+			// ↑张秀楠------------↓马龙
+
+			// 解析听写题目
+			JSONArray jarray = new JSONObject(json).getJSONObject("package")
+					.getJSONArray("listening");
+			for (int i = 0; i < jarray.length(); i++) {
+				JSONObject jn = jarray.getJSONObject(i);
+				JSONArray jArr = jn.getJSONArray("branch_questions");
+				int id = jn.getInt("id");
+				List<QuestionPojo> question = new ArrayList<QuestionPojo>();
+				for (int j = 0; j < jArr.length(); j++) {
+					JSONObject jb = jArr.getJSONObject(j);
+					question.add(new QuestionPojo(jb.getInt("id"), jb
+							.getString("content"), jb.getString("resource_url")));
+				}
+				ListeningQuestionList.addListeningPojo(new ListeningPojo(id,
+						question));
+			}
+
 			handler.sendEmptyMessage(3);
 		} catch (JSONException e) {
 			e.printStackTrace();

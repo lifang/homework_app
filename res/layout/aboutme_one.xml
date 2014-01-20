@@ -6,13 +6,13 @@
 
     <ImageView
         android:id="@+id/aboutme_oneIv"
-        android:layout_width="80dp"
-        android:layout_height="80dp"
+        android:layout_width="80px"
+        android:layout_height="80px"
         android:contentDescription="@null" />
 
     <LinearLayout
-        android:layout_width="450dp"
-        android:layout_height="140dp"
+        android:layout_width="911px"
+        android:layout_height="180px"
         android:background="@drawable/aboutme_one"
         android:orientation="vertical" >
 
@@ -24,28 +24,28 @@
                 android:id="@+id/aboutme_oneTv"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginLeft="25dp"
-                android:layout_marginTop="10dp"
+                android:layout_marginLeft="25px"
+                android:layout_marginTop="10px"
                 android:textColor="#92b81b"
-                android:textSize="24sp" />
+                android:textSize="24px" />
 
             <TextView
                 android:id="@+id/aboutme_oneTv2"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginLeft="25dp"
-                android:layout_marginTop="10dp"
+                android:layout_marginLeft="25px"
+                android:layout_marginTop="10px"
                 android:layout_toRightOf="@id/aboutme_oneTv"
                 android:textColor="#9da2ad"
-                android:textSize="24sp" />
+                android:textSize="24px" />
 
             <ImageButton
                 android:id="@+id/aboutme_oneIb"
-                android:layout_width="40dp"
-                android:layout_height="40dp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
                 android:layout_alignParentRight="true"
-                android:layout_marginRight="10dp"
-                android:layout_marginTop="15dp"
+                android:layout_marginRight="10px"
+                android:layout_marginTop="15px"
                 android:contentDescription="@null"
                 android:background="@drawable/aboutme_delete" />
         </RelativeLayout>
@@ -57,12 +57,12 @@
 
             <TextView
                 android:id="@+id/aboutme_oneTv3"
-                android:layout_width="400dp"
+                android:layout_width="400px"
                 android:layout_height="wrap_content"
-                android:layout_marginLeft="20dp"
-                android:layout_marginTop="10dp"
+                android:layout_marginLeft="20px"
+                android:layout_marginTop="10px"
                 android:textColor="#626060"
-                android:textSize="24sp" />
+                android:textSize="24px" />
 
             <RelativeLayout
                 android:layout_width="wrap_content"
@@ -73,20 +73,20 @@
                     android:id="@+id/aboutme_oneTv4"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginLeft="20dp"
-                    android:layout_marginTop="20dp"
+                    android:layout_marginLeft="20px"
+                    android:layout_marginTop="20px"
                     android:textColor="#c1bebf"
-                    android:textSize="24sp" />
+                    android:textSize="24px" />
 
                 <TextView
                     android:id="@+id/aboutme_oneTv5"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_alignParentRight="true"
-                    android:layout_marginTop="10dp"
+                    android:layout_marginTop="10px"
                     android:text="查看"
                     android:textColor="@color/lvse"
-                    android:textSize="24sp" />
+                    android:textSize="24px" />
             </RelativeLayout>
         </LinearLayout>
     </LinearLayout>

@@ -1,5 +1,7 @@
 package com.comdosoft.homework;
 
+import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 
 import android.app.Activity;
@@ -8,6 +10,8 @@ import android.app.Dialog;
 import android.app.ProgressDialog;
 import android.content.Intent;
 import android.media.MediaPlayer;
+import android.media.MediaPlayer.OnCompletionListener;
+import android.media.MediaPlayer.OnPreparedListener;
 import android.os.Bundle;
 import android.os.Handler;
 import android.view.KeyEvent;
@@ -20,7 +24,9 @@ import com.comdosoft.homework.pojo.QuestionPojo;
 import com.comdosoft.homework.tools.HomeWork;
 import com.comdosoft.homework.tools.Urlinterface;
 
-public class SpeakPrepareActivity extends Activity implements Urlinterface {
+public class SpeakPrepareActivity extends Activity implements Urlinterface,
+		OnPreparedListener, OnCompletionListener {
+	private int mp3Index = 0;
 	private String content = "";
 	private TextView question_speak_title;
 	private TextView question_speak_content;
@@ -31,6 +37,7 @@ public class SpeakPrepareActivity extends Activity implements Urlinterface {
 	private HomeWork homework;
 	private List<QuestionPojo> questionlist;
 	private List<List<String>> history;
+	private List<String> mp3List;
 	private Handler handler = new Handler() {
 		public void handleMessage(android.os.Message msg) {
 			prodialog.dismiss();
@@ -92,6 +99,7 @@ public class SpeakPrepareActivity extends Activity implements Urlinterface {
 		question_speak_title = (TextView) findViewById(R.id.question_speak_title);
 		question_speak_content = (TextView) findViewById(R.id.question_speak_content);
 		player = new MediaPlayer();
+
 	}
 
 	public void onclicks(View v) {
@@ -119,15 +127,18 @@ public class SpeakPrepareActivity extends Activity implements Urlinterface {
 			}
 			break;
 		case R.id.question_speak_img:
+			mp3List = new ArrayList<String>();
+			for (int i = 0; i < questionlist.size(); i++) {
+				mp3List.add(IP + questionlist.get(i).getUrl());
+			}
 			// 从文件系统播放
-			String path = "/sdcard/homework/test.mp3";
 			if (player.isPlaying()) {// 正在播放
 				stop();
 			} else {
-				play(path);
+				play(mp3List.get(mp3Index));
 			}
 			break;
-		} 
+		}
 	}
 
 	private void MyDialog(String title, String btn_one, String Btn_two) {
@@ -176,28 +187,15 @@ public class SpeakPrepareActivity extends Activity implements Urlinterface {
 			 */
 			player.setDataSource(path);
 			player.prepare();// 进行缓冲
-			player.setOnPreparedListener(new MyPreparedListener(0));
+			player.setOnPreparedListener(this);
+			player.setOnCompletionListener(this);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
 	}
 
-	private final class MyPreparedListener implements
-			android.media.MediaPlayer.OnPreparedListener {
-		private int playPosition;
-
-		public MyPreparedListener(int playPosition) {
-			this.playPosition = playPosition;
-		}
-
-		@Override
-		public void onPrepared(MediaPlayer mp) {
-			player.start();// 开始播放
-			if (playPosition > 0) {
-				player.seekTo(playPosition);
-			}
-		}
-
+	public void onPrepared(MediaPlayer mp) {
+		mp.start();
 	}
 
 	public void stop() {
@@ -228,6 +226,26 @@ public class SpeakPrepareActivity extends Activity implements Urlinterface {
 			player = null;
 		}
 		super.onDestroy();
+	}
+
+	// 音频播放结束后继续播放下一个音频,直到所有音频播放完毕
+	@Override
+	public void onCompletion(MediaPlayer mp) {
+		try {
+			if (++mp3Index < mp3List.size()) {
+				mp.reset();
+				mp.setDataSource(mp3List.get(mp3Index));
+				mp.prepare();
+				mp.setOnPreparedListener(this);
+				mp.setOnCompletionListener(this);
+			}
+		} catch (IllegalArgumentException e) {
+			e.printStackTrace();
+		} catch (IllegalStateException e) {
+			e.printStackTrace();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
 	}
 
 	public boolean onKeyDown(int keyCode, KeyEvent event) {

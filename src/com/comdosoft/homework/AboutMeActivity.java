@@ -95,7 +95,6 @@ public class AboutMeActivity extends Activity
 				{
 					num=listam.size()-count;
 					count=listam.size();
-					Log.i("aa", num+"条");
 				}
 				handler.sendEmptyMessage(0);
 			}

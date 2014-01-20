@@ -34,7 +34,6 @@ public class SpeakHistoryActivity extends Activity implements Urlinterface {
 	private LinearLayout question_speak_tishi;
 	private TextView question_speak_content;
 	private List<List<String>> question_history;
-	private int student_id = 1;
 	private HomeWork homework;
 	private List<QuestionPojo> branch_questions;
 	private int index = 0;
@@ -150,8 +149,8 @@ public class SpeakHistoryActivity extends Activity implements Urlinterface {
 
 	public void setTishi(String str) {
 		Log.i(tag, str);
-		if (str.contains("-->")) {
-			String[] str_arr = str.split("-->");
+		if (str.contains("-!-")) {
+			String[] str_arr = str.split("-!-");
 			for (int i = 0; i < str_arr.length; i++) {
 				initView(str_arr[i], i);
 			}
