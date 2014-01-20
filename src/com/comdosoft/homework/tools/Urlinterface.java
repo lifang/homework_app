@@ -3,7 +3,11 @@ package com.comdosoft.homework.tools;
 public interface Urlinterface {
 	static final String tag = "homework";
 	static final String SHARED = "HW";
-	static final String IP = "http://192.168.0.250:3004";
+
+
+//  static final String IP = "http://192.168.0.101:3004";
+	  String IP = "http://192.168.0.250:3004";
+
 	// static final String IP = "http://192.168.0.101:3004";
 //	 static final String IP = "http://192.168.0.127:3000";
 
@@ -21,8 +25,7 @@ public interface Urlinterface {
 
 	// static final String IP = "http://192.168.0.101:3004";
 
-	static final String IP2="http://192.168.0.130:3000";			//李芳
-	static final String IP3="http://192.168.0.101:3004";			//朱传涛
+
 	// static final String HEADIMG = IP + "/user_head_img/";
 	static final String NEWS_RELEASE = IP + "/api/students/news_release";  //  发表消息
 	//	 String UPLOAD_FACE = IP + "/api/students/upload_avatar";  //  上传头像

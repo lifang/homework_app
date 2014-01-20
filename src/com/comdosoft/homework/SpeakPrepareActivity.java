@@ -127,7 +127,7 @@ public class SpeakPrepareActivity extends Activity implements Urlinterface {
 				play(path);
 			}
 			break;
-		}
+		} 
 	}
 
 	private void MyDialog(String title, String btn_one, String Btn_two) {
