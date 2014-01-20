@@ -14,6 +14,7 @@ import android.content.res.Resources;
 import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.Display;
 import android.view.Gravity;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
@@ -36,6 +37,7 @@ public class HomeWorkMainActivity extends TabActivity implements Urlinterface {
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.homewrok_main);
+		homework = (HomeWork) getApplication();
 Intent intent = getIntent();
 		String json = intent.getStringExtra("json");
 
@@ -64,7 +66,8 @@ Intent intent = getIntent();
 					editor.putString("nickname", nick_name);
 					editor.putString("school_class_id", school_class_id);
 					editor.commit();
-					hw.set
+					homework.setClass_id(Integer.parseInt(school_class_id));
+					homework.setUser_id(Integer.parseInt(user_id));
 			} catch (JSONException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
@@ -72,7 +75,11 @@ Intent intent = getIntent();
 		}	
 		
 		
-		homework = (HomeWork) getApplication();
+		
+		Display display = getWindowManager().getDefaultDisplay();
+		int Height = display.getHeight();
+		int width = display.getWidth();
+		Log.i(tag, width + "/" + Height);
 		Log.i(tag, "1111111111");
 		tabhost = getTabHost();
 		res = getResources();

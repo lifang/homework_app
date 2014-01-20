@@ -85,10 +85,10 @@ public class AboutMeAdapter extends BaseAdapter
 				public void onClick(View v) {
 					new Thread()
 					{
+						@SuppressWarnings({ "rawtypes", "unchecked" })
 						public void run()
 						{
 							try {
-								Log.i("aa", "删除方法");
 								HashMap<String, Integer> mp=new HashMap();
 								mp.put("user_id", Integer.valueOf(Amlist.get(position).getUser_id()));
 								mp.put("school_class_id",class_id);
@@ -100,9 +100,7 @@ public class AboutMeAdapter extends BaseAdapter
 								if(status.equals("success"))
 								{
 									Amlist.remove(position);
-									Log.i("aa", Amlist.size()+"");
 									handler.sendEmptyMessage(0);
-									//notifyDataSetInvalidated();
 								}
 								else
 								{
