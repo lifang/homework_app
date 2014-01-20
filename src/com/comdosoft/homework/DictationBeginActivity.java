@@ -12,6 +12,8 @@ import com.comdosoft.homework.tools.HomeWorkParams;
 import com.comdosoft.homework.tools.HomeWorkTool;
 import com.comdosoft.homework.tools.ListeningQuestionList;
 import com.comdosoft.homework.tools.Soundex_Levenshtein;
+import com.comdosoft.homework.tools.Urlinterface;
+
 import android.app.Activity;
 import android.content.Intent;
 import android.graphics.Color;
@@ -30,12 +32,13 @@ import android.widget.TextView;
 
 // 拼写答题    马龙    2014年1月18日
 public class DictationBeginActivity extends Activity implements
-		OnClickListener, HomeWorkParams, OnPreparedListener {
+		OnClickListener, HomeWorkParams, OnPreparedListener, Urlinterface {
 
 	private int linearLayoutIndex = 0;
 	private int smallIndex = 0;
 	private int bigIndex = 0;
 	private String symbol;
+	private String mp3URL;
 	private List<Integer> indexList = new ArrayList<Integer>();
 	private List<QuestionPojo> qpList = new ArrayList<QuestionPojo>();
 	private List<DictationPojo> dictationList = new ArrayList<DictationPojo>();
@@ -81,6 +84,7 @@ public class DictationBeginActivity extends Activity implements
 				.getQuesttionList();
 
 		// 获取当前大&小题数据
+		mp3URL = IP + qpList.get(smallIndex).getUrl();
 		String content = qpList.get(smallIndex).getContent();
 		String[] sArr = content.substring(0, content.length() - 1).split(" ");
 		for (int i = 0; i < sArr.length; i++) {
@@ -185,7 +189,7 @@ public class DictationBeginActivity extends Activity implements
 					// startActivity(intnet);
 					bigIndex++;
 					smallIndex = 0;
-					//new MyTrehad().start();
+					// new MyTrehad().start();
 					check.setText("检查");
 					init();
 				} else {
@@ -205,7 +209,7 @@ public class DictationBeginActivity extends Activity implements
 	public void playerAmr() {
 		try {
 			mediaPlayer.reset();
-			mediaPlayer.setDataSource("/mnt/sdcard/voice_1.mp3");
+			mediaPlayer.setDataSource(mp3URL);
 			mediaPlayer.prepare();
 			mediaPlayer.setOnPreparedListener(this);
 		} catch (IllegalArgumentException e) {
@@ -234,11 +238,7 @@ public class DictationBeginActivity extends Activity implements
 							+ "");
 			map.put("answer", answer.toString());
 			map.put("question_types", "0");
-			Log.i("Ax",
-					"post:"
-							+ HomeWorkTool
-									.doPost("http://192.168.0.101:3004/api/students/record_answer_info",
-											map));
+			Log.i("Ax", "post:" + HomeWorkTool.doPost(SAVE_DICTATION, map));
 			answer.delete(0, answer.length());
 		}
 	}

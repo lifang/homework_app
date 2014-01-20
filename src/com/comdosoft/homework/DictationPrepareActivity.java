@@ -2,7 +2,10 @@ package com.comdosoft.homework;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -10,6 +13,8 @@ import com.comdosoft.homework.pojo.ListeningPojo;
 import com.comdosoft.homework.pojo.QuestionPojo;
 import com.comdosoft.homework.tools.HomeWorkTool;
 import com.comdosoft.homework.tools.ListeningQuestionList;
+import com.comdosoft.homework.tools.Urlinterface;
+
 import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.Intent;
@@ -22,6 +27,7 @@ import android.media.SoundPool.OnLoadCompleteListener;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
+import android.util.Log;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.ImageView;
@@ -29,7 +35,7 @@ import android.widget.Toast;
 
 // 拼写准备    马龙    2014年1月18日
 public class DictationPrepareActivity extends Activity implements
-		OnClickListener, OnPreparedListener, OnCompletionListener {
+		OnClickListener, OnPreparedListener, OnCompletionListener, Urlinterface {
 
 	private String JSON = "	{\"status\":true,\"notice\":\"\",\"package\":{\"listening\":[{\"id\":\"1\",\"branch_questions\":[{\"id\":\"2\",\"content\":\"This is an apple.\",\"resource_url\":\"/question_packages_1/resource2.mp3\"},{\"id\":\"3\",\"content\":\"Why is Google undertaking such a venture?\",\"resource_url\":\"/question_packages_1/resource3.mp3\"}]},{\"id\":\"2\",\"branch_questions\":[{\"id\":\"4\",\"content\":\"The company likes to present itself as having lofty aspirations.\",\"resource_url\":\"/question_packages_2/resource4.mp3\"},{\"id\":\"5\",\"content\":\"At its centre, however, is one simple issue: that of copyright.\",\"resource_url\":\"/question_packages_2/resource5.mp3\"}]}],\"reading\":[{\"id\":\"3\",\"branch_questions\":[{\"id\":\"2\",\"content\":\"This is an apple.\",\"resource_url\":\"/question_packages_1/resource2.mp3\"},{\"id\":\"3\",\"content\":\"Why is Google undertaking such a venture?\",\"resource_url\":\"/question_packages_1/resource3.mp3\"}]},{\"id\":\"4\",\"branch_questions\":[{\"id\":\"4\",\"content\":\"The company likes to present itself as having lofty aspirations.\",\"resource_url\":\"/question_packages_2/resource4.mp3\"},{\"id\":\"5\",\"content\":\"At its centre, however, is one simple issue: that of copyright.\",\"resource_url\":\"/question_packages_2/resource5.mp3\"}]}]},\"user_answers\":{\"listening\":[{\"id\":\"1\",\"branch_questions\":[{\"id\":\"2\",\"answer\":\"This is;||;This is an ;||;This is an apple\"},{\"id\":\"3\",\"answer\":\"Why is Google;||;Why is Google __ venture;||;Why is Google undertaking such a venture?\"}]}],\"reading\":[{\"id\":\"1\",\"branch_questions\":[{\"id\":\"2\",\"answer\":\"/test.mp3;||;/test.mp3\"}]}]}}";
 	private int mp3Index = 0;
@@ -60,12 +66,21 @@ public class DictationPrepareActivity extends Activity implements
 		dictationImg = (ImageView) findViewById(R.id.question_dictation_img);
 		dictationImg.setOnClickListener(this);
 		mPd = new ProgressDialog(this);
-		mp3List.add("/mnt/sdcard/voice_1.mp3");
-		mp3List.add("/mnt/sdcard/voice_1.mp3");
-		mp3List.add("/mnt/sdcard/qlx.mp3");
 		mPd.setMessage("正在加载...");
 		mPd.show();
+		// setMp3Url();
 		new MyThread().start();
+	}
+
+	// 设置音频路径
+	public void setMp3Url() {
+		int index = ListeningQuestionList.getRecordCount();
+		ListeningPojo lp = ListeningQuestionList.getListeningPojo(index);
+		List<QuestionPojo> qpList = lp.getQuesttionList();
+		for (int i = 0; i < qpList.size(); i++) {
+			Log.i("Ax", IP + qpList.get(i).getUrl());
+			mp3List.add(IP + qpList.get(i).getUrl());
+		}
 	}
 
 	// 播放音频
@@ -89,26 +104,26 @@ public class DictationPrepareActivity extends Activity implements
 	public void analyzeJson(String json) {
 		try {
 			// 解析听写记录
-			JSONArray answer = new JSONObject(json).getJSONObject(
-					"user_answers").getJSONArray("listening");
-			for (int i = 0; i < answer.length(); i++) {
-				JSONObject jn = answer.getJSONObject(i);
-				JSONArray jArr = jn.getJSONArray("branch_questions");
-				List<String> smallList = new ArrayList<String>();
-				for (int j = 0; j < jArr.length(); j++) {
-					JSONObject jb = jArr.getJSONObject(j);
-					smallList.add(jb.getString("answer"));
+			if (new JSONObject(json).getJSONObject("user_answers")
+					.getJSONArray("listening").length() > 0) {
+				JSONArray answer = new JSONObject(json).getJSONObject(
+						"user_answers").getJSONArray("listening");
+				for (int i = 0; i < answer.length(); i++) {
+					JSONObject jn = answer.getJSONObject(i);
+					JSONArray jArr = jn.getJSONArray("branch_questions");
+					List<String> smallList = new ArrayList<String>();
+					for (int j = 0; j < jArr.length(); j++) {
+						JSONObject jb = jArr.getJSONObject(j);
+						smallList.add(jb.getString("answer"));
+					}
+					ListeningQuestionList.addAnswer(smallList);
 				}
-				ListeningQuestionList.addAnswer(smallList);
 			}
-
-			int count = ListeningQuestionList.getRecordCount();
 
 			// 解析听写题目
 			JSONArray ja = new JSONObject(json).getJSONObject("package")
 					.getJSONArray("listening");
 			for (int i = 0; i < ja.length(); i++) {
-				// if (i >= count) {
 				JSONObject jn = ja.getJSONObject(i);
 				JSONArray jArr = jn.getJSONArray("branch_questions");
 				int id = jn.getInt("id");
@@ -120,7 +135,6 @@ public class DictationPrepareActivity extends Activity implements
 				}
 				ListeningQuestionList.addListeningPojo(new ListeningPojo(id,
 						question));
-				// }
 			}
 		} catch (JSONException e) {
 			e.printStackTrace();
@@ -133,11 +147,15 @@ public class DictationPrepareActivity extends Activity implements
 		public void run() {
 			super.run();
 			try {
+				Map<String, String> map = new HashMap<String, String>();
+				map.put("student_id", "1");
+				map.put("publish_question_package_id", "2");
 				analyzeJson(HomeWorkTool
 						.sendGETRequest(
-								"http://192.168.0.250:3004/api/students/into_daily_tasks?student_id=1&publish_question_package_id=1",
-								null));
+								"http://192.168.0.250:3004/api/students/into_daily_tasks",
+								map));
 				// analyzeJson(JSON);
+				setMp3Url();
 				mHandler.sendEmptyMessage(1);
 			} catch (Exception e) {
 				e.printStackTrace();
