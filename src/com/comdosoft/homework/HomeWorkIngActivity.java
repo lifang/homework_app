@@ -30,11 +30,14 @@ import android.widget.ListView;
 import android.widget.TextView;
 
 import com.comdosoft.homework.pojo.ListeningPojo;
+import com.comdosoft.homework.pojo.QuestionCasePojo;
 import com.comdosoft.homework.pojo.QuestionPojo;
+import com.comdosoft.homework.pojo.WorkDatePojo;
 import com.comdosoft.homework.pojo.WorkPojo;
 import com.comdosoft.homework.tools.HomeWork;
 import com.comdosoft.homework.tools.HomeWorkParams;
 import com.comdosoft.homework.tools.HomeWorkTool;
+import com.comdosoft.homework.tools.ListeningQuestionList;
 import com.comdosoft.homework.tools.Urlinterface;
 
 public class HomeWorkIngActivity extends Activity implements Urlinterface {
@@ -92,6 +95,19 @@ public class HomeWorkIngActivity extends Activity implements Urlinterface {
 		homework = (HomeWork) getApplication();
 		initialize();// 初始化
 		index = 0;
+
+		prodialog = new ProgressDialog(HomeWorkIngActivity.this);
+		prodialog.setMessage(HomeWorkParams.PD_CLASS_INFO);
+		// prodialog.show();
+		// Thread thread = new Thread(new getClassInfo());
+		// thread.start();
+
+//		work_list = new ArrayList<WorkDatePojo>();
+//		question_list = new ArrayList<QuestionCasePojo>();
+//		for (int i = 0; i < 5; i++) {
+//			WorkDatePojo work = new WorkDatePojo(1, "2014年1月3日", 1);
+//			work_list.add(work);
+//		}
 
 		Thread thread = new Thread(new getClassInfo());
 		thread.start();
@@ -281,9 +297,9 @@ public class HomeWorkIngActivity extends Activity implements Urlinterface {
 			Map<String, String> map = new HashMap<String, String>();
 			map.put("school_class_id", school_class_id + "");
 			map.put("student_id", student_id + "");
-			 String json;
+			String json;
 			try {
-				 json = HomeWorkTool.sendGETRequest(CLASS_INFO, map);
+				json = HomeWorkTool.sendGETRequest(CLASS_INFO, map);
 				JSONObject obj = new JSONObject(json);
 				if (obj.getString("status").equals("success")) {
 					analyzeJson(json);
@@ -302,9 +318,9 @@ public class HomeWorkIngActivity extends Activity implements Urlinterface {
 			Map<String, String> maps = new HashMap<String, String>();
 			maps.put("student_id", student_id + "");
 			maps.put("publish_question_package_id", p_q_package_id + "");
-			 String qsjson;
+			String qsjson;
 			try {
-				 qsjson = HomeWorkTool.sendGETRequest(INTO_DAILY_TASKS, maps);
+				qsjson = HomeWorkTool.sendGETRequest(INTO_DAILY_TASKS, maps);
 				JSONObject obj = new JSONObject(qsjson);
 				if (obj.getBoolean("status")) {
 					QuestionJson(qsjson);
