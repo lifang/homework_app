@@ -22,7 +22,6 @@ public class HomeWork extends Application {
 	private int class_id;
 	private int message_id;
 	
-	
 	public HomeWork() {
 		this.setQuestion_index(0);
 		this.setMainItem(0);

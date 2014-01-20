@@ -45,15 +45,26 @@ import com.comdosoft.homework.tools.HomeWorkParams;
 import com.comdosoft.homework.tools.HomeWorkTool;
 import com.comdosoft.homework.tools.Urlinterface;
 
+<<<<<<< HEAD
+public class Classxinxiliu extends Activity implements IXListViewListener,
+Urlinterface {
+=======
 
 public class Classxinxiliu extends Activity implements IXListViewListener,HomeWorkParams,
 		Urlinterface {
+>>>>>>> 1321b1ce2088d803d5e4a68c420fc68eef961124
 	private XListView listView_mes;
 	private MicropostAdapter micropostAdapter;
 	private List<Micropost> list = new ArrayList<Micropost>();
 	private List<Child_Micropost> child_list = new ArrayList<Child_Micropost>();
+<<<<<<< HEAD
+	private Handler mHandler;
+
+
+=======
 
 	private Bitmap bm = null;
+>>>>>>> 1321b1ce2088d803d5e4a68c420fc68eef961124
 	private View layout;
 	private ListView listView2;
 	private EditText fabiao_content;
@@ -68,7 +79,11 @@ public class Classxinxiliu extends Activity implements IXListViewListener,HomeWo
 	private String reciver_types = null;// 接收者 类型
 
 	private EditText Reply_edit; // 回复 编辑框
+<<<<<<< HEAD
+	private int focus=-1; 
+=======
 	private int focus = -1;
+>>>>>>> 1321b1ce2088d803d5e4a68c420fc68eef961124
 	private int number = 0;
 	private int position_huifu_num = -1;
 	private int pages_count = 1;
@@ -95,10 +110,44 @@ private int  DelNum = -1;
 		listView_mes.setPullLoadEnable(true);
 		listView_mes.setDivider(null);
 
+<<<<<<< HEAD
+		list = new ArrayList<Micropost>();
+		Micropost m1 = new Micropost("1", "12", "student", "张", "若相守1",
+				"etwevececx2423 sdfd",
+				"/homework_system/avatars/students/student_1.jpg",
+				"2012-2-3 02:34:56","12");
+		Micropost m2 = new Micropost("2", "12", "student", "张", "若相守2",
+				"etwevececx2423 sdfd",
+				"/homework_system/avatars/students/student_1.jpg",
+				"2012-2-3 02:34:56","1");
+		Micropost m3 = new Micropost("3", "12", "student", "张", "若相守3",
+				"etwevececx2423 sdfd",
+				"/homework_system/avatars/students/student_1.jpg",
+				"2012-2-3 02:34:56","2");
+
+		list.add(m1);
+		list.add(m2);
+		list.add(m3);
+		Map<String, String> map = new HashMap<String, String>();
+		map.put("student_id", student_id);
+		map.put("school_class_id", school_class_id);
+		//		if (HomeWorkTool.isConnect(getApplicationContext())) {
+		String result="";
+		try {
+			result = HomeWorkTool.sendGETRequest(Urlinterface.get_class_info, map);
+		} catch (Exception e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		}if ("error".equals(result)) {
+
+		}else {
+			JSONObject array;
+=======
 	Thread thread=new Thread()
 	{
 		public void run()
 		{
+>>>>>>> 1321b1ce2088d803d5e4a68c420fc68eef961124
 			try {
 				Map<String, String> map = new HashMap<String, String>();
 				map.put("student_id", user_id);
@@ -113,11 +162,28 @@ private int  DelNum = -1;
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
+<<<<<<< HEAD
+
+		}
+		//		}else {
+		//			Toast.makeText(getApplicationContext(), R.string.Net_null, 1)
+		//			.show();
+		//		}
+		if(list.size()!=0){
+			micropostAdapter = new MicropostAdapter();
+			listView_mes.setAdapter(micropostAdapter);
+		}
+		listView_mes.setXListViewListener(this);
+		mHandler = new Handler();
+
+
+=======
 		}
 	};
 thread.start();	
 
 handler = new Handler();
+>>>>>>> 1321b1ce2088d803d5e4a68c420fc68eef961124
 	}
 	private Handler mHandler = new Handler() {
 		public void handleMessage(android.os.Message msg) {
@@ -254,6 +320,14 @@ handler = new Handler();
 				{
 					try {
 
+<<<<<<< HEAD
+					if ("success".equals(status)) {
+						Toast.makeText(getApplicationContext(), notice, 1)
+						.show();
+					} else {
+						Toast.makeText(getApplicationContext(), notice, 1)
+						.show();
+=======
 						Map<String, String> map = new HashMap<String, String>();
 						map.put("content", fabiaoContents);
 						map.put("user_id", user_id);
@@ -268,11 +342,22 @@ handler = new Handler();
 					} catch (Exception e) {
 						// TODO Auto-generated catch block
 						e.printStackTrace();
+>>>>>>> 1321b1ce2088d803d5e4a68c420fc68eef961124
 					}
 				}
+<<<<<<< HEAD
+
+			} else {
+				//				Toast.makeText(getApplicationContext(), R.string.senderError, 1)
+				//				.show();
+				Toast.makeText(getApplicationContext(), "  result  :null", 1)
+				.show();
+			}
+=======
 			};
 		thread.start();	
 
+>>>>>>> 1321b1ce2088d803d5e4a68c420fc68eef961124
 
 		}
 
@@ -321,6 +406,49 @@ handler = new Handler();
 
 		} else {
 
+<<<<<<< HEAD
+			// sender_id = params[:sender_id]
+			// sender_types = params[:sender_types]
+			// content = params[:content]
+			// micropost_id = params[:micropost_id]
+			// reciver_id = params[:reciver_id]
+			// reciver_types = params[:reciver_types]
+			//
+
+			Map<String, String> map = new HashMap<String, String>();
+			map.put("content", reply_edit);
+			map.put("sender_id", student_id);
+			map.put("sender_types", sender_types);
+			map.put("micropost_id", micropost_id);
+			map.put("reciver_id", reciver_id);
+			map.put("reciver_types", reciver_types);
+			try {
+
+				result = HomeWorkTool.doPost(Urlinterface.reply_message, map);
+				// Toast.makeText(getApplicationContext(), NEWS_RELEASE,
+				// 1).show();
+			} catch (Exception e1) {
+				// TODO Auto-generated catch block
+				e1.printStackTrace();
+			}
+			Toast.makeText(getApplicationContext(), "方法执行---result：" + result,
+					0).show();
+			if (result.length() == 0) {
+
+			} else {
+				JSONObject array;
+				try {
+					array = new JSONObject(result);//
+					String status = array.getString("status");
+					String notice = array.getString("notice");
+
+					if ("success".equals(status)) {
+						Toast.makeText(getApplicationContext(), notice, 1)
+						.show();
+					} else {
+						Toast.makeText(getApplicationContext(), notice, 1)
+						.show();
+=======
 			Thread thread=new Thread()
 			{
 				public void run()
@@ -344,6 +472,7 @@ handler = new Handler();
 					} catch (Exception e) {
 						// TODO Auto-generated catch block
 						e.printStackTrace();
+>>>>>>> 1321b1ce2088d803d5e4a68c420fc68eef961124
 					}
 				}
 			};
@@ -444,6 +573,84 @@ handler = new Handler();
 			{
 				try {
 
+<<<<<<< HEAD
+		// 获得第一页信息
+
+		//		Micropost m1 = new Micropost("1", "12", "student", "张", "若相守1",
+		//				"etwevececx2423 sdfd",
+		//				"/homework_system/avatars/students/student_1.jpg",
+		//				"2012-2-3 02:34:56","2");
+		//		Micropost m2 = new Micropost("2", "12", "student", "张", "若相守2",
+		//				"etwevececx2423 sdfd",
+		//				"/homework_system/avatars/students/student_1.jpg",
+		//				"2012-2-3 02:34:56","2");
+		//		Micropost m3 = new Micropost("3", "12", "student", "张", "若相守3",
+		//				"etwevececx2423 sdfd",
+		//				"/homework_system/avatars/students/student_1.jpg",
+		//				"2012-2-3 02:34:56","1");
+		//
+		//		list.add(m1);
+		//		list.add(m2);
+		//		list.add(m3);
+
+		Map<String, String> map = new HashMap<String, String>();
+		map.put("student_id", student_id);
+		map.put("school_class_id", school_class_id);
+		String result="";
+		try {
+			result = HomeWorkTool.sendGETRequest(Urlinterface.get_class_info, map);
+		} catch (Exception e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		}
+		if ("error".equals(result)) {
+
+		}else {
+			JSONObject array;
+			try {
+				array = new JSONObject(result);
+
+				String status = array.getString("status");
+				String notice = array.getString("notice");
+
+				if ("success".equals(status)) {
+					String micropostsListJson = array.getString("microposts");
+
+					JSONObject microposts = new JSONObject(micropostsListJson);
+					page = Integer.parseInt(microposts.getString("page"));
+					pages_count = Integer.parseInt(microposts
+							.getString("pages_count"));
+					String details_microposts = microposts
+							.getString("details_microposts");
+					// page":1,"pages_count":2,"details_microposts":
+					JSONArray jsonArray2 = new JSONArray(details_microposts);
+
+					// (String id, String user_id, String user_types, String
+					// name, String nickname, String content, String avatar_url,
+					// Long created_at)
+
+					// [{id,content,user_id创建者id,user_types创建者类型，
+					// name主消息的创建者名字，nickname主消息的创建者昵称,
+					// avatar_url创建者头像,created_at创建时间}],
+					for (int i = 0; i < jsonArray2.length(); ++i) {
+						JSONObject o = (JSONObject) jsonArray2.get(i);
+						String id = o.getString("id");
+						String user_id = o.getString("user_id");
+						String user_types = o.getString("user_types");
+						String name = o.getString("name");
+						String nickname = o.getString("nickname");
+						String content = o.getString("content");
+						String avatar_url = o.getString("avatar_url");
+						String created_at = o.getString("created_at");
+						String reply_microposts_count= o.getString("reply_microposts_count");
+
+						Micropost micropost = new Micropost(id, user_id,
+								user_types, name, nickname, content,
+								avatar_url, created_at,reply_microposts_count);
+						list.add(micropost);
+					}
+=======
+>>>>>>> 1321b1ce2088d803d5e4a68c420fc68eef961124
 
 					Map<String, String> map = new HashMap<String, String>();
 					map.put("student_id", user_id);
@@ -543,6 +750,86 @@ handler = new Handler();
 		page = 1;
 		list.clear();
 		// 获得第一页信息
+<<<<<<< HEAD
+
+		//		Micropost m1 = new Micropost("1", "12", "student", "张", "若相守11",
+		//				"etwevececx2423 sdfd",
+		//				"/homework_system/avatars/students/student_1.jpg",
+		//				"2012-2-3 02:34:56");
+		//		Micropost m2 = new Micropost("2", "12", "student", "张", "若相守22",
+		//				"etwevececx2423 sdfd",
+		//				"/homework_system/avatars/students/student_1.jpg",
+		//				"2012-2-3 02:34:56");
+		//		Micropost m3 = new Micropost("3", "12", "student", "张", "若相守33",
+		//				"etwevececx2423 sdfd",
+		//				"/homework_system/avatars/students/student_1.jpg",
+		//				"2012-2-3 02:34:56");
+		//
+		//		list.add(m1);
+		//		list.add(m2);
+		//		list.add(m3);
+
+
+		//school_class_id=2&page=1&user_id=1
+		Map<String, String> map = new HashMap<String, String>();
+		map.put("user_id", student_id);
+		map.put("school_class_id", school_class_id);
+		map.put("page", page+"");
+		//		if (HomeWorkTool.isConnect(getApplicationContext())) {
+		String result="";
+		try {
+			result = HomeWorkTool.sendGETRequest(Urlinterface.MY_MICROPOSTS, map);
+		} catch (Exception e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		}	if ("error".equals(result)) {
+
+		}else {
+			JSONObject array;
+			try {
+				array = new JSONObject(result);
+
+				String status = array.getString("status");
+				String notice = array.getString("notice");
+
+				if ("success".equals(status)) {
+					String micropostsListJson = array.getString("microposts");
+
+					JSONObject microposts = new JSONObject(micropostsListJson);
+					// page = microposts.getString("page");
+					pages_count = Integer.parseInt(microposts
+							.getString("pages_count"));
+					String details_microposts = microposts
+							.getString("details_microposts");
+					// page":1,"pages_count":2,"details_microposts":
+					JSONArray jsonArray2 = new JSONArray(details_microposts);
+
+					// (String id, String user_id, String user_types, String
+					// name, String nickname, String content, String avatar_url,
+					// Long created_at)
+
+					// [{id,content,user_id创建者id,user_types创建者类型，
+					// name主消息的创建者名字，nickname主消息的创建者昵称,
+					// avatar_url创建者头像,created_at创建时间}],
+					for (int i = 0; i < jsonArray2.length(); ++i) {
+						JSONObject o = (JSONObject) jsonArray2.get(i);
+						String id = o.getString("id");
+						String user_id = o.getString("user_id");
+						String user_types = o.getString("user_types");
+						String name = o.getString("name");
+						String nickname = o.getString("nickname");
+						String content = o.getString("content");
+						String avatar_url = o.getString("avatar_url");
+						String created_at = o.getString("created_at");
+
+						String reply_microposts_count= o.getString("reply_microposts_count");
+
+						Micropost micropost = new Micropost(id, user_id,
+								user_types, name, nickname, content,
+								avatar_url, created_at,reply_microposts_count);
+						list.add(micropost);
+					}
+=======
 		// school_class_id=2&page=1&user_id=1
 		
 		// if (HomeWorkTool.isConnect(getApplicationContext())) {
@@ -552,6 +839,7 @@ handler = new Handler();
 			public void run()
 			{
 				try {
+>>>>>>> 1321b1ce2088d803d5e4a68c420fc68eef961124
 
 
 					Map<String, String> map = new HashMap<String, String>();
@@ -573,8 +861,23 @@ handler = new Handler();
 		};
 	thread.start();	
 
+<<<<<<< HEAD
+		}
+		//		}else {
+		//			Toast.makeText(getApplicationContext(), R.string.Net_null, 1)
+		//			.show();
+		//		}
+
+
+
+		// mAdapter.notifyDataSetChanged();
+		micropostAdapter = new MicropostAdapter();
+		listView_mes.setAdapter(micropostAdapter);
+		// Toast.makeText(getApplicationContext(), "方法没写", 1).show();
+=======
 
 	
+>>>>>>> 1321b1ce2088d803d5e4a68c420fc68eef961124
 	}
 
 	private void onLoad() {
@@ -585,14 +888,43 @@ handler = new Handler();
 
 	@Override
 	public void onRefresh() {
+<<<<<<< HEAD
+		page=1;
+		mHandler.postDelayed(new Runnable() {
+=======
 		
 		focus=-1;
 		page = 1;
 		handler.postDelayed(new Runnable() {
+>>>>>>> 1321b1ce2088d803d5e4a68c420fc68eef961124
 
 			@Override
 			public void run() {
 				list.clear();
+<<<<<<< HEAD
+
+
+				// 获得第一页信息
+
+				//				Micropost m1 = new Micropost("1", "12", "student", "张", "若相守1",
+				//						"etwevececx2423 sdfd",
+				//						"/homework_system/avatars/students/student_1.jpg",
+				//						"2012-2-3 02:34:56");
+				//				Micropost m2 = new Micropost("2", "12", "student", "张", "若相守2",
+				//						"etwevececx2423 sdfd",
+				//						"/homework_system/avatars/students/student_1.jpg",
+				//						"2012-2-3 02:34:56");
+				//				Micropost m3 = new Micropost("3", "12", "student", "张", "若相守3",
+				//						"etwevececx2423 sdfd",
+				//						"/homework_system/avatars/students/student_1.jpg",
+				//						"2012-2-3 02:34:56");
+				//
+				//				list.add(m1);
+				//				list.add(m2);
+				//				list.add(m3);
+				//				if (HomeWorkTool.isConnect(getApplicationContext())) {
+				if (micropost_type == 0){
+=======
 				
 				final Handler mHandler = new Handler() {
 					public void handleMessage(android.os.Message msg) {
@@ -725,11 +1057,16 @@ handler = new Handler();
 
 				// if (HomeWorkTool.isConnect(getApplicationContext())) {
 				if (micropost_type == 0) {// 全部
+>>>>>>> 1321b1ce2088d803d5e4a68c420fc68eef961124
 					Map<String, String> map = new HashMap<String, String>();
 					map.put("student_id", user_id);
 					map.put("school_class_id", school_class_id);
+<<<<<<< HEAD
+
+=======
 					map.put("page", "1");
 					
+>>>>>>> 1321b1ce2088d803d5e4a68c420fc68eef961124
 					String result = "";
 					try {
 						result = HomeWorkTool.sendGETRequest(
@@ -747,6 +1084,22 @@ handler = new Handler();
 
 				if (micropost_type == 1) { // 有关我的
 
+<<<<<<< HEAD
+							if ("success".equals(status)) {
+								String micropostsListJson = array
+										.getString("microposts");
+
+								JSONObject microposts = new JSONObject(
+										micropostsListJson);
+								page = Integer.parseInt(microposts.getString("page"));
+								pages_count = Integer.parseInt(microposts
+										.getString("pages_count"));
+								String details_microposts = microposts
+										.getString("details_microposts");
+								// page":1,"pages_count":2,"details_microposts":
+								JSONArray jsonArray2 = new JSONArray(
+										details_microposts);
+=======
 					Map<String, String> map = new HashMap<String, String>();
 					map.put("user_id", user_id);
 					map.put("school_class_id", school_class_id);
@@ -763,6 +1116,7 @@ handler = new Handler();
 						// TODO Auto-generated catch block
 						e1.printStackTrace();
 					}
+>>>>>>> 1321b1ce2088d803d5e4a68c420fc68eef961124
 
 				}
 
@@ -782,6 +1136,20 @@ handler = new Handler();
 		}, 2000);
 	}
 
+<<<<<<< HEAD
+							} else {
+								Toast.makeText(getApplicationContext(), notice, 1)
+								.show();
+							}
+						} catch (JSONException e) {
+							// TODO Auto-generated catch block
+							e.printStackTrace();
+						}
+					}	
+				}
+
+				if (micropost_type ==1){    //  有关我的
+=======
 	@Override
 	public void onLoadMore() {
 		handler.postDelayed(new Runnable() {
@@ -807,6 +1175,7 @@ handler = new Handler();
 				 //  全部      页面加载 更多
 				if (page <= pages_count && micropost_type == 0) {
 					// get 参数school_class_id student_id page
+>>>>>>> 1321b1ce2088d803d5e4a68c420fc68eef961124
 
 					Map<String, String> map = new HashMap<String, String>();
 					map.put("student_id", user_id);
@@ -881,11 +1250,44 @@ handler = new Handler();
 							e.printStackTrace();
 						}
 
+<<<<<<< HEAD
+					}	
+				}
+
+				//				}else {
+				//					Toast.makeText(getApplicationContext(), R.string.Net_null, 1)
+				//					.show();
+				//				}
+				// mAdapter.notifyDataSetChanged();
+				if(list.size()!=0){
+
+					micropostAdapter = new MicropostAdapter();
+					listView_mes.setAdapter(micropostAdapter);
+
+
+				}
+				onLoad();	
+			}
+		}, 2000);
+	}
+
+	@Override
+	public void onLoadMore() {
+		mHandler.postDelayed(new Runnable() {
+			@Override
+			public void run() {
+
+				page = page + 1;
+				if (page <= pages_count&&micropost_type==0) {
+					// get 参数school_class_id student_id page
+
+=======
 					}
 				}
 				
 				 //  我的      页面加载 更多
 				if (page <= pages_count &&micropost_type == 1) {
+>>>>>>> 1321b1ce2088d803d5e4a68c420fc68eef961124
 					Map<String, String> map = new HashMap<String, String>();
 					map.put("user_id", user_id);
 					map.put("school_class_id", school_class_id);
@@ -951,7 +1353,16 @@ handler = new Handler();
 						}
 					}
 				}
+<<<<<<< HEAD
+				//				Micropost m4 = new Micropost("4", "12", "student", "张", "若相守",
+				//						"etwevececx2423 sdfd",
+				//						"/homework_system/avatars/students/student_1.jpg",
+				//						"2012-2-3 02:34:56");
+				//
+				//				list.add(m4);
+=======
 			
+>>>>>>> 1321b1ce2088d803d5e4a68c420fc68eef961124
 				micropostAdapter.notifyDataSetChanged();
 				onLoad();
 			}
@@ -964,6 +1375,11 @@ handler = new Handler();
 	public class MicropostAdapter extends BaseAdapter {
 
 		int huifu_num = 0;
+<<<<<<< HEAD
+
+
+=======
+>>>>>>> 1321b1ce2088d803d5e4a68c420fc68eef961124
 
 		@Override
 		public int getCount() {
@@ -1067,9 +1483,15 @@ if ("null".equals(mess.getAvatar_url())) { // 设置头像
 
 			Micropost_content.setText(mess.getContent()); // 消息内容
 			// 消息日期 到时 根据拿到的数据在修改
+<<<<<<< HEAD
+			//			 SimpleDateFormat dateformat1=new
+			//			 SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+			//			 String a1=dateformat1.format(new Date(mess.getCreated_at()));
+=======
 			// SimpleDateFormat dateformat1=new
 			// SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 			// String a1=dateformat1.format(new Date(mess.getCreated_at()));
+>>>>>>> 1321b1ce2088d803d5e4a68c420fc68eef961124
 			Micropost_date.setText(mess.getCreated_at()); // 消息日期
 			int mic_id =  Integer.parseInt(mess.getId());
 			for (int i = 0; i < care.size(); i++) {
@@ -1106,6 +1528,48 @@ if ("null".equals(mess.getAvatar_url())) { // 设置头像
 				@Override
 				public void onClick(View v) {
 					// TODO Auto-generated method stub
+<<<<<<< HEAD
+					String position = v.getTag().toString();
+
+					Map<String, String> map = new HashMap<String, String>();
+					map.put("micropost_id", position);
+
+					String result="";
+					try {
+
+						result = HomeWorkTool.sendGETRequest(Urlinterface.DELETE_POSTS,
+								map);
+						// Toast.makeText(getApplicationContext(), NEWS_RELEASE,
+						// 1).show();
+
+					} catch (Exception e1) {
+						// TODO Auto-generated catch block
+						e1.printStackTrace();
+					}
+					// Toast.makeText(getApplicationContext(), "方法执行---result：" +
+					// result,
+					// 0).show();
+					if (result.equals("error")) {
+
+					} else {
+						JSONObject array;
+						try {
+							array = new JSONObject(result);//
+							String status = array.getString("status");
+							String notice = array.getString("notice");
+
+							if ("success".equals(status)) {
+								// 删除成功的话,刷新界面
+								list.remove(position);
+								MicropostAdapter.this.notifyDataSetChanged();
+
+							} 
+							Toast.makeText(getApplicationContext(), notice, 1)
+							.show();
+						} catch (JSONException e) {
+							// TODO Auto-generated catch block
+							e.printStackTrace();
+=======
 //					String position = v.getTag().toString();
 					
 					
@@ -1166,6 +1630,7 @@ DelNum = Integer.parseInt(v.getTag().toString());
 								// TODO Auto-generated catch block
 								e.printStackTrace();
 							}
+>>>>>>> 1321b1ce2088d803d5e4a68c420fc68eef961124
 						}
 					};
 				thread.start();	
@@ -1182,6 +1647,21 @@ DelNum = Integer.parseInt(v.getTag().toString());
 				layout1.setVisibility(View.VISIBLE);
 				Reply_edit = (EditText) layout1.findViewById(R.id.reply_edit);
 				Reply_edit.requestFocus();
+<<<<<<< HEAD
+				Reply_edit.setHint(user_name + " 回复  " + mess.getName()
+						+ ":");
+				listView2 = (ListView) layout1.findViewById(R.id.aa);
+				listView2.setDivider(null);
+				Adapter ad = new Adapter();
+				listView2.setAdapter(ad);
+				HomeWorkTool
+				.setListViewHeightBasedOnChildren(listView2);
+			}
+
+
+			// 点击 回复 默认 给主消息回复
+			huifu.setOnClickListener(new OnClickListener() {
+=======
 				Reply_edit.setHint(user_name + " "+HomeWorkParams.REPLY+" " + mess.getName() + ":");
 				if (child_list.size()!=0) {
 					listView2 = (ListView) layout1.findViewById(R.id.aa);
@@ -1201,10 +1681,122 @@ DelNum = Integer.parseInt(v.getTag().toString());
 				lookMore.setVisibility(View.GONE);
 			}
 			lookMore.setOnClickListener(new OnClickListener() {
+>>>>>>> 1321b1ce2088d803d5e4a68c420fc68eef961124
 
 				@Override
 				public void onClick(View v) {
 					// TODO Auto-generated method stub
+<<<<<<< HEAD
+					//					huifu_num = huifu_num + 1;
+
+					number = number + 1;
+					if (number ==2) {
+						number =0;
+					}
+					if (position_huifu_num != position ){
+						number =1;
+
+					}
+
+					focus  = position;
+					// micropost_id reciver_id reciver_types
+					// Toast.makeText(getApplicationContext(),
+					// position+"----position", 1).show();
+
+					child_list = new ArrayList<Child_Micropost>();
+					Child_Micropost c1 = new Child_Micropost("1", "12",
+							"student", "张", "若相守1",
+							"/homework_system/avatars/students/student_1.jpg",
+							"asd斯蒂芬斯蒂芬反反复复反反复复反反复复反反复复吩咐", "张", "若相守1",
+							"2013-2-2");
+					Child_Micropost c2 = new Child_Micropost("1", "12",
+							"student", "张", "若相守1",
+							"/homework_system/avatars/students/student_1.jpg",
+							"asd斯蒂芬斯蒂芬反反复复反反复复反反复复反反复复吩咐", "张", "若相守1",
+							"2013-2-2");
+					Child_Micropost c3 = new Child_Micropost("1", "12",
+							"student", "张", "若相守1",
+							"/homework_system/avatars/students/student_1.jpg",
+							"asd斯蒂芬斯蒂芬反反复复反反复复反反复复反反复复吩咐", "张", "若相守1",
+							"2013-2-2");
+					Child_Micropost c4 = new Child_Micropost("1", "12",
+							"student", "张", "若相守1",
+							"/homework_system/avatars/students/student_1.jpg",
+							"asd斯蒂芬斯蒂芬反反复复反反复复反反复复反反复复吩咐", "张", "若相守1",
+							"2013-2-2");
+
+					child_list.add(c1);
+					child_list.add(c2);
+					child_list.add(c3);
+					child_list.add(c4);
+					if (HomeWorkTool.isConnect(getApplicationContext())) {
+						Map<String, String> map = new HashMap<String, String>();
+						map.put("student_id", student_id);
+						map.put("school_class_id", school_class_id);
+						map.put("micropost_id", micropost_id);
+
+						String result = HomeWorkTool.doPost(
+								Urlinterface.get_reply_microposts, map);
+						if (result.length() != 0) {
+							JSONObject array;
+							try {
+								array = new JSONObject(result);
+
+								String status = array.getString("status");
+								String notice = array.getString("notice");
+								child_list = new ArrayList<Child_Micropost>();
+								if ("success".equals(status)) {
+									String micropostsListJson = array
+											.getString("reply_microposts");
+									JSONArray jsonArray2 = new JSONArray(
+											micropostsListJson);
+
+									// reply_microposts:[{id,sender_id,发送者id，sender_types发送者类型,
+									// sender_name发送者姓名,sender_nickname发送者昵称，
+									// sender_avatar_url发送者头像url,content消息内容,
+									// reciver_name接受者姓名,reciver_nickname接受者昵称,
+									// reciver_avatar_url接受者头像url,created_at创建时间}
+									for (int i = 0; i < jsonArray2.length(); ++i) {
+										JSONObject o = (JSONObject) jsonArray2
+												.get(i);
+										String id = o.getString("id");
+										String sender_id = o.getString("sender_id");
+										String sender_types = o
+												.getString("sender_types");
+										String sender_name = o
+												.getString("sender_name");
+										String sender_nickname = o
+												.getString("sender_nickname");
+
+										String sender_avatar_url = o
+												.getString("sender_avatar_url");
+										String content = o.getString("content");
+										String reciver_name = o
+												.getString("reciver_name");
+										String reciver_nickname = o
+												.getString("reciver_nickname");
+										String reciver_avatar_url = o
+												.getString("reciver_avatar_url");
+										String created_at = o
+												.getString("created_at");
+
+										Child_Micropost child = new Child_Micropost(
+												id, sender_id, sender_types,
+												sender_name, sender_nickname,
+												sender_avatar_url, content,
+												reciver_name, reciver_nickname,
+												created_at);
+										child_list.add(child);
+									}
+
+								} else {
+									Toast.makeText(getApplicationContext(), notice,
+											1).show();
+								}
+							} catch (JSONException e) {
+								// TODO Auto-generated catch block
+								e.printStackTrace();
+=======
 					// huifu_num = huifu_num + 1;
 json="";
 final Handler mHandler = new Handler() {
@@ -1269,17 +1861,79 @@ final Handler mHandler = new Handler() {
 							} else {
 								Toast.makeText(getApplicationContext(),
 										notice, 1).show();
+>>>>>>> 1321b1ce2088d803d5e4a68c420fc68eef961124
 							}
-						} catch (JSONException e) {
-							// TODO Auto-generated catch block
-							e.printStackTrace();
-						}
 
+<<<<<<< HEAD
+						}
 					}
+
+=======
+					}
+>>>>>>> 1321b1ce2088d803d5e4a68c420fc68eef961124
 					micropostAdapter = new MicropostAdapter();
 					listView_mes.setAdapter(micropostAdapter);
 //}
 					listView_mes.setSelection(focus);
+<<<<<<< HEAD
+
+
+					// 内容
+					//
+					//					if (number == 1) {// 第一次点击时 确保点击 哪一个 都会显示
+
+					//					}
+					//
+					//					if (position_huifu_num == position && number != 1) {// 第一次点击以后的点击
+					//						// 确保连续点击
+					//						// 哪一个
+					//						// 2次时
+					//						// 都会显示正确的效果
+					//
+					//						if (huifu_num == 1) {
+					//							layout1.setVisibility(View.VISIBLE);
+					//							Reply_edit = (EditText) layout1
+					//									.findViewById(R.id.reply_edit);
+					//							Reply_edit.setHint(user_name + " 回复  "
+					//									+ mess.getName() + ":");
+					//							listView2 = (ListView) layout1
+					//									.findViewById(R.id.aa);
+					//							listView2.setDivider(null);
+					//							Adapter ad = new Adapter();
+					//							listView2.setAdapter(ad);
+					//							HomeWorkTool
+					//									.setListViewHeightBasedOnChildren(listView2);
+					//						}
+					//						if (huifu_num == 2) {
+					//							layout1.setVisibility(View.GONE);
+					//							huifu_num = 0;
+					//						}
+					//						// Toast.makeText(getApplicationContext(), huifu_num+"",
+					//						// 0).show();
+					//
+					//					}
+					//					if (position_huifu_num != position && number != 1) {// 第一次点击以后的点击
+					//						// 确保连续点击不同的两个按钮时
+					//						// 都会显示正确的效果
+					//
+					//						layout1.setVisibility(View.VISIBLE);
+					//						Reply_edit = (EditText) layout1
+					//								.findViewById(R.id.reply_edit);
+					//						Reply_edit.setHint(user_name + " 回复  " + mess.getName()
+					//								+ ":");
+					//						listView2 = (ListView) layout1.findViewById(R.id.aa);
+					//						listView2.setDivider(null);
+					//						Adapter ad = new Adapter();
+					//						listView2.setAdapter(ad);
+					//						HomeWorkTool
+					//								.setListViewHeightBasedOnChildren(listView2);
+					//						huifu_num = 1;
+					//
+					//						// Toast.makeText(getApplicationContext(), huifu_num+"",
+					//						// 0).show();
+					//
+					//					}
+=======
 				 break;
 			default:
 				break;
@@ -1324,6 +1978,7 @@ final Handler mHandler = new Handler() {
 			
 			// 点击 回复 默认 给主消息回复
 			huifu.setOnClickListener(new OnClickListener() {
+>>>>>>> 1321b1ce2088d803d5e4a68c420fc68eef961124
 
 				@Override
 				public void onClick(View v) {
@@ -1457,6 +2112,12 @@ final Handler mHandler = new Handler() {
 					position_huifu_num = position;
 				}
 
+<<<<<<< HEAD
+
+
+
+=======
+>>>>>>> 1321b1ce2088d803d5e4a68c420fc68eef961124
 			});
 			return view;
 		}
@@ -1561,10 +2222,16 @@ Drawable face_drawable = new BitmapDrawable(bm);
 			}
 			Micropost_whoToWho.setText(child_Micropost.getSender_name()
 					+ "  回复   " + child_Micropost.getReciver_name()); //
+<<<<<<< HEAD
+			//			 SimpleDateFormat dateformat1=new
+			//			 SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+			//			 String a1=dateformat1.format(new Date(child_Micropost.getCreated_at()));
+=======
 			// SimpleDateFormat dateformat1=new
 			// SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 			// String a1=dateformat1.format(new
 			// Date(child_Micropost.getCreated_at()));
+>>>>>>> 1321b1ce2088d803d5e4a68c420fc68eef961124
 			Micropost_content.setText(child_Micropost.getContent() + " ("
 					+ child_Micropost.getCreated_at() + ")"); // 消息内容
 
@@ -1606,6 +2273,35 @@ final Handler mHandler = new Handler() {
 						// TODO Auto-generated catch block
 						e.printStackTrace();
 					}
+<<<<<<< HEAD
+					// Toast.makeText(getApplicationContext(), "方法执行---result：" +
+					// result,
+					// 0).show();
+					if (result.length()!=0) {
+						JSONObject array;
+						try {
+							array = new JSONObject(result);//
+							String status = array.getString("status");
+							String notice = array.getString("notice");
+
+							if ("success".equals(status)) {
+								// 删除成功的话,刷新界面
+								// 删除成功的话,刷新界面
+								child_list.remove(position);
+								Adapter.this.notifyDataSetChanged();
+
+							} 
+							Toast.makeText(getApplicationContext(), notice, 1)
+							.show();
+						} catch (JSONException e) {
+							// TODO Auto-generated catch block
+							e.printStackTrace();
+						}
+					} 
+
+					Toast.makeText(getApplicationContext(), "notice+", 1)
+					.show();
+=======
 				}
 				 break;
 			default:
@@ -1640,6 +2336,7 @@ final Handler mHandler = new Handler() {
 
 //					Toast.makeText(getApplicationContext(), "notice+", 1)
 //							.show();
+>>>>>>> 1321b1ce2088d803d5e4a68c420fc68eef961124
 				}
 			});
 

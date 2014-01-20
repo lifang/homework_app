@@ -51,8 +51,8 @@ public class SpeakBeginActivity extends Activity implements Urlinterface {
 	private Map<Integer, String> ok_speak;
 	public MediaRecorder mediaRecorder;
 
-	private int student_id = 1;
-	private int school_class_id = 1;
+	private int student_id;
+	private int school_class_id;
 	private int publish_question_package_id;
 	private int question_package_id;
 	private int question_id;
@@ -113,7 +113,8 @@ public class SpeakBeginActivity extends Activity implements Urlinterface {
 		SetTextView();
 		publish_question_package_id = homework.getP_q_package_id();
 		question_package_id = homework.getQ_package_id();
-
+		student_id = homework.getUser_id();
+		school_class_id = homework.getClass_id();
 	}
 
 	// 初始化
