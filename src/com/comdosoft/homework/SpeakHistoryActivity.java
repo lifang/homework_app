@@ -150,8 +150,8 @@ public class SpeakHistoryActivity extends Activity implements Urlinterface {
 
 	public void setTishi(String str) {
 		Log.i(tag, str);
-		if (str.contains("-->")) {
-			String[] str_arr = str.split("-->");
+		if (str.contains("-!-")) {
+			String[] str_arr = str.split("-!-");
 			for (int i = 0; i < str_arr.length; i++) {
 				initView(str_arr[i], i);
 			}

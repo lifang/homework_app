@@ -268,7 +268,7 @@ public class SpeakBeginActivity extends Activity implements Urlinterface {
 						if (!error_str
 								.contains(str_list.get(code_list.get(i)[0]))) {
 							error_str += str_list.get(code_list.get(i)[0])
-									+ "-->";
+									+ "-!-";
 						}
 						view_list.get(code_list.get(i)[0]).setBackgroundColor(
 								getResources().getColor(R.color.juhuang));
