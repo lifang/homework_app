@@ -30,14 +30,11 @@ import android.widget.ListView;
 import android.widget.TextView;
 
 import com.comdosoft.homework.pojo.ListeningPojo;
-import com.comdosoft.homework.pojo.QuestionCasePojo;
 import com.comdosoft.homework.pojo.QuestionPojo;
-import com.comdosoft.homework.pojo.WorkDatePojo;
 import com.comdosoft.homework.pojo.WorkPojo;
 import com.comdosoft.homework.tools.HomeWork;
 import com.comdosoft.homework.tools.HomeWorkParams;
 import com.comdosoft.homework.tools.HomeWorkTool;
-import com.comdosoft.homework.tools.ListeningQuestionList;
 import com.comdosoft.homework.tools.Urlinterface;
 
 public class HomeWorkIngActivity extends Activity implements Urlinterface {
