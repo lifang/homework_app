@@ -52,7 +52,6 @@ public class AboutMeActivity extends Activity
 			}
 		}
 	};
-	@SuppressLint("HandlerLeak")
 	Handler handler = new Handler(){
 		public void handleMessage(Message msg) {
 			switch(msg.what)
@@ -65,7 +64,6 @@ public class AboutMeActivity extends Activity
 			}
 		}
 	};
-	@SuppressLint("ShowToast")
 	@SuppressWarnings({ "unchecked", "rawtypes" })
 	public void get_News()
 	{

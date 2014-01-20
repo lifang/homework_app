@@ -31,11 +31,12 @@ import android.widget.ImageButton;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.comdosoft.homework.tools.HomeWork;
 import com.comdosoft.homework.tools.HomeWorkTool;
 import com.comdosoft.homework.tools.Urlinterface;
 import com.comdosoft.homework.Classxinxiliu;
 
-public class RegistrationActivity extends Activity {
+public class RegistrationActivity extends Activity implements Urlinterface{
 	private ImageButton faceImage;
 	private EditText reg_nicheng;//
 	private EditText reg_xingming; //
@@ -43,8 +44,8 @@ public class RegistrationActivity extends Activity {
 	private View layout;//  选择头像界面
 	private View layout2;//  班级验证码错误  返回界面
 	private String tp; // 头像资源
-	
-	private String qq_uid="asfds";  //   QQ  的   open  id   
+	private HomeWork hw;
+	private String open_id="asfds";  //   QQ  的   open  id   
 
 	/* 头像名称 */
 	private static final String IMAGE_FILE_NAME = "faceImage.jpg";
@@ -60,16 +61,17 @@ private String json="";
 		requestWindowFeature(Window.FEATURE_NO_TITLE);
 
 		setContentView(R.layout.activity_registration);
-		
+		hw = (HomeWork) getApplication();
+	
 		
 		Date d = new Date();
-		qq_uid = d.toString();
+		open_id = d.toString();
 		//  上面两句代码 用来获得不一样的   qq_uid，，，测试 用，，后期删除
 		
 		
 		
 //		Intent intent = getIntent();// 
-//		qq_uid = intent.getStringExtra("qq_uid");   // 获得上个页面传过来的   QQ  openid
+//		open_id = intent.getStringExtra("open_id");   // 获得上个页面传过来的   QQ  openid
 
 		layout = this.findViewById(R.id.reg_photolayout); // 隐藏内容
 		layout2 = this.findViewById(R.id.reg_photolayout2); // 隐藏内容
@@ -245,11 +247,11 @@ private String json="";
 									if ("success".equals(status)) {
 										
 									
-//										Toast.makeText(getApplicationContext(), notice, 0).show();
+										Toast.makeText(getApplicationContext(), notice, 0).show();
 										//  添加页面跳转   跳到班级页面
 										  Intent intent = new Intent();
-										intent.putExtra("json",json);
-											intent.setClass(RegistrationActivity.this,Classxinxiliu.class);//
+										  intent.putExtra("json", json);
+											intent.setClass(RegistrationActivity.this,com.comdosoft.homework.HomeWorkMainActivity.class);//
 											startActivity(intent);
 											RegistrationActivity.this.finish();
 										
@@ -297,7 +299,7 @@ private String json="";
 						String name = reg_xingming.getText().toString();
 						String verification_code = reg_banjiyanzhengma.getText().toString();
 						MultipartEntity entity = new MultipartEntity(); 
-						entity.addPart("qq_uid", new StringBody(qq_uid));
+						entity.addPart("open_id", new StringBody(open_id));
 						File f = new File(Environment.getExternalStorageDirectory()
 								+ "/1" + IMAGE_FILE_NAME);
 						if (f.exists()) {

@@ -4,9 +4,6 @@ import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
-import java.io.UnsupportedEncodingException;
-import java.util.HashMap;
-import java.util.Map;
 
 import org.apache.http.HttpResponse;
 import org.apache.http.client.HttpClient;
@@ -18,11 +15,11 @@ import org.apache.http.impl.client.DefaultHttpClient;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import com.comdosoft.homework.tools.HomeWorkTool;
-import com.comdosoft.homework.tools.Urlinterface;
-
 import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
+import android.content.SharedPreferences.Editor;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.drawable.BitmapDrawable;
@@ -34,13 +31,16 @@ import android.os.Environment;
 import android.os.Handler;
 import android.os.Message;
 import android.provider.MediaStore;
-import android.view.Menu;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.Toast;
 
-public class SettingActivity extends Activity {
+import com.comdosoft.homework.tools.HomeWorkTool;
+
+import com.comdosoft.homework.tools.Urlinterface;
+
+public class SettingActivity extends Activity  implements Urlinterface{
 
 	// 设置 界面
 	private ImageButton faceImage;
@@ -48,6 +48,7 @@ public class SettingActivity extends Activity {
 	private EditText name; //
 	private View layout;// 选择头像界面
 	private String json = "";
+	
 	/* 头像名称 */
 	private static final String IMAGE_FILE_NAME = "faceImage.jpg";
 
@@ -59,19 +60,29 @@ public class SettingActivity extends Activity {
 	private String nameS = ""; //
 	private String nicknameS = ""; //
 	private String id = "8"; // 用户 id，，切记 不是 user_id
+	private String user_id = "8"; // 用户 id，，切记 不是 user_id
 	private String avatar_url = "/homework_system/avatars/students/2014-01/student_5.jpg"; // 用户头像
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_setting);
+	
 
-		// Intent intent = getIntent();//
-		// id= intent.getStringExtra("id");
-		// avatar_url= intent.getStringExtra("avatar_url");
-		// nicknameS =intent.getStringExtra("nickname");
-		// name =intent.getStringExtra("name");
 
+		 SharedPreferences  preferences = getSharedPreferences(SHARED, Context.MODE_PRIVATE);
+			
+		user_id = preferences.getString("user_id", null);
+		if (user_id!=null) {
+			id = preferences.getString("id", null);
+			avatar_url = preferences.getString("avatar_url", null);
+			nicknameS = preferences.getString("nicknameS", null);
+			nameS = preferences.getString("name", null);
+			
+		}
+		
+		
+		
 		layout = this.findViewById(R.id.set_photolayout); // 隐藏内容
 		faceImage = (ImageButton) findViewById(R.id.set_touxiang);
 		nickname = (EditText) findViewById(R.id.set_nickname);
@@ -142,6 +153,16 @@ public class SettingActivity extends Activity {
 								if ("success".equals(status)) {
 
 									Toast.makeText(getApplicationContext(), notice, 0).show();
+									SharedPreferences  preferences = getSharedPreferences(SHARED, Context.MODE_PRIVATE);
+									Editor editor = preferences.edit();
+									editor.putString("name", nameS);
+									editor.putString("user_id", id);
+									editor.putString("id", id);
+									editor.putString("avatar_url", avatar_url);
+									editor.putString("nickname", nicknameS);
+								
+									editor.commit();
+									
 								} else {
 									Toast.makeText(getApplicationContext(), notice, 0).show();
 								}
@@ -226,11 +247,29 @@ public class SettingActivity extends Activity {
 	}
 
 	public void changeClass(View v) {
-
+		Intent intent = new Intent();
+		intent.setClass(this, SwitchClassActivity.class);//
+		startActivity(intent);
+		
 	}
 
 	public void exit_user(View v) {
 
+		//  跳转到   登陆界面  ， 清空本地参数
+		
+		
+		
+		SharedPreferences  preferences = getSharedPreferences(SHARED, Context.MODE_PRIVATE);
+		Editor editor = preferences.edit();
+		
+		editor.putString("user_id", null);
+	
+		editor.putString("school_class_id",null);
+		editor.commit();
+		Intent intent = new Intent();
+		intent.setClass(this, SwitchClassActivity.class);//
+		startActivity(intent);
+		
 	}
 
 	private View.OnClickListener listener = new View.OnClickListener() {

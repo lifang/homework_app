@@ -11,10 +11,11 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:orientation="vertical" >
+
         <ImageView
             android:id="@+id/main_class_oneIV"
-            android:layout_width="182dp"
-            android:layout_height="182dp"
+            android:layout_width="182px"
+            android:layout_height="182px"
             android:contentDescription="@drawable/ic_launcher"
             android:src="@drawable/ic_launcher" />
     </LinearLayout>
@@ -23,14 +24,14 @@
         android:id="@+id/main_class_oneTv1"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:textSize="24sp"
-        android:text="@string/main_class_oneTv1" />
+        android:text="@string/main_class_oneTv1"
+        android:textSize="24px" />
 
     <TextView
         android:id="@+id/main_class_oneTv2"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:textSize="24sp"
-        android:text="@string/main_class_oneTv2" />
+        android:text="@string/main_class_oneTv2"
+        android:textSize="24px" />
 
 </LinearLayout>

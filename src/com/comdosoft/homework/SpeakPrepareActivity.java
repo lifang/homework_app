@@ -11,6 +11,7 @@ import android.app.ProgressDialog;
 import android.content.Intent;
 import android.media.MediaPlayer;
 import android.media.MediaPlayer.OnCompletionListener;
+import android.media.MediaPlayer.OnPreparedListener;
 import android.os.Bundle;
 import android.os.Handler;
 import android.view.KeyEvent;
@@ -24,7 +25,7 @@ import com.comdosoft.homework.tools.HomeWork;
 import com.comdosoft.homework.tools.Urlinterface;
 
 public class SpeakPrepareActivity extends Activity implements Urlinterface,
-		OnCompletionListener {
+		OnPreparedListener, OnCompletionListener {
 	private int mp3Index = 0;
 	private String content = "";
 	private TextView question_speak_title;
@@ -98,7 +99,7 @@ public class SpeakPrepareActivity extends Activity implements Urlinterface,
 		question_speak_title = (TextView) findViewById(R.id.question_speak_title);
 		question_speak_content = (TextView) findViewById(R.id.question_speak_content);
 		player = new MediaPlayer();
-		
+
 	}
 
 	public void onclicks(View v) {
@@ -128,7 +129,7 @@ public class SpeakPrepareActivity extends Activity implements Urlinterface,
 		case R.id.question_speak_img:
 			mp3List = new ArrayList<String>();
 			for (int i = 0; i < questionlist.size(); i++) {
-				mp3List.add(questionlist.get(i).getUrl());
+				mp3List.add(IP + questionlist.get(i).getUrl());
 			}
 			// 从文件系统播放
 			if (player.isPlaying()) {// 正在播放
@@ -186,29 +187,15 @@ public class SpeakPrepareActivity extends Activity implements Urlinterface,
 			 */
 			player.setDataSource(path);
 			player.prepare();// 进行缓冲
-			player.setOnPreparedListener(new MyPreparedListener(0));
+			player.setOnPreparedListener(this);
 			player.setOnCompletionListener(this);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
 	}
 
-	private final class MyPreparedListener implements
-			android.media.MediaPlayer.OnPreparedListener {
-		private int playPosition;
-
-		public MyPreparedListener(int playPosition) {
-			this.playPosition = playPosition;
-		}
-
-		@Override
-		public void onPrepared(MediaPlayer mp) {
-			player.start();// 开始播放
-			if (playPosition > 0) {
-				player.seekTo(playPosition);
-			}
-		}
-
+	public void onPrepared(MediaPlayer mp) {
+		mp.start();
 	}
 
 	public void stop() {
@@ -249,7 +236,7 @@ public class SpeakPrepareActivity extends Activity implements Urlinterface,
 				mp.reset();
 				mp.setDataSource(mp3List.get(mp3Index));
 				mp.prepare();
-				mp.setOnPreparedListener(new MyPreparedListener(0));
+				mp.setOnPreparedListener(this);
 				mp.setOnCompletionListener(this);
 			}
 		} catch (IllegalArgumentException e) {

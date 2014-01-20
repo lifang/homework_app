@@ -4,9 +4,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-
 import org.json.JSONObject;
-
 import android.app.Activity;
 import android.app.AlertDialog.Builder;
 import android.app.Dialog;
@@ -29,14 +27,14 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
-
 import com.comdosoft.homework.pojo.QuestionPojo;
 import com.comdosoft.homework.tools.HomeWork;
 import com.comdosoft.homework.tools.HomeWorkParams;
 import com.comdosoft.homework.tools.HomeWorkTool;
-import com.comdosoft.homework.tools.PredicateLayout;
 import com.comdosoft.homework.tools.Soundex_Levenshtein;
 import com.comdosoft.homework.tools.Urlinterface;
+import com.comdosoft.homework.tools.PredicateLayout;
+
 
 public class SpeakBeginActivity extends Activity implements Urlinterface {
 	public String content;// 记录本题正确答案
@@ -51,8 +49,8 @@ public class SpeakBeginActivity extends Activity implements Urlinterface {
 	private Map<Integer, String> ok_speak;
 	public MediaRecorder mediaRecorder;
 
-	private int student_id = 1;
-	private int school_class_id = 1;
+	private int student_id;
+	private int school_class_id;
 	private int publish_question_package_id;
 	private int question_package_id;
 	private int question_id;
@@ -113,7 +111,8 @@ public class SpeakBeginActivity extends Activity implements Urlinterface {
 		SetTextView();
 		publish_question_package_id = homework.getP_q_package_id();
 		question_package_id = homework.getQ_package_id();
-
+		student_id = homework.getUser_id();
+		school_class_id = homework.getClass_id();
 	}
 
 	// 初始化

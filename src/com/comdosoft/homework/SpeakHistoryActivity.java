@@ -34,7 +34,6 @@ public class SpeakHistoryActivity extends Activity implements Urlinterface {
 	private LinearLayout question_speak_tishi;
 	private TextView question_speak_content;
 	private List<List<String>> question_history;
-	private int student_id = 1;
 	private HomeWork homework;
 	private List<QuestionPojo> branch_questions;
 	private int index = 0;

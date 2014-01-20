@@ -19,7 +19,7 @@ public class VerticalTabWigdet extends TabWidget {
 	@Override
 	public void addView(View child) {
 		LinearLayout.LayoutParams lp = new LayoutParams(
-				76, 80);
+				80, 120);
 		lp.setMargins(0, 0, 0, 0);
 		child.setLayoutParams(lp);
 		super.addView(child);

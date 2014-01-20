@@ -4,12 +4,11 @@ public interface Urlinterface {
 	static final String tag = "homework";
 	static final String SHARED = "HW";
 
-
-	//  static final String IP = "http://192.168.0.101:3004";
+	// static final String IP = "http://192.168.0.101:3004";
 	String IP = "http://192.168.0.250:3004";
 
 	// static final String IP = "http://192.168.0.101:3004";
-	//	 static final String IP = "http://192.168.0.127:3000";
+	// static final String IP = "http://192.168.0.127:3000";
 
 	// 获取班级每日任务等信息
 	static final String CLASS_INFO = IP + "/api/students/get_class_info";
@@ -24,7 +23,6 @@ public interface Urlinterface {
 			+ "/api/students/into_daily_tasks";
 
 	// static final String IP = "http://192.168.0.101:3004";
-
 
 	// static final String HEADIMG = IP + "/user_head_img/";
 	static final String NEWS_RELEASE = IP + "/api/students/news_release";  //  发表消息
@@ -43,5 +41,9 @@ public interface Urlinterface {
 	String MY_MICROPOSTS = IP + "/api/students/my_microposts"; // 分页 获取 子消息
 	String delete_message=IP+"/api/students/delete_message";		//删除消息
 	String read_message=IP+"/api/students/read_message";
- 
+	// String UPLOAD_FACE = IP + "/api/students/upload_avatar"; // 上传头像
+	String add_concern=IP+"/api/students/add_concern";			//关注消息
+	
+	String SAVE_DICTATION = IP + "/api/students/record_answer_info"; // 保存拼写答题记录
+	String QQ_LOGIN = IP + "/api/students/login"; // qq登录
 }
