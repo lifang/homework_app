@@ -14,10 +14,10 @@
 
     <ImageButton
         android:id ="@+id/set_touxiang"
-        android:layout_width="176dp"
-        android:layout_height="186dp"
+        android:layout_width="176px"
+        android:layout_height="186px"
         android:background="@drawable/moren"
-        android:layout_marginTop="91dp"
+        android:layout_marginTop="91px"
       />
 
         <TextView
@@ -25,9 +25,9 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         
-        android:layout_marginTop="30dp"
+        android:layout_marginTop="30px"
         android:text="@string/setting_tishi"
-        android:textSize="19.3dp" />
+        android:textSize="19.3px" />
 
     
      <TextView
@@ -35,69 +35,69 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         
-        android:layout_marginTop="40dp"
+        android:layout_marginTop="40px"
         android:text="@string/nicheng"
-        android:textSize="24sp" />
+        android:textSize="24px" />
      
           <EditText
         android:id="@+id/set_nickname"
-        android:layout_width="480dp"
-            android:layout_height="47dp"
-        android:layout_marginTop="21dp"
+        android:layout_width="480px"
+            android:layout_height="47px"
+        android:layout_marginTop="21px"
         android:gravity="center"
         android:hint="fwefsf"
-        android:textSize="24sp" />
+        android:textSize="24px" />
            <TextView
        
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         
-        android:layout_marginTop="21dp"
+        android:layout_marginTop="21px"
         android:text="@string/xingming"
-        android:textSize="24sp" />
+        android:textSize="24px" />
      
           <EditText
         android:id="@+id/set_name"
-         android:layout_width="480dp"
-            android:layout_height="47dp"
-        android:layout_marginTop="21dp"
+         android:layout_width="480px"
+            android:layout_height="47px"
+        android:layout_marginTop="21px"
         android:gravity="center"
         android:hint="马丁"
-        android:textSize="24sp" />    
+        android:textSize="24px" />    
            
      
   
                   <Button
      
-       android:layout_width="480dp"
-            android:layout_height="51dp"
+       android:layout_width="480px"
+            android:layout_height="51px"
         android:gravity="center"
-        android:layout_marginTop="82dp"
+        android:layout_marginTop="82px"
         android:background="#92b81b"
         android:onClick="saveUpdata"
         android:text="@string/saveUpdata"
-        android:textSize="24sp" /> 
+        android:textSize="24px" /> 
     
                      <Button
      
-       android:layout_width="480dp"
-            android:layout_height="51dp"
+       android:layout_width="480px"
+            android:layout_height="51px"
         android:gravity="center"
-        android:layout_marginTop="85dp"
+        android:layout_marginTop="85px"
         android:background="#92b81b"
         android:onClick="changeClass"
         android:text="@string/changeClass"
-        android:textSize="24sp" /> 
+        android:textSize="24px" /> 
                          <Button
      
-       android:layout_width="480dp"
-            android:layout_height="51dp"
+       android:layout_width="480px"
+            android:layout_height="51px"
         android:gravity="center"
-        android:layout_marginTop="37dp"
+        android:layout_marginTop="37px"
         android:background="#f08629"
         android:onClick="set_exit"
         android:text="@string/exit_user"
-        android:textSize="24sp" /> 
+        android:textSize="24px" /> 
     
 </LinearLayout>
    <!-- 下面的内容一开始是隐藏起来的 -->
@@ -113,23 +113,23 @@
                  >
 <Button
             android:id="@+id/paizhaoshangchuan"
-            android:layout_width="480dp"
-            android:layout_height="51dp"
-        android:layout_marginTop="885dp"
+            android:layout_width="480px"
+            android:layout_height="51px"
+        android:layout_marginTop="885px"
         android:background="#f08629"
             android:onClick="set_paizhaoshangchuan"
             android:textColor="#FFFFFF"
-            android:textSize="24sp"
+            android:textSize="24px"
             android:text="@string/takephoto" />
 <Button
             android:id="@+id/congxiangce"
-           android:layout_width="480dp"
-            android:layout_height="51dp"
+           android:layout_width="480px"
+            android:layout_height="51px"
          android:background="#f08629"
              android:onClick="set_congxiangce"
-             android:layout_marginTop="28dp"
+             android:layout_marginTop="28px"
             android:textColor="#FFFFFF"
-            android:textSize="24sp"
+            android:textSize="24px"
             android:text="@string/fromphotostore" />
             </LinearLayout>
             <!-- 上面的内容一开始是隐藏起来的 -->
@@ -150,21 +150,21 @@
            
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-        android:layout_marginTop="856dp"
+        android:layout_marginTop="856px"
         android:background="#FF8C00"
           
             android:textColor="#FFFFFF"
-            android:textSize="24sp"
+            android:textSize="24px"
              />
 <Button
           
-            android:layout_width="480dp"
-            android:layout_height="51dp"
+            android:layout_width="480px"
+            android:layout_height="51px"
          android:background="#f08629"
              android:onClick="reg_fanhui"
-             android:layout_marginTop="50dp"
+             android:layout_marginTop="50px"
             android:textColor="#FFFFFF"
-            android:textSize="24sp"
+            android:textSize="24px"
             android:text="@string/reg_fanhui" />
             </LinearLayout>
             <!-- 上面的内容一开始是隐藏起来的 -->

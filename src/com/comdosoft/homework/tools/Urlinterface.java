@@ -32,6 +32,7 @@ public interface Urlinterface {
 	String get_reply_microposts = IP + "/api/students/get_reply_microposts";  //  获得  子信息
 	String get_class_info = IP + "/api/students/get_class_info";  //  获得  班级信息
 	String reply_message = IP + "/api/students/reply_message";  //  回复 信息
+	String add_concern=IP+"/api/students/add_concern";			//关注消息
 	String MODIFY_PERSON_INFO = IP + "/api/students/modify_person_info";  //  修改个人信息 
 	String RECORD_PERSON_INFO = IP + "/api/students/record_person_info";  //  登记个人信息
 	//     李芳: http://192.168.0.130:3000/api/students/delete_posts

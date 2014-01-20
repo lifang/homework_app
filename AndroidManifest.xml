@@ -27,6 +27,17 @@
         android:screenOrientation="portrait"
         android:theme="@android:style/Theme.NoTitleBar" >
         <activity
+
+            android:name=".MainActivity"
+            android:label="@string/app_name" >      <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+        <activity
+
+
             android:name=".HomeWorkIngActivity"
             android:label="@string/app_name" >
         </activity>
@@ -65,7 +76,7 @@
             android:name=".SettingActivity"
             android:windowSoftInputMode="adjustUnspecified|stateHidden" />
         <activity
-            android:name=".Class_xinxiliu"
+            android:name=".Classxinxiliu"
             android:windowSoftInputMode="adjustUnspecified|stateHidden" />
         <activity android:name="com.comdosoft.homework.Main_classes" >
         </activity>
