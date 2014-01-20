@@ -14,7 +14,7 @@ import com.comdosoft.homework.tools.HomeWork;
 import com.comdosoft.homework.tools.HomeWorkTool;
 import com.comdosoft.homework.tools.Urlinterface;
 
-import android.annotation.SuppressLint;
+
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
@@ -46,7 +46,7 @@ public class SwitchClassActivity extends Activity
 			public void onClick(View v) {
 				Thread thread=new Thread()
 				{
-					@SuppressLint("ShowToast")
+					
 					public void run()
 					{
 						try {
@@ -111,7 +111,7 @@ public class SwitchClassActivity extends Activity
 		return super.onKeyDown(keyCode, event);
 	}
 
-	@SuppressLint("HandlerLeak")
+	
 	Handler handler = new Handler(){
 		public void handleMessage(Message msg) {
 			switch(msg.what)

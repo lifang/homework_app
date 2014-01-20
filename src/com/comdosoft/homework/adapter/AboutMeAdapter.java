@@ -6,16 +6,6 @@ import java.util.List;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import com.comdosoft.homework.Classxinxiliu;
-import com.comdosoft.homework.R;
-import com.comdosoft.homework.pojo.AboutMePojo;
-import com.comdosoft.homework.tools.AsyncImageLoader;
-import com.comdosoft.homework.tools.AsyncImageLoader.LoadFinishCallBack;
-import com.comdosoft.homework.tools.HomeWork;
-import com.comdosoft.homework.tools.HomeWorkTool;
-import com.comdosoft.homework.tools.Urlinterface;
-
-import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
@@ -31,6 +21,15 @@ import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import com.comdosoft.homework.Classxinxiliu;
+import com.comdosoft.homework.R;
+import com.comdosoft.homework.pojo.AboutMePojo;
+import com.comdosoft.homework.tools.AsyncImageLoader;
+import com.comdosoft.homework.tools.AsyncImageLoader.LoadFinishCallBack;
+import com.comdosoft.homework.tools.HomeWork;
+import com.comdosoft.homework.tools.HomeWorkTool;
+import com.comdosoft.homework.tools.Urlinterface;
 
 public class AboutMeAdapter extends BaseAdapter
 {
@@ -152,7 +151,7 @@ public class AboutMeAdapter extends BaseAdapter
 		return convertView;
 
 	}
-	@SuppressLint({ "HandlerLeak", "ShowToast" })
+	
 	Handler handler=new Handler()
 	{
 		public void dispatchMessage(Message msg) {
