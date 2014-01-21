@@ -1,174 +1,160 @@
-﻿
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+﻿<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="fill_parent"
-    android:layout_height="fill_parent">
+    android:layout_height="fill_parent" >
 
-<LinearLayout 
-   
-    android:layout_width="fill_parent"
-    android:layout_height="fill_parent"
-  android:background="#ede9ea"
-    android:orientation="vertical"
-    android:gravity="center_horizontal"
-    >
+    <LinearLayout
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:background="#ede9ea"
+        android:gravity="center_horizontal"
+        android:orientation="vertical" >
 
-    <ImageButton
-        android:id ="@+id/set_touxiang"
-        android:layout_width="176px"
-        android:layout_height="186px"
-        android:background="@drawable/moren"
-        android:layout_marginTop="91px"
-      />
+        <ImageButton
+            android:id="@+id/set_touxiang"
+            android:layout_width="176px"
+            android:layout_height="186px"
+            android:layout_marginTop="91px"
+            android:background="@drawable/moren" />
 
         <TextView
-       
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        
-        android:layout_marginTop="30px"
-        android:text="@string/setting_tishi"
-        android:textSize="19.3px" />
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="30px"
+            android:text="@string/setting_tishi"
+            android:textSize="19.3px" />
 
-    
-     <TextView
-       
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:textColor="#000000"
-        android:layout_marginTop="40px"
-        android:text="@string/nicheng"
-        android:textSize="24px" />
-     
-          <EditText
-        android:id="@+id/set_nickname"
-        android:layout_width="480px"
-            android:layout_height="71px"
-        android:layout_marginTop="21px"
-        android:gravity="center"
-        android:hint="fwefsf"
-        android:textSize="24px" />
-           <TextView
-       
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:textColor="#000000"
-        android:layout_marginTop="21px"
-        android:text="@string/xingming"
-        android:textSize="24px" />
-     
-          <EditText
-        android:id="@+id/set_name"
-         android:layout_width="480px"
-            android:layout_height="71px"
-        android:layout_marginTop="21px"
-        android:gravity="center"
-        android:hint="马丁"
-        android:textSize="24px" />    
-           
-     
-  
-                  <Button
-     
-       android:layout_width="480px"
-            android:layout_height="51px"
-        android:gravity="center"
-        android:layout_marginTop="82px"
-          android:textColor="#FFFFFF"
-        android:background="#92b81b"
-        android:onClick="saveUpdata"
-        android:text="@string/saveUpdata"
-        android:textSize="24px" /> 
-    
-                     <Button
-     
-       android:layout_width="480px"
-            android:layout_height="51px"
-        android:gravity="center"
-        android:layout_marginTop="85px"
-          android:textColor="#FFFFFF"
-        android:background="#92b81b"
-        android:onClick="changeClass"
-        android:text="@string/changeClass"
-        android:textSize="24px" /> 
-                         <Button
-     
-       android:layout_width="480px"
-            android:layout_height="51px"
-        android:gravity="center"
-        android:layout_marginTop="37px"
-        android:background="#f08629"
-          android:textColor="#FFFFFF"
-        android:onClick="set_exit"
-        android:text="@string/exit_user"
-        android:textSize="24px" /> 
-    
-</LinearLayout>
-   <!-- 下面的内容一开始是隐藏起来的 -->
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="40px"
+            android:text="@string/nicheng"
+            android:textColor="#000000"
+            android:textSize="24px" />
 
-            <LinearLayout
-                android:id="@+id/set_photolayout"
-                android:layout_width="fill_parent"
-                android:layout_height="fill_parent"
-                 android:gravity="center_horizontal"
-                android:background="#e0000000"
-                android:orientation="vertical"
-                 android:visibility="gone" 
-                 >
-<Button
+        <EditText
+            android:id="@+id/set_nickname"
+            android:layout_width="480px"
+            android:layout_height="71px"
+            android:layout_marginTop="21px"
+            android:gravity="center"
+            android:hint="fwefsf"
+            android:textSize="24px" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="21px"
+            android:text="@string/xingming"
+            android:textColor="#000000"
+            android:textSize="24px" />
+
+        <EditText
+            android:id="@+id/set_name"
+            android:layout_width="480px"
+            android:layout_height="71px"
+            android:layout_marginTop="21px"
+            android:gravity="center"
+            android:hint="马丁"
+            android:textSize="24px" />
+
+        <Button
+            android:layout_width="480px"
+            android:layout_height="51px"
+            android:layout_marginTop="82px"
+            android:background="#92b81b"
+            android:gravity="center"
+            android:onClick="saveUpdata"
+            android:text="@string/saveUpdata"
+            android:textColor="#FFFFFF"
+            android:textSize="24px" />
+
+        <Button
+            android:layout_width="480px"
+            android:layout_height="51px"
+            android:layout_marginTop="85px"
+            android:background="#92b81b"
+            android:gravity="center"
+            android:onClick="changeClass"
+            android:text="@string/changeClass"
+            android:textColor="#FFFFFF"
+            android:textSize="24px" />
+
+        <Button
+            android:layout_width="480px"
+            android:layout_height="51px"
+            android:layout_marginTop="37px"
+            android:background="#f08629"
+            android:gravity="center"
+            android:onClick="exit_user"
+            android:text="@string/exit_user"
+            android:textColor="#FFFFFF"
+            android:textSize="24px" />
+    </LinearLayout>
+    <!-- 下面的内容一开始是隐藏起来的 -->
+
+    <LinearLayout
+        android:id="@+id/set_photolayout"
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:background="#e0000000"
+        android:gravity="center_horizontal"
+        android:orientation="vertical"
+        android:visibility="gone" >
+
+        <Button
             android:id="@+id/paizhaoshangchuan"
             android:layout_width="480px"
             android:layout_height="51px"
-        android:layout_marginTop="885px"
-        android:background="#f08629"
+            android:layout_marginTop="885px"
+            android:background="#f08629"
             android:onClick="set_paizhaoshangchuan"
+            android:text="@string/takephoto"
             android:textColor="#FFFFFF"
-            android:textSize="24px"
-            android:text="@string/takephoto" />
-<Button
-            android:id="@+id/congxiangce"
-           android:layout_width="480px"
-            android:layout_height="51px"
-         android:background="#f08629"
-             android:onClick="set_congxiangce"
-             android:layout_marginTop="28px"
-            android:textColor="#FFFFFF"
-            android:textSize="24px"
-            android:text="@string/fromphotostore" />
-            </LinearLayout>
-            <!-- 上面的内容一开始是隐藏起来的 -->
-            
-            
-             <!-- 下面的内容一开始是隐藏起来的 -->
+            android:textSize="24px" />
 
-            <LinearLayout
-                android:id="@+id/photolayout2"
-                android:layout_width="fill_parent"
-                android:layout_height="fill_parent"
-                 android:gravity="center_horizontal"
-                android:background="#e0000000"
-                android:orientation="vertical"
-                 android:visibility="gone" 
-                 >
-<TextView
-           
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-        android:layout_marginTop="856px"
-        android:background="#FF8C00"
-          
-            android:textColor="#FFFFFF"
-            android:textSize="24px"
-             />
-<Button
-          
+        <Button
+            android:id="@+id/congxiangce"
             android:layout_width="480px"
             android:layout_height="51px"
-         android:background="#f08629"
-             android:onClick="reg_fanhui"
-             android:layout_marginTop="50px"
+            android:layout_marginTop="28px"
+            android:background="#f08629"
+            android:onClick="set_congxiangce"
+            android:text="@string/fromphotostore"
             android:textColor="#FFFFFF"
-            android:textSize="24px"
-            android:text="@string/reg_fanhui" />
-            </LinearLayout>
-            <!-- 上面的内容一开始是隐藏起来的 -->
+            android:textSize="24px" />
+    </LinearLayout>
+    <!-- 上面的内容一开始是隐藏起来的 -->
+
+
+    <!-- 下面的内容一开始是隐藏起来的 -->
+
+    <LinearLayout
+        android:id="@+id/photolayout2"
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:background="#e0000000"
+        android:gravity="center_horizontal"
+        android:orientation="vertical"
+        android:visibility="gone" >
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="856px"
+            android:background="#FF8C00"
+            android:textColor="#FFFFFF"
+            android:textSize="24px" />
+
+        <Button
+            android:layout_width="480px"
+            android:layout_height="51px"
+            android:layout_marginTop="50px"
+            android:background="#f08629"
+            android:onClick="reg_fanhui"
+            android:text="@string/reg_fanhui"
+            android:textColor="#FFFFFF"
+            android:textSize="24px" />
+    </LinearLayout>
+    <!-- 上面的内容一开始是隐藏起来的 -->
+
 </RelativeLayout>

@@ -31,6 +31,8 @@
             android:layout_marginLeft="3.34px"
             android:layout_marginRight="3.34px"
             android:background="#f6f2f3"
+            android:focusable="true"
+            android:focusableInTouchMode="true"
             android:padding="24px" >
 
             <EditText
@@ -69,11 +71,10 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_below="@+id/class_fabiao_content"
-              
+                android:layout_marginTop="58.53px"
                 android:background="@drawable/an"
                 android:onClick="class_button_all"
                 android:text="@string/class_button_all"
-                 android:layout_marginTop="58.53px"
                 android:textColor="#FFFFFF"
                 android:textSize="24px" />
 
@@ -106,8 +107,8 @@
         android:layout_width="394px"
         android:layout_height="fill_parent"
         android:layout_toRightOf="@+id/classRelativeLayout_left"
-        android:gravity="center_horizontal"
         android:background="#636362"
+        android:gravity="center_horizontal"
         android:orientation="vertical" >
 
         <include
