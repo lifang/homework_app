@@ -208,12 +208,12 @@ public class HomeWorkTool implements Urlinterface {
 		Log.i(tag, "AAA");
 		String json = "error";
 		StringBuilder url = new StringBuilder(path);
-		 url.append("?");
-		 for (Map.Entry<String, String> entry : map.entrySet()) {
-		 url.append(entry.getKey()).append("=").append(entry.getValue());
-		 url.append("&");
-		 }
-		 url.deleteCharAt(url.length() - 1);
+		url.append("?");
+		for (Map.Entry<String, String> entry : map.entrySet()) {
+			url.append(entry.getKey()).append("=").append(entry.getValue());
+			url.append("&");
+		}
+		url.deleteCharAt(url.length() - 1);
 		Log.i(tag, url.toString());
 		HttpURLConnection conn = (HttpURLConnection) new URL(url.toString())
 				.openConnection();
@@ -261,8 +261,7 @@ public class HomeWorkTool implements Urlinterface {
 		return inputStream;
 	}
 
-	
-	//   上传文件
+	// 上传文件
 	public static String sendPhostimg(String url, MultipartEntity entity) {
 		String json = "";
 		HttpPost post = new HttpPost(url);
@@ -314,9 +313,9 @@ public class HomeWorkTool implements Urlinterface {
 			url_con = (HttpURLConnection) url.openConnection();
 			url_con.setRequestMethod("POST");
 			System.setProperty("sun.net.client.defaultConnectTimeout",
-					String.valueOf(HomeWorkTool.connectTimeOut));//
+					String.valueOf(HomeWorkTool.connectTimeOut));
 			System.setProperty("sun.net.client.defaultReadTimeout",
-					String.valueOf(HomeWorkTool.readTimeOut)); // 
+					String.valueOf(HomeWorkTool.readTimeOut));
 			url_con.setDoOutput(true);
 			byte[] b = params.toString().getBytes();
 			url_con.getOutputStream().write(b, 0, b.length);
@@ -331,7 +330,7 @@ public class HomeWorkTool implements Urlinterface {
 			in.close();
 		} catch (IOException e) {
 			e.printStackTrace();
-		} 
+		}
 		Log.i(tag, tempLine);
 		return tempLine;
 	}
@@ -403,8 +402,8 @@ public class HomeWorkTool implements Urlinterface {
 			View listItem = listAdapter.getView(i, null, listView);
 			listItem.measure(0, 0); // 计算子项View 的宽高
 
-			totalHeight += listItem.getMeasuredHeight() ; // 统计所有子项的总高度.
-																// 网上代码没有 加52
+			totalHeight += listItem.getMeasuredHeight(); // 统计所有子项的总高度.
+															// 网上代码没有 加52
 
 		}
 
@@ -412,16 +411,11 @@ public class HomeWorkTool implements Urlinterface {
 		// params.height = totalHeight + (listView.getDividerHeight() *
 		// (listAdapter.getCount() - 1))+157;
 		params.height = totalHeight
-				+ (listView.getDividerHeight() * (listAdapter.getCount()))+127;
+				+ (listView.getDividerHeight() * (listAdapter.getCount()))
+				+ 127;
 		// listView.getDividerHeight()获取子项间分隔符占用的高度
 
 		listView.setLayoutParams(params);
 	}
-	
-	
-	
-	
-	
-	
-	
+
 }
