@@ -44,7 +44,7 @@ public class DictationRecordActivity extends Activity implements
 	private List<String> errorList = new ArrayList<String>();
 	private MediaPlayer mediaPlayer = new MediaPlayer();
 
-	@Override
+	
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.question_dictation_record);
@@ -122,7 +122,7 @@ public class DictationRecordActivity extends Activity implements
 		}
 	}
 
-	@Override
+	
 	public void onClick(View v) {
 		switch (v.getId()) {
 		case R.id.question_dictation_exit:
@@ -139,12 +139,12 @@ public class DictationRecordActivity extends Activity implements
 		}
 	}
 
-	@Override
+	
 	public void onPrepared(MediaPlayer mp) {
 		mp.start();
 	}
 
-	@Override
+	
 	public void onDestroy() {
 		mediaPlayer.release();
 		mediaPlayer = null;
