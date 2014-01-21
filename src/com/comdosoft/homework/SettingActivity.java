@@ -39,7 +39,7 @@ import android.widget.Toast;
 import com.comdosoft.homework.tools.HomeWorkTool;
 import com.comdosoft.homework.tools.Urlinterface;
 
-public class SettingActivity extends Activity  implements Urlinterface{
+public class SettingActivity extends Activity implements Urlinterface {
 
 	// 设置 界面
 	private ImageButton faceImage;
@@ -47,7 +47,7 @@ public class SettingActivity extends Activity  implements Urlinterface{
 	private EditText name; //
 	private View layout;// 选择头像界面
 	private String json = "";
-	
+
 	/* 头像名称 */
 	private static final String IMAGE_FILE_NAME = "faceImage.jpg";
 
@@ -66,22 +66,19 @@ public class SettingActivity extends Activity  implements Urlinterface{
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_setting);
-	
 
+		SharedPreferences preferences = getSharedPreferences(SHARED,
+				Context.MODE_PRIVATE);
 
-		 SharedPreferences  preferences = getSharedPreferences(SHARED, Context.MODE_PRIVATE);
-			
 		user_id = preferences.getString("user_id", null);
-		if (user_id!=null) {
+		if (user_id != null) {
 			id = preferences.getString("id", null);
 			avatar_url = preferences.getString("avatar_url", null);
 			nicknameS = preferences.getString("nicknameS", null);
 			nameS = preferences.getString("name", null);
-			
+
 		}
-		
-		
-		
+
 		layout = this.findViewById(R.id.set_photolayout); // 隐藏内容
 		faceImage = (ImageButton) findViewById(R.id.set_touxiang);
 		nickname = (EditText) findViewById(R.id.set_nickname);
@@ -91,18 +88,17 @@ public class SettingActivity extends Activity  implements Urlinterface{
 		// if (HomeWorkTool.isConnect(getApplicationContext())) {
 
 		if (avatar_url != null || avatar_url.length() != 0) { // 设置头像
-		// HttpGet hg = new HttpGet(Urlinterface.IP
-		// + avatar_url);//
+			// HttpGet hg = new HttpGet(Urlinterface.IP
+			// + avatar_url);//
 
 			GetCSDNLogoTask task = new GetCSDNLogoTask();
-			task.execute(Urlinterface.IP
-					 + avatar_url);//
+			task.execute(Urlinterface.IP + avatar_url);//
 
+			faceImage.setOnClickListener(listener);
 
-		faceImage.setOnClickListener(listener);
-		
+		}
 	}
-	}
+
 	class GetCSDNLogoTask extends AsyncTask<String, Integer, Drawable> {
 
 		@Override
@@ -136,48 +132,53 @@ public class SettingActivity extends Activity  implements Urlinterface{
 		}
 
 	}
+
 	Handler mHandler = new Handler() {
 		public void handleMessage(android.os.Message msg) {
 			switch (msg.what) {
-				case 0:
-					 final String res =  (String) msg.obj;
-						if (res.length() != 0) {
-							JSONObject array;
+			case 0:
+				final String res = (String) msg.obj;
+				if (res.length() != 0) {
+					JSONObject array;
 
-							try {
-								array = new JSONObject(res);
-								String status = array.getString("status");
-								String notice = array.getString("notice");
+					try {
+						array = new JSONObject(res);
+						String status = array.getString("status");
+						String notice = array.getString("notice");
 
-								if ("success".equals(status)) {
+						if ("success".equals(status)) {
 
-									Toast.makeText(getApplicationContext(), notice, 0).show();
-									SharedPreferences  preferences = getSharedPreferences(SHARED, Context.MODE_PRIVATE);
-									Editor editor = preferences.edit();
-									editor.putString("name", nameS);
-									editor.putString("user_id", id);
-									editor.putString("id", id);
-									editor.putString("avatar_url", avatar_url);
-									editor.putString("nickname", nicknameS);
-								
-									editor.commit();
-									
-								} else {
-									Toast.makeText(getApplicationContext(), notice, 0).show();
-								}
-							} catch (JSONException e) {
-								// TODO Auto-generated catch block
-								e.printStackTrace();
-							}
+							Toast.makeText(getApplicationContext(), notice, 0)
+									.show();
+							SharedPreferences preferences = getSharedPreferences(
+									SHARED, Context.MODE_PRIVATE);
+							Editor editor = preferences.edit();
+							editor.putString("name", nameS);
+							editor.putString("user_id", id);
+							editor.putString("id", id);
+							editor.putString("avatar_url", avatar_url);
+							editor.putString("nickname", nicknameS);
 
+							editor.commit();
+
+						} else {
+							Toast.makeText(getApplicationContext(), notice, 0)
+									.show();
 						}
-					 break;
-				default:
-					break;
-					
+					} catch (JSONException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
+
+				}
+				break;
+			default:
+				break;
+
 			}
 		}
 	};
+
 	// 保存设置
 	public void saveUpdata(View v) {
 
@@ -228,11 +229,11 @@ public class SettingActivity extends Activity  implements Urlinterface{
 
 					json = HomeWorkTool.sendPhostimg(
 							Urlinterface.MODIFY_PERSON_INFO, entity);
-					Message msg = new Message();//  创建Message 对象
-					msg.what =0 ;
+					Message msg = new Message();// 创建Message 对象
+					msg.what = 0;
 					msg.obj = json;
 					mHandler.sendMessage(msg);
-		
+
 				} catch (Exception e) {
 					// TODO Auto-generated catch block
 					e.printStackTrace();
@@ -241,36 +242,30 @@ public class SettingActivity extends Activity  implements Urlinterface{
 		};
 		thread.start();
 
-
-
 	}
 
 	public void changeClass(View v) {
 		Intent intent = new Intent();
 		intent.setClass(this, SwitchClassActivity.class);//
 		startActivity(intent);
-		
+
 	}
 
 	public void exit_user(View v) {
 
-		//  跳转到   登陆界面  ， 清空本地参数
-		
-		
-		
-		SharedPreferences  preferences = getSharedPreferences(SHARED, Context.MODE_PRIVATE);
+		// 跳转到 登陆界面 ， 清空本地参数
+
+		SharedPreferences preferences = getSharedPreferences(SHARED,
+				Context.MODE_PRIVATE);
 		Editor editor = preferences.edit();
-		
-		editor.putString("user_id", null);
-	
-		editor.putString("school_class_id",null);
+		editor.putString("user_id", "");
+		editor.putString("school_class_id", "");
 		editor.commit();
 		Intent intent = new Intent();
 		intent.setClass(this, LoginActivity.class);//
 		startActivity(intent);
 		HomeWorkMainActivity.instance.finish();
 
-		
 	}
 
 	private View.OnClickListener listener = new View.OnClickListener() {

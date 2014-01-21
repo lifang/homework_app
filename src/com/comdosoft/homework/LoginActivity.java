@@ -132,7 +132,6 @@ public class LoginActivity extends Activity implements Urlinterface {
 				editor.commit();
 				homework.setClass_id(Integer.parseInt(school_class_id));
 				homework.setUser_id(Integer.parseInt(user_id));
-
 				mHandler.sendEmptyMessage(2);
 			}
 		} catch (JSONException e) {
