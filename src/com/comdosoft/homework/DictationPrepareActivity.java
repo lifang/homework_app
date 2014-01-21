@@ -57,7 +57,7 @@ public class DictationPrepareActivity extends Activity implements
 		dictationImg = (ImageView) findViewById(R.id.question_dictation_img);
 		dictationImg.setOnClickListener(this);
 		// setMp3Url();
-//		/new MyThread().start();
+		// /new MyThread().start();
 	}
 
 	@Override
@@ -134,8 +134,8 @@ public class DictationPrepareActivity extends Activity implements
 						question));
 
 				ListeningQuestionList.Record_Count = 0;
-//				ListeningQuestionList.Record_Count = ListeningQuestionList
-//						.getRecordCount();
+				// ListeningQuestionList.Record_Count = ListeningQuestionList
+				// .getRecordCount();
 			}
 		} catch (JSONException e) {
 			e.printStackTrace();

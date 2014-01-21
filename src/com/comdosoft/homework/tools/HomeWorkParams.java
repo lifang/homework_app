@@ -9,7 +9,6 @@ public interface HomeWorkParams {
 	public static String REPLY = "回复";
 
 
-
 	public static String PD_QUESTION_INFO = "正在获取题目,请稍候..";
 	public static String PD_FINISH_QUESTION = "正在提交作业,请稍候..";
 

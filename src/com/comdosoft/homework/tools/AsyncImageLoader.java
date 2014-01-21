@@ -17,11 +17,12 @@ public class AsyncImageLoader{
     // 1.根据URL返回Drawable的函数  
     // 2.工具类的核心函数,包含handler+thread  
   
+    
     public AsyncImageLoader() {  
         imageCache = new HashMap<String, SoftReference<Bitmap>>();  
         opts = new BitmapFactory.Options();     
         opts.inSampleSize = 0;    //这个的值压缩的倍数（2的整数倍），数值越小，压缩率越小，图片越清晰      
-    }  
+    } 
 	public Bitmap asyncLoadImage(final String strUrl, final int i, final LoadFinishCallBack loadFinishCallBack) {  
         Bitmap bitmap = null;  
         //首先判断Map中是否有这种图片的缓存，若有，直接返回该图片的引用  
