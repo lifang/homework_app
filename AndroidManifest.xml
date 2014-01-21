@@ -71,12 +71,13 @@
         <activity
             android:name=".LoginActivity"
             android:label="@string/app_name" >
-            <intent-filter>
+          
+        </activity>
+        <activity android:name="com.comdosoft.homework.AboutMeActivity" >
+              <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
-        </activity>
-        <activity android:name="com.comdosoft.homework.AboutMeActivity" >
         </activity>
         <activity android:name=".Spec1" />
         <activity android:name=".Spec3" />
