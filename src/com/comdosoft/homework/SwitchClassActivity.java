@@ -20,6 +20,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
+import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -46,7 +47,6 @@ public class SwitchClassActivity extends Activity
 			public void onClick(View v) {
 				Thread thread=new Thread()
 				{
-					@SuppressLint("ShowToast")
 					public void run()
 					{
 						try {
@@ -55,6 +55,7 @@ public class SwitchClassActivity extends Activity
 							mp.put("student_id", String.valueOf(hw.getUser_id()));
 							String json=HomeWorkTool.doPost(Urlinterface.Validation_into_class, mp);
 							JSONObject jsonobject=new JSONObject(json);
+							Log.i("aa", json);
 							String status=jsonobject.getString("status");
 							if(status.equals("error"))
 							{
@@ -111,7 +112,6 @@ public class SwitchClassActivity extends Activity
 		return super.onKeyDown(keyCode, event);
 	}
 
-	@SuppressLint("HandlerLeak")
 	Handler handler = new Handler(){
 		public void handleMessage(Message msg) {
 			switch(msg.what)
