@@ -1358,12 +1358,6 @@ Urlinterface {
 				Reply_edit = (EditText) layout1.findViewById(R.id.reply_edit);
 				Reply_edit.requestFocus();
 				Reply_edit.setHint(user_name + " "+HomeWorkParams.REPLY+" " + mess.getName() + ":");
-<<<<<<< HEAD
-				
-
-				
-				
-=======
 
 				final Handler mHandler = new Handler() {
 					public void handleMessage(android.os.Message msg) {
@@ -1465,7 +1459,6 @@ Urlinterface {
 				thread.start();	
 
 
->>>>>>> 1f586e44c53b3e4504f2deb7c16dc2783a07e71d
 				if (child_list.size()!=0) {
 					listView2 = (ListView) layout1.findViewById(R.id.aa);
 					listView2.setDivider(null);
@@ -1724,11 +1717,6 @@ Urlinterface {
 					//					
 					json="";
 
-<<<<<<< HEAD
-			
-=======
-
->>>>>>> 1f586e44c53b3e4504f2deb7c16dc2783a07e71d
 					micropostAdapter = new MicropostAdapter();
 					listView_mes.setAdapter(micropostAdapter);
 
