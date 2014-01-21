@@ -8,6 +8,7 @@ import com.comdosoft.homework.pojo.ListeningPojo;
 public class ListeningQuestionList {
 	public static List<ListeningPojo> listeningList = new ArrayList<ListeningPojo>();
 	public static List<List<String>> answerList = new ArrayList<List<String>>();
+	public static int Record_Count = 0;
 
 	public static void addListeningPojo(ListeningPojo lp) {
 		listeningList.add(lp);
