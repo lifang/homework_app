@@ -446,7 +446,7 @@ Urlinterface {
 								Toast.makeText(getApplicationContext(), notice, 1)
 								.show();
 								fabiao_content.setText("");
-								
+
 							} else {
 								Toast.makeText(getApplicationContext(), notice, 1)
 								.show();
@@ -898,7 +898,7 @@ Urlinterface {
 		listView_mes.stopLoadMore();
 		listView_mes.setRefreshTime("刚刚");
 	}
-	@Override
+	
 	public void onRefresh() {
 
 		focus=-1;
@@ -928,7 +928,6 @@ Urlinterface {
 
 		handler.postDelayed(new Runnable() {
 
-			@Override
 			public void run() {
 				list.clear();
 
@@ -991,7 +990,6 @@ Urlinterface {
 		}, 2000);
 	}
 
-	@Override
 	public void onLoadMore() {
 
 		final Handler mHandleronLoadMore = new Handler() {
@@ -1018,7 +1016,6 @@ Urlinterface {
 		page = page + 1;
 
 		handler.postDelayed(new Runnable() {
-			@Override
 			public void run() {
 
 				Thread thread=new Thread()
@@ -1083,20 +1080,17 @@ Urlinterface {
 
 		int huifu_num = 0;
 
-		@Override
 		public int getCount() {
 			// TODO Auto-generated method stub
 
 			return list.size();// 数据总数
 		}
 
-		@Override
 		public Object getItem(int position) {
 			// TODO Auto-generated method stub
 			return list.get(position);
 		}
 
-		@Override
 		public long getItemId(int position) {
 			// TODO Auto-generated method stub
 			return position;
@@ -1285,7 +1279,6 @@ Urlinterface {
 			}
 			button1.setTag(position);
 			button1.setOnClickListener(new OnClickListener() {
-				@Override
 				public void onClick(View v) {
 					// TODO Auto-generated method stub
 					//					String position = v.getTag().toString();
@@ -1365,10 +1358,114 @@ Urlinterface {
 				Reply_edit = (EditText) layout1.findViewById(R.id.reply_edit);
 				Reply_edit.requestFocus();
 				Reply_edit.setHint(user_name + " "+HomeWorkParams.REPLY+" " + mess.getName() + ":");
+<<<<<<< HEAD
 				
 
 				
 				
+=======
+
+				final Handler mHandler = new Handler() {
+					public void handleMessage(android.os.Message msg) {
+						switch (msg.what) {
+						case 0:
+							final String json7 =  (String) msg.obj;
+							child_list = new ArrayList<Child_Micropost>();
+							if ("error".equals(json7)) {
+
+							} else {
+								JSONObject array;
+								try {
+									array = new JSONObject(json7);
+
+									String status = array.getString("status");
+									String notice = array.getString("notice");
+									child_list = new ArrayList<Child_Micropost>();
+									if ("success".equals(status)) {
+										String micropostsListJson = array
+												.getString("reply_microposts");
+										JSONObject microposts = new JSONObject(
+												micropostsListJson);
+										child_page = Integer.parseInt(microposts.getString("page"));
+										child_pages_count = Integer.parseInt(microposts
+												.getString("pages_count"));
+										String reply_microposts = microposts
+												.getString("reply_microposts");
+										JSONArray jsonArray2 = new JSONArray(
+												reply_microposts);
+
+										for (int i = 0; i < jsonArray2.length(); ++i) {
+											JSONObject o = (JSONObject) jsonArray2
+													.get(i);
+											String id = o.getString("id");
+											String sender_id = o
+													.getString("sender_id");
+											String sender_types = o
+													.getString("sender_types");
+											String sender_name = o
+													.getString("sender_name");
+
+
+											String sender_avatar_url = o
+													.getString("sender_avatar_url");
+											String content = o.getString("content");
+											String reciver_name = o
+													.getString("reciver_name");
+
+											String reciver_avatar_url = o
+													.getString("reciver_avatar_url");
+											String created_at = o
+													.getString("created_at");
+
+											Child_Micropost child = new Child_Micropost(
+													id, sender_id, sender_types,
+													sender_name, 
+													sender_avatar_url, content,
+													reciver_name, 
+													created_at);
+											child_list.add(child);
+										}
+
+									} else {
+										Toast.makeText(getApplicationContext(),
+												notice, 1).show();
+									}
+								} catch (JSONException e) {
+									// TODO Auto-generated catch block
+									e.printStackTrace();
+								}
+
+							}								
+
+							break;
+						default:
+							break;									
+						}
+					}
+				};
+				Thread thread=new Thread()
+				{
+					public void run()
+					{
+						try {
+							Map<String, String> map = new HashMap<String, String>();									
+							map.put("micropost_id", micropost_id);
+							json = HomeWorkTool.sendGETRequest(
+									Urlinterface.get_reply_microposts, map);
+							Message msg = new Message();//  创建Message 对象
+							msg.what = 0;
+							msg.obj = json;
+							mHandler.sendMessage(msg);
+						} catch (Exception e) {
+							// TODO Auto-generated catch block
+							e.printStackTrace();
+						}
+					}
+				};
+				thread.start();	
+
+
+>>>>>>> 1f586e44c53b3e4504f2deb7c16dc2783a07e71d
 				if (child_list.size()!=0) {
 					listView2 = (ListView) layout1.findViewById(R.id.aa);
 					listView2.setDivider(null);
@@ -1379,10 +1476,10 @@ Urlinterface {
 
 			}
 
-			
-			
-			
-			
+
+
+
+
 			if (mess.getReply_microposts_count()!=null) {
 				huifu.setText(HomeWorkParams.REPLY+"("+mess.getReply_microposts_count() +")");	
 			}
@@ -1392,7 +1489,6 @@ Urlinterface {
 			}
 			lookMore.setOnClickListener(new OnClickListener() {
 
-				@Override
 				public void onClick(View v) {
 					// TODO Auto-generated method stub
 					// huifu_num = huifu_num + 1;
@@ -1611,7 +1707,6 @@ Urlinterface {
 			// 点击 回复 默认 给主消息回复
 			huifu.setOnClickListener(new OnClickListener() {
 
-				@Override
 				public void onClick(View v) {
 					// TODO Auto-generated method stub
 					// huifu_num = huifu_num + 1;
@@ -1629,7 +1724,11 @@ Urlinterface {
 					//					
 					json="";
 
+<<<<<<< HEAD
 			
+=======
+
+>>>>>>> 1f586e44c53b3e4504f2deb7c16dc2783a07e71d
 					micropostAdapter = new MicropostAdapter();
 					listView_mes.setAdapter(micropostAdapter);
 
@@ -1649,26 +1748,22 @@ Urlinterface {
 	}
 	public class Adapter extends BaseAdapter {
 
-		@Override
 		public int getCount() {
 			// TODO Auto-generated method stub
 
 			return child_list.size();// 数据总数
 		}
 
-		@Override
 		public Object getItem(int position) {
 			// TODO Auto-generated method stub
 			return child_list.get(position);
 		}
 
-		@Override
 		public long getItemId(int position) {
 			// TODO Auto-generated method stub
 			return position;
 		}
 
-		@Override
 		public View getView(final int position, View convertView,
 				ViewGroup parent) {
 			Log.i("111111111", child_list.size() + "--");
@@ -1757,7 +1852,6 @@ Urlinterface {
 			}
 			delete.setTag(position);
 			delete.setOnClickListener(new OnClickListener() {
-				@Override
 				public void onClick(View v) {
 					DelNum = Integer.parseInt(v.getTag().toString());
 					json="";
@@ -1828,7 +1922,6 @@ Urlinterface {
 			});
 
 			reply.setOnClickListener(new OnClickListener() {
-				@Override
 				public void onClick(View v) {
 					Reply_edit.setHint(user_name + " 回复  "
 							+ child_Micropost.getSender_name() + " :");

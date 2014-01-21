@@ -44,25 +44,21 @@ private Context context1;
 		inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 	}
 
-	@Override
 	public int getCount() {
 		// TODO Auto-generated method stub
 		
 		return Micropostlist.size();//  数据总数
 	}
 
-	@Override
 	public Object getItem(int position) {
 		// TODO Auto-generated method stub
 		return Micropostlist.get(position);
 	}
 
-	@Override
 	public long getItemId(int position) {
 		// TODO Auto-generated method stub
 		return position;
 	}
-	@Override
 	public View getView( final int position, View convertView, ViewGroup parent) {
 		Log.i("111111111", Micropostlist.size()+"--"); 
 		if(convertView==null){

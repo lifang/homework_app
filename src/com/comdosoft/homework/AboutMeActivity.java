@@ -60,17 +60,17 @@ public class AboutMeActivity extends Activity
 		{
 			public void run()
 			{
-//				while(true)
-//				{
-					try {
-						get_News();
-						Thread.sleep(1000);
-						Log.i("aa", num+"新的东西");
-					} catch (InterruptedException e) {
-						// TODO Auto-generated catch block
-						e.printStackTrace();
-					}
-//				}
+				//				while(true)
+				//				{
+				try {
+					get_News();
+					Thread.sleep(1000);
+					Log.i("aa", num+"新的东西");
+				} catch (InterruptedException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+				//				}
 			}
 		}.start();
 	}
@@ -139,16 +139,6 @@ public class AboutMeActivity extends Activity
 
 		};	
 		thread.start();
-	}
-	public boolean onKeyDown(int keyCode, KeyEvent event) {
-		Intent intent = new Intent();
-		if (keyCode == KeyEvent.KEYCODE_BACK) {
-			AboutMeActivity.this.finish();
-			intent.setClass(AboutMeActivity.this, AboutMeActivity.class);
-			startActivity(intent);
-			return true;
-		}
-		return super.onKeyDown(keyCode, event);
 	}
 	//分割content
 	public List<String> divisionStr(String str)
@@ -229,7 +219,7 @@ public class AboutMeActivity extends Activity
 									String status=jsonobject.getString("status");
 									Message msg=new Message();
 									Log.i("aa", json);
-//									
+									//									
 									if(status.equals("error"))
 									{
 										msg.what=3;

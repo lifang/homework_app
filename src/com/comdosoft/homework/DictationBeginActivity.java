@@ -52,7 +52,7 @@ public class DictationBeginActivity extends Activity implements
 	private MediaPlayer mediaPlayer = new MediaPlayer();
 	private ProgressDialog mPd;
 
-	@Override
+	
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.question_dictation_begin);
@@ -233,7 +233,7 @@ public class DictationBeginActivity extends Activity implements
 
 	// 提交答题记录
 	class MyTrehad extends Thread {
-		@Override
+		
 		public void run() {
 			super.run();
 			Map<String, String> map = new HashMap<String, String>();
@@ -316,7 +316,7 @@ public class DictationBeginActivity extends Activity implements
 		dialog.show();
 	}
 
-	@Override
+	
 	public void onClick(View v) {
 		switch (v.getId()) {
 		case R.id.question_dictation_exit:
@@ -331,12 +331,12 @@ public class DictationBeginActivity extends Activity implements
 		}
 	}
 
-	@Override
+	
 	public void onPrepared(MediaPlayer mp) {
 		mp.start();
 	}
 
-	@Override
+	
 	public void onDestroy() {
 		mediaPlayer.release();
 		mediaPlayer = null;
