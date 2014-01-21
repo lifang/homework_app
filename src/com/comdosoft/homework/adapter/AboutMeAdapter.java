@@ -41,6 +41,7 @@ public class AboutMeAdapter extends BaseAdapter
 	HomeWork hw=(HomeWork) context.getApplicationContext();
 	public AboutMeAdapter()
 	{
+		
 	}
 	public AboutMeAdapter(List<AboutMePojo> amlist, Context context,ListView listview) {
 		Amlist = amlist;

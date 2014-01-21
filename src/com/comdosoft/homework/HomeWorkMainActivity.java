@@ -33,11 +33,19 @@ public class HomeWorkMainActivity extends TabActivity implements Urlinterface {
 	public Field mBottomRightStrip;
 	private HomeWork homework;
 
+	public static HomeWorkMainActivity instance = null;   
+
+
+
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.homewrok_main);
 		homework = (HomeWork) getApplication();
+
+		instance = this;
+
 		Intent intent = getIntent();
+
 		String json = intent.getStringExtra("json");
 
 		if (json != null || json != "") {

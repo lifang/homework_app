@@ -38,6 +38,7 @@ public class SwitchClassActivity extends Activity
 	private List<ClassPojo> classList=new ArrayList<ClassPojo>();
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
+		
 		setContentView(R.layout.switchclass);
 		hw = (HomeWork) getApplication();
 		SwitchClass_Et=(EditText) findViewById(R.id.SwitchClass_Et);

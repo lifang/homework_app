@@ -37,7 +37,6 @@ import android.widget.ImageButton;
 import android.widget.Toast;
 
 import com.comdosoft.homework.tools.HomeWorkTool;
-
 import com.comdosoft.homework.tools.Urlinterface;
 
 public class SettingActivity extends Activity  implements Urlinterface{
@@ -269,6 +268,8 @@ public class SettingActivity extends Activity  implements Urlinterface{
 		Intent intent = new Intent();
 		intent.setClass(this, LoginActivity.class);//
 		startActivity(intent);
+		HomeWorkMainActivity.instance.finish();
+
 		
 	}
 

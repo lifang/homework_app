@@ -10,7 +10,6 @@ public class Micropost
 	private String  user_id;//创建者id
 	private String user_types;//创建者类型
 	private String  name;//主消息的创建者名字，
-
 	private String  content;  //  消息内容
 	private String avatar_url; //创建者头像
 	private String  created_at;//创建时间

@@ -1,4 +1,4 @@
-
+﻿
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="fill_parent"
     android:layout_height="fill_parent">
@@ -73,6 +73,7 @@
             android:layout_height="51px"
         android:gravity="center"
         android:layout_marginTop="82px"
+          android:textColor="#FFFFFF"
         android:background="#92b81b"
         android:onClick="saveUpdata"
         android:text="@string/saveUpdata"
@@ -84,6 +85,7 @@
             android:layout_height="51px"
         android:gravity="center"
         android:layout_marginTop="85px"
+          android:textColor="#FFFFFF"
         android:background="#92b81b"
         android:onClick="changeClass"
         android:text="@string/changeClass"
@@ -95,6 +97,7 @@
         android:gravity="center"
         android:layout_marginTop="37px"
         android:background="#f08629"
+          android:textColor="#FFFFFF"
         android:onClick="set_exit"
         android:text="@string/exit_user"
         android:textSize="24px" /> 

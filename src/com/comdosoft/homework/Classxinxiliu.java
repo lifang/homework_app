@@ -382,7 +382,36 @@ Urlinterface {
 						String mess = homework.getNoselect_message();
 						list.clear();
 						//  该处解析  消息  json  并放入  list
+//						{"status":"success","micropost":{"content":"ull","created_at":"2014-01-16T17:51:43+08:00","id":1,"reply_microposts_count":0,"school_class_id":1,"updated_at":"2014-01-16T17:51:43+08:00","user_id":1,"user_types":1}}
 						
+						JSONObject js;
+						try {
+							js = new JSONObject(mess);
+							String micropost = js.getString("micropost");
+							JSONObject o =new JSONObject(micropost);
+							String micropost_id = o.getString("micropost_id");
+							String user_id = o.getString("user_id");
+							String user_types = o.getString("user_types");
+							String micropost_name = o.getString("name");
+
+							String content = o.getString("content");
+							String micropost_avatar_url = o.getString("avatar_url");
+//							String micropost_avatar_url = "";
+							String created_at = o.getString("created_at");
+							String reply_microposts_count = o
+							.getString("reply_microposts_count");
+
+							Micropost mic = new Micropost(micropost_id, user_id,
+									user_types, micropost_name,content,
+									micropost_avatar_url, created_at,
+									reply_microposts_count);
+							list.add(mic);
+						} catch (JSONException e) {
+							// TODO Auto-generated catch block
+							e.printStackTrace();
+						}
+//						
+				
 						
 					}
 					
@@ -1056,11 +1085,12 @@ Urlinterface {
 			Micropost_senderName.setText(mess.getName()); // 发消息的人
 
 			Micropost_content.setText(mess.getContent()); // 消息内容
+		
 			// 消息日期 到时 根据拿到的数据在修改
 			// SimpleDateFormat dateformat1=new
 			// SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 			// String a1=dateformat1.format(new Date(mess.getCreated_at()));
-			Micropost_date.setText(mess.getCreated_at()); // 消息日期
+			Micropost_date.setText(divisionTime(mess.getCreated_at())); // 消息日期
 			int mic_id =  Integer.parseInt(mess.getId());
 			for (int i = 0; i < care.size(); i++) {
 				int a=	(Integer) care.get(i);
@@ -1233,7 +1263,7 @@ Urlinterface {
 				public void onClick(View v) {
 					// TODO Auto-generated method stub
 					// huifu_num = huifu_num + 1;
-					json="";
+					
 					final Handler mHandler = new Handler() {
 						public void handleMessage(android.os.Message msg) {
 							switch (msg.what) {
@@ -1248,7 +1278,7 @@ Urlinterface {
 
 										String status = array.getString("status");
 										String notice = array.getString("notice");
-										child_list = new ArrayList<Child_Micropost>();
+										
 										if ("success".equals(status)) {
 											String micropostsListJson = array
 											.getString("reply_microposts");
@@ -1325,11 +1355,11 @@ Urlinterface {
 										Map<String, String> map = new HashMap<String, String>();
 										map.put("micropost_id", micropost_id);
 										map.put("page", child_page+"");
-										json = HomeWorkTool.sendGETRequest(
+									String	js = HomeWorkTool.sendGETRequest(
 												Urlinterface.get_reply_microposts, map);
 										Message msg = new Message();//  创建Message 对象
 										msg.what = 0;
-										msg.obj = json;
+										msg.obj = js;
 										mHandler.sendMessage(msg);
 									} catch (Exception e) {
 										// TODO Auto-generated catch block
@@ -1471,7 +1501,13 @@ Urlinterface {
 			return view;
 		}
 	}
-
+	//分割时间
+	public String divisionTime(String timeStr)
+	{
+		int temp1=timeStr.indexOf("T");
+		int temp2=timeStr.lastIndexOf("+");
+		return timeStr.substring(0, temp1)+" "+timeStr.substring(temp1+1, temp2);
+	}
 	public class Adapter extends BaseAdapter {
 
 		@Override
@@ -1575,7 +1611,7 @@ Urlinterface {
 			// String a1=dateformat1.format(new
 			// Date(child_Micropost.getCreated_at()));
 			Micropost_content.setText(child_Micropost.getContent() + " ("
-					+ child_Micropost.getCreated_at() + ")"); // 消息内容
+					+ divisionTime(child_Micropost.getCreated_at()) + ")"); // 消息内容
 
 			if (user_id.equals(child_Micropost.getSender_id())||user_id.equals(list.get(focus).getUser_id())) {
 				delete.setVisibility(View.VISIBLE);

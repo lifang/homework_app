@@ -15,7 +15,6 @@ public class AboutMePojo
 	public AboutMePojo() {
 	}
 
-
 	public AboutMePojo(String id, String micropost_id, String user_id,
 			String sender_avatar_url, String sender_name, String status,
 			String content, String created_at) {
