@@ -382,7 +382,36 @@ Urlinterface {
 						String mess = homework.getNoselect_message();
 						list.clear();
 						//  该处解析  消息  json  并放入  list
+//						{"status":"success","micropost":{"content":"ull","created_at":"2014-01-16T17:51:43+08:00","id":1,"reply_microposts_count":0,"school_class_id":1,"updated_at":"2014-01-16T17:51:43+08:00","user_id":1,"user_types":1}}
 						
+						JSONObject js;
+						try {
+							js = new JSONObject(mess);
+							String micropost = js.getString("micropost");
+							JSONObject o =new JSONObject(micropost);
+							String micropost_id = o.getString("micropost_id");
+							String user_id = o.getString("user_id");
+							String user_types = o.getString("user_types");
+							String micropost_name = o.getString("name");
+
+							String content = o.getString("content");
+							String micropost_avatar_url = o.getString("avatar_url");
+//							String micropost_avatar_url = "";
+							String created_at = o.getString("created_at");
+							String reply_microposts_count = o
+							.getString("reply_microposts_count");
+
+							Micropost mic = new Micropost(micropost_id, user_id,
+									user_types, micropost_name,content,
+									micropost_avatar_url, created_at,
+									reply_microposts_count);
+							list.add(mic);
+						} catch (JSONException e) {
+							// TODO Auto-generated catch block
+							e.printStackTrace();
+						}
+//						
+				
 						
 					}
 					

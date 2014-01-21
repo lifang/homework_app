@@ -11,7 +11,6 @@ public class QuestionPojo {
 	public QuestionPojo() {
 		super();
 	}
-
 	public QuestionPojo(int id, String content, String url) {
 		super();
 		this.id = id;

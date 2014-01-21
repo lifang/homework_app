@@ -41,12 +41,12 @@ public class AboutMeAdapter extends BaseAdapter
 	HomeWork hw=(HomeWork) context.getApplicationContext();
 	public AboutMeAdapter()
 	{
+		
 	}
-	public AboutMeAdapter(List<AboutMePojo> amlist, Context context,ListView listview,int class_id) {
+	public AboutMeAdapter(List<AboutMePojo> amlist, Context context,ListView listview) {
 		Amlist = amlist;
 		this.context = context;
 		this.listview=listview;
-		this.class_id=class_id;
 	}
 	public int getCount() {
 		return Amlist.size();
@@ -85,10 +85,10 @@ public class AboutMeAdapter extends BaseAdapter
 						@SuppressWarnings({ "unchecked", "rawtypes" })
 						public void run()
 						{
-							HashMap<String, Integer> mp=new HashMap();
-							mp.put("user_id", Integer.valueOf(Amlist.get(position).getUser_id()));
-							mp.put("school_class_id",class_id);
-							mp.put("message_id", Integer.valueOf(Amlist.get(position).getMicropost_id()));
+							HashMap<String, String> mp=new HashMap();
+							mp.put("user_id", Amlist.get(position).getUser_id());
+							mp.put("school_class_id",String.valueOf(hw.getClass_id()));
+							mp.put("message_id", Amlist.get(position).getMicropost_id());
 							String json=HomeWorkTool.doPost(Urlinterface.read_message, mp);
 							Message msg=new Message();
 							msg.what=2;
@@ -122,6 +122,7 @@ public class AboutMeAdapter extends BaseAdapter
 								if(status.equals("success"))
 								{
 									Amlist.remove(position);
+									handler.sendMessage(msg);
 								}
 								else
 								{
@@ -135,7 +136,6 @@ public class AboutMeAdapter extends BaseAdapter
 					}.start();
 				}
 			});
-
 			ImageView iv=(ImageView) convertView.findViewById(R.id.aboutme_oneIv);
 			String strUrl=Urlinterface.IP+Amlist.get(position).getSender_avatar_url();
 			iv.setTag(strUrl+Amlist.get(position).getId());
@@ -151,7 +151,6 @@ public class AboutMeAdapter extends BaseAdapter
 		return convertView;
 
 	}
-	
 	Handler handler=new Handler()
 	{
 		public void dispatchMessage(Message msg) {
