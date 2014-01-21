@@ -112,15 +112,15 @@ Urlinterface {
 		width=display.getWidth();
 		height=display.getHeight();
 		care = new ArrayList();
-		
-		 SharedPreferences  preferences = getSharedPreferences(SHARED, Context.MODE_PRIVATE);
-			
-			user_id = preferences.getString("user_id", null);
-			
-			school_class_id = preferences.getString("school_class_id", null);
-				
-				
-			
+
+		SharedPreferences  preferences = getSharedPreferences(SHARED, Context.MODE_PRIVATE);
+
+		user_id = preferences.getString("user_id", null);
+
+		school_class_id = preferences.getString("school_class_id", null);
+
+
+
 		//		 Intent intent = getIntent();//
 		//		 json = intent.getStringExtra("json"); // 获得上个页面传过来的
 
@@ -256,14 +256,14 @@ Urlinterface {
 					e.printStackTrace();
 				} 
 
-				
+
 				//  查看   跳到本界面的   处理操作
-				 message_id  = homework.getMessage_id();
+				message_id  = homework.getMessage_id();
 				if(message_id!=-1){
 					homework.setMessage_id(-1);  //  将  公共变量message_id  设置为  -1
 					child_list = new ArrayList<Child_Micropost>();
 					//					
-			
+
 					final Handler mHandler = new Handler() {
 						public void handleMessage(android.os.Message msg) {
 							switch (msg.what) {
@@ -335,7 +335,7 @@ Urlinterface {
 									}
 
 								}								
-						
+
 								break;
 							default:
 								break;									
@@ -349,7 +349,7 @@ Urlinterface {
 							try {
 								Map<String, String> map = new HashMap<String, String>();									
 								map.put("micropost_id", message_id+"");
-							String	re = HomeWorkTool.sendGETRequest(
+								String	re = HomeWorkTool.sendGETRequest(
 										Urlinterface.get_reply_microposts, map);
 								Message msg = new Message();//  创建Message 对象
 								msg.what = 0;
@@ -365,7 +365,7 @@ Urlinterface {
 
 					int a=0;
 					for (int i = 0; i < list.size(); i++) {
-						
+
 						if (Integer.parseInt(list.get(i).getId())==message_id) {
 							focus = i;   //   要展开的  主消息  的   位置
 							number = 1;	
@@ -378,12 +378,12 @@ Urlinterface {
 						}
 					}
 					if(a==list.size()){//  若第一页主消息中没有  提示信息所在，，则  单独显示  该条提示信息
-						
+
 						String mess = homework.getNoselect_message();
 						list.clear();
 						//  该处解析  消息  json  并放入  list
-//						{"status":"success","micropost":{"content":"ull","created_at":"2014-01-16T17:51:43+08:00","id":1,"reply_microposts_count":0,"school_class_id":1,"updated_at":"2014-01-16T17:51:43+08:00","user_id":1,"user_types":1}}
-						
+						//						{"status":"success","micropost":{"content":"ull","created_at":"2014-01-16T17:51:43+08:00","id":1,"reply_microposts_count":0,"school_class_id":1,"updated_at":"2014-01-16T17:51:43+08:00","user_id":1,"user_types":1}}
+
 						JSONObject js;
 						try {
 							js = new JSONObject(mess);
@@ -396,7 +396,7 @@ Urlinterface {
 
 							String content = o.getString("content");
 							String micropost_avatar_url = o.getString("avatar_url");
-//							String micropost_avatar_url = "";
+							//							String micropost_avatar_url = "";
 							String created_at = o.getString("created_at");
 							String reply_microposts_count = o
 							.getString("reply_microposts_count");
@@ -410,15 +410,15 @@ Urlinterface {
 							// TODO Auto-generated catch block
 							e.printStackTrace();
 						}
-//						
-				
-						
+						//						
+
+
 					}
-					
+
 				}
 				micropostAdapter = new MicropostAdapter();
 				listView_mes.setAdapter(micropostAdapter);
-//				listView_mes.setSelection(focus);
+				//				listView_mes.setSelection(focus);
 				listView_mes.setXListViewListener(Classxinxiliu.this);
 				handler = new Handler();
 				break;
@@ -1085,7 +1085,7 @@ Urlinterface {
 			Micropost_senderName.setText(mess.getName()); // 发消息的人
 
 			Micropost_content.setText(mess.getContent()); // 消息内容
-		
+
 			// 消息日期 到时 根据拿到的数据在修改
 			// SimpleDateFormat dateformat1=new
 			// SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
@@ -1106,9 +1106,9 @@ Urlinterface {
 					final Handler gzHandler=new Handler()
 					{
 						public void handleMessage(android.os.Message msg) {
+							JSONObject jsonobject;
 							switch (msg.what) {
 							case 0:
-								JSONObject jsonobject;
 								try {
 									jsonobject = new JSONObject(msg.obj.toString());
 									String status=jsonobject.getString("status");
@@ -1117,6 +1117,22 @@ Urlinterface {
 									{
 										care.add(mess.getId());  
 										guanzhu.setText("已关注");
+									}
+									Toast.makeText(getApplicationContext(), notic, 0).show();
+								} catch (JSONException e) {
+									// TODO Auto-generated catch block
+									e.printStackTrace();
+								}
+								break;
+							case 1:
+								try {
+									jsonobject = new JSONObject(msg.obj.toString());
+									String status=jsonobject.getString("status");
+									String notic=jsonobject.getString("notice");
+									if(status.equals("success"))
+									{
+										care.remove(mess.getId());  
+										guanzhu.setText("关注");
 									}
 									Toast.makeText(getApplicationContext(), notic, 0).show();
 								} catch (JSONException e) {
@@ -1136,13 +1152,23 @@ Urlinterface {
 						public void run()
 						{
 							try {
-								HashMap mp=new HashMap();
-								mp.put("user_id", user_id);
-								mp.put("micropost_id", mess.getId());
-								String str=HomeWorkTool.sendGETRequest(Urlinterface.add_concern, mp);
+								HashMap<String,String> mp=new HashMap();
+								mp.put("user_id", String.valueOf(user_id));
+								mp.put("micropost_id", String.valueOf(mess.getId()));
+								String str=null;
 								Message msg = new Message();//  创建Message 对象
-								msg.what = 0;
-								msg.obj = str;
+								if(guanzhu.getText().equals("关注"))
+								{
+									str=HomeWorkTool.sendGETRequest(Urlinterface.add_concern, mp);
+									msg.what = 0;
+									msg.obj = str;
+								}
+								else if(guanzhu.getText().equals("已关注"))
+								{
+									str=HomeWorkTool.sendGETRequest(Urlinterface.unfollow, mp);
+									msg.what = 1;
+									msg.obj = str;
+								}
 								gzHandler.sendMessage(msg);
 							} catch (Exception e) {
 								// TODO Auto-generated catch block
@@ -1263,7 +1289,7 @@ Urlinterface {
 				public void onClick(View v) {
 					// TODO Auto-generated method stub
 					// huifu_num = huifu_num + 1;
-					
+
 					final Handler mHandler = new Handler() {
 						public void handleMessage(android.os.Message msg) {
 							switch (msg.what) {
@@ -1278,7 +1304,7 @@ Urlinterface {
 
 										String status = array.getString("status");
 										String notice = array.getString("notice");
-										
+
 										if ("success".equals(status)) {
 											String micropostsListJson = array
 											.getString("reply_microposts");
@@ -1355,7 +1381,7 @@ Urlinterface {
 										Map<String, String> map = new HashMap<String, String>();
 										map.put("micropost_id", micropost_id);
 										map.put("page", child_page+"");
-									String	js = HomeWorkTool.sendGETRequest(
+										String	js = HomeWorkTool.sendGETRequest(
 												Urlinterface.get_reply_microposts, map);
 										Message msg = new Message();//  创建Message 对象
 										msg.what = 0;

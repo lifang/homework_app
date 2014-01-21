@@ -41,7 +41,7 @@ public interface Urlinterface {
 	String read_message=IP+"/api/students/read_message";
 	// String UPLOAD_FACE = IP + "/api/students/upload_avatar"; // 上传头像
 	String add_concern=IP+"/api/students/add_concern";			//关注消息
-	
+	String unfollow=IP+"/api/students/add_concern";			//取消关注消息
 	String SAVE_DICTATION = IP + "/api/students/record_answer_info"; // 保存拼写答题记录
 	String QQ_LOGIN = IP + "/api/students/login"; // qq登录
 }
