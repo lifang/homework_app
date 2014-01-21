@@ -27,38 +27,7 @@
         android:screenOrientation="portrait"
         android:theme="@android:style/Theme.NoTitleBar" >
         <activity
-
-            android:name=".MainActivity"
-            android:label="@string/app_name" >      <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
-        </activity>
-        <activity
-
-
-            android:name=".HomeWorkIngActivity"
-            android:label="@string/app_name" >
-        </activity>
-        <activity android:name=".RegistrationActivity" />
-        <activity
-            android:name=".SpeakPrepareActivity"
-            android:label="@string/app_name" >
-        </activity>
-        <activity android:name="com.comdosoft.homework.Classxinxiliu" >
-            
-        </activity>
-        <activity
-            android:name=".SpeakBeginActivity"
-            android:label="@string/app_name" >
-        </activity>
-        <activity
             android:name=".DictationPrepareActivity"
-            android:label="@string/app_name" >
-        </activity>
-        <activity
-            android:name=".HomeWorkMainActivity"
             android:label="@string/app_name" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -67,8 +36,18 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".HomeWorkMainActivity"
-            android:label="@string/app_name" />
+            android:name=".HomeWorkIngActivity"
+            android:label="@string/app_name" >
+        </activity>
+        <activity android:name=".RegistrationActivity" />
+        <activity
+            android:name=".SpeakPrepareActivity"
+            android:label="@string/app_name" >
+        </activity>
+        <activity
+            android:name=".SpeakBeginActivity"
+            android:label="@string/app_name" >
+        </activity>
         <activity
             android:name=".DictationBeginActivity"
             android:label="@string/app_name" />
@@ -95,6 +74,7 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+        <activity android:name=".HomeWorkMainActivity" />
         <activity android:name=".Spec1" />
         <activity android:name=".Spec3" />
         <activity android:name=".Spec4" />

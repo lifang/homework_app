@@ -5,25 +5,19 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 import com.comdosoft.homework.pojo.ListeningPojo;
 import com.comdosoft.homework.pojo.QuestionPojo;
-import com.comdosoft.homework.tools.HomeWorkTool;
 import com.comdosoft.homework.tools.ListeningQuestionList;
 import com.comdosoft.homework.tools.Urlinterface;
-
 import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.Intent;
-import android.media.AudioManager;
 import android.media.MediaPlayer;
 import android.media.MediaPlayer.OnCompletionListener;
 import android.media.MediaPlayer.OnPreparedListener;
-import android.media.SoundPool;
-import android.media.SoundPool.OnLoadCompleteListener;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
@@ -65,20 +59,27 @@ public class DictationPrepareActivity extends Activity implements
 		findViewById(R.id.question_dictation_exit).setOnClickListener(this);
 		dictationImg = (ImageView) findViewById(R.id.question_dictation_img);
 		dictationImg.setOnClickListener(this);
-		mPd = new ProgressDialog(this);
-		mPd.setMessage("正在加载...");
-		mPd.show();
 		// setMp3Url();
 		new MyThread().start();
 	}
 
+	@Override
+	protected void onRestart() {
+		super.onRestart();
+		Log.i("Ax", "onRestart");
+		// setMp3Url();
+	}
+
 	// 设置音频路径
 	public void setMp3Url() {
+		// mp3List.clear();
+		// mp3Index = 0;
+		Log.i("Ax", "setMp3URL");
 		int index = ListeningQuestionList.getRecordCount();
+		Toast.makeText(getApplicationContext(), index + "index", 0).show();
 		ListeningPojo lp = ListeningQuestionList.getListeningPojo(index);
 		List<QuestionPojo> qpList = lp.getQuesttionList();
 		for (int i = 0; i < qpList.size(); i++) {
-			Log.i("Ax", IP + qpList.get(i).getUrl());
 			mp3List.add(IP + qpList.get(i).getUrl());
 		}
 	}
@@ -150,11 +151,11 @@ public class DictationPrepareActivity extends Activity implements
 				Map<String, String> map = new HashMap<String, String>();
 				map.put("student_id", "1");
 				map.put("publish_question_package_id", "1");
-				analyzeJson(HomeWorkTool
-						.sendGETRequest(
-								"http://192.168.0.250:3004/api/students/into_daily_tasks",
-								map));
-				// analyzeJson(JSON);
+				// analyzeJson(HomeWorkTool
+				// .sendGETRequest(
+				// "http://192.168.0.250:3004/api/students/into_daily_tasks",
+				// map));
+				analyzeJson(JSON);
 				setMp3Url();
 				mHandler.sendEmptyMessage(1);
 			} catch (Exception e) {

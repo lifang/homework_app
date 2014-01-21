@@ -9,24 +9,24 @@ import java.util.Random;
 import com.comdosoft.homework.pojo.DictationPojo;
 import com.comdosoft.homework.pojo.QuestionPojo;
 import com.comdosoft.homework.tools.HomeWorkParams;
-import com.comdosoft.homework.tools.HomeWorkTool;
 import com.comdosoft.homework.tools.ListeningQuestionList;
 import com.comdosoft.homework.tools.Soundex_Levenshtein;
 import com.comdosoft.homework.tools.Urlinterface;
-
 import android.app.Activity;
+import android.app.Dialog;
+import android.app.ProgressDialog;
 import android.content.Intent;
 import android.graphics.Color;
 import android.media.MediaPlayer;
 import android.media.MediaPlayer.OnPreparedListener;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
+import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
-import android.widget.Toast;
 import android.widget.LinearLayout.LayoutParams;
 import android.widget.TextView;
 
@@ -50,6 +50,7 @@ public class DictationBeginActivity extends Activity implements
 	private TextView check;
 	private StringBuffer answer = new StringBuffer();
 	private MediaPlayer mediaPlayer = new MediaPlayer();
+	private ProgressDialog mPd;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -62,6 +63,8 @@ public class DictationBeginActivity extends Activity implements
 		findViewById(R.id.question_dictation_exit).setOnClickListener(this);
 		findViewById(R.id.question_dictation_check).setOnClickListener(this);
 		findViewById(R.id.question_dictation_play).setOnClickListener(this);
+		mPd = new ProgressDialog(this);
+
 		init();
 	}
 
@@ -179,30 +182,36 @@ public class DictationBeginActivity extends Activity implements
 		} else {
 			// Next
 			if (bigIndex < ListeningQuestionList.getListeningPojoList().size()) {
-				if (smallIndex == qpList.size()) {
-					// 大题里最后一小题
-					bigIndex++;
-					smallIndex = 0;
-					if (bigIndex == ListeningQuestionList
-							.getListeningPojoList().size()) {
-						Toast.makeText(getApplicationContext(), "aaaa", 0)
-								.show();
-						return;
-					}
-
-					// ListeningQuestionList.delListeningPojoList(0);
-					// Intent intnet = new Intent(getApplicationContext(),
-					// HomeWorkIngActivity.class);
-					// startActivity(intnet);
-				}
 				if (answer.length() > 0) {
 					answer.delete(answer.length() - 3, answer.length());
 				}
-				check.setText("检查");
 				new MyTrehad().start();
+				if (smallIndex == qpList.size()) {
+					// 切换答题
+					bigIndex++;
+					smallIndex = 0;
+
+					if (bigIndex == ListeningQuestionList
+							.getListeningPojoList().size()) {
+						MyDialog("恭喜完成今天的朗读作业!", "确认", "取消", 2);
+						return;
+					}
+
+					ListeningQuestionList.Record_Count = ListeningQuestionList.Record_Count + 1;
+					MyDialog("你已经答完本题确认继续下一题吗?", "确认", "取消", 1);
+					return;
+				}
+				check.setText("检查");
 				init();
 			}
 		}
+	}
+
+	// 切换下一题
+	public void nextQuestion() {
+		mPd = new ProgressDialog(DictationBeginActivity.this);
+		mPd.setMessage(HomeWorkParams.PD_FINISH_QUESTION);
+		mPd.show();
 	}
 
 	// 播放音频
@@ -223,7 +232,6 @@ public class DictationBeginActivity extends Activity implements
 
 	// 提交答题记录
 	class MyTrehad extends Thread {
-
 		@Override
 		public void run() {
 			super.run();
@@ -238,16 +246,80 @@ public class DictationBeginActivity extends Activity implements
 							+ "");
 			map.put("answer", answer.toString());
 			map.put("question_types", "0");
-			Log.i("Ax", "post:" + HomeWorkTool.doPost(SAVE_DICTATION, map));
 			answer.delete(0, answer.length());
 		}
+	}
+
+	public void myFinish() {
+		finish();
+		Intent intent = new Intent();
+		intent.setClass(DictationBeginActivity.this, HomeWorkMainActivity.class);
+		startActivity(intent);
+	}
+
+	// 自定义dialog设置
+	private void MyDialog(String title, String btn_one, String Btn_two,
+			final int type) {
+		final Dialog dialog = new Dialog(this, R.style.Transparent);
+		dialog.setContentView(R.layout.my_dialog);
+		dialog.setCancelable(true);
+
+		ImageView dialog_img = (ImageView) dialog.findViewById(R.id.dialog_img);
+		TextView title_tv = (TextView) dialog.findViewById(R.id.dialog_title);
+		Button dialog_ok = (Button) dialog.findViewById(R.id.dialog_ok);
+		Button dialog_no = (Button) dialog.findViewById(R.id.dialog_no);
+
+		title_tv.setText(title);
+		dialog_ok.setText(btn_one);
+		dialog_no.setText(Btn_two);
+
+		dialog_ok.setOnClickListener(new View.OnClickListener() {
+			public void onClick(View v) {
+				dialog.dismiss();
+				switch (type) {
+				case 0:
+					myFinish();
+					break;
+				case 1:
+					check.setText("检查");
+					init();
+					// Intent intent = new Intent();
+					// intent.setClass(DictationBeginActivity.this,
+					// DictationPrepareActivity.class);
+					// startActivity(intent);
+					break;
+				case 2:
+					myFinish();
+					break;
+				}
+			}
+		});
+		dialog_no.setOnClickListener(new View.OnClickListener() {
+			public void onClick(View v) {
+				dialog.dismiss();
+				switch (type) {
+				case 0:
+					break;
+				case 1:
+					myFinish();
+					break;
+				}
+			}
+		});
+		if (type == 2) {
+			dialog_no.setVisibility(View.GONE);
+			dialog_ok.setBackgroundColor(getResources().getColor(R.color.lvse));
+		} else {
+			dialog_img.setVisibility(View.GONE);
+		}
+		dialog.show();
 	}
 
 	@Override
 	public void onClick(View v) {
 		switch (v.getId()) {
 		case R.id.question_dictation_exit:
-			this.finish();
+			MyDialog("你还没有做完题,确认要退出吗?", "确认", "取消", 0);
 			break;
 		case R.id.question_dictation_check:
 			check();

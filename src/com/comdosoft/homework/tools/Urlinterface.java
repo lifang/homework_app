@@ -45,8 +45,8 @@ public interface Urlinterface {
 																				// 子消息
 	String MY_MICROPOSTS = IP + "/api/students/my_microposts"; // 分页 获取 子消息
 	String delete_message = IP + "/api/students/delete_message"; // 删除消息
-	String add_concern=IP+"/api/students/add_concern";			//关注消息
-	
+	String add_concern = IP + "/api/students/add_concern"; // 关注消息
+
 	String SAVE_DICTATION = IP + "/api/students/record_answer_info"; // 保存拼写答题记录
 	String QQ_LOGIN = IP + "/api/students/login"; // qq登录
 }
