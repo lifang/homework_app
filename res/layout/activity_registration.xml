@@ -1,4 +1,4 @@
-
+﻿
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="fill_parent"
     android:layout_height="fill_parent">
@@ -17,7 +17,7 @@
         android:layout_width="176px"
         android:layout_height="186px"
         android:background="@drawable/moren"
-        android:layout_marginTop="94px"
+        android:layout_marginTop="494px"
       />
 
    
@@ -103,7 +103,7 @@
             android:id="@+id/paizhaoshangchuan"
             android:layout_width="480px"
             android:layout_height="51px"
-        android:layout_marginTop="585px"
+        android:layout_marginTop="885px"
         android:background="#FF8C00"
             android:onClick="reg_paizhaoshangchuan"
             android:textColor="#FFFFFF"

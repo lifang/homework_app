@@ -1,4 +1,4 @@
-
+﻿
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="fill_parent"
     android:layout_height="fill_parent">
@@ -42,7 +42,7 @@
           <EditText
         android:id="@+id/set_nickname"
         android:layout_width="480px"
-            android:layout_height="51px"
+            android:layout_height="47px"
         android:layout_marginTop="21px"
         android:gravity="center"
         android:hint="fwefsf"
@@ -59,7 +59,7 @@
           <EditText
         android:id="@+id/set_name"
          android:layout_width="480px"
-            android:layout_height="51px"
+            android:layout_height="47px"
         android:layout_marginTop="21px"
         android:gravity="center"
         android:hint="马丁"
