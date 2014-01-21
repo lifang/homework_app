@@ -10,6 +10,8 @@
     android:background="@drawable/bj"
     android:orientation="vertical"
     android:gravity="center_horizontal"
+    android:focusable="true"
+android:focusableInTouchMode="true"
     >
 
     <ImageButton
@@ -38,7 +40,7 @@
             android:layout_height="71px"
         android:layout_marginTop="22px"
         android:gravity="center"
-        android:hint="fwefsf"
+        
         android:textSize="24px" />
            <TextView
        
@@ -55,7 +57,7 @@
             android:layout_height="71px"
         android:layout_marginTop="22px"
         android:gravity="center"
-        android:hint="马丁"
+        
         android:textSize="24px" />    
                    <TextView
        
@@ -71,13 +73,13 @@
          android:layout_width="480px"
             android:layout_height="71px"
         android:gravity="center"
-        android:hint="fwefsf;wer"
+       
         android:layout_marginTop="22px"
         android:textSize="24px" /> 
                   <Button
      
        android:layout_width="480px"
-            android:layout_height="51px"
+            android:layout_height="71px"
         android:gravity="center"
         android:layout_marginTop="69px"
         android:background="#FFFF00"
@@ -102,7 +104,7 @@
 <Button
             android:id="@+id/paizhaoshangchuan"
             android:layout_width="480px"
-            android:layout_height="51px"
+            android:layout_height="71px"
         android:layout_marginTop="885px"
         android:background="#FF8C00"
             android:onClick="reg_paizhaoshangchuan"
@@ -112,7 +114,7 @@
 <Button
             android:id="@+id/congxiangce"
            android:layout_width="480px"
-            android:layout_height="51px"
+            android:layout_height="71px"
          android:background="#FF8C00"
              android:onClick="reg_congxiangce"
              android:layout_marginTop="28px"

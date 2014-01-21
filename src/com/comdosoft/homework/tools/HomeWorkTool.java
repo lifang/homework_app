@@ -309,7 +309,7 @@ public class HomeWorkTool implements Urlinterface {
 				params = params.deleteCharAt(params.length() - 1);
 			}
 			URL url = new URL(reqUrl);
-			Log.i("linshi", url.toString());
+			Log.i(tag, url.toString());
 			url_con = (HttpURLConnection) url.openConnection();
 			url_con.setRequestMethod("POST");
 			System.setProperty("sun.net.client.defaultConnectTimeout",
@@ -411,8 +411,7 @@ public class HomeWorkTool implements Urlinterface {
 		// params.height = totalHeight + (listView.getDividerHeight() *
 		// (listAdapter.getCount() - 1))+157;
 		params.height = totalHeight
-				+ (listView.getDividerHeight() * (listAdapter.getCount()))
-				+ 127;
+				+ (listView.getDividerHeight() * (listAdapter.getCount()));
 		// listView.getDividerHeight()获取子项间分隔符占用的高度
 
 		listView.setLayoutParams(params);

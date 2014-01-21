@@ -30,7 +30,7 @@ import android.widget.LinearLayout;
 import android.widget.LinearLayout.LayoutParams;
 import android.widget.TextView;
 
-// 拼写答题    马龙    2014年1月20日
+// 拼写答题    马龙    2014年1月21日
 public class DictationBeginActivity extends Activity implements
 		OnClickListener, HomeWorkParams, OnPreparedListener, Urlinterface {
 
@@ -78,7 +78,8 @@ public class DictationBeginActivity extends Activity implements
 		editLinearLayout.removeAllViews();
 
 		// 获取已答过题目记录数
-		bigIndex = ListeningQuestionList.getRecordCount();
+//		bigIndex = ListeningQuestionList.getRecordCount();
+		bigIndex = ListeningQuestionList.Record_Count;
 
 		// 获取小题数据
 		qpList = ListeningQuestionList.getListeningPojo(bigIndex)
@@ -281,12 +282,12 @@ public class DictationBeginActivity extends Activity implements
 					myFinish();
 					break;
 				case 1:
-					check.setText("检查");
-					init();
-					// Intent intent = new Intent();
-					// intent.setClass(DictationBeginActivity.this,
-					// DictationPrepareActivity.class);
-					// startActivity(intent);
+//					check.setText("检查");
+//					init();
+					Intent intent = new Intent();
+					intent.setClass(DictationBeginActivity.this,
+							DictationPrepareActivity.class);
+					startActivity(intent);
 					break;
 				case 2:
 					myFinish();

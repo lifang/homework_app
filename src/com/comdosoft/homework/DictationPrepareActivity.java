@@ -27,7 +27,7 @@ import android.view.View.OnClickListener;
 import android.widget.ImageView;
 import android.widget.Toast;
 
-// 拼写准备    马龙    2014年1月20日
+// 拼写准备    马龙    2014年1月21日
 public class DictationPrepareActivity extends Activity implements
 		OnClickListener, OnPreparedListener, OnCompletionListener, Urlinterface {
 
@@ -43,9 +43,6 @@ public class DictationPrepareActivity extends Activity implements
 			super.handleMessage(msg);
 			switch (msg.what) {
 			case 1:
-				mPd.dismiss();
-				break;
-			case 2:
 				break;
 			}
 		}
@@ -60,23 +57,21 @@ public class DictationPrepareActivity extends Activity implements
 		dictationImg = (ImageView) findViewById(R.id.question_dictation_img);
 		dictationImg.setOnClickListener(this);
 		// setMp3Url();
-		// new MyThread().start();
 	}
 
 	@Override
 	protected void onRestart() {
 		super.onRestart();
 		Log.i("Ax", "onRestart");
-		// setMp3Url();
+		setMp3Url();
 	}
 
 	// 设置音频路径
 	public void setMp3Url() {
-		// mp3List.clear();
-		// mp3Index = 0;
-		Log.i("Ax", "setMp3URL");
-		int index = ListeningQuestionList.getRecordCount();
-		Toast.makeText(getApplicationContext(), index + "index", 0).show();
+		mp3List.clear();
+		mp3Index = 0;
+		// int index = ListeningQuestionList.getRecordCount();
+		int index = ListeningQuestionList.Record_Count;
 		ListeningPojo lp = ListeningQuestionList.getListeningPojo(index);
 		List<QuestionPojo> qpList = lp.getQuesttionList();
 		for (int i = 0; i < qpList.size(); i++) {
@@ -136,6 +131,10 @@ public class DictationPrepareActivity extends Activity implements
 				}
 				ListeningQuestionList.addListeningPojo(new ListeningPojo(id,
 						question));
+
+				ListeningQuestionList.Record_Count = 0;
+				// ListeningQuestionList.Record_Count = ListeningQuestionList
+				// .getRecordCount();
 			}
 		} catch (JSONException e) {
 			e.printStackTrace();

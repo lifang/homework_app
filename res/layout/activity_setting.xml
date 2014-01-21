@@ -6,6 +6,8 @@
         android:layout_width="fill_parent"
         android:layout_height="fill_parent"
         android:background="#ede9ea"
+        android:focusable="true"
+        android:focusableInTouchMode="true"
         android:gravity="center_horizontal"
         android:orientation="vertical" >
 
@@ -37,7 +39,6 @@
             android:layout_height="71px"
             android:layout_marginTop="21px"
             android:gravity="center"
-            android:hint="fwefsf"
             android:textSize="24px" />
 
         <TextView
@@ -54,12 +55,11 @@
             android:layout_height="71px"
             android:layout_marginTop="21px"
             android:gravity="center"
-            android:hint="马丁"
             android:textSize="24px" />
 
         <Button
             android:layout_width="480px"
-            android:layout_height="51px"
+            android:layout_height="71px"
             android:layout_marginTop="82px"
             android:background="#92b81b"
             android:gravity="center"
@@ -70,7 +70,7 @@
 
         <Button
             android:layout_width="480px"
-            android:layout_height="51px"
+            android:layout_height="71px"
             android:layout_marginTop="85px"
             android:background="#92b81b"
             android:gravity="center"
@@ -81,7 +81,7 @@
 
         <Button
             android:layout_width="480px"
-            android:layout_height="51px"
+            android:layout_height="71px"
             android:layout_marginTop="37px"
             android:background="#f08629"
             android:gravity="center"
