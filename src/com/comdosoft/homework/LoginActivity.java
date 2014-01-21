@@ -65,14 +65,14 @@ public class LoginActivity extends Activity implements Urlinterface {
 		sp.edit().putString("user_id", "1").commit();
 		sp.edit().putString("school_class_id", "1").commit();
 
-		// if (sp.getString("user_id", "").equals("")
-		// && sp.getString("school_class_id", "").equals("")) {
-		// onClickLogin();
-		// } else {
-		Intent intent = new Intent(getApplicationContext(),
-				HomeWorkMainActivity.class);
-		startActivity(intent);
-		// }
+		if (sp.getString("user_id", "").equals("")
+				&& sp.getString("school_class_id", "").equals("")) {
+			onClickLogin();
+		} else {
+			Intent intent = new Intent(getApplicationContext(),
+					HomeWorkMainActivity.class);
+			startActivity(intent);
+		}
 	}
 
 	@Override
