@@ -33,6 +33,7 @@ public class HomeWork extends Application {
 	public HomeWork() {
 		this.setQuestion_index(0);
 		this.setMainItem(0);
+		this.setMessage_id(-1);
 	}
 
 	public int getQuestion_index() {

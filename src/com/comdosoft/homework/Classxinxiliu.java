@@ -18,7 +18,6 @@ import org.json.JSONObject;
 
 import android.app.Activity;
 import android.content.Context;
-import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -40,7 +39,6 @@ import android.widget.EditText;
 import android.widget.GridView;
 import android.widget.ImageButton;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -133,10 +131,6 @@ Urlinterface {
 		listView_mes = (XListView) findViewById(R.id.pull_refresh_list);
 		listView_mes.setPullLoadEnable(true);
 		listView_mes.setDivider(null);
-		stuList.add(new ClassStuPojo(1,"tea","/homework_system/avatars/students/student_1.jpg","u4e0a\u5584\u82e5\u6c34"));
-		stuList.add(new ClassStuPojo(2,"tea","/homework_system/avatars/students/student_2.png","u4e0a\u5584\u82e5\u6c341"));
-		stuList.add(new ClassStuPojo(3,"tea","/homework_system/avatars/students/student_1.jpg","u4e0a\u5584\u82e5\u6c342"));
-		stuList.add(new ClassStuPojo(4,"tea","/homework_system/avatars/students/student_1.jpg","u4e0a\u5584\u82e5\u6c343"));
 
 		thread.start();	
 		handler = new Handler();
