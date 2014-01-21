@@ -370,7 +370,7 @@ Urlinterface {
 							a= i+1;
 						}
 					}
-					if(a==list.size()){//  若第一页主消息中没有  提示信息所在，，则  单独显示  该条提示信息
+					if(a==list.size()&&a!=0){//  若第一页主消息中没有  提示信息所在，，则  单独显示  该条提示信息
 
 						String mess = homework.getNoselect_message();
 						list.clear();
@@ -447,6 +447,7 @@ Urlinterface {
 								Toast.makeText(getApplicationContext(), notice, 1)
 								.show();
 								fabiao_content.setText("");
+								
 							} else {
 								Toast.makeText(getApplicationContext(), notice, 1)
 								.show();
@@ -528,6 +529,10 @@ Urlinterface {
 							if ("success".equals(status)) {
 								Toast.makeText(getApplicationContext(), notice, 0)
 								.show();
+								micropostAdapter = new MicropostAdapter();
+								listView_mes.setAdapter(micropostAdapter);
+
+								listView_mes.setSelection(focus);
 							} else {
 								Toast.makeText(getApplicationContext(), notice, 0)
 								.show();
@@ -660,6 +665,8 @@ Urlinterface {
 
 				if ( true ==status) {
 					String micropostsListJson = array.getString("details_microposts");
+					page = Integer.parseInt(array
+							.getString("page"));
 					pages_count = Integer.parseInt(array.getString("pages_count"));
 
 					JSONArray jsonArray2 = new JSONArray(micropostsListJson);
@@ -1259,6 +1266,107 @@ Urlinterface {
 				Reply_edit = (EditText) layout1.findViewById(R.id.reply_edit);
 				Reply_edit.requestFocus();
 				Reply_edit.setHint(user_name + " "+HomeWorkParams.REPLY+" " + mess.getName() + ":");
+				
+				final Handler mHandler = new Handler() {
+					public void handleMessage(android.os.Message msg) {
+						switch (msg.what) {
+						case 0:
+							final String json7 =  (String) msg.obj;
+							child_list = new ArrayList<Child_Micropost>();
+							if ("error".equals(json7)) {
+
+							} else {
+								JSONObject array;
+								try {
+									array = new JSONObject(json7);
+
+									String status = array.getString("status");
+									String notice = array.getString("notice");
+									child_list = new ArrayList<Child_Micropost>();
+									if ("success".equals(status)) {
+										String micropostsListJson = array
+										.getString("reply_microposts");
+										JSONObject microposts = new JSONObject(
+												micropostsListJson);
+										child_page = Integer.parseInt(microposts.getString("page"));
+										child_pages_count = Integer.parseInt(microposts
+												.getString("pages_count"));
+										String reply_microposts = microposts
+										.getString("reply_microposts");
+										JSONArray jsonArray2 = new JSONArray(
+												reply_microposts);
+
+										for (int i = 0; i < jsonArray2.length(); ++i) {
+											JSONObject o = (JSONObject) jsonArray2
+											.get(i);
+											String id = o.getString("id");
+											String sender_id = o
+											.getString("sender_id");
+											String sender_types = o
+											.getString("sender_types");
+											String sender_name = o
+											.getString("sender_name");
+
+
+											String sender_avatar_url = o
+											.getString("sender_avatar_url");
+											String content = o.getString("content");
+											String reciver_name = o
+											.getString("reciver_name");
+
+											String reciver_avatar_url = o
+											.getString("reciver_avatar_url");
+											String created_at = o
+											.getString("created_at");
+
+											Child_Micropost child = new Child_Micropost(
+													id, sender_id, sender_types,
+													sender_name, 
+													sender_avatar_url, content,
+													reciver_name, 
+													created_at);
+											child_list.add(child);
+										}
+
+									} else {
+										Toast.makeText(getApplicationContext(),
+												notice, 1).show();
+									}
+								} catch (JSONException e) {
+									// TODO Auto-generated catch block
+									e.printStackTrace();
+								}
+
+							}								
+							
+							break;
+						default:
+							break;									
+						}
+					}
+				};
+				Thread thread=new Thread()
+				{
+					public void run()
+					{
+						try {
+							Map<String, String> map = new HashMap<String, String>();									
+							map.put("micropost_id", micropost_id);
+							json = HomeWorkTool.sendGETRequest(
+									Urlinterface.get_reply_microposts, map);
+							Message msg = new Message();//  创建Message 对象
+							msg.what = 0;
+							msg.obj = json;
+							mHandler.sendMessage(msg);
+						} catch (Exception e) {
+							// TODO Auto-generated catch block
+							e.printStackTrace();
+						}
+					}
+				};
+				thread.start();	
+				
+				
 				if (child_list.size()!=0) {
 					listView2 = (ListView) layout1.findViewById(R.id.aa);
 					listView2.setDivider(null);
@@ -1269,6 +1377,10 @@ Urlinterface {
 
 			}
 
+			
+			
+			
+			
 			if (mess.getReply_microposts_count()!=null) {
 				huifu.setText(HomeWorkParams.REPLY+"("+mess.getReply_microposts_count() +")");	
 			}
@@ -1413,6 +1525,7 @@ Urlinterface {
 					//					
 					json="";
 
+<<<<<<< HEAD
 					final Handler mHandler = new Handler() {
 						public void handleMessage(android.os.Message msg) {
 							switch (msg.what) {
@@ -1486,34 +1599,13 @@ Urlinterface {
 								}								
 								micropostAdapter = new MicropostAdapter();
 								listView_mes.setAdapter(micropostAdapter);
+=======
+			
+					micropostAdapter = new MicropostAdapter();
+					listView_mes.setAdapter(micropostAdapter);
+>>>>>>> 8bbf61c1753891d50bd54b10acfc54475bf6ddf8
 
-								listView_mes.setSelection(focus);
-								break;
-							default:
-								break;									
-							}
-						}
-					};
-					Thread thread=new Thread()
-					{
-						public void run()
-						{
-							try {
-								Map<String, String> map = new HashMap<String, String>();									
-								map.put("micropost_id", micropost_id);
-								json = HomeWorkTool.sendGETRequest(
-										Urlinterface.get_reply_microposts, map);
-								Message msg = new Message();//  创建Message 对象
-								msg.what = 0;
-								msg.obj = json;
-								mHandler.sendMessage(msg);
-							} catch (Exception e) {
-								// TODO Auto-generated catch block
-								e.printStackTrace();
-							}
-						}
-					};
-					thread.start();	
+					listView_mes.setSelection(focus);
 					position_huifu_num = position;
 				}
 			});

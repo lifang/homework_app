@@ -10,6 +10,8 @@
   android:background="#ede9ea"
     android:orientation="vertical"
     android:gravity="center_horizontal"
+    android:focusable="true"
+android:focusableInTouchMode="true"
     >
 
     <ImageButton
@@ -45,7 +47,7 @@
             android:layout_height="71px"
         android:layout_marginTop="21px"
         android:gravity="center"
-        android:hint="fwefsf"
+        
         android:textSize="24px" />
            <TextView
        
@@ -62,7 +64,7 @@
             android:layout_height="71px"
         android:layout_marginTop="21px"
         android:gravity="center"
-        android:hint="马丁"
+     
         android:textSize="24px" />    
            
      
@@ -70,7 +72,7 @@
                   <Button
      
        android:layout_width="480px"
-            android:layout_height="51px"
+            android:layout_height="71px"
         android:gravity="center"
         android:layout_marginTop="82px"
           android:textColor="#FFFFFF"
@@ -82,7 +84,7 @@
                      <Button
      
        android:layout_width="480px"
-            android:layout_height="51px"
+            android:layout_height="71px"
         android:gravity="center"
         android:layout_marginTop="85px"
           android:textColor="#FFFFFF"
@@ -93,12 +95,12 @@
                          <Button
      
        android:layout_width="480px"
-            android:layout_height="51px"
+            android:layout_height="71px"
         android:gravity="center"
         android:layout_marginTop="37px"
         android:background="#f08629"
           android:textColor="#FFFFFF"
-        android:onClick="set_exit"
+        android:onClick="exit_user"
         android:text="@string/exit_user"
         android:textSize="24px" /> 
     

@@ -16,7 +16,7 @@ public class VerticalTabWigdet extends TabWidget {
 		setOrientation(LinearLayout.VERTICAL);
 	}
 
-	@Override
+	
 	public void addView(View child) {
 		LinearLayout.LayoutParams lp = new LayoutParams(
 				80, 120);
