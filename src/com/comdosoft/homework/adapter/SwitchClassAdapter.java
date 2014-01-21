@@ -2,11 +2,10 @@ package com.comdosoft.homework.adapter;
 
 import java.util.List;
 
-import com.comdosoft.homework.AboutMeActivity;
 import com.comdosoft.homework.Classxinxiliu;
 import com.comdosoft.homework.R;
 import com.comdosoft.homework.pojo.ClassPojo;
-
+import com.comdosoft.homework.tools.HomeWork;
 import android.content.Context;
 import android.content.Intent;
 import android.view.Gravity;
@@ -37,7 +36,7 @@ public class SwitchClassAdapter extends BaseAdapter
 	public long getItemId(int position) {
 		return position;
 	}
-	public View getView(int position, View convertView, ViewGroup parent) {
+	public View getView(final int position, View convertView, ViewGroup parent) {
 		LayoutInflater inflater = LayoutInflater
 				.from(context);
 		TextView scTv = null;
@@ -48,6 +47,9 @@ public class SwitchClassAdapter extends BaseAdapter
 			scTv=(TextView) convertView.findViewById(R.id.switchclass_oneTv);
 			scTv.setWidth(479);
 			scTv.setHeight(55);
+			scTv.setText(classlist.get(position).getName());
+			scTv.setGravity(Gravity.CENTER);
+			scTv.setTextSize(24);
 			scTv.setOnClickListener(new OnClickListener()
 			{
 				public void onClick(View v) {
@@ -55,6 +57,8 @@ public class SwitchClassAdapter extends BaseAdapter
 					{
 						public void run()
 						{
+							HomeWork hw=(HomeWork) context;
+							hw.setClass_id(classlist.get(position).getId());
 							Intent intent = new Intent(context,Classxinxiliu.class);
 							intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK); 
 							context.getApplicationContext().startActivity(intent);
@@ -62,9 +66,6 @@ public class SwitchClassAdapter extends BaseAdapter
 					}.start();
 				}
 			});
-			scTv.setText(classlist.get(position).getName());
-			scTv.setGravity(Gravity.CENTER);
-			scTv.setTextSize(24);
 		}
 		return convertView;
 	}

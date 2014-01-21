@@ -1,6 +1,5 @@
 package com.comdosoft.homework.pojo;
 
-import java.sql.Date;
 
 public class AboutMePojo 
 {
@@ -15,7 +14,6 @@ public class AboutMePojo
 
 	public AboutMePojo() {
 	}
-
 
 	public AboutMePojo(String id, String micropost_id, String user_id,
 			String sender_avatar_url, String sender_name, String status,

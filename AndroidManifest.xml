@@ -27,7 +27,7 @@
         android:screenOrientation="portrait"
         android:theme="@android:style/Theme.NoTitleBar" >
         <activity
-            android:name=".DictationPrepareActivity"
+            android:name=".LoginActivity"
             android:label="@string/app_name" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -49,8 +49,9 @@
             android:label="@string/app_name" >
         </activity>
         <activity
-            android:name=".DictationBeginActivity"
-            android:label="@string/app_name" />
+            android:name=".HomeWorkMainActivity"
+            android:label="@string/app_name" >
+        </activity>
         <activity
             android:name=".SpeakHistoryActivity"
             android:label="@string/app_name" />
@@ -60,21 +61,13 @@
         <activity
             android:name=".Classxinxiliu"
             android:windowSoftInputMode="adjustUnspecified|stateHidden" />
-        <activity android:name="com.comdosoft.homework.Main_classes" >
-        </activity>
         <activity
             android:name="com.comdosoft.homework.SwitchClassActivity"
             android:theme="@style/Transparent"
             android:windowSoftInputMode="adjustUnspecified|stateHidden" >
         </activity>
         <activity android:name="com.comdosoft.homework.AboutMeActivity" >
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
         </activity>
-        <activity android:name=".HomeWorkMainActivity" />
         <activity android:name=".Spec1" />
         <activity android:name=".Spec3" />
         <activity android:name=".Spec4" />

@@ -9,6 +9,7 @@ import org.json.JSONObject;
 
 import com.comdosoft.homework.adapter.AboutMeAdapter;
 import com.comdosoft.homework.pojo.AboutMePojo;
+import com.comdosoft.homework.tools.HomeWork;
 import com.comdosoft.homework.tools.HomeWorkTool;
 import com.comdosoft.homework.tools.Urlinterface;
 
@@ -27,13 +28,17 @@ public class AboutMeActivity extends Activity
 	private ListView listview;
 	List<AboutMePojo> listam ;
 	private int count=0;
+	@SuppressWarnings("unused")
 	private int num;
+	HomeWork hw=(HomeWork) getApplication();
 	protected void onCreate(Bundle savedInstanceState) {
 		// TODO Auto-generated method stub
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.aboutme);
 		listview=(ListView) findViewById(R.id.aboutmeLv);
+		Log.i("aa", "aboutmeActivity");
 		thread.start();
+
 	}
 	Thread thread=new Thread()
 	{
@@ -48,6 +53,9 @@ public class AboutMeActivity extends Activity
 			} catch (InterruptedException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
+			} catch (Exception e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
 			}
 		}
 	};
@@ -56,22 +64,22 @@ public class AboutMeActivity extends Activity
 			switch(msg.what)
 			{
 			case 0:
-				listview.setAdapter(new AboutMeAdapter(listam,getApplicationContext(),listview,1));
+				listview.setAdapter(new AboutMeAdapter(listam,getApplicationContext(),listview));
 				break;
 			case 1:
 				break;
 			}
 		}
 	};
-	@SuppressWarnings({ "unchecked", "rawtypes" })
 	public void get_News()
 	{
 		try {
 			listam=new ArrayList<AboutMePojo>();
-			HashMap mp=new HashMap();
-			mp.put("user_id", "1");
-			mp.put("school_class_id", "1");
-			String json = HomeWorkTool.sendGETRequest(Urlinterface.get_News, mp);
+			HashMap<String,String> mp=new HashMap<String,String>();
+			mp.put("user_id", String.valueOf(hw.getUser_id()));
+			mp.put("school_class_id", String.valueOf(hw.getClass_id()));
+			String json	= HomeWorkTool.sendGETRequest(Urlinterface.get_News, mp);
+			Log.i("aa", json);
 			JSONObject jsonobject=new JSONObject(json);
 			String status=(String) jsonobject.get("status");
 			if(status.equals("success"))
@@ -85,10 +93,13 @@ public class AboutMeActivity extends Activity
 					String content=liststr.get(1);
 					String created_at=divisionTime(jsonobject2.getString("created_at"));
 					String id=jsonobject2.getString("id");
+					Log.i("aa", id);
 					String micropost_id=jsonobject2.getString("micropost_id");
+					Log.i("aa", micropost_id);
 					String sender_avatar_url=jsonobject2.getString("sender_avatar_url");
 					String sender_name=jsonobject2.getString("sender_name");
 					String user_id=jsonobject2.getString("user_id");
+					Log.i("aa", user_id);
 					listam.add(new AboutMePojo(id,micropost_id,user_id,sender_avatar_url,sender_name,jsonstatus,content,created_at));
 				}
 				if(count<=listam.size())

@@ -33,6 +33,8 @@ public class HomeWorkMainActivity extends TabActivity implements Urlinterface {
 	public Field mBottomRightStrip;
 	private HomeWork homework;
 
+	public static HomeWorkMainActivity instance = null;
+
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.homewrok_main);
@@ -41,10 +43,11 @@ public class HomeWorkMainActivity extends TabActivity implements Urlinterface {
 		String json = intent.getStringExtra("json");
 
 		if (json != null && json.equals("")) {
-			JSONObject array0;
+
+			instance = this;
 
 			try {
-				array0 = new JSONObject(json);
+				JSONObject array0 = new JSONObject(json);
 				JSONObject student = array0.getJSONObject("student"); // 获得学生的信息
 				String id = student.getString("id");
 				String user_id = student.getString("user_id");
@@ -68,6 +71,7 @@ public class HomeWorkMainActivity extends TabActivity implements Urlinterface {
 				editor.commit();
 				homework.setClass_id(Integer.parseInt(school_class_id));
 				homework.setUser_id(Integer.parseInt(user_id));
+
 			} catch (JSONException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
@@ -80,7 +84,7 @@ public class HomeWorkMainActivity extends TabActivity implements Urlinterface {
 		Log.i(tag, width + "/" + Height);
 		tabhost = getTabHost();
 		res = getResources();
-		Intent intent1 = new Intent(this, Spec1.class);
+		Intent intent1 = new Intent(this, Classxinxiliu.class);
 		spec1 = tabhost.newTabSpec("spec1")
 				.setIndicator("", res.getDrawable(R.drawable.th1_1))
 				.setContent(intent1);
@@ -98,7 +102,7 @@ public class HomeWorkMainActivity extends TabActivity implements Urlinterface {
 				.setContent(intent3);
 		tabhost.addTab(spec3);
 
-		Intent intent4 = new Intent(this, Spec4.class);
+		Intent intent4 = new Intent(this, SettingActivity.class);
 		spec4 = tabhost.newTabSpec("spec4")
 				.setIndicator("", res.getDrawable(R.drawable.th4_4))
 				.setContent(intent4);

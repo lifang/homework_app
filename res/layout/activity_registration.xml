@@ -1,4 +1,4 @@
-
+﻿
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="fill_parent"
     android:layout_height="fill_parent">
@@ -17,7 +17,7 @@
         android:layout_width="176px"
         android:layout_height="186px"
         android:background="@drawable/moren"
-        android:layout_marginTop="94px"
+        android:layout_marginTop="494px"
       />
 
    
@@ -27,7 +27,7 @@
        
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        
+        android:textColor="#000000"
         android:layout_marginTop="76px"
         android:text="@string/nicheng"
         android:textSize="24px" />
@@ -35,8 +35,8 @@
           <EditText
         android:id="@+id/reg_nicheng"
         android:layout_width="480px"
-            android:layout_height="47px"
-        android:layout_marginTop="44px"
+            android:layout_height="71px"
+        android:layout_marginTop="22px"
         android:gravity="center"
         android:hint="fwefsf"
         android:textSize="24px" />
@@ -44,16 +44,16 @@
        
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        
-        android:layout_marginTop="25px"
+        android:textColor="#000000"
+        android:layout_marginTop="22px"
         android:text="@string/xingming"
         android:textSize="24px" />
      
           <EditText
         android:id="@+id/reg_xingming"
          android:layout_width="480px"
-            android:layout_height="47px"
-        android:layout_marginTop="44px"
+            android:layout_height="71px"
+        android:layout_marginTop="22px"
         android:gravity="center"
         android:hint="马丁"
         android:textSize="24px" />    
@@ -61,18 +61,18 @@
        
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        
-        android:layout_marginTop="25px"
+        android:textColor="#000000"
+        android:layout_marginTop="22px"
         android:text="@string/banjiyanzhengma"
         android:textSize="24px" />
      
           <EditText
         android:id="@+id/reg_banjiyanzhengma"
          android:layout_width="480px"
-            android:layout_height="47px"
+            android:layout_height="71px"
         android:gravity="center"
         android:hint="fwefsf;wer"
-        android:layout_marginTop="44px"
+        android:layout_marginTop="22px"
         android:textSize="24px" /> 
                   <Button
      
@@ -103,7 +103,7 @@
             android:id="@+id/paizhaoshangchuan"
             android:layout_width="480px"
             android:layout_height="51px"
-        android:layout_marginTop="585px"
+        android:layout_marginTop="885px"
         android:background="#FF8C00"
             android:onClick="reg_paizhaoshangchuan"
             android:textColor="#FFFFFF"

@@ -10,8 +10,10 @@ import org.json.JSONObject;
 
 import com.comdosoft.homework.adapter.SwitchClassAdapter;
 import com.comdosoft.homework.pojo.ClassPojo;
+import com.comdosoft.homework.tools.HomeWork;
 import com.comdosoft.homework.tools.HomeWorkTool;
 import com.comdosoft.homework.tools.Urlinterface;
+
 
 import android.app.Activity;
 import android.content.Intent;
@@ -32,14 +34,18 @@ public class SwitchClassActivity extends Activity
 	private EditText SwitchClass_Et;
 	private ListView switchclassLv;
 	private ImageButton switchClassIB;
+	private HomeWork hw;
 	private List<ClassPojo> classList=new ArrayList<ClassPojo>();
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
+		
 		setContentView(R.layout.switchclass);
+		hw = (HomeWork) getApplication();
 		SwitchClass_Et=(EditText) findViewById(R.id.SwitchClass_Et);
 		SwitchClass_Et.clearFocus();
 		switchclassLv=(ListView) findViewById(R.id.switchclassLv);
 		switchClassIB=(ImageButton) findViewById(R.id.switchClassIB);
+		final HomeWork hw=(HomeWork) getApplication();
 		switchClassIB.setOnClickListener(new OnClickListener(){
 			public void onClick(View v) {
 				Thread thread=new Thread()
@@ -49,9 +55,10 @@ public class SwitchClassActivity extends Activity
 						try {
 							HashMap<String,String> mp=new HashMap<String,String>();
 							mp.put("verification_code", SwitchClass_Et.getText().toString());
-							mp.put("student_id", "1");
+							mp.put("student_id", String.valueOf(hw.getUser_id()));
 							String json=HomeWorkTool.doPost(Urlinterface.Validation_into_class, mp);
 							JSONObject jsonobject=new JSONObject(json);
+							Log.i("aa", json);
 							String status=jsonobject.getString("status");
 							if(status.equals("error"))
 							{
@@ -78,7 +85,7 @@ public class SwitchClassActivity extends Activity
 			{
 				try {
 					HashMap<String,String> mp=new HashMap<String,String>();
-					mp.put("student_id", "1");
+					mp.put("student_id", String.valueOf(hw.getUser_id()));
 					String json=HomeWorkTool.sendGETRequest(Urlinterface.get_class,mp);
 					JSONObject jsonobject=new JSONObject(json);
 					JSONArray jsonarray=jsonobject.getJSONArray("classes");
@@ -101,7 +108,8 @@ public class SwitchClassActivity extends Activity
 		Intent intent = new Intent();
 		if (keyCode == KeyEvent.KEYCODE_BACK) {
 			SwitchClassActivity.this.finish();
-			intent.setClass(SwitchClassActivity.this, SettingActivity.class);
+			hw.setMainItem(3);
+			intent.setClass(SwitchClassActivity.this, HomeWorkMainActivity.class);
 			startActivity(intent);
 			return true;
 		}

@@ -1,4 +1,4 @@
-
+﻿
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="fill_parent"
     android:layout_height="fill_parent">
@@ -34,7 +34,7 @@
        
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        
+        android:textColor="#000000"
         android:layout_marginTop="40px"
         android:text="@string/nicheng"
         android:textSize="24px" />
@@ -42,7 +42,7 @@
           <EditText
         android:id="@+id/set_nickname"
         android:layout_width="480px"
-            android:layout_height="47px"
+            android:layout_height="71px"
         android:layout_marginTop="21px"
         android:gravity="center"
         android:hint="fwefsf"
@@ -51,7 +51,7 @@
        
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        
+        android:textColor="#000000"
         android:layout_marginTop="21px"
         android:text="@string/xingming"
         android:textSize="24px" />
@@ -59,7 +59,7 @@
           <EditText
         android:id="@+id/set_name"
          android:layout_width="480px"
-            android:layout_height="47px"
+            android:layout_height="71px"
         android:layout_marginTop="21px"
         android:gravity="center"
         android:hint="马丁"
@@ -73,6 +73,7 @@
             android:layout_height="51px"
         android:gravity="center"
         android:layout_marginTop="82px"
+          android:textColor="#FFFFFF"
         android:background="#92b81b"
         android:onClick="saveUpdata"
         android:text="@string/saveUpdata"
@@ -84,6 +85,7 @@
             android:layout_height="51px"
         android:gravity="center"
         android:layout_marginTop="85px"
+          android:textColor="#FFFFFF"
         android:background="#92b81b"
         android:onClick="changeClass"
         android:text="@string/changeClass"
@@ -95,6 +97,7 @@
         android:gravity="center"
         android:layout_marginTop="37px"
         android:background="#f08629"
+          android:textColor="#FFFFFF"
         android:onClick="set_exit"
         android:text="@string/exit_user"
         android:textSize="24px" /> 

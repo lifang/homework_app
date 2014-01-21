@@ -21,7 +21,16 @@ public class HomeWork extends Application {
 	private int user_id;
 	private int class_id;
 	private int message_id;
+	private String noselect_message;
 	
+	public String getNoselect_message() {
+		return noselect_message;
+	}
+
+	public void setNoselect_message(String noselect_message) {
+		this.noselect_message = noselect_message;
+	}
+
 	public HomeWork() {
 		this.setQuestion_index(0);
 		this.setMainItem(0);
@@ -126,7 +135,6 @@ public class HomeWork extends Application {
 	public int getMessage_id() {
 		return message_id;
 	}
-
 	public void setMessage_id(int message_id) {
 		this.message_id = message_id;
 	}
