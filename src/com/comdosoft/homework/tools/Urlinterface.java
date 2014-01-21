@@ -5,12 +5,11 @@ public interface Urlinterface {
 	static final String SHARED = "HW";
 
 	// static final String IP = "http://192.168.0.101:3004";
-	String IP = "http://192.168.0.250:3004";
+	static final String IP = "http://192.168.0.250:3004";
 
 	// static final String IP = "http://192.168.0.101:3004";
 	// static final String IP = "http://192.168.0.127:3000";
 
-	
 	// 获取班级每日任务等信息
 	static final String CLASS_INFO = IP + "/api/students/get_class_info";
 	// 提交作业
@@ -47,5 +46,5 @@ public interface Urlinterface {
 	String unfollow = IP + "/api/students/add_concern"; // 取消关注消息
 	String SAVE_DICTATION = IP + "/api/students/record_answer_info"; // 保存拼写答题记录
 	String QQ_LOGIN = IP + "/api/students/login"; // qq登录
-	String add_concern=IP+"/api/students/add_concern";	 //关注消息
+	String add_concern = IP + "/api/students/add_concern"; // 关注消息
 }

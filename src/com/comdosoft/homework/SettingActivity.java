@@ -376,7 +376,7 @@ public class SettingActivity extends Activity  implements Urlinterface{
 		intent.putExtra("aspectY", 1);
 		// outputX outputY 是裁剪图片宽高
 		intent.putExtra("outputX", 350);
-		intent.putExtra("outputY", 380);
+		intent.putExtra("outputY", 400);
 		intent.putExtra("return-data", true);
 		startActivityForResult(intent, 2);
 	}

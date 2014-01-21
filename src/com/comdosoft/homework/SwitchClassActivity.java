@@ -8,7 +8,6 @@ import org.json.JSONArray;
 import org.json.JSONObject;
 
 
-import com.comdosoft.homework.adapter.SwitchClassAdapter;
 import com.comdosoft.homework.pojo.ClassPojo;
 import com.comdosoft.homework.tools.HomeWork;
 import com.comdosoft.homework.tools.HomeWorkTool;
@@ -16,17 +15,23 @@ import com.comdosoft.homework.tools.Urlinterface;
 
 
 import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.util.Log;
+import android.view.Gravity;
 import android.view.KeyEvent;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
 import android.view.View.OnClickListener;
+import android.widget.BaseAdapter;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ListView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 public class SwitchClassActivity extends Activity
@@ -128,4 +133,61 @@ public class SwitchClassActivity extends Activity
 			}
 		}
 	};
+	public class SwitchClassAdapter extends BaseAdapter
+	{
+		private  List<ClassPojo> classlist;
+		private Context context;
+		public SwitchClassAdapter(Context context,List<ClassPojo> classlist )
+		{
+			this.context=context;
+			this.classlist=classlist;
+		}
+		public int getCount() {
+			return classlist.size();
+		}
+
+		public Object getItem(int position) {
+			return classlist.get(position);
+		}
+
+		public long getItemId(int position) {
+			return position;
+		}
+		public View getView(final int position, View convertView, ViewGroup parent) {
+			LayoutInflater inflater = LayoutInflater
+					.from(context);
+			TextView scTv = null;
+			if(convertView==null)
+			{
+				convertView=inflater.inflate(R.layout.switchclass_one, null);
+				convertView.setPadding(0, 5, 0, 5);
+				scTv=(TextView) convertView.findViewById(R.id.switchclass_oneTv);
+				scTv.setWidth(479);
+				scTv.setHeight(55);
+				scTv.setText(classlist.get(position).getName());
+				scTv.setGravity(Gravity.CENTER);
+				scTv.setTextSize(24);
+				scTv.setOnClickListener(new OnClickListener()
+				{
+					public void onClick(View v) {
+						new Thread()
+						{
+							public void run()
+							{
+								HomeWork hw=(HomeWork) context;
+								hw.setClass_id(classlist.get(position).getId());
+								hw.setMainItem(0);
+								Intent intent = new Intent(context,HomeWorkMainActivity.class);
+								intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK); 
+								context.getApplicationContext().startActivity(intent);
+								SwitchClassActivity.this.finish();
+							}
+						}.start();
+					}
+				});
+			}
+			return convertView;
+		}
+
+	}
 }
