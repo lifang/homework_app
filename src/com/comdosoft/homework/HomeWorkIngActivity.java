@@ -5,9 +5,11 @@ import java.util.Calendar;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
+
 import android.app.Activity;
 import android.app.AlertDialog.Builder;
 import android.app.ProgressDialog;
@@ -27,6 +29,7 @@ import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
+
 import com.comdosoft.homework.pojo.ListeningPojo;
 import com.comdosoft.homework.pojo.QuestionPojo;
 import com.comdosoft.homework.pojo.WorkPojo;
@@ -353,6 +356,7 @@ public class HomeWorkIngActivity extends Activity implements Urlinterface {
 				String date = item.getString("end_time");
 				String day = date.split("T")[0];
 				day = day.replaceAll("-", "");
+				
 				if (Integer.valueOf(day) > Integer.valueOf(Window_day)) {
 					type = true;
 					Log.i(tag, "day:" + type);
