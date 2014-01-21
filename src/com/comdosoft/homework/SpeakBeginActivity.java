@@ -241,8 +241,8 @@ public class SpeakBeginActivity extends Activity implements Urlinterface {
 					builder.show();
 				}
 			} else {
-				Toast.makeText(SpeakBeginActivity.this,
-						"本题的回答次数已经用完了,请继续下一题!", Toast.LENGTH_SHORT).show();
+				Toast.makeText(SpeakBeginActivity.this, "本题的回答次数已经用完了,请继续下一题!",
+						Toast.LENGTH_SHORT).show();
 			}
 			break;
 		}
@@ -516,11 +516,8 @@ public class SpeakBeginActivity extends Activity implements Urlinterface {
 	}
 
 	public boolean onKeyDown(int keyCode, KeyEvent event) {
-		Intent intent = new Intent();
 		if (keyCode == KeyEvent.KEYCODE_BACK) {
-			SpeakBeginActivity.this.finish();
-			intent.setClass(SpeakBeginActivity.this, SpeakPrepareActivity.class);
-			startActivity(intent);
+			MyDialog("你还没有做完题,确认要退出吗?", "确认", "取消", 0);
 			return true;
 		}
 		return super.onKeyDown(keyCode, event);
