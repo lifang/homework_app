@@ -34,10 +34,12 @@ public class SwitchClassActivity extends Activity
 	private EditText SwitchClass_Et;
 	private ListView switchclassLv;
 	private ImageButton switchClassIB;
+	private HomeWork hw;
 	private List<ClassPojo> classList=new ArrayList<ClassPojo>();
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.switchclass);
+		hw = (HomeWork) getApplication();
 		SwitchClass_Et=(EditText) findViewById(R.id.SwitchClass_Et);
 		SwitchClass_Et.clearFocus();
 		switchclassLv=(ListView) findViewById(R.id.switchclassLv);
@@ -105,7 +107,8 @@ public class SwitchClassActivity extends Activity
 		Intent intent = new Intent();
 		if (keyCode == KeyEvent.KEYCODE_BACK) {
 			SwitchClassActivity.this.finish();
-			intent.setClass(SwitchClassActivity.this, SettingActivity.class);
+			hw.setMainItem(3);
+			intent.setClass(SwitchClassActivity.this, HomeWorkMainActivity.class);
 			startActivity(intent);
 			return true;
 		}
