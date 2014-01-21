@@ -4,6 +4,7 @@ public class DictationPojo {
 	private String value;
 	private int flag;
 
+	
 	public DictationPojo() {
 		super();
 	}

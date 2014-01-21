@@ -10,6 +10,7 @@ public interface Urlinterface {
 	// static final String IP = "http://192.168.0.101:3004";
 	// static final String IP = "http://192.168.0.127:3000";
 
+	
 	// 获取班级每日任务等信息
 	static final String CLASS_INFO = IP + "/api/students/get_class_info";
 	// 提交作业

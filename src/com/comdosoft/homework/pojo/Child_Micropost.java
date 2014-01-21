@@ -7,6 +7,7 @@ public class Child_Micropost {
 //	sender_avatar_url发送者头像url,content消息内容,reciver_name接受者姓名,
 //	reciver_nickname接受者昵称,sender_avatar_url接受者头像url,created_at创建时间
 	
+	
 	private String id;
 	private String sender_id;
 	private String sender_types;
