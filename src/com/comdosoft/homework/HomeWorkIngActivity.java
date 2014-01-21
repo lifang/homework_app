@@ -91,7 +91,7 @@ public class HomeWorkIngActivity extends Activity implements Urlinterface {
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_working);
-		homework = (HomeWork) getApplication();//初始化
+		homework = (HomeWork) getApplication();// 初始化
 		initialize();// 初始化
 		index = 0;
 
@@ -100,7 +100,7 @@ public class HomeWorkIngActivity extends Activity implements Urlinterface {
 		school_class_id = sp.getString("school_class_id", "null");
 		homework.setClass_id(Integer.valueOf(school_class_id));
 		homework.setUser_id(Integer.valueOf(student_id));
-		
+
 		prodialog = new ProgressDialog(HomeWorkIngActivity.this);
 		prodialog.setMessage(HomeWorkParams.PD_CLASS_INFO);
 		// prodialog.show();
@@ -123,6 +123,7 @@ public class HomeWorkIngActivity extends Activity implements Urlinterface {
 							int position, long id) {
 						index = position;
 						p_q_package_id = list.get(position).getId();
+						Log.i(tag, p_q_package_id + "");
 						homework.setP_q_package_id(p_q_package_id);
 						working_date_list.setAdapter(date_adapter);
 						working_content_list.setAdapter(question_adapter);
@@ -356,7 +357,7 @@ public class HomeWorkIngActivity extends Activity implements Urlinterface {
 				String date = item.getString("end_time");
 				String day = date.split("T")[0];
 				day = day.replaceAll("-", "");
-				
+
 				if (Integer.valueOf(day) > Integer.valueOf(Window_day)) {
 					type = true;
 					Log.i(tag, "day:" + type);
@@ -373,6 +374,11 @@ public class HomeWorkIngActivity extends Activity implements Urlinterface {
 								.getString("question_packages_url"), item
 								.getString("listening_schedule"), item
 								.getString("reading_schedule"), type));
+			}
+			if (list.size() > 0) {
+				p_q_package_id = list.get(0).getId();
+				Log.i(tag, p_q_package_id + "");
+				homework.setP_q_package_id(p_q_package_id);
 			}
 			handler.sendEmptyMessage(1);
 		} catch (JSONException e) {

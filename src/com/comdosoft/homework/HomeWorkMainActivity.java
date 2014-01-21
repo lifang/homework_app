@@ -4,6 +4,7 @@ import java.lang.reflect.Field;
 
 import android.app.TabActivity;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.res.Resources;
 import android.os.Build;
 import android.os.Bundle;
@@ -33,7 +34,7 @@ public class HomeWorkMainActivity extends TabActivity implements Urlinterface {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.homewrok_main);
 		homework = (HomeWork) getApplication();
-
+		
 		instance = this;
 		Display display = getWindowManager().getDefaultDisplay();
 		int Height = display.getHeight();
@@ -48,7 +49,7 @@ public class HomeWorkMainActivity extends TabActivity implements Urlinterface {
 		tabhost.addTab(spec1);
 
 		Intent intent2 = new Intent(this, HomeWorkIngActivity.class);
-		spec2 = tabhost.newTabSpec("spec2")
+		spec2 = tabhost.newTabSpec("spec2") 
 				.setIndicator("", res.getDrawable(R.drawable.th2_2))
 				.setContent(intent2);
 		tabhost.addTab(spec2);

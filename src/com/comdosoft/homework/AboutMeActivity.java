@@ -18,6 +18,7 @@ import com.comdosoft.homework.tools.AsyncImageLoader.LoadFinishCallBack;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.os.Handler;
@@ -39,6 +40,8 @@ public class AboutMeActivity extends Activity
 {
 	private ListView listview;
 	List<AboutMePojo> listam ;
+	private String user_id;
+	private String school_class_id;
 	private int count=0;
 	@SuppressWarnings("unused")
 	private int num;
@@ -48,29 +51,30 @@ public class AboutMeActivity extends Activity
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.aboutme);
 		listview=(ListView) findViewById(R.id.aboutmeLv);
-		thread.start();
+		Log.i("aa", "AboutMeActivity");
+		SharedPreferences sp = getSharedPreferences(Urlinterface.SHARED, 0);
+		user_id = sp.getString("user_id", "null");
+		school_class_id = sp.getString("school_class_id", "null");
 
-	}
-	Thread thread=new Thread()
-	{
-		public void run()
+		new Thread()
 		{
-			try {
-				while(true)
-				{
+			public void run()
+			{
+				//				while(true)
+				//				{
+				try {
 					get_News();
-					Thread.sleep(5000);
+					Thread.sleep(1000);
+					Log.i("aa", num+"新的东西");
+				} catch (InterruptedException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
 				}
-			} catch (InterruptedException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			} catch (Exception e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
+				//				}
 			}
-		}
-	};
-	Handler handler = new Handler(){
+		}.start();
+	}
+	Handler handler1 = new Handler(){
 		public void handleMessage(Message msg) {
 			switch(msg.what)
 			{
@@ -84,57 +88,57 @@ public class AboutMeActivity extends Activity
 	};
 	public void get_News()
 	{
-		try {
-			listam=new ArrayList<AboutMePojo>();
-			HashMap<String,String> mp=new HashMap<String,String>();
-			mp.put("user_id", String.valueOf(hw.getUser_id()));
-			mp.put("school_class_id", String.valueOf(hw.getClass_id()));
-			String json	= HomeWorkTool.sendGETRequest(Urlinterface.get_News, mp);
-			Log.i("aa", json);
-			JSONObject jsonobject=new JSONObject(json);
-			String status=(String) jsonobject.get("status");
-			if(status.equals("success"))
+		listam=new ArrayList<AboutMePojo>();
+
+		Thread thread=new Thread()
+		{
+			public void run()
 			{
-				JSONArray jsonarray= jsonobject.getJSONArray("messages");
-				for(int i=0;i<jsonarray.length();i++)
-				{
-					JSONObject jsonobject2=jsonarray.getJSONObject(i);
-					List<String> liststr=divisionStr(jsonobject2.getString("content"));
-					String jsonstatus=liststr.get(0);
-					String content=liststr.get(1);
-					String created_at=divisionTime(jsonobject2.getString("created_at"));
-					String id=jsonobject2.getString("id");
-					String micropost_id=jsonobject2.getString("micropost_id");
-					String sender_avatar_url=jsonobject2.getString("sender_avatar_url");
-					String sender_name=jsonobject2.getString("sender_name");
-					String user_id=jsonobject2.getString("user_id");
-					listam.add(new AboutMePojo(id,micropost_id,user_id,sender_avatar_url,sender_name,jsonstatus,content,created_at));
+				try {
+					HashMap<String,String> mp=new HashMap<String,String>();
+					mp.put("user_id","1");
+					mp.put("school_class_id", "1");
+					String json = HomeWorkTool.sendGETRequest(Urlinterface.get_News, mp);
+					JSONObject jsonobject=new JSONObject(json);
+					String status=(String) jsonobject.get("status");
+					if(status.equals("success"))
+					{
+						JSONArray jsonarray= jsonobject.getJSONArray("messages");
+						for(int i=0;i<jsonarray.length();i++)
+						{
+							JSONObject jsonobject2=jsonarray.getJSONObject(i);
+							List<String> liststr=divisionStr(jsonobject2.getString("content"));
+							String jsonstatus=liststr.get(0);
+							String content=liststr.get(1);
+							String created_at=divisionTime(jsonobject2.getString("created_at"));
+							String id=jsonobject2.getString("id");
+							String micropost_id=jsonobject2.getString("micropost_id");
+							Log.i("aa", micropost_id);
+							String sender_avatar_url=jsonobject2.getString("sender_avatar_url");
+							String sender_name=jsonobject2.getString("sender_name");
+							String user_id=jsonobject2.getString("user_id");
+							listam.add(new AboutMePojo(id,micropost_id,user_id,sender_avatar_url,sender_name,jsonstatus,content,created_at));
+						}
+						if(count<=listam.size())
+						{
+							num=listam.size()-count;
+							count=listam.size();
+						}
+						handler1.sendEmptyMessage(0);
+					}
+					else
+					{
+						String notic=(String) jsonobject.get("notic");
+						Toast.makeText(getApplicationContext(), notic, 1).show();
+					} 
+				} catch (Exception e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
 				}
-				if(count<=listam.size())
-				{
-					num=listam.size()-count;
-					count=listam.size();
-				}
-				handler.sendEmptyMessage(0);
 			}
-			else
-			{
-				String notic=(String) jsonobject.get("notic");
-				Toast.makeText(getApplicationContext(), notic, 1).show();
-			}
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-	}
-	public boolean onKeyDown(int keyCode, KeyEvent event) {
-		Intent intent = new Intent();
-		if (keyCode == KeyEvent.KEYCODE_BACK) {
-			AboutMeActivity.this.finish();
-			intent.setClass(AboutMeActivity.this, AboutMeActivity.class);
-			startActivity(intent);
-			return true;
-		}
-		return super.onKeyDown(keyCode, event);
+
+		};	
+		thread.start();
 	}
 	//分割content
 	public List<String> divisionStr(String str)
@@ -160,7 +164,7 @@ public class AboutMeActivity extends Activity
 		private ListView listview;
 		private int class_id;
 		AsyncImageLoader asyncImageLoader=new AsyncImageLoader();
-		HomeWork hw=(HomeWork) context.getApplicationContext();
+		HomeWork hw=(HomeWork) context;
 		public AboutMeAdapter()
 		{
 		}
@@ -186,7 +190,7 @@ public class AboutMeActivity extends Activity
 			if(convertView==null)
 			{
 				convertView = inflater.inflate(R.layout.aboutme_one,null);
-
+				convertView.setPadding(0, 10, 0,10);
 				TextView tv1= (TextView) convertView.findViewById(R.id.aboutme_oneTv);
 				TextView tv2= (TextView) convertView.findViewById(R.id.aboutme_oneTv2);
 				TextView tv3= (TextView) convertView.findViewById(R.id.aboutme_oneTv3);
@@ -197,29 +201,48 @@ public class AboutMeActivity extends Activity
 				tv2.setText(Amlist.get(position).getStatus());
 				tv3.setText(Amlist.get(position).getContent());
 				tv4.setText(Amlist.get(position).getCreated_at());
-
+				//查看
 				tv5.setOnClickListener(new OnClickListener()
 				{
 					public void onClick(View v) {
 						new Thread()
 						{
-							@SuppressWarnings({ "unchecked", "rawtypes" })
 							public void run()
 							{
-								HashMap<String, String> mp=new HashMap();
-								mp.put("user_id", Amlist.get(position).getUser_id());
-								mp.put("school_class_id",String.valueOf(hw.getClass_id()));
-								mp.put("message_id", Amlist.get(position).getMicropost_id());
-								String json=HomeWorkTool.doPost(Urlinterface.read_message, mp);
-								Message msg=new Message();
-								msg.what=2;
-								hw.setNoselect_message(json);
-								handler.sendMessage(msg);
+								try {
+									HashMap<String, String> mp=new HashMap();
+									mp.put("user_id", Amlist.get(position).getUser_id());
+									mp.put("school_class_id",String.valueOf(class_id));
+									mp.put("message_id", Amlist.get(position).getMicropost_id());
+									String json=HomeWorkTool.doPost(Urlinterface.read_message, mp);
+									JSONObject jsonobject=new JSONObject(json);
+									String status=jsonobject.getString("status");
+									Message msg=new Message();
+									Log.i("aa", json);
+									//									
+									if(status.equals("error"))
+									{
+										msg.what=3;
+										handler.sendMessage(msg);
+									}
+									else if(status.equals("success"))
+									{
+										hw.setMessage_id(Integer.valueOf(Amlist.get(position).getMicropost_id()));
+										Log.i("aa", hw.getMessage_id()+"消息ID");
+										hw.setNoselect_message(json);
+										msg.what=2;
+										handler.sendMessage(msg);
+									}
+								} catch (JSONException e) {
+									e.printStackTrace();
+								}
 							}
 						}.start();
 
 					}
 				});
+
+				//删除
 				Ib.setOnClickListener(new OnClickListener()
 				{
 					public void onClick(View v) {
@@ -238,16 +261,17 @@ public class AboutMeActivity extends Activity
 									String notice=jsonobject.getString("notice");
 									String status=(String) jsonobject.get("status");
 									Message msg=new Message();
-									msg.what=0;
 									msg.obj=notice;
 									if(status.equals("success"))
 									{
+										msg.what=0;
 										Amlist.remove(position);
 										handler.sendMessage(msg);
 									}
 									else
 									{
-										handler.sendEmptyMessage(1);
+										msg.what=1;
+										handler.sendMessage(msg);
 									}
 								} catch (JSONException e) {
 									// TODO Auto-generated catch block
@@ -278,18 +302,21 @@ public class AboutMeActivity extends Activity
 				super.dispatchMessage(msg);
 				switch (msg.what) {
 				case 0:
+					Toast.makeText(AboutMeActivity.this,msg.obj.toString() , 0).show();
 					notifyDataSetChanged();
 					break;
 				case 1:
 					Toast.makeText(context, msg.obj.toString(), 0).show();
 					break;
 				case 2:
-					HomeWork hw=(HomeWork) context;
+					HomeWork hw=(HomeWork) getApplication();
 					hw.setMainItem(0);
-					Intent intent = new Intent(context,HomeWorkMainActivity.class);
+					Intent intent = new Intent(AboutMeActivity.this,HomeWorkMainActivity.class);
 					AboutMeActivity.this.finish();
-					intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK); 
-					context.getApplicationContext().startActivity(intent);
+					startActivity(intent);
+					break;
+				case 3:
+					Toast.makeText(AboutMeActivity.this, "查看错误", 0).show();
 					break;
 				default:
 					break;

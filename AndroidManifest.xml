@@ -77,9 +77,9 @@
         </activity>
         <activity android:name="com.comdosoft.homework.AboutMeActivity" >
         </activity>
-        <activity android:name=".Spec1" />
-        <activity android:name=".Spec3" />
-        <activity android:name=".Spec4" />
+        <activity android:name=".DictationBeginActivity" />
+        <activity android:name=".DictationPrepareActivity" />
+        <activity android:name=".DictationRecordActivity" />
         <activity
             android:name="com.tencent.tauth.AuthActivity"
             android:launchMode="singleTask"

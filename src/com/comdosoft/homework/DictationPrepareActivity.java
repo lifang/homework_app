@@ -38,7 +38,7 @@ public class DictationPrepareActivity extends Activity implements
 	private ImageView dictationImg;
 	private ProgressDialog mPd;
 	private Handler mHandler = new Handler() {
-		@Override
+		
 		public void handleMessage(Message msg) {
 			super.handleMessage(msg);
 			switch (msg.what) {
@@ -48,7 +48,7 @@ public class DictationPrepareActivity extends Activity implements
 		}
 	};
 
-	@Override
+	
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.question_dictation_prepare);
@@ -57,10 +57,9 @@ public class DictationPrepareActivity extends Activity implements
 		dictationImg = (ImageView) findViewById(R.id.question_dictation_img);
 		dictationImg.setOnClickListener(this);
 		// setMp3Url();
-		// /new MyThread().start();
 	}
 
-	@Override
+	
 	protected void onRestart() {
 		super.onRestart();
 		Log.i("Ax", "onRestart");
@@ -144,7 +143,7 @@ public class DictationPrepareActivity extends Activity implements
 
 	// 获取听写题目json
 	class MyThread extends Thread {
-		@Override
+		
 		public void run() {
 			super.run();
 			try {
@@ -164,36 +163,40 @@ public class DictationPrepareActivity extends Activity implements
 		}
 	}
 
-	@Override
+	
 	public void onClick(View v) {
+		Intent intent = new Intent();
 		switch (v.getId()) {
 		case R.id.question_dictation_img:
 			playerAmr();
 			break;
 		case R.id.question_dictation_next:
-			Intent intent = new Intent(this, DictationBeginActivity.class);
+			DictationPrepareActivity.this.finish();
+			intent.setClass(this, DictationBeginActivity.class);
 			startActivity(intent);
 			break;
 		case R.id.question_dictation_exit:
 			this.finish();
+			intent.setClass(this, HomeWorkMainActivity.class);
+			startActivity(intent);
 			break;
 		}
 	}
 
-	@Override
+	
 	public void onDestroy() {
 		mediaPlayer.release();
 		mediaPlayer = null;
 		super.onDestroy();
 	}
 
-	@Override
+	
 	public void onPrepared(MediaPlayer mp) {
 		mp.start();
 	}
 
 	// 音频播放结束后继续播放下一个音频,直到所有音频播放完毕
-	@Override
+	
 	public void onCompletion(MediaPlayer mp) {
 		try {
 			if (++mp3Index < mp3List.size()) {
