@@ -70,7 +70,7 @@
                   <Button
      
        android:layout_width="480px"
-            android:layout_height="51px"
+            android:layout_height="71px"
         android:gravity="center"
         android:layout_marginTop="82px"
           android:textColor="#FFFFFF"
@@ -82,7 +82,7 @@
                      <Button
      
        android:layout_width="480px"
-            android:layout_height="51px"
+            android:layout_height="71px"
         android:gravity="center"
         android:layout_marginTop="85px"
           android:textColor="#FFFFFF"
@@ -93,7 +93,7 @@
                          <Button
      
        android:layout_width="480px"
-            android:layout_height="51px"
+            android:layout_height="71px"
         android:gravity="center"
         android:layout_marginTop="37px"
         android:background="#f08629"

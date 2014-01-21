@@ -77,7 +77,7 @@
                   <Button
      
        android:layout_width="480px"
-            android:layout_height="51px"
+            android:layout_height="71px"
         android:gravity="center"
         android:layout_marginTop="69px"
         android:background="#FFFF00"
@@ -102,7 +102,7 @@
 <Button
             android:id="@+id/paizhaoshangchuan"
             android:layout_width="480px"
-            android:layout_height="51px"
+            android:layout_height="71px"
         android:layout_marginTop="885px"
         android:background="#FF8C00"
             android:onClick="reg_paizhaoshangchuan"
@@ -112,7 +112,7 @@
 <Button
             android:id="@+id/congxiangce"
            android:layout_width="480px"
-            android:layout_height="51px"
+            android:layout_height="71px"
          android:background="#FF8C00"
              android:onClick="reg_congxiangce"
              android:layout_marginTop="28px"

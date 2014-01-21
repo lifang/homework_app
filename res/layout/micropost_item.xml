@@ -93,7 +93,7 @@
 
 <Button
     android:id="@+id/micropost_huifu"
-    android:layout_width="90px"
+    android:layout_width="wrap_content"
     android:layout_height="wrap_content"
     android:layout_alignParentRight="true"
     android:layout_below="@+id/reply_edit"
@@ -105,7 +105,7 @@
                 <ListView
                     android:id="@+id/aa"
                     android:layout_width="fill_parent"
-                    android:layout_height="127px"
+                    android:layout_height="wrap_content"
                      android:fadingEdge="none" 
                     android:layout_below="@+id/micropost_huifu"
                     android:background="#ede9ea" />
