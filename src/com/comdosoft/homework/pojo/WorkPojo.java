@@ -11,6 +11,7 @@ public class WorkPojo {
 	private String reading_schedule;
 	private boolean type;
 
+	
 	public WorkPojo() {
 	}
 

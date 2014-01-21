@@ -8,6 +8,7 @@ public class ClassStuPojo
 	private String Nick_Name;
 	public ClassStuPojo() {
 	}	
+
 	public ClassStuPojo(int id, String student_Name, String head_portrait_Url,
 			String nick_Name) {
 		super();
