@@ -371,7 +371,7 @@ Urlinterface {
 							a= i+1;
 						}
 					}
-					if(a==list.size()){//  若第一页主消息中没有  提示信息所在，，则  单独显示  该条提示信息
+					if(a==list.size()&&a!=0){//  若第一页主消息中没有  提示信息所在，，则  单独显示  该条提示信息
 
 						String mess = homework.getNoselect_message();
 						list.clear();
@@ -666,6 +666,8 @@ Urlinterface {
 
 				if ( true ==status) {
 					String micropostsListJson = array.getString("details_microposts");
+					page = Integer.parseInt(array
+							.getString("page"));
 					pages_count = Integer.parseInt(array.getString("pages_count"));
 
 					JSONArray jsonArray2 = new JSONArray(micropostsListJson);
