@@ -47,7 +47,13 @@ public class AboutMeActivity extends Activity
 			try {
 				while(true)
 				{
-					get_News();
+					HashMap<String, String> mp=new HashMap<String, String>();
+					mp.put("user_id","1");
+					mp.put("school_class_id","1");
+					mp.put("message_id","12");
+					String json=HomeWorkTool.doPost(Urlinterface.read_message, mp);
+					Log.i("aa",json);
+//					get_News();
 					Thread.sleep(5000);
 				}
 			} catch (InterruptedException e) {

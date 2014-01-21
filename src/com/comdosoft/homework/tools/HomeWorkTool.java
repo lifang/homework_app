@@ -310,7 +310,7 @@ public class HomeWorkTool implements Urlinterface {
 				params = params.deleteCharAt(params.length() - 1);
 			}
 			URL url = new URL(reqUrl);
-			Log.i("linshi", url.toString());
+			Log.i(tag, url.toString());
 			url_con = (HttpURLConnection) url.openConnection();
 			url_con.setRequestMethod("POST");
 			System.setProperty("sun.net.client.defaultConnectTimeout",

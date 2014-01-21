@@ -11,6 +11,7 @@ import android.content.Intent;
 import android.graphics.Bitmap;
 import android.os.Handler;
 import android.os.Message;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -89,6 +90,7 @@ public class AboutMeAdapter extends BaseAdapter
 							mp.put("school_class_id",String.valueOf(hw.getClass_id()));
 							mp.put("message_id", Amlist.get(position).getMicropost_id());
 							String json=HomeWorkTool.doPost(Urlinterface.read_message, mp);
+							Log.i("aa",json);
 							Message msg=new Message();
 							msg.what=2;
 							hw.setNoselect_message(json);
