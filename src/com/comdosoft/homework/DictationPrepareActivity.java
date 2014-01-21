@@ -60,7 +60,7 @@ public class DictationPrepareActivity extends Activity implements
 		dictationImg = (ImageView) findViewById(R.id.question_dictation_img);
 		dictationImg.setOnClickListener(this);
 		// setMp3Url();
-		new MyThread().start();
+		//new MyThread().start();
 	}
 
 	@Override

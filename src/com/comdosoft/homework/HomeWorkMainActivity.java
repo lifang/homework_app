@@ -77,7 +77,6 @@ public class HomeWorkMainActivity extends TabActivity implements Urlinterface {
 				e.printStackTrace();
 			}
 		}
-
 		Display display = getWindowManager().getDefaultDisplay();
 		int Height = display.getHeight();
 		int width = display.getWidth();
