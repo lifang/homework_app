@@ -40,41 +40,40 @@ public class HomeWorkMainActivity extends TabActivity implements Urlinterface {
 		Intent intent = getIntent();
 		String json = intent.getStringExtra("json");
 
-//		if (json != null || json != "") {
-//			JSONObject array0;
-//
-//			try {
-//				array0 = new JSONObject(json);
-//				JSONObject student = array0.getJSONObject("student"); // 获得学生的信息
-//				String id = student.getString("id");
-//				String user_id = student.getString("user_id");
-//				String avatar_url = student.getString("avatar_url"); // 获取本人头像昂所有在地址
-//				String name = student.getString("name");
-//				String nick_name = student.getString("nickname");
-//				// service.save(id, user_id, nick_name, nick_name, avatar_url);
-//				JSONObject class1 = array0.getJSONObject("class"); // 或得班级信息
-//				// 获取class_name
-//
-//				String school_class_id = class1.getString("id");
-//				SharedPreferences preferences = getSharedPreferences(SHARED,
-//						Context.MODE_PRIVATE);
-//				Editor editor = preferences.edit();
-//				editor.putString("name", name);
-//				editor.putString("user_id", id);
-//				editor.putString("id", id);
-//				editor.putString("avatar_url", avatar_url);
-//				editor.putString("nickname", nick_name);
-//				editor.putString("school_class_id", school_class_id);
-//				editor.commit();
-//				homework.setClass_id(Integer.parseInt(school_class_id));
-//				homework.setUser_id(Integer.parseInt(user_id));
-		homework.setClass_id(1);
-		homework.setUser_id(1);
-//			} catch (JSONException e) {
-//				// TODO Auto-generated catch block
-//				e.printStackTrace();
-//			}
-//		}
+		if (json != null || json != "") {
+			JSONObject array0;
+
+			try {
+				array0 = new JSONObject(json);
+				JSONObject student = array0.getJSONObject("student"); // 获得学生的信息
+				String id = student.getString("id");
+				String user_id = student.getString("user_id");
+				String avatar_url = student.getString("avatar_url"); // 获取本人头像昂所有在地址
+				String name = student.getString("name");
+				String nick_name = student.getString("nickname");
+				// service.save(id, user_id, nick_name, nick_name, avatar_url);
+				JSONObject class1 = array0.getJSONObject("class"); // 或得班级信息
+				// 获取class_name
+
+				String school_class_id = class1.getString("id");
+				SharedPreferences preferences = getSharedPreferences(SHARED,
+						Context.MODE_PRIVATE);
+				Editor editor = preferences.edit();
+				editor.putString("name", name);
+				editor.putString("user_id", id);
+				editor.putString("id", id);
+				editor.putString("avatar_url", avatar_url);
+				editor.putString("nickname", nick_name);
+				editor.putString("school_class_id", school_class_id);
+				editor.commit();
+				homework.setClass_id(Integer.parseInt(school_class_id));
+				homework.setUser_id(Integer.parseInt(user_id));
+
+			} catch (JSONException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
 
 		Display display = getWindowManager().getDefaultDisplay();
 		int Height = display.getHeight();
