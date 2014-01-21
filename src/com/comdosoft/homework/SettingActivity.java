@@ -267,7 +267,7 @@ public class SettingActivity extends Activity  implements Urlinterface{
 		editor.putString("school_class_id",null);
 		editor.commit();
 		Intent intent = new Intent();
-		intent.setClass(this, SwitchClassActivity.class);//
+		intent.setClass(this, LoginActivity.class);//
 		startActivity(intent);
 		
 	}

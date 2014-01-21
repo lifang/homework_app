@@ -27,6 +27,8 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
+
 import com.comdosoft.homework.pojo.QuestionPojo;
 import com.comdosoft.homework.tools.HomeWork;
 import com.comdosoft.homework.tools.HomeWorkParams;
@@ -34,7 +36,6 @@ import com.comdosoft.homework.tools.HomeWorkTool;
 import com.comdosoft.homework.tools.Soundex_Levenshtein;
 import com.comdosoft.homework.tools.Urlinterface;
 import com.comdosoft.homework.tools.PredicateLayout;
-
 
 public class SpeakBeginActivity extends Activity implements Urlinterface {
 	public String content;// 记录本题正确答案
@@ -61,6 +62,7 @@ public class SpeakBeginActivity extends Activity implements Urlinterface {
 	public String error_str = "";// 记录错误的词
 	private ProgressDialog prodialog;
 	private int type;
+	private int speak_number;
 	private Handler handler = new Handler() {
 		public void handleMessage(Message msg) {
 			Intent intent = new Intent();
@@ -186,51 +188,62 @@ public class SpeakBeginActivity extends Activity implements Urlinterface {
 			}
 			break;
 		case R.id.speak:// 语音
-			try {
-				// 通过Intent传递语音识别的模式，开启语音
-				Intent speak_intent = new Intent(
-						RecognizerIntent.ACTION_RECOGNIZE_SPEECH);
-				// 语言模式和自由模式的语音识别
-				intent.putExtra(RecognizerIntent.EXTRA_LANGUAGE_MODEL,
-						RecognizerIntent.LANGUAGE_MODEL_FREE_FORM);
-				// 提示语音开始
-				intent.putExtra(RecognizerIntent.EXTRA_PROMPT, "开始语音");
-				// 开始语音识别
 
-				startActivityForResult(speak_intent,
-						VOICE_RECOGNITION_REQUEST_CODE);
+			if (speak_number < 4) {
+				speak_number += 1;
+				Toast.makeText(SpeakBeginActivity.this,
+						"第" + speak_number + "次答题", Toast.LENGTH_SHORT).show();
+				try {
+					// 通过Intent传递语音识别的模式，开启语音
+					Intent speak_intent = new Intent(
+							RecognizerIntent.ACTION_RECOGNIZE_SPEECH);
+					// 语言模式和自由模式的语音识别
+					intent.putExtra(RecognizerIntent.EXTRA_LANGUAGE_MODEL,
+							RecognizerIntent.LANGUAGE_MODEL_FREE_FORM);
+					// 提示语音开始
+					intent.putExtra(RecognizerIntent.EXTRA_PROMPT, "开始语音");
+					// 开始语音识别
 
-			} catch (Exception e) {
-				Builder builder = new Builder(SpeakBeginActivity.this);
-				builder.setTitle("提示");
-				builder.setMessage("您的设备未安装语音引擎,点击确定开始安装。");
-				builder.setPositiveButton("确定",
-						new DialogInterface.OnClickListener() {
-							public void onClick(DialogInterface dialog,
-									int which) {
-								if (HomeWorkTool.copyApkFromAssets(
-										SpeakBeginActivity.this,
-										"VoiceSearch.apk", Environment
-												.getExternalStorageDirectory()
-												.getAbsolutePath()
-												+ "/VoiceSearch.apk")) {
-									Intent intent = new Intent(
-											Intent.ACTION_VIEW);
-									intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-									intent.setDataAndType(
-											Uri.parse("file://"
-													+ Environment
+					startActivityForResult(speak_intent,
+							VOICE_RECOGNITION_REQUEST_CODE);
+
+				} catch (Exception e) {
+					Builder builder = new Builder(SpeakBeginActivity.this);
+					builder.setTitle("提示");
+					builder.setMessage("您的设备未安装语音引擎,点击确定开始安装。");
+					builder.setPositiveButton("确定",
+							new DialogInterface.OnClickListener() {
+								public void onClick(DialogInterface dialog,
+										int which) {
+									if (HomeWorkTool
+											.copyApkFromAssets(
+													SpeakBeginActivity.this,
+													"VoiceSearch.apk",
+													Environment
 															.getExternalStorageDirectory()
 															.getAbsolutePath()
-													+ "/VoiceSearch.apk"),
-											"application/vnd.android.package-archive");
-									SpeakBeginActivity.this
-											.startActivity(intent);
+															+ "/VoiceSearch.apk")) {
+										Intent intent = new Intent(
+												Intent.ACTION_VIEW);
+										intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+										intent.setDataAndType(
+												Uri.parse("file://"
+														+ Environment
+																.getExternalStorageDirectory()
+																.getAbsolutePath()
+														+ "/VoiceSearch.apk"),
+												"application/vnd.android.package-archive");
+										SpeakBeginActivity.this
+												.startActivity(intent);
+									}
 								}
-							}
-						});
-				builder.setNegativeButton("取消", null);
-				builder.show();
+							});
+					builder.setNegativeButton("取消", null);
+					builder.show();
+				}
+			} else {
+				Toast.makeText(SpeakBeginActivity.this,
+						"本题的回答次数已经用完了,请继续下一题!", Toast.LENGTH_SHORT).show();
 			}
 			break;
 		}
