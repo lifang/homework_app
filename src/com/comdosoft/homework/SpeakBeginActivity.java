@@ -27,6 +27,7 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 import com.comdosoft.homework.pojo.QuestionPojo;
 import com.comdosoft.homework.tools.HomeWork;
 import com.comdosoft.homework.tools.HomeWorkParams;
@@ -34,7 +35,6 @@ import com.comdosoft.homework.tools.HomeWorkTool;
 import com.comdosoft.homework.tools.Soundex_Levenshtein;
 import com.comdosoft.homework.tools.Urlinterface;
 import com.comdosoft.homework.tools.PredicateLayout;
-
 
 public class SpeakBeginActivity extends Activity implements Urlinterface {
 	public String content;// 记录本题正确答案
@@ -61,6 +61,7 @@ public class SpeakBeginActivity extends Activity implements Urlinterface {
 	public String error_str = "";// 记录错误的词
 	private ProgressDialog prodialog;
 	private int type;
+	private int speak_number;
 	private Handler handler = new Handler() {
 		public void handleMessage(Message msg) {
 			Intent intent = new Intent();
@@ -97,6 +98,21 @@ public class SpeakBeginActivity extends Activity implements Urlinterface {
 				intent.setClass(SpeakBeginActivity.this,
 						HomeWorkMainActivity.class);
 				startActivity(intent);
+				break;
+			case 5:
+				// MyDialog("恭喜完成今天的朗读作业!", "确认", "取消", 2);
+				prodialog.dismiss();
+				builder.setMessage("提交作业失败");
+				builder.setPositiveButton("确定", null);
+				builder.show();
+				break;
+			case 6:
+				prodialog.dismiss();
+				if ((homework.getQuestion_index() + 1) < homework.getQuestion_allNumber()) {
+					MyDialog("你已经答完本题确认继续下一题吗?", "确认", "取消", 1);
+				} else {
+					MyDialog("恭喜完成今天的朗读作业!", "确认", "取消", 2);
+				}
 				break;
 			}
 			super.handleMessage(msg);
@@ -163,7 +179,10 @@ public class SpeakBeginActivity extends Activity implements Urlinterface {
 				if ((index + 1) < branch_questions.size()) {
 					handler.sendEmptyMessage(0);
 				} else {
-					MyDialog("你已经答完本题确认继续下一题吗?", "确认", "取消", 1);
+					prodialog = new ProgressDialog(SpeakBeginActivity.this);
+					prodialog.setMessage(HomeWorkParams.PD_FINISH_QUESTION);
+					prodialog.show();
+					new Thread(new SendWorkOver()).start();// 记录大題
 				}
 			} else {
 				question_id = branch_questions.get(index).getId();
@@ -172,7 +191,10 @@ public class SpeakBeginActivity extends Activity implements Urlinterface {
 				if ((index + 1) < branch_questions.size()) {
 					handler.sendEmptyMessage(0);
 				} else {
-					MyDialog("恭喜完成今天的朗读作业!", "确认", "取消", 2);
+					prodialog = new ProgressDialog(SpeakBeginActivity.this);
+					prodialog.setMessage(HomeWorkParams.PD_FINISH_QUESTION);
+					prodialog.show();
+					new Thread(new SendWorkOver()).start();// 记录大題
 				}
 			}
 			break;
@@ -186,51 +208,62 @@ public class SpeakBeginActivity extends Activity implements Urlinterface {
 			}
 			break;
 		case R.id.speak:// 语音
-			try {
-				// 通过Intent传递语音识别的模式，开启语音
-				Intent speak_intent = new Intent(
-						RecognizerIntent.ACTION_RECOGNIZE_SPEECH);
-				// 语言模式和自由模式的语音识别
-				intent.putExtra(RecognizerIntent.EXTRA_LANGUAGE_MODEL,
-						RecognizerIntent.LANGUAGE_MODEL_FREE_FORM);
-				// 提示语音开始
-				intent.putExtra(RecognizerIntent.EXTRA_PROMPT, "开始语音");
-				// 开始语音识别
 
-				startActivityForResult(speak_intent,
-						VOICE_RECOGNITION_REQUEST_CODE);
+			if (speak_number < 4) {
+				speak_number += 1;
+				Toast.makeText(SpeakBeginActivity.this,
+						"第" + speak_number + "次答题", Toast.LENGTH_SHORT).show();
+				try {
+					// 通过Intent传递语音识别的模式，开启语音
+					Intent speak_intent = new Intent(
+							RecognizerIntent.ACTION_RECOGNIZE_SPEECH);
+					// 语言模式和自由模式的语音识别
+					intent.putExtra(RecognizerIntent.EXTRA_LANGUAGE_MODEL,
+							RecognizerIntent.LANGUAGE_MODEL_FREE_FORM);
+					// 提示语音开始
+					intent.putExtra(RecognizerIntent.EXTRA_PROMPT, "开始语音");
+					// 开始语音识别
 
-			} catch (Exception e) {
-				Builder builder = new Builder(SpeakBeginActivity.this);
-				builder.setTitle("提示");
-				builder.setMessage("您的设备未安装语音引擎,点击确定开始安装。");
-				builder.setPositiveButton("确定",
-						new DialogInterface.OnClickListener() {
-							public void onClick(DialogInterface dialog,
-									int which) {
-								if (HomeWorkTool.copyApkFromAssets(
-										SpeakBeginActivity.this,
-										"VoiceSearch.apk", Environment
-												.getExternalStorageDirectory()
-												.getAbsolutePath()
-												+ "/VoiceSearch.apk")) {
-									Intent intent = new Intent(
-											Intent.ACTION_VIEW);
-									intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-									intent.setDataAndType(
-											Uri.parse("file://"
-													+ Environment
+					startActivityForResult(speak_intent,
+							VOICE_RECOGNITION_REQUEST_CODE);
+
+				} catch (Exception e) {
+					Builder builder = new Builder(SpeakBeginActivity.this);
+					builder.setTitle("提示");
+					builder.setMessage("您的设备未安装语音引擎,点击确定开始安装。");
+					builder.setPositiveButton("确定",
+							new DialogInterface.OnClickListener() {
+								public void onClick(DialogInterface dialog,
+										int which) {
+									if (HomeWorkTool
+											.copyApkFromAssets(
+													SpeakBeginActivity.this,
+													"VoiceSearch.apk",
+													Environment
 															.getExternalStorageDirectory()
 															.getAbsolutePath()
-													+ "/VoiceSearch.apk"),
-											"application/vnd.android.package-archive");
-									SpeakBeginActivity.this
-											.startActivity(intent);
+															+ "/VoiceSearch.apk")) {
+										Intent intent = new Intent(
+												Intent.ACTION_VIEW);
+										intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+										intent.setDataAndType(
+												Uri.parse("file://"
+														+ Environment
+																.getExternalStorageDirectory()
+																.getAbsolutePath()
+														+ "/VoiceSearch.apk"),
+												"application/vnd.android.package-archive");
+										SpeakBeginActivity.this
+												.startActivity(intent);
+									}
 								}
-							}
-						});
-				builder.setNegativeButton("取消", null);
-				builder.show();
+							});
+					builder.setNegativeButton("取消", null);
+					builder.show();
+				}
+			} else {
+				Toast.makeText(SpeakBeginActivity.this, "本题的回答次数已经用完了,请继续下一题!",
+						Toast.LENGTH_SHORT).show();
 			}
 			break;
 		}
@@ -326,19 +359,14 @@ public class SpeakBeginActivity extends Activity implements Urlinterface {
 					break;
 				case 1:
 					dialog.dismiss();
-					prodialog = new ProgressDialog(SpeakBeginActivity.this);
-					prodialog.setMessage(HomeWorkParams.PD_FINISH_QUESTION);
-					prodialog.show();
-					new Thread(new SendWorkOver()).start();// 记录大題
+					handler.sendEmptyMessage(2);
 
 					break;
 				case 2:
 					dialog.dismiss();
 					homework.setQuestion_index(0);
-					prodialog = new ProgressDialog(SpeakBeginActivity.this);
-					prodialog.setMessage(HomeWorkParams.PD_FINISH_QUESTION);
-					prodialog.show();
-					new Thread(new SendWorkOver()).start();// 记录大題
+					handler.sendEmptyMessage(2);
+
 					break;
 				}
 			}
@@ -413,10 +441,10 @@ public class SpeakBeginActivity extends Activity implements Urlinterface {
 				if (obj.getString("status").equals("success")) {
 					switch (type) {
 					case 1:
-						handler.sendEmptyMessage(2);
+						handler.sendEmptyMessage(6);
 						break;
 					case 2:
-						handler.sendEmptyMessage(4);
+						handler.sendEmptyMessage(5);
 						break;
 					}
 
@@ -504,11 +532,8 @@ public class SpeakBeginActivity extends Activity implements Urlinterface {
 	}
 
 	public boolean onKeyDown(int keyCode, KeyEvent event) {
-		Intent intent = new Intent();
 		if (keyCode == KeyEvent.KEYCODE_BACK) {
-			SpeakBeginActivity.this.finish();
-			intent.setClass(SpeakBeginActivity.this, SpeakPrepareActivity.class);
-			startActivity(intent);
+			MyDialog("你还没有做完题,确认要退出吗?", "确认", "取消", 0);
 			return true;
 		}
 		return super.onKeyDown(keyCode, event);

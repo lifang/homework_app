@@ -7,8 +7,7 @@ public class ClassStuPojo
 	private String Head_portrait_Url;
 	private String Nick_Name;
 	public ClassStuPojo() {
-	}
-	
+	}	
 	public ClassStuPojo(int id, String student_Name, String head_portrait_Url,
 			String nick_Name) {
 		super();

@@ -249,12 +249,8 @@ public class SpeakPrepareActivity extends Activity implements Urlinterface,
 	}
 
 	public boolean onKeyDown(int keyCode, KeyEvent event) {
-		Intent intent = new Intent();
 		if (keyCode == KeyEvent.KEYCODE_BACK) {
-			SpeakPrepareActivity.this.finish();
-			intent.setClass(SpeakPrepareActivity.this,
-					HomeWorkMainActivity.class);
-			startActivity(intent);
+			MyDialog("确认不在继续答题吗？", "确定", "取消");
 			return true;
 		}
 		return super.onKeyDown(keyCode, event);

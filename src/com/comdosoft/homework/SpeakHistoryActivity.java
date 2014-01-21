@@ -317,10 +317,7 @@ public class SpeakHistoryActivity extends Activity implements Urlinterface {
 	public boolean onKeyDown(int keyCode, KeyEvent event) {
 		Intent intent = new Intent();
 		if (keyCode == KeyEvent.KEYCODE_BACK) {
-			SpeakHistoryActivity.this.finish();
-			intent.setClass(SpeakHistoryActivity.this,
-					SpeakPrepareActivity.class);
-			startActivity(intent);
+			MyDialog("确认要退出吗?", "确认", "取消", 0);
 			return true;
 		}
 		return super.onKeyDown(keyCode, event);
