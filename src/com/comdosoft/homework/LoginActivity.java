@@ -5,25 +5,29 @@ import java.util.Map;
 import org.json.JSONException;
 import org.json.JSONObject;
 import com.comdosoft.homework.tools.HomeWorkTool;
+import com.comdosoft.homework.tools.Urlinterface;
 import com.tencent.tauth.IUiListener;
 import com.tencent.tauth.Tencent;
 import com.tencent.tauth.UiError;
 import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.widget.Toast;
 
-public class LoginActivity extends Activity {
+// 登录    马龙    2014年1月20日
+public class LoginActivity extends Activity implements Urlinterface {
 
 	private static final String SCOPE = "get_user_info";
 	private static final String APP_ID = "101003848";
 	private String mes;
 	private String json;
-	private Tencent mTencent;
 	private String openid;
+	private Tencent mTencent;
+	private SharedPreferences sp;
 	private ProgressDialog mPd;
 	private Handler mHandler = new Handler() {
 
@@ -35,14 +39,14 @@ public class LoginActivity extends Activity {
 			Intent intent = new Intent();
 			switch (msg.what) {
 			case 1:
+				intent.putExtra("open_id", openid);
 				intent.setClass(getApplicationContext(),
-						HomeWorkIngActivity.class);
+						RegistrationActivity.class);
 				break;
 			case 2:
-				intent.putExtra("open_id", openid);
 				intent.putExtra("json", json);
 				intent.setClass(getApplicationContext(),
-						HomeWorkIngActivity.class);
+						HomeWorkMainActivity.class);
 				break;
 			}
 			startActivity(intent);
@@ -57,7 +61,16 @@ public class LoginActivity extends Activity {
 		mTencent = Tencent.createInstance(APP_ID, this.getApplicationContext());
 		mPd = new ProgressDialog(LoginActivity.this);
 		mPd.setMessage("正在登陆...");
-		onClickLogin();
+		sp = getPreferences(0);
+
+		if (sp.getString("user_id", "").equals("")
+				&& sp.getString("class_id", "").equals("")) {
+			onClickLogin();
+		} else {
+			Intent intent = new Intent(getApplicationContext(),
+					HomeWorkMainActivity.class);
+			startActivity(intent);
+		}
 	}
 
 	@Override
@@ -95,8 +108,7 @@ public class LoginActivity extends Activity {
 			super.run();
 			Map<String, String> map = new HashMap<String, String>();
 			map.put("open_id", openid);
-			json = HomeWorkTool.doPost(
-					"http://192.168.0.127:3004/api/students/login", map);
+			json = HomeWorkTool.doPost(QQ_LOGIN, map);
 			analyzeJson(json);
 		}
 	}

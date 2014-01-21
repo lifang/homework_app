@@ -80,7 +80,7 @@ public class HomeWorkMainActivity extends TabActivity implements Urlinterface {
 		Log.i(tag, width + "/" + Height);
 		tabhost = getTabHost();
 		res = getResources();
-		Intent intent1 = new Intent(this, Spec1.class);
+		Intent intent1 = new Intent(this, Classxinxiliu.class);
 		spec1 = tabhost.newTabSpec("spec1")
 				.setIndicator("", res.getDrawable(R.drawable.th1_1))
 				.setContent(intent1);
@@ -98,7 +98,7 @@ public class HomeWorkMainActivity extends TabActivity implements Urlinterface {
 				.setContent(intent3);
 		tabhost.addTab(spec3);
 
-		Intent intent4 = new Intent(this, Spec4.class);
+		Intent intent4 = new Intent(this, SettingActivity.class);
 		spec4 = tabhost.newTabSpec("spec4")
 				.setIndicator("", res.getDrawable(R.drawable.th4_4))
 				.setContent(intent4);

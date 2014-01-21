@@ -17,7 +17,6 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
-import android.util.Log;
 import android.view.KeyEvent;
 import android.widget.ListView;
 import android.widget.Toast;
@@ -27,6 +26,7 @@ public class AboutMeActivity extends Activity
 	private ListView listview;
 	List<AboutMePojo> listam ;
 	private int count=0;
+	@SuppressWarnings("unused")
 	private int num;
 	protected void onCreate(Bundle savedInstanceState) {
 		// TODO Auto-generated method stub
