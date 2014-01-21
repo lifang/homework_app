@@ -205,6 +205,7 @@ public class HomeWorkTool implements Urlinterface {
 	// get请求
 	public static String sendGETRequest(String path, Map<String, String> map)
 			throws Exception {
+		Log.i(tag, "AAA");
 		String json = "error";
 		StringBuilder url = new StringBuilder(path);
 		 url.append("?");
