@@ -100,6 +100,21 @@ public class SpeakBeginActivity extends Activity implements Urlinterface {
 						HomeWorkMainActivity.class);
 				startActivity(intent);
 				break;
+			case 5:
+				// MyDialog("恭喜完成今天的朗读作业!", "确认", "取消", 2);
+				prodialog.dismiss();
+				builder.setMessage("提交作业失败");
+				builder.setPositiveButton("确定", null);
+				builder.show();
+				break;
+			case 6:
+				prodialog.dismiss();
+				if ((homework.getQuestion_index() + 1) < homework.getQuestion_allNumber()) {
+					MyDialog("你已经答完本题确认继续下一题吗?", "确认", "取消", 1);
+				} else {
+					MyDialog("恭喜完成今天的朗读作业!", "确认", "取消", 2);
+				}
+				break;
 			}
 			super.handleMessage(msg);
 		}
@@ -165,7 +180,10 @@ public class SpeakBeginActivity extends Activity implements Urlinterface {
 				if ((index + 1) < branch_questions.size()) {
 					handler.sendEmptyMessage(0);
 				} else {
-					MyDialog("你已经答完本题确认继续下一题吗?", "确认", "取消", 1);
+					prodialog = new ProgressDialog(SpeakBeginActivity.this);
+					prodialog.setMessage(HomeWorkParams.PD_FINISH_QUESTION);
+					prodialog.show();
+					new Thread(new SendWorkOver()).start();// 记录大題
 				}
 			} else {
 				question_id = branch_questions.get(index).getId();
@@ -174,7 +192,10 @@ public class SpeakBeginActivity extends Activity implements Urlinterface {
 				if ((index + 1) < branch_questions.size()) {
 					handler.sendEmptyMessage(0);
 				} else {
-					MyDialog("恭喜完成今天的朗读作业!", "确认", "取消", 2);
+					prodialog = new ProgressDialog(SpeakBeginActivity.this);
+					prodialog.setMessage(HomeWorkParams.PD_FINISH_QUESTION);
+					prodialog.show();
+					new Thread(new SendWorkOver()).start();// 记录大題
 				}
 			}
 			break;
@@ -339,19 +360,14 @@ public class SpeakBeginActivity extends Activity implements Urlinterface {
 					break;
 				case 1:
 					dialog.dismiss();
-					prodialog = new ProgressDialog(SpeakBeginActivity.this);
-					prodialog.setMessage(HomeWorkParams.PD_FINISH_QUESTION);
-					prodialog.show();
-					new Thread(new SendWorkOver()).start();// 记录大題
+					handler.sendEmptyMessage(2);
 
 					break;
 				case 2:
 					dialog.dismiss();
 					homework.setQuestion_index(0);
-					prodialog = new ProgressDialog(SpeakBeginActivity.this);
-					prodialog.setMessage(HomeWorkParams.PD_FINISH_QUESTION);
-					prodialog.show();
-					new Thread(new SendWorkOver()).start();// 记录大題
+					handler.sendEmptyMessage(2);
+
 					break;
 				}
 			}
@@ -426,10 +442,10 @@ public class SpeakBeginActivity extends Activity implements Urlinterface {
 				if (obj.getString("status").equals("success")) {
 					switch (type) {
 					case 1:
-						handler.sendEmptyMessage(2);
+						handler.sendEmptyMessage(6);
 						break;
 					case 2:
-						handler.sendEmptyMessage(4);
+						handler.sendEmptyMessage(5);
 						break;
 					}
 
