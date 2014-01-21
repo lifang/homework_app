@@ -64,14 +64,14 @@ private String json="";
 		hw = (HomeWork) getApplication();
 	
 		
-		Date d = new Date();
-		open_id = d.toString();
+//		Date d = new Date();
+//		open_id = d.toString();
 		//  上面两句代码 用来获得不一样的   qq_uid，，，测试 用，，后期删除
 		
 		
 		
-//		Intent intent = getIntent();// 
-//		open_id = intent.getStringExtra("open_id");   // 获得上个页面传过来的   QQ  openid
+		Intent intent = getIntent();// 
+		open_id = intent.getStringExtra("open_id");   // 获得上个页面传过来的   QQ  openid
 
 		layout = this.findViewById(R.id.reg_photolayout); // 隐藏内容
 		layout2 = this.findViewById(R.id.reg_photolayout2); // 隐藏内容

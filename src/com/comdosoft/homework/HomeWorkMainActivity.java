@@ -33,7 +33,6 @@ public class HomeWorkMainActivity extends TabActivity implements Urlinterface {
 	public Field mBottomRightStrip;
 	private HomeWork homework;
 
-
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.homewrok_main);
@@ -41,23 +40,24 @@ public class HomeWorkMainActivity extends TabActivity implements Urlinterface {
 		Intent intent = getIntent();
 		String json = intent.getStringExtra("json");
 
-		if (json!=null||json!="") {
+		if (json != null || json != "") {
 			JSONObject array0;
 
 			try {
 				array0 = new JSONObject(json);
-				JSONObject student = array0.getJSONObject("student");  //   获得学生的信息
+				JSONObject student = array0.getJSONObject("student"); // 获得学生的信息
 				String id = student.getString("id");
 				String user_id = student.getString("user_id");
-				String avatar_url=student.getString("avatar_url");			//获取本人头像昂所有在地址
-				String name=student.getString("name");						
-				String nick_name=student.getString("nickname");
-				//service.save(id, user_id, nick_name, nick_name, avatar_url);
-				JSONObject class1 = array0.getJSONObject("class");  //  或得班级信息
-				//获取class_name
+				String avatar_url = student.getString("avatar_url"); // 获取本人头像昂所有在地址
+				String name = student.getString("name");
+				String nick_name = student.getString("nickname");
+				// service.save(id, user_id, nick_name, nick_name, avatar_url);
+				JSONObject class1 = array0.getJSONObject("class"); // 或得班级信息
+				// 获取class_name
 
 				String school_class_id = class1.getString("id");
-				SharedPreferences  preferences = getSharedPreferences(SHARED, Context.MODE_PRIVATE);
+				SharedPreferences preferences = getSharedPreferences(SHARED,
+						Context.MODE_PRIVATE);
 				Editor editor = preferences.edit();
 				editor.putString("name", name);
 				editor.putString("user_id", id);
@@ -72,9 +72,7 @@ public class HomeWorkMainActivity extends TabActivity implements Urlinterface {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
-		}	
-
-
+		}
 
 		Display display = getWindowManager().getDefaultDisplay();
 		int Height = display.getHeight();
@@ -82,7 +80,7 @@ public class HomeWorkMainActivity extends TabActivity implements Urlinterface {
 		Log.i(tag, width + "/" + Height);
 		tabhost = getTabHost();
 		res = getResources();
-		Intent intent1 = new Intent(this, Spec1.class);
+		Intent intent1 = new Intent(this, Classxinxiliu.class);
 		spec1 = tabhost.newTabSpec("spec1")
 				.setIndicator("", res.getDrawable(R.drawable.th1_1))
 				.setContent(intent1);
@@ -100,7 +98,7 @@ public class HomeWorkMainActivity extends TabActivity implements Urlinterface {
 				.setContent(intent3);
 		tabhost.addTab(spec3);
 
-		Intent intent4 = new Intent(this, Spec4.class);
+		Intent intent4 = new Intent(this, SettingActivity.class);
 		spec4 = tabhost.newTabSpec("spec4")
 				.setIndicator("", res.getDrawable(R.drawable.th4_4))
 				.setContent(intent4);
