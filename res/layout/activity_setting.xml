@@ -45,7 +45,7 @@
             android:layout_height="71px"
         android:layout_marginTop="21px"
         android:gravity="center"
-        android:hint="fwefsf"
+        
         android:textSize="24px" />
            <TextView
        
@@ -62,7 +62,7 @@
             android:layout_height="71px"
         android:layout_marginTop="21px"
         android:gravity="center"
-        android:hint="马丁"
+     
         android:textSize="24px" />    
            
      

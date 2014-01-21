@@ -38,7 +38,7 @@
             android:layout_height="71px"
         android:layout_marginTop="22px"
         android:gravity="center"
-        android:hint="fwefsf"
+        
         android:textSize="24px" />
            <TextView
        
@@ -55,7 +55,7 @@
             android:layout_height="71px"
         android:layout_marginTop="22px"
         android:gravity="center"
-        android:hint="马丁"
+        
         android:textSize="24px" />    
                    <TextView
        
@@ -71,7 +71,7 @@
          android:layout_width="480px"
             android:layout_height="71px"
         android:gravity="center"
-        android:hint="fwefsf;wer"
+       
         android:layout_marginTop="22px"
         android:textSize="24px" /> 
                   <Button
