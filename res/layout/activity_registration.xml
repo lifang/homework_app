@@ -10,6 +10,8 @@
     android:background="@drawable/bj"
     android:orientation="vertical"
     android:gravity="center_horizontal"
+    android:focusable="true"
+android:focusableInTouchMode="true"
     >
 
     <ImageButton
