@@ -53,7 +53,7 @@ public class SpeakBeginActivity extends Activity implements Urlinterface {
 	private int school_class_id;
 	private int publish_question_package_id;
 	private int question_package_id;
-	private int question_id;
+	private int branch_question_id;
 	private HomeWork homework;
 	private List<QuestionPojo> branch_questions;
 	private int index = 0;
@@ -62,6 +62,7 @@ public class SpeakBeginActivity extends Activity implements Urlinterface {
 	private ProgressDialog prodialog;
 	private int type;
 	private int speak_number;
+	private boolean over_static = false;
 	private Handler handler = new Handler() {
 		public void handleMessage(Message msg) {
 			Intent intent = new Intent();
@@ -77,6 +78,8 @@ public class SpeakBeginActivity extends Activity implements Urlinterface {
 				SetTextView();
 				break;
 			case 1:
+				prodialog.dismiss();
+				homework.setHistory_item(homework.getHistory_item() + 1);
 				MyDialog("你已经答完本题确认继续下一题吗?", "确认", "取消", 1);
 				break;
 			case 2:
@@ -170,15 +173,23 @@ public class SpeakBeginActivity extends Activity implements Urlinterface {
 			MyDialog("你还没有做完题,确认要退出吗?", "确认", "取消", 0);
 			break;
 		case R.id.question_speak_next:
+			speak_number = 0;
 			stop();
-			int ye = homework.getQuestion_index();
+			int ye = 0;
+			if (homework.getHistory_item() >= homework.getQuestion_list()
+					.size()) {
+				ye = homework.getQuestion_index();
+			} else {
+				ye = homework.getHistory_item();
+			}
 			if ((ye + 1) < homework.getQuestion_allNumber()) {
-				question_id = branch_questions.get(index).getId();
+				branch_question_id = branch_questions.get(index).getId();
 				if ((index + 1) < branch_questions.size()) {
 					Thread thread = new Thread(new Record_answer_info());// 记录小题
 					thread.start();
 					handler.sendEmptyMessage(0);
 				} else {
+					over_static = true;
 					prodialog = new ProgressDialog(SpeakBeginActivity.this);
 					prodialog.setMessage(HomeWorkParams.PD_FINISH_QUESTION);
 					prodialog.show();
@@ -186,7 +197,7 @@ public class SpeakBeginActivity extends Activity implements Urlinterface {
 					thread.start();
 				}
 			} else {
-				question_id = branch_questions.get(index).getId();
+				branch_question_id = branch_questions.get(index).getId();
 				Thread thread = new Thread(new Record_answer_info());// 记录小题
 				thread.start();
 				if ((index + 1) < branch_questions.size()) {
@@ -281,12 +292,14 @@ public class SpeakBeginActivity extends Activity implements Urlinterface {
 
 			String speak = results.get(0);// 用户语音返回的字符串
 			str_list = new ArrayList<String>();
-			String s = content.replaceAll("(?i)[^a-zA-Z0-9\u4E00-\u9FA5]", " ");// 去除标点符号
-			String[] item = s.split(" ");
+			String[] item = content.split(" ");
 			for (int i = 0; i < item.length; i++) {
-				str_list.add(item[i]);
+				String is = item[i].replaceAll("(?i)[^a-zA-Z0-9\u4E00-\u9FA5]",
+						" ");// 去除标点符号
+				str_list.add(is);
 			}
 			// question_speak_tishi
+			Log.i(tag, speak + "->" + str_list);
 			List<int[]> code_list = Soundex_Levenshtein.Engine(speak, str_list);
 			if (code_list.size() > 0) {
 				for (int i = 0; i < code_list.size(); i++) {
@@ -401,32 +414,29 @@ public class SpeakBeginActivity extends Activity implements Urlinterface {
 	class Record_answer_info implements Runnable {
 		public void run() {
 			Looper.prepare();
-			Log.i(tag, "错词：" + error_str);
-			Log.i(tag,
-					school_class_id + "-" + student_id + "-"
-							+ question_package_id + "-"
-							+ homework.getBranch_question_id() + "-"
-							+ question_id + "-");
+			Log.i("linshi", "错词：" + error_str);
+			Log.i("linshi",
+					student_id + "->" + school_class_id + "->"
+							+ publish_question_package_id + "->"
+							+ homework.getQuestion_id() + "->"
+							+ branch_question_id);
 			Map<String, String> map = new HashMap<String, String>();
 			map.put("school_class_id", school_class_id + "");
 			map.put("student_id", student_id + "");
 			map.put("publish_question_package_id", publish_question_package_id
 					+ "");
-			map.put("branch_question_id", homework.getBranch_question_id() + "");
-			map.put("question_id", question_id + "");
+			map.put("branch_question_id", branch_question_id + "");
+			map.put("question_id", homework.getQuestion_id() + "");
 			map.put("answer", error_str);
-			map.put("question_types", 0 + "");
+			map.put("question_types", 1 + "");
 
 			String json;
 			try {
 				json = HomeWorkTool.doPost(RECORD_ANSWER_INFO, map);
 				JSONObject obj = new JSONObject(json);
 				if (obj.getString("status").equals("success")) {
-					if ((homework.getQuestion_index() + 1) < homework
-							.getQuestion_allNumber()) {
-						if ((index + 1) > branch_questions.size()) {
-							handler.sendEmptyMessage(1);
-						}
+					if (over_static == true) {
+						handler.sendEmptyMessage(1);
 					}
 				}
 			} catch (Exception e) {
@@ -440,6 +450,7 @@ public class SpeakBeginActivity extends Activity implements Urlinterface {
 	class SendWorkOver implements Runnable {
 		public void run() {
 			Looper.prepare();
+			Log.i("linshi", student_id + "->");
 			Map<String, String> map = new HashMap<String, String>();
 			map.put("school_class_id", school_class_id + "");
 			map.put("student_id", student_id + "");
