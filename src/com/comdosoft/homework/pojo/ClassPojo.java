@@ -9,6 +9,7 @@ public class ClassPojo
 		this.name = name;
 	}
 
+
 	public int getId() {
 		return id;
 	}
