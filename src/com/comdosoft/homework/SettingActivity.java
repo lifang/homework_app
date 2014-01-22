@@ -73,9 +73,9 @@ public class SettingActivity extends Activity implements Urlinterface {
 		user_id = preferences.getString("user_id", null);
 		if (user_id != null) {
 			id = preferences.getString("id", null);
-			avatar_url = preferences.getString("avatar_url", null);
-			nicknameS = preferences.getString("nicknameS", null);
-			nameS = preferences.getString("name", null);
+			avatar_url = preferences.getString("avatar_url", "");
+			nicknameS = preferences.getString("nickname", "");
+			nameS = preferences.getString("name", "");
 
 		}
 

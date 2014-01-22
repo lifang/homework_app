@@ -1,163 +1,161 @@
-<?xml version="1.0" encoding="utf-8"?>
-<LinearLayout 
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<?xml version="1.0" encoding="UTF-8"?>
+
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="fill_parent"
-    android:layout_height="wrap_content"
-    
-    >
-<RelativeLayout android:layout_width="fill_parent"
-    android:layout_height="wrap_content"
-    android:background="#f6f2f3"
-    android:orientation="vertical"
-    android:paddingTop="37px"
- >
+    android:layout_height="wrap_content" >
 
-    <ImageView
-        android:id="@+id/user_face"
-        android:layout_width="82px"
-        android:layout_height="82px"
-        android:background="@drawable/moren" />
-
+
     <RelativeLayout
-        android:id="@+id/relativeLayout1"
-        android:layout_width="wrap_content"
+        android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:layout_alignRight="@+id/message_content"
-        android:layout_alignTop="@+id/user_face"
-        android:layout_marginLeft="19px"
-        android:layout_toRightOf="@+id/user_face" >
+        android:background="#f6f2f3"
+        android:orientation="vertical"
+        android:paddingTop="37px" >
 
-        <TextView
-            android:id="@+id/message_senderName"
+        <ImageView
+            android:id="@+id/user_face"
+            android:layout_width="82px"
+            android:layout_height="82px"
+            android:background="@drawable/moren" />
+
+
+        <RelativeLayout
+            android:id="@+id/relativeLayout1"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignRight="@+id/message_content"
             android:layout_alignTop="@+id/user_face"
-            android:text="张三  回复  李四"
-            android:textColor="#92b81b"
-            android:textSize="24px" />
+            android:layout_marginLeft="19px"
+            android:layout_toRightOf="@+id/user_face" >
 
-        <ImageButton
-            android:id="@+id/button1"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentRight="true"
-            android:layout_alignParentTop="true"
-            android:background="@drawable/delete"
-            android:onClick="delete_parents" />
+            <TextView
+                android:id="@+id/message_senderName"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignRight="@+id/message_content"
+               
+                android:text="张三 回复 李四"
+                android:textColor="#92b81b"
+                android:textSize="24px" />
 
-        <TextView
-            android:id="@+id/micropost_content"
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            android:layout_alignParentLeft="true"
-            android:layout_below="@+id/message_senderName"
-            android:paddingRight="10px"
-            android:text="啊啊啊啊啊啊啊啊啊啊速度等等等等等等等等等等等等等等等等等等等等等等等等等等等等等等等等等等等等"
-            android:textColor="#626060"
-            android:textSize="24px" />
+            <ImageButton
+                android:id="@+id/button1"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentRight="true"
+                android:layout_alignParentTop="true"
+                android:background="@drawable/delete"
+                android:onClick="delete_parents" />
 
-        <Button
-            android:id="@+id/micropost_huifu"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentRight="true"
-            android:layout_below="@+id/micropost_content"
-            android:text="@string/huifu"
-            android:textColor="#92b81b"
-           android:background="#00000000"
-            android:textSize="24px" />
+            <TextView
+                android:id="@+id/micropost_content"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:layout_alignParentLeft="true"
+                android:layout_below="@+id/message_senderName"
+                android:paddingRight="10px"
+                android:text="啊啊啊啊啊啊啊啊啊啊速度等等等等等等等等等等等等等等等等等等等等等等等等等等等等等等等等等等等等"
+                android:textColor="#626060"
+                android:textSize="24px" />
 
-        
-         <!-- 下面的内容一开始是隐藏起来的  android:visibility="gone" -->
-
+            <Button
+                android:id="@+id/micropost_huifu"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentRight="true"
+                android:layout_below="@+id/micropost_content"
+                android:background="#00000000"
+                android:text="@string/huifu"
+                android:textColor="#92b81b"
+                android:textSize="24px" />
+
+            <!-- 下面的内容一开始是隐藏起来的 android:visibility="gone" -->
+
+-
+
             <RelativeLayout
                 android:id="@+id/child_micropost"
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
                 android:layout_below="@+id/micropost_huifu"
                 android:background="@drawable/child_bj2"
-              android:visibility="gone"
-                >
-
-<EditText
-    android:id="@+id/reply_edit"
-    android:layout_width="fill_parent"
-    android:layout_height="127px"
-    android:layout_marginTop="40px"
-    android:gravity="top"
-    android:focusable="true" 
-  android:focusableInTouchMode="true" 
-    
-     />
+                android:visibility="gone" >
 
-<Button
-    android:id="@+id/micropost_huifu"
-   android:layout_width="73.9px"
-                android:layout_height="32.5px"
-    android:layout_alignParentRight="true"
-    android:layout_below="@+id/reply_edit"
-    android:text="@string/huifu"
-     android:background="#92b81b"
-     android:textColor="#FFFFFF"
-    android:onClick="reply_message"
-   
-    android:textSize="24px" />
-
+                <EditText
+                    android:id="@+id/reply_edit"
+                    android:layout_width="fill_parent"
+                    android:layout_height="127px"
+                    android:layout_marginTop="40px"
+                    android:focusable="true"
+                    android:focusableInTouchMode="true"
+                      android:textSize="24px"
+                    android:gravity="top" />
+
+                <Button
+                    android:id="@+id/micropost_huifu"
+                    android:layout_width="73.9px"
+                    android:layout_height="32.5px"
+                    android:layout_alignParentRight="true"
+                    android:layout_below="@+id/reply_edit"
+                    android:background="#92b81b"
+                    android:onClick="reply_message"
+                    android:text="@string/huifu"
+                    android:textColor="#FFFFFF"
+                    android:textSize="24px" />
+
                 <ListView
                     android:id="@+id/aa"
                     android:layout_width="fill_parent"
                     android:layout_height="20px"
-                     android:fadingEdge="none" 
                     android:layout_below="@+id/micropost_huifu"
-                     android:visibility="gone"
-                    android:background="#ede9ea" />
-<Button
+                    android:background="#ede9ea"
+                    android:fadingEdge="none"
+                    android:visibility="gone" />
+
+                <Button
                     android:id="@+id/lookMore"
                     android:layout_width="fill_parent"
                     android:layout_height="wrap_content"
-                      android:textSize="24px"
                     android:layout_below="@+id/aa"
+                    android:background="#ede9ea"
                     android:text="@string/lookmore"
-                     android:visibility="gone"
-                    android:background="#ede9ea" />
+                    android:textSize="24px"
+                    android:visibility="gone" />
             </RelativeLayout>
+
             <!-- 上面的内容一开始是隐藏起来的 -->
 
-        <Button
-            android:id="@+id/micropost_guanzhu"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_below="@+id/micropost_content"
-            android:layout_marginRight="26px"
-            android:layout_toLeftOf="@+id/micropost_huifu"
-            android:text="@string/guanzhu"
-            android:textColor="#92b81b"
-           android:background="#00000000"
-            android:textSize="24px" />
+            <Button
+                android:id="@+id/micropost_guanzhu"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/micropost_content"
+                android:layout_marginRight="26px"
+                android:layout_toLeftOf="@+id/micropost_huifu"
+                android:background="#00000000"
+                android:text="@string/guanzhu"
+                android:textColor="#92b81b"
+                android:textSize="24px" />
 
-        <TextView
-            android:id="@+id/micropost_date"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignBaseline="@+id/micropost_guanzhu"
-            android:layout_alignBottom="@+id/micropost_guanzhu"
+            <TextView
+                android:id="@+id/micropost_date"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignBaseline="@+id/micropost_guanzhu"
+                android:layout_alignBottom="@+id/micropost_guanzhu"
+                android:layout_alignParentLeft="true"
+                android:text="2013/12/06 15:33"
+                android:textColor="#c5c2c2"
+                android:textSize="24px" />
+        </RelativeLayout>
+
+        <EditText
+            android:layout_width="fill_parent"
+            android:layout_height="5px"
             android:layout_alignParentLeft="true"
-            android:text="2013/12/06 15:33"
-            android:textColor="#c5c2c2"
-            android:textSize="24px" />
-
+            android:layout_below="@+id/relativeLayout1"
+            android:layout_marginTop="22px"
+            android:focusable="false" />
     </RelativeLayout>
 
-    <EditText
-        android:layout_width="fill_parent"
-        android:layout_height="5px"
-        android:layout_alignParentLeft="true"
-        android:layout_below="@+id/relativeLayout1"
-        android:layout_marginTop="22px"
-       
-        android:focusable="false"
-         />
-
-</RelativeLayout>
 </LinearLayout>

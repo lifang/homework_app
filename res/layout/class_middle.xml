@@ -42,6 +42,7 @@
                 android:focusable="true"
                 android:focusableInTouchMode="true"
                 android:gravity="top"
+                android:textSize="24px"
                 android:hint="@string/class_fabiao_tishi" />
 
             <Button
