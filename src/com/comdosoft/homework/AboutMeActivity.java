@@ -51,7 +51,6 @@ public class AboutMeActivity extends Activity
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.aboutme);
 		listview=(ListView) findViewById(R.id.aboutmeLv);
-		Log.i("aa", "AboutMeActivity");
 		SharedPreferences sp = getSharedPreferences(Urlinterface.SHARED, 0);
 		user_id = sp.getString("user_id", "null");
 		school_class_id = sp.getString("school_class_id", "null");
@@ -65,7 +64,6 @@ public class AboutMeActivity extends Activity
 				try {
 					get_News();
 					Thread.sleep(1000);
-					Log.i("aa", num+"新的东西");
 				} catch (InterruptedException e) {
 					// TODO Auto-generated catch block
 					e.printStackTrace();
@@ -215,10 +213,10 @@ public class AboutMeActivity extends Activity
 									mp.put("school_class_id",String.valueOf(class_id));
 									mp.put("message_id", Amlist.get(position).getMicropost_id());
 									String json=HomeWorkTool.doPost(Urlinterface.read_message, mp);
+									Log.i("aa", json);
 									JSONObject jsonobject=new JSONObject(json);
 									String status=jsonobject.getString("status");
 									Message msg=new Message();
-									Log.i("aa", json);
 									//									
 									if(status.equals("error"))
 									{
@@ -256,6 +254,7 @@ public class AboutMeActivity extends Activity
 									mp.put("user_id", Integer.valueOf(Amlist.get(position).getUser_id()));
 									mp.put("school_class_id",class_id);
 									mp.put("message_id", Integer.valueOf(Amlist.get(position).getId()));
+									Log.i("aa", "user_id:"+Amlist.get(position).getUser_id()+"class_id:"+class_id+"messag_id:"+Amlist.get(position).getId());
 									String json=HomeWorkTool.doPost(Urlinterface.delete_message, mp);
 									JSONObject jsonobject=new JSONObject(json);
 									String notice=jsonobject.getString("notice");
