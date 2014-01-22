@@ -4,7 +4,9 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+
 import org.json.JSONObject;
+
 import android.app.Activity;
 import android.app.AlertDialog.Builder;
 import android.app.Dialog;
@@ -28,13 +30,14 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
+
 import com.comdosoft.homework.pojo.QuestionPojo;
 import com.comdosoft.homework.tools.HomeWork;
 import com.comdosoft.homework.tools.HomeWorkParams;
 import com.comdosoft.homework.tools.HomeWorkTool;
+import com.comdosoft.homework.tools.PredicateLayout;
 import com.comdosoft.homework.tools.Soundex_Levenshtein;
 import com.comdosoft.homework.tools.Urlinterface;
-import com.comdosoft.homework.tools.PredicateLayout;
 
 public class SpeakBeginActivity extends Activity implements Urlinterface {
 	public String content;// 记录本题正确答案
@@ -52,7 +55,6 @@ public class SpeakBeginActivity extends Activity implements Urlinterface {
 	private int student_id;
 	private int school_class_id;
 	private int publish_question_package_id;
-	private int question_package_id;
 	private int branch_question_id;
 	private HomeWork homework;
 	private List<QuestionPojo> branch_questions;
@@ -129,7 +131,6 @@ public class SpeakBeginActivity extends Activity implements Urlinterface {
 		SetTextView();
 		publish_question_package_id = homework.getP_q_package_id();
 		Log.i(tag, publish_question_package_id + "===");
-		question_package_id = homework.getQ_package_id();
 		student_id = homework.getUser_id();
 		school_class_id = homework.getClass_id();
 	}
@@ -379,8 +380,10 @@ public class SpeakBeginActivity extends Activity implements Urlinterface {
 				case 2:
 					dialog.dismiss();
 					homework.setQuestion_index(0);
-					handler.sendEmptyMessage(2);
-
+					SpeakBeginActivity.this.finish();
+					intent.setClass(SpeakBeginActivity.this,
+							HomeWorkMainActivity.class);
+					startActivity(intent);
 					break;
 				}
 			}
@@ -450,28 +453,20 @@ public class SpeakBeginActivity extends Activity implements Urlinterface {
 	class SendWorkOver implements Runnable {
 		public void run() {
 			Looper.prepare();
-			Log.i("linshi", student_id + "->");
 			Map<String, String> map = new HashMap<String, String>();
 			map.put("school_class_id", school_class_id + "");
 			map.put("student_id", student_id + "");
-			map.put("question_package_id", question_package_id + "");
 			map.put("publish_question_package_id", publish_question_package_id
 					+ "");
-			Log.i(tag, school_class_id + "-" + student_id + "-"
-					+ question_package_id + "-" + publish_question_package_id);
+			Log.i(tag, school_class_id + "-" + student_id + "-" + "-"
+					+ publish_question_package_id);
 			String json;
 			try {
 				json = HomeWorkTool.doPost(FINISH_QUESTION_PACKGE, map);
 				JSONObject obj = new JSONObject(json);
 				if (obj.getString("status").equals("success")) {
-					switch (type) {
-					case 1:
-						handler.sendEmptyMessage(6);
-						break;
-					case 2:
-						handler.sendEmptyMessage(5);
-						break;
-					}
+					Log.i(tag, type + "-=-=-=");
+					handler.sendEmptyMessage(6);
 
 				} else {
 					message = obj.getString("notice");
