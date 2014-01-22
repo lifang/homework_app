@@ -66,7 +66,7 @@ Urlinterface {
 	private View layout;
 	private ListView listView2;
 	private EditText fabiao_content;
-	private String id = "1";  //  学生的 注册id ，，唯一
+	private String id = "8";  //  学生的 注册id ，，唯一
 	private String user_id = "8"; // 学生 id 上面 会传过来的 学生student_id，
 	private String user_name = "丁作强"; // 从拿到的班级信息中获取
 	private String school_class_id = "1";// 班级id，学生所在班级
@@ -114,7 +114,7 @@ Urlinterface {
 		SharedPreferences  preferences = getSharedPreferences(SHARED, Context.MODE_PRIVATE);
 
 //		user_id = preferences.getString("user_id", null);
-//
+//id = preferences.getString("id", null);
 //		school_class_id = preferences.getString("school_class_id", null);
 
 
