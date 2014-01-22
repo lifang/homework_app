@@ -184,7 +184,7 @@ Urlinterface {
 					id = student.getString("id");
 					user_id = student.getString("user_id");
 					String avatar_url=student.getString("avatar_url");			//获取本人头像昂所有在地址
-					user_name=student.getString("name");						
+					 user_name=student.getString("name");						
 					String nick_name=student.getString("nickname");
 					String notice = array0.getString("notice");
 					user_Url=Urlinterface.IP+avatar_url;
@@ -200,7 +200,8 @@ Urlinterface {
 					for(int i=0;i<jsonArray.length();i++)
 					{ 
 						JSONObject jsonObject2 = (JSONObject)jsonArray.get(i); 
-												String stu_Url=(String) jsonObject2.get("avatar_url");
+						//						String stu_Url=(String) jsonObject2.get("avatar_url");
+						String stu_Url=null;
 						int id=jsonObject2.getInt("id");
 						String stuname=jsonObject2.getString("name");
 						String nickname=jsonObject2.getString("nickname");
@@ -250,70 +251,129 @@ Urlinterface {
 					e.printStackTrace();
 				} 
 
-		//   获得要查看的  主消息 的  子消息		
-				final Handler mHandler = new Handler() {
-					public void handleMessage(android.os.Message msg) {
-						switch (msg.what) {
-						case 0:
-							final String json7 =  (String) msg.obj;
-							child_list = new ArrayList<Child_Micropost>();
-							parseJson_childMicropost(json7);								
-
-							break;
-						default:
-							break;									
-						}
-					}
-				};
-				Thread thread_m=new Thread()
-				{
-					public void run()
-					{
-						try {
-							Map<String, String> map = new HashMap<String, String>();									
-							map.put("micropost_id", message_id+"");
-							String	re = HomeWorkTool.sendGETRequest(
-									Urlinterface.get_reply_microposts, map);
-							Message msg = new Message();//  创建Message 对象
-							msg.what = 0;
-							msg.obj = re;
-							mHandler.sendMessage(msg);
-						} catch (Exception e) {
-							// TODO Auto-generated catch block
-							e.printStackTrace();
-						}
-					}
-				};
 
 				//  查看   跳到本界面的   处理操作
 				message_id  = homework.getMessage_id();
 				if(message_id!=-1){
-					
-//					thread_m.start();	
 					homework.setMessage_id(-1);  //  将  公共变量message_id  设置为  -1
-					Button b = (Button) findViewById(R.id.class_button_all);
-					b.setBackgroundDrawable(getResources().getDrawable(R.drawable.an2));
-					Button b2 = (Button) findViewById(R.id.class_button_myself);
-					b2.setBackgroundDrawable(getResources().getDrawable(R.drawable.an));
-				
-					micropost_type = 1;
-					page = 1;
-					number = 1;	
+					child_list = new ArrayList<Child_Micropost>();
+					//					
+
+					final Handler mHandler = new Handler() {
+						public void handleMessage(android.os.Message msg) {
+							switch (msg.what) {
+							case 0:
+								final String json7 =  (String) msg.obj;
+								child_list = new ArrayList<Child_Micropost>();
+								if ("error".equals(json7)) {
+
+								} else {
+									JSONObject array;
+									try {
+										array = new JSONObject(json7);
+
+										String status = array.getString("status");
+										String notice = array.getString("notice");
+										child_list = new ArrayList<Child_Micropost>();
+										if ("success".equals(status)) {
+											String micropostsListJson = array
+											.getString("reply_microposts");
+											JSONObject microposts = new JSONObject(
+													micropostsListJson);
+											child_page = Integer.parseInt(microposts.getString("page"));
+											child_pages_count = Integer.parseInt(microposts
+													.getString("pages_count"));
+											String reply_microposts = microposts
+											.getString("reply_microposts");
+											JSONArray jsonArray2 = new JSONArray(
+													reply_microposts);
+
+											for (int i = 0; i < jsonArray2.length(); ++i) {
+												JSONObject o = (JSONObject) jsonArray2
+												.get(i);
+												String id = o.getString("id");
+												String sender_id = o
+												.getString("sender_id");
+												String sender_types = o
+												.getString("sender_types");
+												String sender_name = o
+												.getString("sender_name");
+
+
+												String sender_avatar_url = o
+												.getString("sender_avatar_url");
+												String content = o.getString("content");
+												String reciver_name = o
+												.getString("reciver_name");
+
+												String reciver_avatar_url = o
+												.getString("reciver_avatar_url");
+												String created_at = o
+												.getString("created_at");
+
+												Child_Micropost child = new Child_Micropost(
+														id, sender_id, sender_types,
+														sender_name, 
+														sender_avatar_url, content,
+														reciver_name, 
+														created_at);
+												child_list.add(child);
+											}
+
+										} else {
+											Toast.makeText(getApplicationContext(),
+													notice, 1).show();
+										}
+									} catch (JSONException e) {
+										// TODO Auto-generated catch block
+										e.printStackTrace();
+									}
+
+								}								
+
+								break;
+							default:
+								break;									
+							}
+						}
+					};
+					Thread thread=new Thread()
+					{
+						public void run()
+						{
+							try {
+								Map<String, String> map = new HashMap<String, String>();									
+								map.put("micropost_id", message_id+"");
+								String	re = HomeWorkTool.sendGETRequest(
+										Urlinterface.get_reply_microposts, map);
+								Message msg = new Message();//  创建Message 对象
+								msg.what = 0;
+								msg.obj = re;
+								mHandler.sendMessage(msg);
+							} catch (Exception e) {
+								// TODO Auto-generated catch block
+								e.printStackTrace();
+							}
+						}
+					};
+					thread.start();	
 
 					int a=0;
 					for (int i = 0; i < list.size(); i++) {
 
 						if (Integer.parseInt(list.get(i).getId())==message_id) {
 							focus = i;   //   要展开的  主消息  的   位置
-							
-							
+							number = 1;	
+
+							micropost_type = 1;
+							page = 1;
 							break;
 						}else{
 							a= i+1;
 						}
 					}
 					if(a==list.size()&&a!=0){//  若第一页主消息中没有  提示信息所在，，则  单独显示  该条提示信息
-						focus = 0;   //   要展开的  主消息  的   位置
+
 						String mess = homework.getNoselect_message();
 						list.clear();
 						//  该处解析  消息  json  并放入  list
@@ -345,7 +405,11 @@ Urlinterface {
 							// TODO Auto-generated catch block
 							e.printStackTrace();
 						}
+						//						
+
+
 					}
+
 				}
 				micropostAdapter = new MicropostAdapter();
 				listView_mes.setAdapter(micropostAdapter);
@@ -474,7 +538,6 @@ Urlinterface {
 										switch (msg.what) {
 										case 0:
 											final String json7 =  (String) msg.obj;
-											child_list = new ArrayList<Child_Micropost>();
 											parseJson_childMicropost(json7);				
 											micropostAdapter = new MicropostAdapter();
 											listView_mes.setAdapter(micropostAdapter);
@@ -676,13 +739,13 @@ Urlinterface {
 
 
 	/*
-	 * 解析  回复  模块中的   子消息
+	 * 解析  我的  模块中的   主消息
 	 * 
 	 * 
 	 * */
 	void parseJson_childMicropost(String json3){
 		
-		
+		child_list = new ArrayList<Child_Micropost>();
 		if ("error".equals(json3)) {
 
 		} else {
@@ -751,11 +814,7 @@ Urlinterface {
 	
 	}
 	
-	/*
-	 *   全部  模块    点击方法
-	 * 
-	 * 
-	 * */
+	// 全部
 	public void class_button_all(View v) {
 		final Handler mHandler = new Handler() {
 			public void handleMessage(android.os.Message msg) {
@@ -803,12 +862,7 @@ Urlinterface {
 		thread.start();	
 	}
 
-	/*
-	 *    我的 模块    点击方法
-	 * 
-	 * 
-	 * */
-	//	
+	//	 我的
 	public void class_button_myself(View v) {
 		final Handler mHandler = new Handler() {
 			public void handleMessage(android.os.Message msg) {
@@ -869,7 +923,7 @@ Urlinterface {
 		final Handler mHandleronRefresh = new Handler() {
 			public void handleMessage(android.os.Message msg) {
 				switch (msg.what) {
-				case 0:   //  全部
+				case 0:
 					final String json_all =  (String) msg.obj;
 					parseJson_all(json_all);
 					micropostAdapter = new MicropostAdapter();
@@ -877,7 +931,7 @@ Urlinterface {
 					onLoad();
 					break;
 
-				case 1:  //  我的
+				case 1:
 					final String jsonmyself =  (String) msg.obj;
 					parseJson_Myself(jsonmyself);
 					micropostAdapter = new MicropostAdapter();
@@ -1329,48 +1383,10 @@ Urlinterface {
 				Reply_edit = (EditText) layout1.findViewById(R.id.reply_edit);
 				Reply_edit.requestFocus();
 				Reply_edit.setHint(user_name + " "+HomeWorkParams.REPLY+" " + mess.getName() + ":");
+ 
 				
-				final Handler mHandler = new Handler() {
-					public void handleMessage(android.os.Message msg) {
-						switch (msg.what) {
-						case 0:
-							final String json7 =  (String) msg.obj;
-							child_list = new ArrayList<Child_Micropost>();
-							parseJson_childMicropost(json7);
-								micropostAdapter = new MicropostAdapter();
-								listView_mes.setAdapter(micropostAdapter);
-
-								listView_mes.setSelection(focus);
-															
-							
-							break;
-						default:
-							break;									
-						}
-					}
-				};
-				Thread thread=new Thread()
-				{
-					public void run()
-					{
-						try {
-							Map<String, String> map = new HashMap<String, String>();									
-							map.put("micropost_id", mess.getId());
-						String	reply = HomeWorkTool.sendGETRequest(
-									Urlinterface.get_reply_microposts, map);
-							Message msg = new Message();//  创建Message 对象
-							msg.what = 0;
-							msg.obj = reply;
-							mHandler.sendMessage(msg);
-						} catch (Exception e) {
-							// TODO Auto-generated catch block
-							e.printStackTrace();
-						}
-					}
-				};
-				thread.start();
 				
-// Toast.makeText(getApplicationContext(), child_list.size()+"-------------", 1).show();
+				
 				if (child_list.size()!=0) {
 					listView2 = (ListView) layout1.findViewById(R.id.aa);
 					listView2.setVisibility(View.VISIBLE);
@@ -1473,8 +1489,45 @@ Urlinterface {
 					focus = position;
 					
 					//					
-					micropostAdapter = new MicropostAdapter();
-					listView_mes.setAdapter(micropostAdapter);
+					final Handler mHandler = new Handler() {
+						public void handleMessage(android.os.Message msg) {
+							switch (msg.what) {
+							case 0:
+								final String json7 =  (String) msg.obj;
+								child_list = new ArrayList<Child_Micropost>();
+								parseJson_childMicropost(json7);
+									micropostAdapter = new MicropostAdapter();
+									listView_mes.setAdapter(micropostAdapter);
+
+									listView_mes.setSelection(focus);
+																
+								
+								break;
+							default:
+								break;									
+							}
+						}
+					};
+					Thread thread=new Thread()
+					{
+						public void run()
+						{
+							try {
+								Map<String, String> map = new HashMap<String, String>();									
+								map.put("micropost_id", mess.getId());
+							String	reply = HomeWorkTool.sendGETRequest(
+										Urlinterface.get_reply_microposts, map);
+								Message msg = new Message();//  创建Message 对象
+								msg.what = 0;
+								msg.obj = reply;
+								mHandler.sendMessage(msg);
+							} catch (Exception e) {
+								// TODO Auto-generated catch block
+								e.printStackTrace();
+							}
+						}
+					};
+					thread.start();	
 
 			
 			
