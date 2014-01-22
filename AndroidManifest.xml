@@ -30,9 +30,13 @@
             android:name=".DictationPrepareActivity"
             android:label="@string/app_name"
             android:launchMode="singleTask" >
+        </activity>
+        <activity
+            android:name=".LoginActivity"
+            android:label="@string/app_name"
+            android:launchMode="singleTask" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
@@ -73,8 +77,6 @@
         </activity>
         <activity android:name="com.comdosoft.homework.AboutMeActivity" >
         </activity>
-        <activity android:name=".DictationBeginActivity" />
-        <activity android:name=".DictationPrepareActivity" />
         <activity android:name=".DictationRecordActivity" />
         <activity
             android:name="com.tencent.tauth.AuthActivity"
