@@ -1256,13 +1256,13 @@ Urlinterface {
 								mp.put("micropost_id", String.valueOf(mess.getId()));
 								String str=null;
 								Message msg = new Message();//  创建Message 对象
-								if(guanzhu.getText().equals("关注"))
+								if(guanzhu.getText().toString().equals("关注"))
 								{
 									str=HomeWorkTool.sendGETRequest(Urlinterface.add_concern, mp);
 									msg.what = 0;
 									msg.obj = str;
 								}
-								else if(guanzhu.getText().equals("已关注"))
+								else if(guanzhu.getText().toString().equals("已关注"))
 								{
 									str=HomeWorkTool.sendGETRequest(Urlinterface.unfollow, mp);
 									msg.what = 1;
