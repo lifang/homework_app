@@ -114,11 +114,10 @@ Urlinterface {
 		SharedPreferences  preferences = getSharedPreferences(SHARED, Context.MODE_PRIVATE);
 
 		user_id = preferences.getString("user_id", null);
-<<<<<<< HEAD
+
 		id = preferences.getString("id", null);
-=======
-id = preferences.getString("id", null);
->>>>>>> 75f9abb1e635b5a386e79a96e42a418451c1185c
+
+
 		school_class_id = preferences.getString("school_class_id", null);
 
 
