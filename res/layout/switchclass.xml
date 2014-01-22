@@ -11,6 +11,7 @@
         android:layout_width="479px"
         android:layout_height="55px"
         android:gravity="center"
+        android:textColor="#996633"
         android:text="@string/SwitchClass_Tv"
         android:textSize="24px" />
 

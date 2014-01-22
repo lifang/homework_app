@@ -90,16 +90,18 @@ public class SwitchClassActivity extends Activity {
 									Urlinterface.Validation_into_class, mp);
 							JSONObject jsonobject = new JSONObject(json);
 							String status = jsonobject.getString("status");
-
 							if (status.equals("error")) {
 								String notice = jsonobject.getString("notice");
-								Toast.makeText(SwitchClassActivity.this,
-										notice, 1).show();
+								Message msg=new Message();
+								msg.what=1;
+								msg.obj=notice;
+								handler.sendMessage(msg);
+								
 							} else if (status.equals("success")) {
-
 								JSONObject jsonobject2 = jsonobject
 										.getJSONObject("class");
 								int id = jsonobject2.getInt("id");
+								Log.i("aa", "id:"+id);
 								SharedPreferences preferences = getSharedPreferences(
 										Urlinterface.SHARED,
 										Context.MODE_PRIVATE);
@@ -107,14 +109,15 @@ public class SwitchClassActivity extends Activity {
 								editor.putString("school_class_id",
 										String.valueOf(id));
 								editor.commit();
+								HomeWork hw = (HomeWork) getApplication();
+								hw.setMainItem(0);
+								Intent intent = new Intent(
+										SwitchClassActivity.this,
+										HomeWorkMainActivity.class);
+								startActivity(intent);
+								SwitchClassActivity.this.finish();
 							}
-							HomeWork hw = (HomeWork) getApplication();
-							hw.setMainItem(0);
-							Intent intent = new Intent(
-									SwitchClassActivity.this,
-									HomeWorkMainActivity.class);
-							startActivity(intent);
-							SwitchClassActivity.this.finish();
+						
 						} catch (Exception e) {
 							e.printStackTrace();
 						}
@@ -145,6 +148,10 @@ public class SwitchClassActivity extends Activity {
 			case 0:
 				switchclassLv.setAdapter(new SwitchClassAdapter(
 						getApplication(), classList));
+				break;
+			case 1:
+				Toast.makeText(SwitchClassActivity.this,
+						msg.obj.toString(), 1).show();
 				break;
 			}
 		}

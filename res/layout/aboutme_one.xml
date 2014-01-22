@@ -81,8 +81,8 @@
 
                 <TextView
                     android:id="@+id/aboutme_oneTv5"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
+                    android:layout_width="50px"
+                    android:layout_height="50px"
                     android:layout_alignParentRight="true"
                     android:layout_marginTop="10px"
                     android:text="查看"

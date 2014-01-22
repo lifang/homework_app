@@ -52,7 +52,7 @@ public class LoginActivity extends Activity implements Urlinterface {
 						RegistrationActivity.class);
 				break;
 			case 2:
-//				intent.putExtra("json", json);
+				//				intent.putExtra("json", json);
 				intent.setClass(getApplicationContext(),
 						HomeWorkMainActivity.class);
 				break;
@@ -71,9 +71,10 @@ public class LoginActivity extends Activity implements Urlinterface {
 		mPd = new ProgressDialog(LoginActivity.this);
 		mPd.setMessage("正在登陆...");
 		sp = getPreferences(0);
-		// sp.edit().putString("user_id", "1").commit();
-		// sp.edit().putString("school_class_id", "1").commit();
-
+//		sp.edit().putString("user_id", "1").commit();
+//		sp.edit().putString("school_class_id", "1").commit();
+//		homework.setUser_id(1);
+//		homework.setClass_id(1);
 		if (sp.getString("user_id", "").equals("")
 				&& sp.getString("school_class_id", "").equals("")) {
 			onClickLogin();

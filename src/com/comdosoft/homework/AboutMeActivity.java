@@ -63,7 +63,7 @@ public class AboutMeActivity extends Activity
 				{
 					try {
 						get_News();
-						Thread.sleep(10000);
+						Thread.sleep(20000);
 					} catch (InterruptedException e) {
 						// TODO Auto-generated catch block
 						e.printStackTrace();
@@ -183,7 +183,7 @@ public class AboutMeActivity extends Activity
 
 		public View getView(final int position, View convertView, ViewGroup parent) {
 			LayoutInflater inflater = LayoutInflater
-			.from(context);
+					.from(context);
 			if(convertView==null)
 			{
 				convertView = inflater.inflate(R.layout.aboutme_one,null);
@@ -250,18 +250,19 @@ public class AboutMeActivity extends Activity
 							public void run()
 							{
 								try {
-									HashMap<String, Integer> mp=new HashMap();
-									mp.put("user_id", Integer.valueOf(Amlist.get(position).getUser_id()));
-									mp.put("school_class_id",class_id);
-									mp.put("message_id", Integer.valueOf(Amlist.get(position).getId()));
+									HashMap<String, String> mp=new HashMap();
+									mp.put("user_id", user_id);
+									mp.put("school_class_id",school_class_id);
+									mp.put("message_id", Amlist.get(position).getId());
 									String json=HomeWorkTool.doPost(Urlinterface.delete_message, mp);
-									JSONObject jsonobject=new JSONObject(json);
+									JSONObject jsonobject = new JSONObject(json);
 									String notice=jsonobject.getString("notice");
 									String status=(String) jsonobject.get("status");
 									Message msg=new Message();
 									msg.obj=notice;
 									if(status.equals("success"))
 									{
+										Log.i("aa",position+"aa");
 										msg.what=0;
 										Amlist.remove(position);
 										handler.sendMessage(msg);
@@ -300,8 +301,8 @@ public class AboutMeActivity extends Activity
 				super.dispatchMessage(msg);
 				switch (msg.what) {
 				case 0:
+					listview.setAdapter(new AboutMeAdapter(listam,getApplicationContext(),listview));
 					Toast.makeText(AboutMeActivity.this,msg.obj.toString() , 0).show();
-					notifyDataSetChanged();
 					break;
 				case 1:
 					Toast.makeText(context, msg.obj.toString(), 0).show();
@@ -314,7 +315,7 @@ public class AboutMeActivity extends Activity
 					startActivity(intent);
 					break;
 				case 3:
-					Toast.makeText(AboutMeActivity.this, "查看错误", 0).show();
+					Toast.makeText(AboutMeActivity.this, "信息错误", 0).show();
 					break;
 				default:
 					break;
