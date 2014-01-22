@@ -66,7 +66,7 @@ Urlinterface {
 	private View layout;
 	private ListView listView2;
 	private EditText fabiao_content;
-	private String id = "1";  //  学生的 注册id ，，唯一
+	private String id = "8";  //  学生的 注册id ，，唯一
 	private String user_id = "8"; // 学生 id 上面 会传过来的 学生student_id，
 	private String user_name = "丁作强"; // 从拿到的班级信息中获取
 	private String school_class_id = "1";// 班级id，学生所在班级
@@ -113,15 +113,13 @@ Urlinterface {
 
 		SharedPreferences  preferences = getSharedPreferences(SHARED, Context.MODE_PRIVATE);
 
-		user_id = preferences.getString("user_id", null);
+//		user_id = preferences.getString("user_id", null);
+//id = preferences.getString("id", null);
+//		school_class_id = preferences.getString("school_class_id", null);
 
-		school_class_id = preferences.getString("school_class_id", null);
 
 
-
-		//		 Intent intent = getIntent();//
-		//		 json = intent.getStringExtra("json"); // 获得上个页面传过来的
-
+	
 		main_class_classGv=(GridView) findViewById(R.id.main_class_classGv);
 		main_class_classesTv=(TextView) findViewById(R.id.main_class_classesTv);
 		main_class_oneIV=(ImageView) findViewById(R.id.main_class_classes_include).findViewById(R.id.main_class_oneIV);
@@ -199,7 +197,8 @@ Urlinterface {
 					for(int i=0;i<jsonArray.length();i++)
 					{ 
 						JSONObject jsonObject2 = (JSONObject)jsonArray.get(i); 
-						String stu_Url=(String) jsonObject2.get("avatar_url");
+						//						String stu_Url=(String) jsonObject2.get("avatar_url");
+						String stu_Url=null;
 						int id=jsonObject2.getInt("id");
 						String stuname=jsonObject2.getString("name");
 						String nickname=jsonObject2.getString("nickname");
@@ -214,14 +213,14 @@ Urlinterface {
 					}
 
 					String micropostsListJson = array0
-							.getString("microposts");
+					.getString("microposts");
 					JSONObject microposts = new JSONObject(
 							micropostsListJson);
 					page = Integer.parseInt(microposts.getString("page"));
 					pages_count = Integer.parseInt(microposts
 							.getString("pages_count"));
 					String details_microposts = microposts
-							.getString("details_microposts");
+					.getString("details_microposts");
 					// page":1,"pages_count":2,"details_microposts":
 					JSONArray jsonArray2 = new JSONArray(details_microposts);
 
@@ -236,7 +235,7 @@ Urlinterface {
 						String micropost_avatar_url = o.getString("avatar_url");
 						String created_at = o.getString("created_at");
 						String reply_microposts_count = o
-								.getString("reply_microposts_count");
+						.getString("reply_microposts_count");
 
 						Micropost micropost = new Micropost(micropost_id, user_id,
 								user_types, micropost_name,content,
@@ -275,39 +274,39 @@ Urlinterface {
 										child_list = new ArrayList<Child_Micropost>();
 										if ("success".equals(status)) {
 											String micropostsListJson = array
-													.getString("reply_microposts");
+											.getString("reply_microposts");
 											JSONObject microposts = new JSONObject(
 													micropostsListJson);
 											child_page = Integer.parseInt(microposts.getString("page"));
 											child_pages_count = Integer.parseInt(microposts
 													.getString("pages_count"));
 											String reply_microposts = microposts
-													.getString("reply_microposts");
+											.getString("reply_microposts");
 											JSONArray jsonArray2 = new JSONArray(
 													reply_microposts);
 
 											for (int i = 0; i < jsonArray2.length(); ++i) {
 												JSONObject o = (JSONObject) jsonArray2
-														.get(i);
+												.get(i);
 												String id = o.getString("id");
 												String sender_id = o
-														.getString("sender_id");
+												.getString("sender_id");
 												String sender_types = o
-														.getString("sender_types");
+												.getString("sender_types");
 												String sender_name = o
-														.getString("sender_name");
+												.getString("sender_name");
 
 
 												String sender_avatar_url = o
-														.getString("sender_avatar_url");
+												.getString("sender_avatar_url");
 												String content = o.getString("content");
 												String reciver_name = o
-														.getString("reciver_name");
+												.getString("reciver_name");
 
 												String reciver_avatar_url = o
-														.getString("reciver_avatar_url");
+												.getString("reciver_avatar_url");
 												String created_at = o
-														.getString("created_at");
+												.getString("created_at");
 
 												Child_Micropost child = new Child_Micropost(
 														id, sender_id, sender_types,
@@ -392,7 +391,7 @@ Urlinterface {
 							//							String micropost_avatar_url = "";
 							String created_at = o.getString("created_at");
 							String reply_microposts_count = o
-									.getString("reply_microposts_count");
+							.getString("reply_microposts_count");
 
 							Micropost mic = new Micropost(micropost_id, user_id,
 									user_types, micropost_name,content,
@@ -447,7 +446,7 @@ Urlinterface {
 								Toast.makeText(getApplicationContext(), notice, 1)
 								.show();
 								fabiao_content.setText("");
-
+								
 							} else {
 								Toast.makeText(getApplicationContext(), notice, 1)
 								.show();
@@ -529,6 +528,106 @@ Urlinterface {
 							if ("success".equals(status)) {
 								Toast.makeText(getApplicationContext(), notice, 0)
 								.show();
+								
+								
+								final Handler mHandler = new Handler() {
+									public void handleMessage(android.os.Message msg) {
+										switch (msg.what) {
+										case 0:
+											final String json7 =  (String) msg.obj;
+											child_list = new ArrayList<Child_Micropost>();
+											if ("error".equals(json7)) {
+
+											} else {
+												JSONObject array;
+												try {
+													array = new JSONObject(json7);
+
+													String status = array.getString("status");
+													String notice = array.getString("notice");
+													child_list = new ArrayList<Child_Micropost>();
+													if ("success".equals(status)) {
+														String micropostsListJson = array
+														.getString("reply_microposts");
+														JSONObject microposts = new JSONObject(
+																micropostsListJson);
+														child_page = Integer.parseInt(microposts.getString("page"));
+														child_pages_count = Integer.parseInt(microposts
+																.getString("pages_count"));
+														String reply_microposts = microposts
+														.getString("reply_microposts");
+														JSONArray jsonArray2 = new JSONArray(
+																reply_microposts);
+
+														for (int i = 0; i < jsonArray2.length(); ++i) {
+															JSONObject o = (JSONObject) jsonArray2
+															.get(i);
+															String id = o.getString("id");
+															String sender_id = o
+															.getString("sender_id");
+															String sender_types = o
+															.getString("sender_types");
+															String sender_name = o
+															.getString("sender_name");
+
+
+															String sender_avatar_url = o
+															.getString("sender_avatar_url");
+															String content = o.getString("content");
+															String reciver_name = o
+															.getString("reciver_name");
+
+															String reciver_avatar_url = o
+															.getString("reciver_avatar_url");
+															String created_at = o
+															.getString("created_at");
+
+															Child_Micropost child = new Child_Micropost(
+																	id, sender_id, sender_types,
+																	sender_name, 
+																	sender_avatar_url, content,
+																	reciver_name, 
+																	created_at);
+															child_list.add(child);
+														}
+
+													} else {
+														Toast.makeText(getApplicationContext(),
+																notice, 1).show();
+													}
+												} catch (JSONException e) {
+													// TODO Auto-generated catch block
+													e.printStackTrace();
+												}
+
+											}								
+											
+											break;
+										default:
+											break;									
+										}
+									}
+								};
+								Thread thread=new Thread()
+								{
+									public void run()
+									{
+										try {
+											Map<String, String> map = new HashMap<String, String>();									
+											map.put("micropost_id", micropost_id);
+										String	js2 = HomeWorkTool.sendGETRequest(
+													Urlinterface.get_reply_microposts, map);
+											Message msg = new Message();//  创建Message 对象
+											msg.what = 0;
+											msg.obj = js2;
+											mHandler.sendMessage(msg);
+										} catch (Exception e) {
+											// TODO Auto-generated catch block
+											e.printStackTrace();
+										}
+									}
+								};
+								thread.start();	
 								micropostAdapter = new MicropostAdapter();
 								listView_mes.setAdapter(micropostAdapter);
 
@@ -548,7 +647,7 @@ Urlinterface {
 				}
 			}
 		};
-		json = "";
+		
 		String reply_edit = Reply_edit.getText().toString();
 		if (reply_edit.length() == 0) {
 			Toast.makeText(getApplicationContext(), "内容不能为空", 0).show();
@@ -567,10 +666,10 @@ Urlinterface {
 						map.put("reciver_id", reciver_id);
 						map.put("reciver_types", reciver_types);
 						map.put("school_class_id", school_class_id);
-						json = HomeWorkTool.doPost(Urlinterface.reply_message, map);
+					String	js1 = HomeWorkTool.doPost(Urlinterface.reply_message, map);
 						Message msg = new Message();//  创建Message 对象
 						msg.what = 0;
-						msg.obj = json;
+						msg.obj = js1;
 						mHandler.sendMessage(msg);
 					} catch (Exception e) {
 						// TODO Auto-generated catch block
@@ -599,7 +698,7 @@ Urlinterface {
 
 				if ("success".equals(status)) {
 					String micropostsListJson = array3
-							.getString("microposts");
+					.getString("microposts");
 					JSONObject microposts = new JSONObject(
 							micropostsListJson);
 					page = Integer.parseInt(microposts
@@ -607,26 +706,26 @@ Urlinterface {
 					pages_count = Integer.parseInt(microposts
 							.getString("pages_count"));
 					String details_microposts = microposts
-							.getString("details_microposts");
+					.getString("details_microposts");
 					// page":1,"pages_count":2,"details_microposts":
 					JSONArray jsonArray2 = new JSONArray(
 							details_microposts);
 					for (int i = 0; i < jsonArray2.length(); ++i) {
 						JSONObject o = (JSONObject) jsonArray2
-								.get(i);
+						.get(i);
 						String micropost_id = o.getString("micropost_id");
 						String user_id = o.getString("user_id");
 						String user_types = o
-								.getString("user_types");
+						.getString("user_types");
 						String name = o.getString("name");											
 						String content = o.getString("content");
 						String avatar_url = o
-								.getString("avatar_url");
+						.getString("avatar_url");
 						String created_at = o
-								.getString("created_at");
+						.getString("created_at");
 
 						String reply_microposts_count = o
-								.getString("reply_microposts_count");
+						.getString("reply_microposts_count");
 
 						Micropost micropost = new Micropost(micropost_id,
 								user_id, user_types, name,
@@ -681,7 +780,7 @@ Urlinterface {
 						String avatar_url = o.getString("avatar_url");
 						String created_at = o.getString("created_at");
 						String reply_microposts_count = o
-								.getString("reply_microposts_count");
+						.getString("reply_microposts_count");
 						Micropost micropost = new Micropost(micropost_id, user_id,
 								user_types, name, content,
 								avatar_url, created_at, reply_microposts_count);
@@ -799,7 +898,7 @@ Urlinterface {
 		listView_mes.stopLoadMore();
 		listView_mes.setRefreshTime("刚刚");
 	}
-	
+	@Override
 	public void onRefresh() {
 
 		focus=-1;
@@ -829,6 +928,7 @@ Urlinterface {
 
 		handler.postDelayed(new Runnable() {
 
+			@Override
 			public void run() {
 				list.clear();
 
@@ -891,6 +991,7 @@ Urlinterface {
 		}, 2000);
 	}
 
+	@Override
 	public void onLoadMore() {
 
 		final Handler mHandleronLoadMore = new Handler() {
@@ -917,6 +1018,7 @@ Urlinterface {
 		page = page + 1;
 
 		handler.postDelayed(new Runnable() {
+			@Override
 			public void run() {
 
 				Thread thread=new Thread()
@@ -981,17 +1083,20 @@ Urlinterface {
 
 		int huifu_num = 0;
 
+		@Override
 		public int getCount() {
 			// TODO Auto-generated method stub
 
 			return list.size();// 数据总数
 		}
 
+		@Override
 		public Object getItem(int position) {
 			// TODO Auto-generated method stub
 			return list.get(position);
 		}
 
+		@Override
 		public long getItemId(int position) {
 			// TODO Auto-generated method stub
 			return position;
@@ -1006,12 +1111,12 @@ Urlinterface {
 
 			final	ImageView face = (ImageView) view.findViewById(R.id.user_face); // 头像
 			TextView Micropost_senderName = (TextView) view
-					.findViewById(R.id.message_senderName); // 谁发的
+			.findViewById(R.id.message_senderName); // 谁发的
 			ImageButton button1 = (ImageButton) view.findViewById(R.id.button1); // 删除按钮
 			TextView Micropost_content = (TextView) view
-					.findViewById(R.id.micropost_content); // 消息内容
+			.findViewById(R.id.micropost_content); // 消息内容
 			TextView Micropost_date = (TextView) view
-					.findViewById(R.id.micropost_date); // 日期
+			.findViewById(R.id.micropost_date); // 日期
 			final Button guanzhu = (Button) view.findViewById(R.id.micropost_guanzhu); // 关注
 			Button lookMore = (Button) view.findViewById(R.id.lookMore); // 关注
 			Button huifu = (Button) view.findViewById(R.id.micropost_huifu); // 回复
@@ -1180,6 +1285,7 @@ Urlinterface {
 			}
 			button1.setTag(position);
 			button1.setOnClickListener(new OnClickListener() {
+				@Override
 				public void onClick(View v) {
 					// TODO Auto-generated method stub
 					//					String position = v.getTag().toString();
@@ -1259,109 +1365,14 @@ Urlinterface {
 				Reply_edit = (EditText) layout1.findViewById(R.id.reply_edit);
 				Reply_edit.requestFocus();
 				Reply_edit.setHint(user_name + " "+HomeWorkParams.REPLY+" " + mess.getName() + ":");
-
-				final Handler mHandler = new Handler() {
-					public void handleMessage(android.os.Message msg) {
-						switch (msg.what) {
-						case 0:
-							final String json7 =  (String) msg.obj;
-							child_list = new ArrayList<Child_Micropost>();
-							if ("error".equals(json7)) {
-
-							} else {
-								JSONObject array;
-								try {
-									array = new JSONObject(json7);
-
-									String status = array.getString("status");
-									String notice = array.getString("notice");
-									child_list = new ArrayList<Child_Micropost>();
-									if ("success".equals(status)) {
-										String micropostsListJson = array
-												.getString("reply_microposts");
-										JSONObject microposts = new JSONObject(
-												micropostsListJson);
-										child_page = Integer.parseInt(microposts.getString("page"));
-										child_pages_count = Integer.parseInt(microposts
-												.getString("pages_count"));
-										String reply_microposts = microposts
-												.getString("reply_microposts");
-										JSONArray jsonArray2 = new JSONArray(
-												reply_microposts);
-
-										for (int i = 0; i < jsonArray2.length(); ++i) {
-											JSONObject o = (JSONObject) jsonArray2
-													.get(i);
-											String id = o.getString("id");
-											String sender_id = o
-													.getString("sender_id");
-											String sender_types = o
-													.getString("sender_types");
-											String sender_name = o
-													.getString("sender_name");
-
-
-											String sender_avatar_url = o
-													.getString("sender_avatar_url");
-											String content = o.getString("content");
-											String reciver_name = o
-													.getString("reciver_name");
-
-											String reciver_avatar_url = o
-													.getString("reciver_avatar_url");
-											String created_at = o
-													.getString("created_at");
-
-											Child_Micropost child = new Child_Micropost(
-													id, sender_id, sender_types,
-													sender_name, 
-													sender_avatar_url, content,
-													reciver_name, 
-													created_at);
-											child_list.add(child);
-										}
-
-									} else {
-										Toast.makeText(getApplicationContext(),
-												notice, 1).show();
-									}
-								} catch (JSONException e) {
-									// TODO Auto-generated catch block
-									e.printStackTrace();
-								}
-
-							}								
-
-							break;
-						default:
-							break;									
-						}
-					}
-				};
-				Thread thread=new Thread()
-				{
-					public void run()
-					{
-						try {
-							Map<String, String> map = new HashMap<String, String>();									
-							map.put("micropost_id", micropost_id);
-							json = HomeWorkTool.sendGETRequest(
-									Urlinterface.get_reply_microposts, map);
-							Message msg = new Message();//  创建Message 对象
-							msg.what = 0;
-							msg.obj = json;
-							mHandler.sendMessage(msg);
-						} catch (Exception e) {
-							// TODO Auto-generated catch block
-							e.printStackTrace();
-						}
-					}
-				};
-				thread.start();	
-
-
+ 
+				
+				
+				
 				if (child_list.size()!=0) {
 					listView2 = (ListView) layout1.findViewById(R.id.aa);
+					listView2.setVisibility(View.VISIBLE);
+					lookMore.setVisibility(View.VISIBLE);
 					listView2.setDivider(null);
 					Adapter ad = new Adapter();
 					listView2.setAdapter(ad);
@@ -1370,19 +1381,18 @@ Urlinterface {
 
 			}
 
-
-
-
-
+			
+			
+			
+			
 			if (mess.getReply_microposts_count()!=null) {
 				huifu.setText(HomeWorkParams.REPLY+"("+mess.getReply_microposts_count() +")");	
 			}
 			//  查看更多  
-			if (child_list.size()==0) {
-				lookMore.setVisibility(View.GONE);
-			}
+		
 			lookMore.setOnClickListener(new OnClickListener() {
 
+				@Override
 				public void onClick(View v) {
 					// TODO Auto-generated method stub
 					// huifu_num = huifu_num + 1;
@@ -1404,38 +1414,38 @@ Urlinterface {
 
 										if ("success".equals(status)) {
 											String micropostsListJson = array
-													.getString("reply_microposts");
+											.getString("reply_microposts");
 											JSONObject microposts = new JSONObject(
 													micropostsListJson);
 											child_page = Integer.parseInt(microposts.getString("page"));
 											child_pages_count = Integer.parseInt(microposts
 													.getString("pages_count"));
 											String reply_microposts = microposts
-													.getString("reply_microposts");
+											.getString("reply_microposts");
 											JSONArray jsonArray2 = new JSONArray(
 													reply_microposts);
 
 											for (int i = 0; i < jsonArray2.length(); ++i) {
 												JSONObject o = (JSONObject) jsonArray2
-														.get(i);
+												.get(i);
 												String id = o.getString("id");
 												String sender_id = o
-														.getString("sender_id");
+												.getString("sender_id");
 												String sender_types = o
-														.getString("sender_types");
+												.getString("sender_types");
 												String sender_name = o
-														.getString("sender_name");
+												.getString("sender_name");
 
 												String sender_avatar_url = o
-														.getString("sender_avatar_url");
+												.getString("sender_avatar_url");
 												String content = o.getString("content");
 												String reciver_name = o
-														.getString("reciver_name");
+												.getString("reciver_name");
 
 												String reciver_avatar_url = o
-														.getString("reciver_avatar_url");
+												.getString("reciver_avatar_url");
 												String created_at = o
-														.getString("created_at");
+												.getString("created_at");
 
 												Child_Micropost child = new Child_Micropost(
 														id, sender_id, sender_types,
@@ -1456,6 +1466,7 @@ Urlinterface {
 									}
 
 								}
+				
 								micropostAdapter = new MicropostAdapter();
 								listView_mes.setAdapter(micropostAdapter);
 								//}
@@ -1499,6 +1510,7 @@ Urlinterface {
 			// 点击 回复 默认 给主消息回复
 			huifu.setOnClickListener(new OnClickListener() {
 
+				@Override
 				public void onClick(View v) {
 					// TODO Auto-generated method stub
 					// huifu_num = huifu_num + 1;
@@ -1514,9 +1526,106 @@ Urlinterface {
 					focus = position;
 					child_list = new ArrayList<Child_Micropost>();
 					//					
-					json="";
+					final Handler mHandler = new Handler() {
+						public void handleMessage(android.os.Message msg) {
+							switch (msg.what) {
+							case 0:
+								final String json7 =  (String) msg.obj;
+								child_list = new ArrayList<Child_Micropost>();
+								if ("error".equals(json7)) {
+
+								} else {
+									JSONObject array;
+									try {
+										array = new JSONObject(json7);
+
+										String status = array.getString("status");
+										String notice = array.getString("notice");
+										child_list = new ArrayList<Child_Micropost>();
+										if ("success".equals(status)) {
+											String micropostsListJson = array
+											.getString("reply_microposts");
+											JSONObject microposts = new JSONObject(
+													micropostsListJson);
+											child_page = Integer.parseInt(microposts.getString("page"));
+											child_pages_count = Integer.parseInt(microposts
+													.getString("pages_count"));
+											String reply_microposts = microposts
+											.getString("reply_microposts");
+											JSONArray jsonArray2 = new JSONArray(
+													reply_microposts);
+
+											for (int i = 0; i < jsonArray2.length(); ++i) {
+												JSONObject o = (JSONObject) jsonArray2
+												.get(i);
+												String id = o.getString("id");
+												String sender_id = o
+												.getString("sender_id");
+												String sender_types = o
+												.getString("sender_types");
+												String sender_name = o
+												.getString("sender_name");
 
 
+												String sender_avatar_url = o
+												.getString("sender_avatar_url");
+												String content = o.getString("content");
+												String reciver_name = o
+												.getString("reciver_name");
+
+												String reciver_avatar_url = o
+												.getString("reciver_avatar_url");
+												String created_at = o
+												.getString("created_at");
+
+												Child_Micropost child = new Child_Micropost(
+														id, sender_id, sender_types,
+														sender_name, 
+														sender_avatar_url, content,
+														reciver_name, 
+														created_at);
+												child_list.add(child);
+											}
+
+										} else {
+											Toast.makeText(getApplicationContext(),
+													notice, 1).show();
+										}
+									} catch (JSONException e) {
+										// TODO Auto-generated catch block
+										e.printStackTrace();
+									}
+
+								}								
+								
+								break;
+							default:
+								break;									
+							}
+						}
+					};
+					Thread thread=new Thread()
+					{
+						public void run()
+						{
+							try {
+								Map<String, String> map = new HashMap<String, String>();									
+								map.put("micropost_id", micropost_id);
+							String	reply = HomeWorkTool.sendGETRequest(
+										Urlinterface.get_reply_microposts, map);
+								Message msg = new Message();//  创建Message 对象
+								msg.what = 0;
+								msg.obj = reply;
+								mHandler.sendMessage(msg);
+							} catch (Exception e) {
+								// TODO Auto-generated catch block
+								e.printStackTrace();
+							}
+						}
+					};
+					thread.start();	
+
+			
 					micropostAdapter = new MicropostAdapter();
 					listView_mes.setAdapter(micropostAdapter);
 
@@ -1536,22 +1645,26 @@ Urlinterface {
 	}
 	public class Adapter extends BaseAdapter {
 
+		@Override
 		public int getCount() {
 			// TODO Auto-generated method stub
 
 			return child_list.size();// 数据总数
 		}
 
+		@Override
 		public Object getItem(int position) {
 			// TODO Auto-generated method stub
 			return child_list.get(position);
 		}
 
+		@Override
 		public long getItemId(int position) {
 			// TODO Auto-generated method stub
 			return position;
 		}
 
+		@Override
 		public View getView(final int position, View convertView,
 				ViewGroup parent) {
 			Log.i("111111111", child_list.size() + "--");
@@ -1560,17 +1673,17 @@ Urlinterface {
 					null);
 
 			final ImageView face = (ImageView) child_view
-					.findViewById(R.id.child_user_face); // 头像
+			.findViewById(R.id.child_user_face); // 头像
 			TextView Micropost_whoToWho = (TextView) child_view
-					.findViewById(R.id.child_message_senderName); // 张三 回复 李四
+			.findViewById(R.id.child_message_senderName); // 张三 回复 李四
 
 			TextView Micropost_content = (TextView) child_view
-					.findViewById(R.id.child_micropost_content); // 内容
+			.findViewById(R.id.child_micropost_content); // 内容
 
 			Button delete = (Button) child_view
-					.findViewById(R.id.child_micropost_delete); // 删除
+			.findViewById(R.id.child_micropost_delete); // 删除
 			Button reply = (Button) child_view
-					.findViewById(R.id.child_micropost_huifu); // 回复
+			.findViewById(R.id.child_micropost_huifu); // 回复
 
 			final Child_Micropost child_Micropost = child_list.get(position);
 			if (HomeWorkTool.isConnect(getApplicationContext())) {
@@ -1640,6 +1753,7 @@ Urlinterface {
 			}
 			delete.setTag(position);
 			delete.setOnClickListener(new OnClickListener() {
+				@Override
 				public void onClick(View v) {
 					DelNum = Integer.parseInt(v.getTag().toString());
 					json="";
@@ -1710,6 +1824,7 @@ Urlinterface {
 			});
 
 			reply.setOnClickListener(new OnClickListener() {
+				@Override
 				public void onClick(View v) {
 					Reply_edit.setHint(user_name + " 回复  "
 							+ child_Micropost.getSender_name() + " :");

@@ -76,7 +76,7 @@
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
                 android:layout_below="@+id/micropost_huifu"
-                android:background="@drawable/child_bj"
+                android:background="@drawable/child_bj2"
               android:visibility="gone"
                 >
 
@@ -93,21 +93,24 @@
 
 <Button
     android:id="@+id/micropost_huifu"
-    android:layout_width="wrap_content"
-    android:layout_height="wrap_content"
+   android:layout_width="73.9px"
+                android:layout_height="32.5px"
     android:layout_alignParentRight="true"
     android:layout_below="@+id/reply_edit"
     android:text="@string/huifu"
+     android:background="#92b81b"
+     android:textColor="#FFFFFF"
     android:onClick="reply_message"
-    android:textColor="#92b81b"
+   
     android:textSize="24px" />
 
                 <ListView
                     android:id="@+id/aa"
                     android:layout_width="fill_parent"
-                    android:layout_height="wrap_content"
+                    android:layout_height="20px"
                      android:fadingEdge="none" 
                     android:layout_below="@+id/micropost_huifu"
+                     android:visibility="gone"
                     android:background="#ede9ea" />
 <Button
                     android:id="@+id/lookMore"
@@ -115,7 +118,8 @@
                     android:layout_height="wrap_content"
                       android:textSize="24px"
                     android:layout_below="@+id/aa"
-                    android:text="查看更多"
+                    android:text="@string/lookmore"
+                     android:visibility="gone"
                     android:background="#ede9ea" />
             </RelativeLayout>
             <!-- 上面的内容一开始是隐藏起来的 -->

@@ -324,7 +324,7 @@ public class HomeWorkTool implements Urlinterface {
 
 			InputStream in = url_con.getInputStream();
 			BufferedReader rd = new BufferedReader(new InputStreamReader(in,
-					"GBK"));
+					"UTF-8"));
 			tempLine = rd.readLine();
 			rd.close();
 			in.close();

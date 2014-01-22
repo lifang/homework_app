@@ -14,6 +14,7 @@ import android.media.MediaPlayer.OnCompletionListener;
 import android.media.MediaPlayer.OnPreparedListener;
 import android.os.Bundle;
 import android.os.Handler;
+import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
 import android.widget.Button;
@@ -75,7 +76,9 @@ public class SpeakPrepareActivity extends Activity implements Urlinterface,
 
 		list = homework.getQuestion_list();
 		history = homework.getQuestion_history();
-
+		if (history.size()==0) {
+			Log.i(tag, ""+history.size());
+		}
 		if (homework.isWork_history()) {// 表示查看历史记录
 			questionlist = list.get(homework.getQuestion_index())
 					.getQuesttionList();

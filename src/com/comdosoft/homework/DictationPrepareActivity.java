@@ -57,7 +57,6 @@ public class DictationPrepareActivity extends Activity implements
 		dictationImg = (ImageView) findViewById(R.id.question_dictation_img);
 		dictationImg.setOnClickListener(this);
 		// setMp3Url();
-		// /new MyThread().start();
 	}
 
 	
@@ -166,16 +165,20 @@ public class DictationPrepareActivity extends Activity implements
 
 	
 	public void onClick(View v) {
+		Intent intent = new Intent();
 		switch (v.getId()) {
 		case R.id.question_dictation_img:
 			playerAmr();
 			break;
 		case R.id.question_dictation_next:
-			Intent intent = new Intent(this, DictationBeginActivity.class);
+			DictationPrepareActivity.this.finish();
+			intent.setClass(this, DictationBeginActivity.class);
 			startActivity(intent);
 			break;
 		case R.id.question_dictation_exit:
 			this.finish();
+			intent.setClass(this, HomeWorkMainActivity.class);
+			startActivity(intent);
 			break;
 		}
 	}

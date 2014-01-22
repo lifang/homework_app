@@ -77,6 +77,7 @@ public class SpeakBeginActivity extends Activity implements Urlinterface {
 				SetTextView();
 				break;
 			case 1:
+				MyDialog("你已经答完本题确认继续下一题吗?", "确认", "取消", 1);
 				break;
 			case 2:
 				prodialog.dismiss();
@@ -108,11 +109,9 @@ public class SpeakBeginActivity extends Activity implements Urlinterface {
 				break;
 			case 6:
 				prodialog.dismiss();
-				if ((homework.getQuestion_index() + 1) < homework.getQuestion_allNumber()) {
-					MyDialog("你已经答完本题确认继续下一题吗?", "确认", "取消", 1);
-				} else {
-					MyDialog("恭喜完成今天的朗读作业!", "确认", "取消", 2);
-				}
+
+				MyDialog("恭喜完成今天的朗读作业!", "确认", "取消", 2);
+
 				break;
 			}
 			super.handleMessage(msg);
@@ -126,6 +125,7 @@ public class SpeakBeginActivity extends Activity implements Urlinterface {
 		initialize();
 		SetTextView();
 		publish_question_package_id = homework.getP_q_package_id();
+		Log.i(tag, publish_question_package_id + "===");
 		question_package_id = homework.getQ_package_id();
 		student_id = homework.getUser_id();
 		school_class_id = homework.getClass_id();
@@ -174,15 +174,16 @@ public class SpeakBeginActivity extends Activity implements Urlinterface {
 			int ye = homework.getQuestion_index();
 			if ((ye + 1) < homework.getQuestion_allNumber()) {
 				question_id = branch_questions.get(index).getId();
-				Thread thread = new Thread(new Record_answer_info());// 记录小题
-				thread.start();
 				if ((index + 1) < branch_questions.size()) {
+					Thread thread = new Thread(new Record_answer_info());// 记录小题
+					thread.start();
 					handler.sendEmptyMessage(0);
 				} else {
 					prodialog = new ProgressDialog(SpeakBeginActivity.this);
 					prodialog.setMessage(HomeWorkParams.PD_FINISH_QUESTION);
 					prodialog.show();
-					new Thread(new SendWorkOver()).start();// 记录大題
+					Thread thread = new Thread(new Record_answer_info());// 记录小题
+					thread.start();
 				}
 			} else {
 				question_id = branch_questions.get(index).getId();
@@ -401,10 +402,16 @@ public class SpeakBeginActivity extends Activity implements Urlinterface {
 		public void run() {
 			Looper.prepare();
 			Log.i(tag, "错词：" + error_str);
+			Log.i(tag,
+					school_class_id + "-" + student_id + "-"
+							+ question_package_id + "-"
+							+ homework.getBranch_question_id() + "-"
+							+ question_id + "-");
 			Map<String, String> map = new HashMap<String, String>();
 			map.put("school_class_id", school_class_id + "");
 			map.put("student_id", student_id + "");
-			map.put("publish_question_package_id", question_package_id + "");
+			map.put("publish_question_package_id", publish_question_package_id
+					+ "");
 			map.put("branch_question_id", homework.getBranch_question_id() + "");
 			map.put("question_id", question_id + "");
 			map.put("answer", error_str);
@@ -415,7 +422,12 @@ public class SpeakBeginActivity extends Activity implements Urlinterface {
 				json = HomeWorkTool.doPost(RECORD_ANSWER_INFO, map);
 				JSONObject obj = new JSONObject(json);
 				if (obj.getString("status").equals("success")) {
-
+					if ((homework.getQuestion_index() + 1) < homework
+							.getQuestion_allNumber()) {
+						if ((index + 1) > branch_questions.size()) {
+							handler.sendEmptyMessage(1);
+						}
+					}
 				}
 			} catch (Exception e) {
 				e.printStackTrace();
@@ -434,6 +446,8 @@ public class SpeakBeginActivity extends Activity implements Urlinterface {
 			map.put("question_package_id", question_package_id + "");
 			map.put("publish_question_package_id", publish_question_package_id
 					+ "");
+			Log.i(tag, school_class_id + "-" + student_id + "-"
+					+ question_package_id + "-" + publish_question_package_id);
 			String json;
 			try {
 				json = HomeWorkTool.doPost(FINISH_QUESTION_PACKGE, map);
