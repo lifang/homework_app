@@ -315,7 +315,7 @@ public class AboutMeActivity extends Activity
 					startActivity(intent);
 					break;
 				case 3:
-					Toast.makeText(AboutMeActivity.this, "查看错误", 0).show();
+					Toast.makeText(AboutMeActivity.this, "信息错误", 0).show();
 					break;
 				default:
 					break;
