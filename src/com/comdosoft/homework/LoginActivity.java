@@ -119,7 +119,7 @@ public class LoginActivity extends Activity implements Urlinterface {
 				// 获取class_name
 
 				String school_class_id = class1.getString("id");
-				Log.i(tag, user_id + "------" + school_class_id);
+				Log.i(tag, user_id + "----------------" + school_class_id);
 				SharedPreferences preferences = getSharedPreferences(SHARED,
 						Context.MODE_PRIVATE);
 				Editor editor = preferences.edit();

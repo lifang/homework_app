@@ -11,7 +11,7 @@ public class AboutMePojo
 	private String status;					//回复的状态，是日志，还是状态，还是关注
 	private String content;					//消息的内容
 	private String created_at;				//日期
-	
+
 	public AboutMePojo() {
 	}
 

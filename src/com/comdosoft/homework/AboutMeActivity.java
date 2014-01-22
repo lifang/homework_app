@@ -59,16 +59,16 @@ public class AboutMeActivity extends Activity
 		{
 			public void run()
 			{
-				//				while(true)
-				//				{
-				try {
-					get_News();
-					Thread.sleep(1000);
-				} catch (InterruptedException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
+				while(true)
+				{
+					try {
+						get_News();
+						Thread.sleep(1000);
+					} catch (InterruptedException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
 				}
-				//				}
 			}
 		}.start();
 	}
@@ -94,8 +94,8 @@ public class AboutMeActivity extends Activity
 			{
 				try {
 					HashMap<String,String> mp=new HashMap<String,String>();
-					mp.put("user_id","1");
-					mp.put("school_class_id", "1");
+					mp.put("user_id",user_id);
+					mp.put("school_class_id", school_class_id);
 					String json = HomeWorkTool.sendGETRequest(Urlinterface.get_News, mp);
 					JSONObject jsonobject=new JSONObject(json);
 					String status=(String) jsonobject.get("status");
@@ -111,7 +111,6 @@ public class AboutMeActivity extends Activity
 							String created_at=divisionTime(jsonobject2.getString("created_at"));
 							String id=jsonobject2.getString("id");
 							String micropost_id=jsonobject2.getString("micropost_id");
-							Log.i("aa", micropost_id);
 							String sender_avatar_url=jsonobject2.getString("sender_avatar_url");
 							String sender_name=jsonobject2.getString("sender_name");
 							String user_id=jsonobject2.getString("user_id");
@@ -162,7 +161,7 @@ public class AboutMeActivity extends Activity
 		private ListView listview;
 		private int class_id;
 		AsyncImageLoader asyncImageLoader=new AsyncImageLoader();
-		HomeWork hw=(HomeWork) context;
+		HomeWork hw=(HomeWork) getApplication();
 		public AboutMeAdapter()
 		{
 		}
@@ -184,7 +183,7 @@ public class AboutMeActivity extends Activity
 
 		public View getView(final int position, View convertView, ViewGroup parent) {
 			LayoutInflater inflater = LayoutInflater
-					.from(context);
+			.from(context);
 			if(convertView==null)
 			{
 				convertView = inflater.inflate(R.layout.aboutme_one,null);
@@ -210,10 +209,9 @@ public class AboutMeActivity extends Activity
 								try {
 									HashMap<String, String> mp=new HashMap();
 									mp.put("user_id", Amlist.get(position).getUser_id());
-									mp.put("school_class_id",String.valueOf(class_id));
+									mp.put("school_class_id",String.valueOf(school_class_id));
 									mp.put("message_id", Amlist.get(position).getMicropost_id());
 									String json=HomeWorkTool.doPost(Urlinterface.read_message, mp);
-									Log.i("aa", json);
 									JSONObject jsonobject=new JSONObject(json);
 									String status=jsonobject.getString("status");
 									Message msg=new Message();
@@ -225,8 +223,10 @@ public class AboutMeActivity extends Activity
 									}
 									else if(status.equals("success"))
 									{
+										Log.i("aa",Amlist.get(position).getMicropost_id()+"");
 										hw.setMessage_id(Integer.valueOf(Amlist.get(position).getMicropost_id()));
 										Log.i("aa", hw.getMessage_id()+"消息ID");
+										Log.i("aa", "json:"+json);
 										hw.setNoselect_message(json);
 										msg.what=2;
 										handler.sendMessage(msg);
@@ -254,7 +254,6 @@ public class AboutMeActivity extends Activity
 									mp.put("user_id", Integer.valueOf(Amlist.get(position).getUser_id()));
 									mp.put("school_class_id",class_id);
 									mp.put("message_id", Integer.valueOf(Amlist.get(position).getId()));
-									Log.i("aa", "user_id:"+Amlist.get(position).getUser_id()+"class_id:"+class_id+"messag_id:"+Amlist.get(position).getId());
 									String json=HomeWorkTool.doPost(Urlinterface.delete_message, mp);
 									JSONObject jsonobject=new JSONObject(json);
 									String notice=jsonobject.getString("notice");

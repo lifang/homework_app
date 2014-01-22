@@ -14,7 +14,7 @@ public class Micropost
 	private String avatar_url; //创建者头像
 	private String  created_at;//创建时间
 	private String reply_microposts_count;
-	
+
 	public Micropost(){}
 
 	public Micropost(String id, String user_id, String user_types, String name,
