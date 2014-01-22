@@ -8,7 +8,9 @@ import java.util.Map;
 import java.util.Random;
 import com.comdosoft.homework.pojo.DictationPojo;
 import com.comdosoft.homework.pojo.QuestionPojo;
+import com.comdosoft.homework.tools.HomeWork;
 import com.comdosoft.homework.tools.HomeWorkParams;
+import com.comdosoft.homework.tools.HomeWorkTool;
 import com.comdosoft.homework.tools.ListeningQuestionList;
 import com.comdosoft.homework.tools.Soundex_Levenshtein;
 import com.comdosoft.homework.tools.Urlinterface;
@@ -20,6 +22,7 @@ import android.graphics.Color;
 import android.media.MediaPlayer;
 import android.media.MediaPlayer.OnPreparedListener;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -37,6 +40,7 @@ public class DictationBeginActivity extends Activity implements
 	private int linearLayoutIndex = 0;
 	private int smallIndex = 0;
 	private int bigIndex = 0;
+	private int publish_question_package_id;
 	private String symbol;
 	private String mp3URL;
 	private List<Integer> indexList = new ArrayList<Integer>();
@@ -51,8 +55,9 @@ public class DictationBeginActivity extends Activity implements
 	private StringBuffer answer = new StringBuffer();
 	private MediaPlayer mediaPlayer = new MediaPlayer();
 	private ProgressDialog mPd;
+	private HomeWork homeWork;
 
-	
+	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.question_dictation_begin);
@@ -64,6 +69,10 @@ public class DictationBeginActivity extends Activity implements
 		findViewById(R.id.question_dictation_check).setOnClickListener(this);
 		findViewById(R.id.question_dictation_play).setOnClickListener(this);
 		mPd = new ProgressDialog(this);
+		mPd.setMessage(HomeWorkParams.PD_FINISH_QUESTION);
+
+		homeWork = (HomeWork) getApplication();
+		publish_question_package_id = homeWork.getP_q_package_id();
 
 		init();
 	}
@@ -78,7 +87,7 @@ public class DictationBeginActivity extends Activity implements
 		editLinearLayout.removeAllViews();
 
 		// 获取已答过题目记录数
-//		bigIndex = ListeningQuestionList.getRecordCount();
+		// bigIndex = ListeningQuestionList.getRecordCount();
 		bigIndex = ListeningQuestionList.Record_Count;
 
 		// 获取小题数据
@@ -186,7 +195,8 @@ public class DictationBeginActivity extends Activity implements
 				if (answer.length() > 0) {
 					answer.delete(answer.length() - 3, answer.length());
 				}
-				new MyTrehad().start();
+				mPd.show();
+				new MyTrehad(bigIndex, smallIndex).start();
 				if (smallIndex == qpList.size()) {
 					// 切换答题
 					bigIndex++;
@@ -233,21 +243,38 @@ public class DictationBeginActivity extends Activity implements
 
 	// 提交答题记录
 	class MyTrehad extends Thread {
-		
+		private int bIndex, sIndex;
+
+		public void MyThread() {
+		}
+
+		public MyTrehad(int bIndex, int sIndex) {
+			super();
+			this.bIndex = bIndex;
+			this.sIndex = sIndex;
+		}
+
+		@Override
 		public void run() {
 			super.run();
 			Map<String, String> map = new HashMap<String, String>();
-			map.put("student_id", "1");
-			map.put("school_class_id ", "1");
-			map.put("publish_question_package_id", "1");
+			map.put("student_id", homeWork.getUser_id() + "");
+			map.put("school_class_id ", homeWork.getClass_id() + "");
+			map.put("publish_question_package_id", publish_question_package_id
+					+ "");
 			map.put("branch_question_id ", ListeningQuestionList
-					.getListeningPojo(0).getId() + "");
-			map.put("question_id",
-					qpList.get(smallIndex > 0 ? smallIndex - 1 : 0).getId()
-							+ "");
+					.getListeningPojo(bIndex).getId() + "");
+			map.put("question_id", qpList.get(sIndex - 1).getId() + "");
 			map.put("answer", answer.toString());
 			map.put("question_types", "0");
+			Log.i("Ax",
+					"bigId:"
+							+ ListeningQuestionList.getListeningPojo(bIndex)
+									.getId());
+			Log.i("Ax", "question_id:" + qpList.get(sIndex - 1).getId());
+			HomeWorkTool.doPost(SAVE_DICTATION, map);
 			answer.delete(0, answer.length());
+			mPd.dismiss();
 		}
 	}
 
@@ -282,8 +309,8 @@ public class DictationBeginActivity extends Activity implements
 					myFinish();
 					break;
 				case 1:
-//					check.setText("检查");
-//					init();
+					// check.setText("检查");
+					// init();
 					Intent intent = new Intent();
 					intent.setClass(DictationBeginActivity.this,
 							DictationPrepareActivity.class);
@@ -316,7 +343,7 @@ public class DictationBeginActivity extends Activity implements
 		dialog.show();
 	}
 
-	
+	@Override
 	public void onClick(View v) {
 		switch (v.getId()) {
 		case R.id.question_dictation_exit:
@@ -331,12 +358,12 @@ public class DictationBeginActivity extends Activity implements
 		}
 	}
 
-	
+	@Override
 	public void onPrepared(MediaPlayer mp) {
 		mp.start();
 	}
 
-	
+	@Override
 	public void onDestroy() {
 		mediaPlayer.release();
 		mediaPlayer = null;

@@ -52,7 +52,8 @@ public class LoginActivity extends Activity implements Urlinterface {
 						RegistrationActivity.class);
 				break;
 			case 2:
-//				intent.putExtra("json", json);
+				// intent.putExtra("json", json);
+				LoginActivity.this.finish();
 				intent.setClass(getApplicationContext(),
 						HomeWorkMainActivity.class);
 				break;

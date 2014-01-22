@@ -76,10 +76,8 @@ public class SpeakPrepareActivity extends Activity implements Urlinterface,
 
 		list = homework.getQuestion_list();
 		history = homework.getQuestion_history();
-		if (history.size()==0) {
-			Log.i(tag, ""+history.size());
-		}
-		if (homework.isWork_history()) {// 表示查看历史记录
+		Log.i("linshi", homework.getHistory_item()+"-=" + list.size());
+		if (homework.getHistory_item() >= list.size()) {// 表示查看历史记录
 			questionlist = list.get(homework.getQuestion_index())
 					.getQuesttionList();
 			homework.setQ_package_id(list.get(homework.getQuestion_index())
@@ -88,8 +86,15 @@ public class SpeakPrepareActivity extends Activity implements Urlinterface,
 				content += questionlist.get(i).getContent() + "\n";
 			}
 		} else {
-			questionlist = list.get(history.size()).getQuesttionList();
-			homework.setQ_package_id(list.get(history.size()).getId());
+			Log.i(tag, history.size() + "-->" + list.size());
+			// int history_item = 0;
+			// if (history.size() != 0) {
+			// history_item = history.size() - 1;
+			// }
+			questionlist = list.get(homework.getHistory_item())
+					.getQuesttionList();
+			homework.setQ_package_id(list.get(homework.getHistory_item())
+					.getId());
 			for (int i = 0; i < questionlist.size(); i++) {
 				content += questionlist.get(i).getContent() + "\n";
 			}
@@ -114,16 +119,21 @@ public class SpeakPrepareActivity extends Activity implements Urlinterface,
 		case R.id.question_speak_next:
 			stop();
 			SpeakPrepareActivity.this.finish();
-			if (homework.isWork_history()) {// 进入答题历史页面
+			if (homework.getHistory_item() >= list.size()) {// 进入答题历史页面
 				homework.setBranch_questions(list.get(
 						homework.getQuestion_index()).getQuesttionList());
 				intent.setClass(SpeakPrepareActivity.this,
 						SpeakHistoryActivity.class);
 				startActivity(intent);
 			} else {
-				homework.setBranch_questions(list.get(history.size())
-						.getQuesttionList());
-				homework.setBranch_question_id(list.get(history.size()).getId());
+				// int history_item = 0;
+				// if (history.size() != 0) {
+				// history_item = history.size() - 1;
+				// }
+				homework.setBranch_questions(list.get(
+						homework.getHistory_item()).getQuesttionList());
+				homework.setQuestion_id(list.get(homework.getHistory_item())
+						.getId());
 				intent.setClass(SpeakPrepareActivity.this,
 						SpeakBeginActivity.class);
 				startActivity(intent);

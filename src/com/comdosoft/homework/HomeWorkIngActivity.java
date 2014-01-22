@@ -98,6 +98,7 @@ public class HomeWorkIngActivity extends Activity implements Urlinterface {
 		SharedPreferences sp = getSharedPreferences(SHARED, 0);
 		student_id = sp.getString("user_id", "null");
 		school_class_id = sp.getString("school_class_id", "null");
+		Log.i(tag, school_class_id + "====");
 		homework.setClass_id(Integer.valueOf(school_class_id));
 		homework.setUser_id(Integer.valueOf(student_id));
 
@@ -144,7 +145,7 @@ public class HomeWorkIngActivity extends Activity implements Urlinterface {
 						} else {
 							homework.setWork_history(true);
 						}
-						HomeWorkIngActivity.this.finish();
+						HomeWorkMainActivity.instance.finish();
 						Intent intent = new Intent();
 						switch (position) {
 						case 0:
@@ -442,7 +443,7 @@ public class HomeWorkIngActivity extends Activity implements Urlinterface {
 			}
 
 			homework.setQuestion_history(questionhistory);
-
+			homework.setHistory_item(questionhistory.size());
 			// ↑张秀楠------------↓马龙
 
 			// 解析听写题目
