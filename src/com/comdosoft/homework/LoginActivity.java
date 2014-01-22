@@ -52,8 +52,12 @@ public class LoginActivity extends Activity implements Urlinterface {
 						RegistrationActivity.class);
 				break;
 			case 2:
+<<<<<<< HEAD
 				// intent.putExtra("json", json);
 				LoginActivity.this.finish();
+=======
+				//				intent.putExtra("json", json);
+>>>>>>> 75f9abb1e635b5a386e79a96e42a418451c1185c
 				intent.setClass(getApplicationContext(),
 						HomeWorkMainActivity.class);
 				break;
@@ -72,9 +76,10 @@ public class LoginActivity extends Activity implements Urlinterface {
 		mPd = new ProgressDialog(LoginActivity.this);
 		mPd.setMessage("正在登陆...");
 		sp = getPreferences(0);
-		// sp.edit().putString("user_id", "1").commit();
-		// sp.edit().putString("school_class_id", "1").commit();
-
+//		sp.edit().putString("user_id", "1").commit();
+//		sp.edit().putString("school_class_id", "1").commit();
+//		homework.setUser_id(1);
+//		homework.setClass_id(1);
 		if (sp.getString("user_id", "").equals("")
 				&& sp.getString("school_class_id", "").equals("")) {
 			onClickLogin();
@@ -120,7 +125,7 @@ public class LoginActivity extends Activity implements Urlinterface {
 				// 获取class_name
 
 				String school_class_id = class1.getString("id");
-				Log.i(tag, user_id + "------" + school_class_id);
+				Log.i(tag, user_id + "----------------" + school_class_id);
 				SharedPreferences preferences = getSharedPreferences(SHARED,
 						Context.MODE_PRIVATE);
 				Editor editor = preferences.edit();

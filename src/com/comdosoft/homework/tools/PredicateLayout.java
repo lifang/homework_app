@@ -16,7 +16,7 @@ public class PredicateLayout extends LinearLayout {
 		super(context);
 	}
 
-
+	
 	public PredicateLayout(Context context, int horizontalSpacing,
 			int verticalSpacing) {
 		super(context);

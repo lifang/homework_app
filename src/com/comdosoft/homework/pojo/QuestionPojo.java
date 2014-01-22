@@ -12,6 +12,7 @@ public class QuestionPojo {
 		super();
 	}
 	
+
 	public QuestionPojo(int id, String content, String url) {
 		super();
 		this.id = id;

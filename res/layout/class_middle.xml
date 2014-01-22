@@ -42,6 +42,7 @@
                 android:focusable="true"
                 android:focusableInTouchMode="true"
                 android:gravity="top"
+                android:textSize="24px"
                 android:hint="@string/class_fabiao_tishi" />
 
             <Button
@@ -63,7 +64,7 @@
                 android:layout_height="5px"
                 android:layout_below="@+id/button_fabiao"
                 android:layout_centerHorizontal="true"
-                android:layout_marginTop="22px"
+                android:layout_marginTop="30px"
                 android:focusable="false" />
 
             <Button
@@ -104,7 +105,7 @@
     </RelativeLayout>
 
     <LinearLayout
-        android:layout_width="394px"
+        android:layout_width="fill_parent"
         android:layout_height="fill_parent"
         android:layout_toRightOf="@+id/classRelativeLayout_left"
         android:background="#636362"
@@ -112,6 +113,7 @@
         android:orientation="vertical" >
 
         <include
+            android:layout_marginTop="20px"
             android:id="@+id/main_class_classes_include"
             android:layout_width="395px"
             android:layout_height="250px"

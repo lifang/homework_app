@@ -51,7 +51,6 @@ public class AboutMeActivity extends Activity
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.aboutme);
 		listview=(ListView) findViewById(R.id.aboutmeLv);
-		Log.i("aa", "AboutMeActivity");
 		SharedPreferences sp = getSharedPreferences(Urlinterface.SHARED, 0);
 		user_id = sp.getString("user_id", "null");
 		school_class_id = sp.getString("school_class_id", "null");
@@ -60,17 +59,16 @@ public class AboutMeActivity extends Activity
 		{
 			public void run()
 			{
-				//				while(true)
-				//				{
-				try {
-					get_News();
-					Thread.sleep(1000);
-					Log.i("aa", num+"新的东西");
-				} catch (InterruptedException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
+				while(true)
+				{
+					try {
+						get_News();
+						Thread.sleep(20000);
+					} catch (InterruptedException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
 				}
-				//				}
 			}
 		}.start();
 	}
@@ -96,8 +94,8 @@ public class AboutMeActivity extends Activity
 			{
 				try {
 					HashMap<String,String> mp=new HashMap<String,String>();
-					mp.put("user_id","1");
-					mp.put("school_class_id", "1");
+					mp.put("user_id",user_id);
+					mp.put("school_class_id", school_class_id);
 					String json = HomeWorkTool.sendGETRequest(Urlinterface.get_News, mp);
 					JSONObject jsonobject=new JSONObject(json);
 					String status=(String) jsonobject.get("status");
@@ -113,7 +111,6 @@ public class AboutMeActivity extends Activity
 							String created_at=divisionTime(jsonobject2.getString("created_at"));
 							String id=jsonobject2.getString("id");
 							String micropost_id=jsonobject2.getString("micropost_id");
-							Log.i("aa", micropost_id);
 							String sender_avatar_url=jsonobject2.getString("sender_avatar_url");
 							String sender_name=jsonobject2.getString("sender_name");
 							String user_id=jsonobject2.getString("user_id");
@@ -164,7 +161,7 @@ public class AboutMeActivity extends Activity
 		private ListView listview;
 		private int class_id;
 		AsyncImageLoader asyncImageLoader=new AsyncImageLoader();
-		HomeWork hw=(HomeWork) context;
+		HomeWork hw=(HomeWork) getApplication();
 		public AboutMeAdapter()
 		{
 		}
@@ -212,13 +209,12 @@ public class AboutMeActivity extends Activity
 								try {
 									HashMap<String, String> mp=new HashMap();
 									mp.put("user_id", Amlist.get(position).getUser_id());
-									mp.put("school_class_id",String.valueOf(class_id));
+									mp.put("school_class_id",String.valueOf(school_class_id));
 									mp.put("message_id", Amlist.get(position).getMicropost_id());
 									String json=HomeWorkTool.doPost(Urlinterface.read_message, mp);
 									JSONObject jsonobject=new JSONObject(json);
 									String status=jsonobject.getString("status");
 									Message msg=new Message();
-									Log.i("aa", json);
 									//									
 									if(status.equals("error"))
 									{
@@ -227,8 +223,10 @@ public class AboutMeActivity extends Activity
 									}
 									else if(status.equals("success"))
 									{
+										Log.i("aa",Amlist.get(position).getMicropost_id()+"");
 										hw.setMessage_id(Integer.valueOf(Amlist.get(position).getMicropost_id()));
 										Log.i("aa", hw.getMessage_id()+"消息ID");
+										Log.i("aa", "json:"+json);
 										hw.setNoselect_message(json);
 										msg.what=2;
 										handler.sendMessage(msg);
@@ -252,18 +250,19 @@ public class AboutMeActivity extends Activity
 							public void run()
 							{
 								try {
-									HashMap<String, Integer> mp=new HashMap();
-									mp.put("user_id", Integer.valueOf(Amlist.get(position).getUser_id()));
-									mp.put("school_class_id",class_id);
-									mp.put("message_id", Integer.valueOf(Amlist.get(position).getId()));
+									HashMap<String, String> mp=new HashMap();
+									mp.put("user_id", user_id);
+									mp.put("school_class_id",school_class_id);
+									mp.put("message_id", Amlist.get(position).getId());
 									String json=HomeWorkTool.doPost(Urlinterface.delete_message, mp);
-									JSONObject jsonobject=new JSONObject(json);
+									JSONObject jsonobject = new JSONObject(json);
 									String notice=jsonobject.getString("notice");
 									String status=(String) jsonobject.get("status");
 									Message msg=new Message();
 									msg.obj=notice;
 									if(status.equals("success"))
 									{
+										Log.i("aa",position+"aa");
 										msg.what=0;
 										Amlist.remove(position);
 										handler.sendMessage(msg);
@@ -302,8 +301,8 @@ public class AboutMeActivity extends Activity
 				super.dispatchMessage(msg);
 				switch (msg.what) {
 				case 0:
+					listview.setAdapter(new AboutMeAdapter(listam,getApplicationContext(),listview));
 					Toast.makeText(AboutMeActivity.this,msg.obj.toString() , 0).show();
-					notifyDataSetChanged();
 					break;
 				case 1:
 					Toast.makeText(context, msg.obj.toString(), 0).show();
@@ -316,7 +315,7 @@ public class AboutMeActivity extends Activity
 					startActivity(intent);
 					break;
 				case 3:
-					Toast.makeText(AboutMeActivity.this, "查看错误", 0).show();
+					Toast.makeText(AboutMeActivity.this, "信息错误", 0).show();
 					break;
 				default:
 					break;
