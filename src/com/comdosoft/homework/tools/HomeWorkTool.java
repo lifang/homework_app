@@ -411,7 +411,7 @@ public class HomeWorkTool implements Urlinterface {
 		// params.height = totalHeight + (listView.getDividerHeight() *
 		// (listAdapter.getCount() - 1))+157;
 		params.height = totalHeight
-				+ (listView.getDividerHeight() * (listAdapter.getCount()));
+				+ (listView.getDividerHeight() * (listAdapter.getCount()))+157;
 		// listView.getDividerHeight()获取子项间分隔符占用的高度
 
 		listView.setLayoutParams(params);

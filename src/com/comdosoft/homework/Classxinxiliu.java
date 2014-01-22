@@ -113,9 +113,9 @@ Urlinterface {
 
 		SharedPreferences  preferences = getSharedPreferences(SHARED, Context.MODE_PRIVATE);
 
-//		user_id = preferences.getString("user_id", null);
-//id = preferences.getString("id", null);
-//		school_class_id = preferences.getString("school_class_id", null);
+		user_id = preferences.getString("user_id", null);
+id = preferences.getString("id", null);
+		school_class_id = preferences.getString("school_class_id", null);
 
 
 
@@ -248,28 +248,62 @@ Urlinterface {
 					e.printStackTrace();
 				} 
 
+		//   获得要查看的  主消息 的  子消息		
+				final Handler mHandler = new Handler() {
+					public void handleMessage(android.os.Message msg) {
+						switch (msg.what) {
+						case 0:
+							final String json7 =  (String) msg.obj;
+							child_list = new ArrayList<Child_Micropost>();
+							parseJson_childMicropost(json7);								
+
+							break;
+						default:
+							break;									
+						}
+					}
+				};
+				Thread thread_m=new Thread()
+				{
+					public void run()
+					{
+						try {
+							Map<String, String> map = new HashMap<String, String>();									
+							map.put("micropost_id", message_id+"");
+							String	re = HomeWorkTool.sendGETRequest(
+									Urlinterface.get_reply_microposts, map);
+							Message msg = new Message();//  创建Message 对象
+							msg.what = 0;
+							msg.obj = re;
+							mHandler.sendMessage(msg);
+						} catch (Exception e) {
+							// TODO Auto-generated catch block
+							e.printStackTrace();
+						}
+					}
+				};
 
 				//  查看   跳到本界面的   处理操作
 				message_id  = homework.getMessage_id();
 				if(message_id!=-1){
+					
+//					thread_m.start();	
 					homework.setMessage_id(-1);  //  将  公共变量message_id  设置为  -1
-
+					Button b = (Button) findViewById(R.id.class_button_all);
+					b.setBackgroundDrawable(getResources().getDrawable(R.drawable.an2));
+					Button b2 = (Button) findViewById(R.id.class_button_myself);
+					b2.setBackgroundDrawable(getResources().getDrawable(R.drawable.an));
+				
+					micropost_type = 1;
+					page = 1;
+					number = 1;	
 
 					int a=0;
 					for (int i = 0; i < list.size(); i++) {
 
 						if (Integer.parseInt(list.get(i).getId())==message_id) {
 							focus = i;   //   要展开的  主消息  的   位置
-							number = 1;	
-
-							micropost_type = 1;
-							page = 1;
-							Button b = (Button) findViewById(R.id.class_button_all);
-							b.setBackgroundDrawable(getResources().getDrawable(R.drawable.an2));
-							Button b2 = (Button) findViewById(R.id.class_button_myself);
-							b2.setBackgroundDrawable(getResources().getDrawable(R.drawable.an));
-						
-						
+							
 							
 							break;
 						}else{
@@ -277,7 +311,7 @@ Urlinterface {
 						}
 					}
 					if(a==list.size()&&a!=0){//  若第一页主消息中没有  提示信息所在，，则  单独显示  该条提示信息
-
+						focus = 0;   //   要展开的  主消息  的   位置
 						String mess = homework.getNoselect_message();
 						list.clear();
 						//  该处解析  消息  json  并放入  list
@@ -309,49 +343,8 @@ Urlinterface {
 							// TODO Auto-generated catch block
 							e.printStackTrace();
 						}
-						//						
-
-
 					}
-
 				}
-				child_list = new ArrayList<Child_Micropost>();
-				//					
-
-				final Handler mHandler = new Handler() {
-					public void handleMessage(android.os.Message msg) {
-						switch (msg.what) {
-						case 0:
-							final String json7 =  (String) msg.obj;
-							child_list = new ArrayList<Child_Micropost>();
-				parseJson_childMicropost(json7);							
-
-							break;
-						default:
-							break;									
-						}
-					}
-				};
-				Thread thread=new Thread()
-				{
-					public void run()
-					{
-						try {
-							Map<String, String> map = new HashMap<String, String>();									
-							map.put("micropost_id", message_id+"");
-							String	re = HomeWorkTool.sendGETRequest(
-									Urlinterface.get_reply_microposts, map);
-							Message msg = new Message();//  创建Message 对象
-							msg.what = 0;
-							msg.obj = re;
-							mHandler.sendMessage(msg);
-						} catch (Exception e) {
-							// TODO Auto-generated catch block
-							e.printStackTrace();
-						}
-					}
-				};
-				thread.start();	
 				micropostAdapter = new MicropostAdapter();
 				listView_mes.setAdapter(micropostAdapter);
 				//				listView_mes.setSelection(focus);
@@ -479,6 +472,7 @@ Urlinterface {
 										switch (msg.what) {
 										case 0:
 											final String json7 =  (String) msg.obj;
+											child_list = new ArrayList<Child_Micropost>();
 											parseJson_childMicropost(json7);				
 											micropostAdapter = new MicropostAdapter();
 											listView_mes.setAdapter(micropostAdapter);
@@ -686,7 +680,7 @@ Urlinterface {
 	 * */
 	void parseJson_childMicropost(String json3){
 		
-		child_list = new ArrayList<Child_Micropost>();
+		
 		if ("error".equals(json3)) {
 
 		} else {
@@ -1333,10 +1327,48 @@ Urlinterface {
 				Reply_edit = (EditText) layout1.findViewById(R.id.reply_edit);
 				Reply_edit.requestFocus();
 				Reply_edit.setHint(user_name + " "+HomeWorkParams.REPLY+" " + mess.getName() + ":");
- 
 				
+				final Handler mHandler = new Handler() {
+					public void handleMessage(android.os.Message msg) {
+						switch (msg.what) {
+						case 0:
+							final String json7 =  (String) msg.obj;
+							child_list = new ArrayList<Child_Micropost>();
+							parseJson_childMicropost(json7);
+								micropostAdapter = new MicropostAdapter();
+								listView_mes.setAdapter(micropostAdapter);
+
+								listView_mes.setSelection(focus);
+															
+							
+							break;
+						default:
+							break;									
+						}
+					}
+				};
+				Thread thread=new Thread()
+				{
+					public void run()
+					{
+						try {
+							Map<String, String> map = new HashMap<String, String>();									
+							map.put("micropost_id", mess.getId());
+						String	reply = HomeWorkTool.sendGETRequest(
+									Urlinterface.get_reply_microposts, map);
+							Message msg = new Message();//  创建Message 对象
+							msg.what = 0;
+							msg.obj = reply;
+							mHandler.sendMessage(msg);
+						} catch (Exception e) {
+							// TODO Auto-generated catch block
+							e.printStackTrace();
+						}
+					}
+				};
+				thread.start();
 				
-				
+// Toast.makeText(getApplicationContext(), child_list.size()+"-------------", 1).show();
 				if (child_list.size()!=0) {
 					listView2 = (ListView) layout1.findViewById(R.id.aa);
 					listView2.setVisibility(View.VISIBLE);
@@ -1439,45 +1471,8 @@ Urlinterface {
 					focus = position;
 					
 					//					
-					final Handler mHandler = new Handler() {
-						public void handleMessage(android.os.Message msg) {
-							switch (msg.what) {
-							case 0:
-								final String json7 =  (String) msg.obj;
-								child_list = new ArrayList<Child_Micropost>();
-								parseJson_childMicropost(json7);
-									micropostAdapter = new MicropostAdapter();
-									listView_mes.setAdapter(micropostAdapter);
-
-									listView_mes.setSelection(focus);
-																
-								
-								break;
-							default:
-								break;									
-							}
-						}
-					};
-					Thread thread=new Thread()
-					{
-						public void run()
-						{
-							try {
-								Map<String, String> map = new HashMap<String, String>();									
-								map.put("micropost_id", mess.getId());
-							String	reply = HomeWorkTool.sendGETRequest(
-										Urlinterface.get_reply_microposts, map);
-								Message msg = new Message();//  创建Message 对象
-								msg.what = 0;
-								msg.obj = reply;
-								mHandler.sendMessage(msg);
-							} catch (Exception e) {
-								// TODO Auto-generated catch block
-								e.printStackTrace();
-							}
-						}
-					};
-					thread.start();	
+					micropostAdapter = new MicropostAdapter();
+					listView_mes.setAdapter(micropostAdapter);
 
 			
 			
