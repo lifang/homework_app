@@ -736,7 +736,7 @@ Urlinterface {
 
 
 	/*
-	 * 解析  我的  模块中的   主消息
+	 * 解析  回复  模块中的   子消息
 	 * 
 	 * 
 	 * */
@@ -811,7 +811,11 @@ Urlinterface {
 	
 	}
 	
-	// 全部
+	/*
+	 *   全部  模块    点击方法
+	 * 
+	 * 
+	 * */
 	public void class_button_all(View v) {
 		final Handler mHandler = new Handler() {
 			public void handleMessage(android.os.Message msg) {
@@ -859,7 +863,12 @@ Urlinterface {
 		thread.start();	
 	}
 
-	//	 我的
+	/*
+	 *    我的 模块    点击方法
+	 * 
+	 * 
+	 * */
+	//	
 	public void class_button_myself(View v) {
 		final Handler mHandler = new Handler() {
 			public void handleMessage(android.os.Message msg) {
@@ -920,7 +929,7 @@ Urlinterface {
 		final Handler mHandleronRefresh = new Handler() {
 			public void handleMessage(android.os.Message msg) {
 				switch (msg.what) {
-				case 0:
+				case 0:   //  全部
 					final String json_all =  (String) msg.obj;
 					parseJson_all(json_all);
 					micropostAdapter = new MicropostAdapter();
@@ -928,7 +937,7 @@ Urlinterface {
 					onLoad();
 					break;
 
-				case 1:
+				case 1:  //  我的
 					final String jsonmyself =  (String) msg.obj;
 					parseJson_Myself(jsonmyself);
 					micropostAdapter = new MicropostAdapter();

@@ -17,7 +17,7 @@ public class AsyncImageLoader{
     // 1.根据URL返回Drawable的函数  
     // 2.工具类的核心函数,包含handler+thread  
     
-    
+ 
     public AsyncImageLoader() {  
         imageCache = new HashMap<String, SoftReference<Bitmap>>();  
         opts = new BitmapFactory.Options();     
