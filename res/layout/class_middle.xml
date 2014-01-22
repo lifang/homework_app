@@ -63,7 +63,7 @@
                 android:layout_height="5px"
                 android:layout_below="@+id/button_fabiao"
                 android:layout_centerHorizontal="true"
-                android:layout_marginTop="22px"
+                android:layout_marginTop="30px"
                 android:focusable="false" />
 
             <Button
