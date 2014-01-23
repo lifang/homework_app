@@ -61,14 +61,21 @@ public class HomeWorkIngActivity extends Activity implements Urlinterface {
 			builder.setTitle("提示");
 			switch (msg.what) {
 			case 1:
-				working_date_list.setAdapter(date_adapter);
-				working_content_list.setAdapter(question_adapter);
-				p_q_package_id = list.get(0).getId();
-				prodialog = new ProgressDialog(HomeWorkIngActivity.this);
-				prodialog.setMessage(HomeWorkParams.PD_QUESTION_INFO);
-				prodialog.show();
-				Thread thread = new Thread(new getQuestion());
-				thread.start();
+				if (list.size() != 0) {
+
+					working_date_list.setAdapter(date_adapter);
+					working_content_list.setAdapter(question_adapter);
+					p_q_package_id = list.get(0).getId();
+					prodialog = new ProgressDialog(HomeWorkIngActivity.this);
+					prodialog.setMessage(HomeWorkParams.PD_QUESTION_INFO);
+					prodialog.show();
+					Thread thread = new Thread(new getQuestion());
+					thread.start();
+				} else {
+					builder.setMessage("暂无任何任务!");
+					builder.setPositiveButton("确定", null);
+					builder.show();
+				}
 				break;
 			case 2:
 				builder.setMessage(message);
@@ -462,6 +469,9 @@ public class HomeWorkIngActivity extends Activity implements Urlinterface {
 				ListeningQuestionList.addListeningPojo(new ListeningPojo(id,
 						question));
 			}
+
+			ListeningQuestionList.Record_Count = ListeningQuestionList
+					.getRecordCount();
 
 			handler.sendEmptyMessage(3);
 		} catch (JSONException e) {

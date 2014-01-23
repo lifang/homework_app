@@ -76,7 +76,7 @@ public class SpeakPrepareActivity extends Activity implements Urlinterface,
 
 		list = homework.getQuestion_list();
 		history = homework.getQuestion_history();
-		Log.i("linshi", homework.getHistory_item()+"-=" + list.size());
+		Log.i("linshi", homework.getHistory_item() + "-=" + list.size());
 		if (homework.getHistory_item() >= list.size()) {// 表示查看历史记录
 			questionlist = list.get(homework.getQuestion_index())
 					.getQuesttionList();
@@ -91,10 +91,30 @@ public class SpeakPrepareActivity extends Activity implements Urlinterface,
 			// if (history.size() != 0) {
 			// history_item = history.size() - 1;
 			// }
-			questionlist = list.get(homework.getHistory_item())
-					.getQuesttionList();
-			homework.setQ_package_id(list.get(homework.getHistory_item())
-					.getId());
+			if (homework.getHistory_item() == 0) {
+				questionlist = list.get(homework.getHistory_item())
+						.getQuesttionList();
+				homework.setQ_package_id(list.get(homework.getHistory_item())
+						.getId());
+			} else {
+				int number = list.get(homework.getHistory_item() - 1)
+						.getQuesttionList().size();// 题目实际题数
+				int size = homework.getQuestion_history()
+						.get(homework.getHistory_item() - 1).size();// 题目实际题数
+				Log.i("linshi", homework.getHistory_item() - 1 + "--->>"
+						+ number + ";;;;;;;;" + size);
+				if (number > size) {
+					questionlist = list.get(homework.getHistory_item() - 1)
+							.getQuesttionList();
+					homework.setQ_package_id(list.get(
+							homework.getHistory_item() - 1).getId());
+				} else {
+					questionlist = list.get(homework.getHistory_item())
+							.getQuesttionList();
+					homework.setQ_package_id(list.get(
+							homework.getHistory_item()).getId());
+				}
+			}
 			for (int i = 0; i < questionlist.size(); i++) {
 				content += questionlist.get(i).getContent() + "\n";
 			}
@@ -130,10 +150,41 @@ public class SpeakPrepareActivity extends Activity implements Urlinterface,
 				// if (history.size() != 0) {
 				// history_item = history.size() - 1;
 				// }
-				homework.setBranch_questions(list.get(
-						homework.getHistory_item()).getQuesttionList());
-				homework.setQuestion_id(list.get(homework.getHistory_item())
-						.getId());
+				if (homework.getHistory_item() == 0) {
+					homework.setBranch_questions(list.get(
+							homework.getHistory_item()).getQuesttionList());
+					homework.setQuestion_id(list
+							.get(homework.getHistory_item()).getId());
+				} else {
+					int number = list.get(homework.getHistory_item() - 1)
+							.getQuesttionList().size();// 题目实际题数
+					int size = homework.getQuestion_history()
+							.get(homework.getHistory_item() - 1).size();// 已做题数
+
+					if (number > size) {
+						List<QuestionPojo> qlist = list.get(
+								homework.getHistory_item() - 1)
+								.getQuesttionList();
+						for (int i = 0; i < qlist.size(); i++) {
+							if (i < size) {
+								qlist.remove(i);
+							}
+						}
+						homework.setBranch_questions(qlist);
+						homework.setQuestion_id(list.get(
+								homework.getHistory_item() - 1).getId());
+						homework.setHistory_item(homework.getHistory_item()-1);
+					} else {
+						homework.setBranch_questions(list.get(
+								homework.getHistory_item()).getQuesttionList());
+						homework.setQuestion_id(list.get(
+								homework.getHistory_item()).getId());
+					}
+				}
+				// homework.setBranch_questions(list.get(
+				// homework.getHistory_item()).getQuesttionList());
+				// homework.setQuestion_id(list.get(homework.getHistory_item())
+				// .getId());
 				intent.setClass(SpeakPrepareActivity.this,
 						SpeakBeginActivity.class);
 				startActivity(intent);
