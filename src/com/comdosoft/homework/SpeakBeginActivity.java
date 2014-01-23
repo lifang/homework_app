@@ -35,6 +35,7 @@ import com.comdosoft.homework.pojo.QuestionPojo;
 import com.comdosoft.homework.tools.HomeWork;
 import com.comdosoft.homework.tools.HomeWorkParams;
 import com.comdosoft.homework.tools.HomeWorkTool;
+import com.comdosoft.homework.tools.ListeningQuestionList;
 import com.comdosoft.homework.tools.PredicateLayout;
 import com.comdosoft.homework.tools.Soundex_Levenshtein;
 import com.comdosoft.homework.tools.Urlinterface;
@@ -64,7 +65,7 @@ public class SpeakBeginActivity extends Activity implements Urlinterface {
 	private ProgressDialog prodialog;
 	private int type;
 	private int speak_number;
-	private boolean over_static = false;
+	private int over_static;
 	private Handler handler = new Handler() {
 		public void handleMessage(Message msg) {
 			Intent intent = new Intent();
@@ -72,6 +73,7 @@ public class SpeakBeginActivity extends Activity implements Urlinterface {
 			builder.setTitle("提示");
 			switch (msg.what) {
 			case 0:
+				prodialog.dismiss();
 				index += 1;
 				PredicateLayout.removeAllViews();
 				question_speak_title.setText((index + 1) + "/"
@@ -184,31 +186,30 @@ public class SpeakBeginActivity extends Activity implements Urlinterface {
 				ye = homework.getHistory_item();
 			}
 			if ((ye + 1) < homework.getQuestion_allNumber()) {
+				prodialog = new ProgressDialog(SpeakBeginActivity.this);
+				prodialog.setMessage(HomeWorkParams.PD_FINISH_QUESTION);
+				prodialog.show();
 				branch_question_id = branch_questions.get(index).getId();
 				if ((index + 1) < branch_questions.size()) {
-					Thread thread = new Thread(new Record_answer_info());// 记录小题
-					thread.start();
-					handler.sendEmptyMessage(0);
+					over_static = 0;
 				} else {
-					over_static = true;
-					prodialog = new ProgressDialog(SpeakBeginActivity.this);
-					prodialog.setMessage(HomeWorkParams.PD_FINISH_QUESTION);
-					prodialog.show();
-					Thread thread = new Thread(new Record_answer_info());// 记录小题
-					thread.start();
+					over_static = 1;
 				}
-			} else {
-				branch_question_id = branch_questions.get(index).getId();
 				Thread thread = new Thread(new Record_answer_info());// 记录小题
 				thread.start();
+			} else {
+				prodialog = new ProgressDialog(SpeakBeginActivity.this);
+				prodialog.setMessage(HomeWorkParams.PD_FINISH_QUESTION);
+				prodialog.show();
+				branch_question_id = branch_questions.get(index).getId();
 				if ((index + 1) < branch_questions.size()) {
-					handler.sendEmptyMessage(0);
+					over_static = 0;
 				} else {
-					prodialog = new ProgressDialog(SpeakBeginActivity.this);
-					prodialog.setMessage(HomeWorkParams.PD_FINISH_QUESTION);
-					prodialog.show();
-					new Thread(new SendWorkOver()).start();// 记录大題
+					over_static = 2;
+					// new Thread(new SendWorkOver()).start();// 记录大題
 				}
+				Thread thread = new Thread(new Record_answer_info());// 记录小题
+				thread.start();
 			}
 			break;
 		case R.id.question_speak_img:// 播放音频
@@ -438,8 +439,25 @@ public class SpeakBeginActivity extends Activity implements Urlinterface {
 				json = HomeWorkTool.doPost(RECORD_ANSWER_INFO, map);
 				JSONObject obj = new JSONObject(json);
 				if (obj.getString("status").equals("success")) {
-					if (over_static == true) {
+					switch (over_static) {
+					case 0:
+						handler.sendEmptyMessage(0);
+						break;
+					case 1:
 						handler.sendEmptyMessage(1);
+						break;
+					case 2:
+						Log.i(tag, ListeningQuestionList.Record_Count
+								+ "***"
+								+ ListeningQuestionList.getListeningPojoList()
+										.size());
+						if (ListeningQuestionList.Record_Count == ListeningQuestionList
+								.getListeningPojoList().size()) {
+							new Thread(new SendWorkOver()).start();
+						} else {
+							handler.sendEmptyMessage(6);
+						}
+						break;
 					}
 				}
 			} catch (Exception e) {
@@ -465,7 +483,6 @@ public class SpeakBeginActivity extends Activity implements Urlinterface {
 				json = HomeWorkTool.doPost(FINISH_QUESTION_PACKGE, map);
 				JSONObject obj = new JSONObject(json);
 				if (obj.getString("status").equals("success")) {
-					Log.i(tag, type + "-=-=-=");
 					handler.sendEmptyMessage(6);
 
 				} else {

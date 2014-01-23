@@ -275,7 +275,6 @@ public class DictationBeginActivity extends Activity implements
 			Log.i("Ax", "question_id:" + qpList.get(sIndex - 1).getId());
 			HomeWorkTool.doPost(SAVE_DICTATION, map);
 			answer.delete(0, answer.length());
-			mPd.dismiss();
 		}
 	}
 
