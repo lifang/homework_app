@@ -116,6 +116,12 @@ public class Classxinxiliu extends Activity implements IXListViewListener,
 		height = display.getHeight();
 		care = new ArrayList();
 
+		Button b = (Button) findViewById(R.id.class_button_all);
+		b.setBackgroundDrawable(getResources().getDrawable(R.drawable.an));
+		Button b2 = (Button) findViewById(R.id.class_button_myself);
+		b2.setBackgroundDrawable(getResources().getDrawable(R.drawable.an2));
+		focus = -1;
+		micropost_type = 0;
 		SharedPreferences preferences = getSharedPreferences(SHARED,
 				Context.MODE_PRIVATE);
 
@@ -1117,7 +1123,13 @@ public class Classxinxiliu extends Activity implements IXListViewListener,
 							case 0:
 								final String json6 = (String) msg.obj;
 								parseJson_childMicropost(json6);
-								ad.notifyDataSetChanged();
+								 ad = new Adapter();
+								  listView2
+								 .setAdapter(ad);
+								 HomeWorkTool
+								 .setListViewHeightBasedOnChildren(listView2);
+//								
+//								ad.notifyDataSetChanged();
 								break;
 							default:
 								break;
@@ -1211,7 +1223,7 @@ public class Classxinxiliu extends Activity implements IXListViewListener,
 				}
 			});
 
-			// 点击 回复 默认 给主消息回复
+			//  回复消息   按钮
 			Button_huifu.setOnClickListener(new OnClickListener() {
 
 				@Override
