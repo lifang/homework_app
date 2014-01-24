@@ -12,6 +12,7 @@
         android:layout_marginTop="16px"
         android:background="@color/lvse"
         android:gravity="center"
-        android:textColor="#FCE3CE" />
+        android:textColor="#FCE3CE"
+        android:textSize="24px" />
 
 </LinearLayout>
