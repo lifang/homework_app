@@ -101,9 +101,9 @@ public class Classxinxiliu extends Activity implements IXListViewListener,
 	private int width;
 	private int height;
 	private List<ClassStuPojo> stuList = new ArrayList<ClassStuPojo>();
-	private String lookStr_micropost_id="";
+	private String lookStr_micropost_id = "";
 	private ProgressDialog prodialog;
-	
+
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		requestWindowFeature(Window.FEATURE_NO_TITLE);
@@ -235,12 +235,12 @@ public class Classxinxiliu extends Activity implements IXListViewListener,
 				}
 
 				// 查看 跳到本界面的 处理操作
-			
+
 				String lookStr = homework.getNoselect_message();
-				
+
 				Micropost lookStr_micropost = new Micropost();
-				if (lookStr!=null&&!lookStr.equals("")) {
-				
+				if (lookStr != null && !lookStr.equals("")) {
+
 					care.clear();
 					page = 1;
 					number = 1;
@@ -255,58 +255,53 @@ public class Classxinxiliu extends Activity implements IXListViewListener,
 					Button b2 = (Button) findViewById(R.id.class_button_myself);
 					b2.setBackgroundDrawable(getResources().getDrawable(
 							R.drawable.an));
-//			
-//					{"status":"success","notice":"\u5df2\u9605\u8bfb\uff01",
-//						"micropost":[{"avatar_url":"/homework_system/avatars/students/2014-01/student_66.jpg"
-//							,"content":"ted85233","created_at":"2014-01-23T15:18:35+08:00"
-//								,"micropost_id":109,"name":"xhxksn "
-//						,"reply_microposts_count":1,
-//						"school_class_id":1,
-//						"user_id":66,"user_types":1}]}
-					
-					
-				JSONObject js;
-				try {
-					js = new JSONObject(lookStr);
-					String micropost = js.getString("micropost");
-					JSONArray jsonArray2;
+					//
+					// {"status":"success","notice":"\u5df2\u9605\u8bfb\uff01",
+					// "micropost":[{"avatar_url":"/homework_system/avatars/students/2014-01/student_66.jpg"
+					// ,"content":"ted85233","created_at":"2014-01-23T15:18:35+08:00"
+					// ,"micropost_id":109,"name":"xhxksn "
+					// ,"reply_microposts_count":1,
+					// "school_class_id":1,
+					// "user_id":66,"user_types":1}]}
+
+					JSONObject js;
 					try {
-						jsonArray2 = new JSONArray(micropost);
-						for (int i = 0; i < jsonArray2.length(); ++i) {
-							JSONObject o = (JSONObject) jsonArray2
-									.get(i);
-							lookStr_micropost_id = o.getString("micropost_id");
-							String user_id = o.getString("user_id");
-//							String user_types = "1";
-							
-							String user_types = o
-									.getString("user_types");
-							String name = o.getString("name");
-							String content = o.getString("content");
-							String avatar_url = o
-									.getString("avatar_url");
-							String created_at = o
-									.getString("created_at");
+						js = new JSONObject(lookStr);
+						String micropost = js.getString("micropost");
+						JSONArray jsonArray2;
+						try {
+							jsonArray2 = new JSONArray(micropost);
+							for (int i = 0; i < jsonArray2.length(); ++i) {
+								JSONObject o = (JSONObject) jsonArray2.get(i);
+								lookStr_micropost_id = o
+										.getString("micropost_id");
+								String user_id = o.getString("user_id");
+								// String user_types = "1";
 
-							String reply_microposts_count = o
-									.getString("reply_microposts_count");
+								String user_types = o.getString("user_types");
+								String name = o.getString("name");
+								String content = o.getString("content");
+								String avatar_url = o.getString("avatar_url");
+								String created_at = o.getString("created_at");
 
-							 lookStr_micropost = new Micropost(
-									 lookStr_micropost_id, user_id, user_types,
-									name, content, avatar_url,
-									created_at, reply_microposts_count);
-						
+								String reply_microposts_count = o
+										.getString("reply_microposts_count");
+
+								lookStr_micropost = new Micropost(
+										lookStr_micropost_id, user_id,
+										user_types, name, content, avatar_url,
+										created_at, reply_microposts_count);
+
+							}
+
+						} catch (JSONException e) {
+							e.printStackTrace();
 						}
-
 					} catch (JSONException e) {
+						// TODO Auto-generated catch block
 						e.printStackTrace();
 					}
-				} catch (JSONException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				}
 
-					
 					final Handler mHandler = new Handler() {
 						public void handleMessage(android.os.Message msg) {
 							switch (msg.what) {
@@ -351,7 +346,7 @@ public class Classxinxiliu extends Activity implements IXListViewListener,
 						}
 					}
 					if (a == list.size() && a != 0) {// 若第一页主消息中没有 提示信息所在，，则
-					
+
 						list = new ArrayList<Micropost>();
 						focus = 0; // 要展开的 主消息 的 位置
 						list.add(lookStr_micropost);
@@ -383,8 +378,8 @@ public class Classxinxiliu extends Activity implements IXListViewListener,
 	// 发表
 	public void class_fabiao(View v) {
 		prodialog = new ProgressDialog(Classxinxiliu.this);
-		  prodialog.setMessage(HomeWorkParams.PD_CLASS_INFO);
-		  prodialog.show();
+		prodialog.setMessage(HomeWorkParams.PD_CLASS_INFO);
+		prodialog.show();
 		final Handler class_fabiaoHandler = new Handler() {
 			public void handleMessage(android.os.Message msg) {
 				switch (msg.what) {
@@ -851,53 +846,48 @@ public class Classxinxiliu extends Activity implements IXListViewListener,
 			}
 		};
 
-		handler.postDelayed(new Runnable() {
+		list.clear();
+		Thread thread = new Thread() {
+			public void run() {// 获得第一页信息
 
-			@Override
-			public void run() {
-				list.clear();
-				Thread thread = new Thread() {
-					public void run() {// 获得第一页信息
+				if (micropost_type == 0) {// 全部
+					Map<String, String> map = new HashMap<String, String>();
+					map.put("student_id", id);
+					map.put("school_class_id", school_class_id);
+					map.put("page", "1");
+					try {
 
-						if (micropost_type == 0) {// 全部
-							Map<String, String> map = new HashMap<String, String>();
-							map.put("student_id", id);
-							map.put("school_class_id", school_class_id);
-							map.put("page", "1");
-							try {
-
-								String result = HomeWorkTool.sendGETRequest(
-										Urlinterface.GET_MICROPOSTS, map);
-								Message msg = new Message();// 创建Message 对象
-								msg.what = 0;
-								msg.obj = result;
-								mHandleronRefresh.sendMessage(msg);
-							} catch (Exception e1) {
-								e1.printStackTrace();
-							}
-						}
-						if (micropost_type == 1) { // 有关我的
-							Map<String, String> map = new HashMap<String, String>();
-							map.put("user_id", user_id);
-							map.put("school_class_id", school_class_id);
-							map.put("page", page + "");
-							String result = "";
-							try {
-								result = HomeWorkTool.sendGETRequest(
-										Urlinterface.MY_MICROPOSTS, map);
-								Message msg = new Message();// 创建Message 对象
-								msg.what = 1;
-								msg.obj = result;
-								mHandleronRefresh.sendMessage(msg);
-							} catch (Exception e1) {
-								e1.printStackTrace();
-							}
-						}
+						String result = HomeWorkTool.sendGETRequest(
+								Urlinterface.GET_MICROPOSTS, map);
+						Message msg = new Message();// 创建Message 对象
+						msg.what = 0;
+						msg.obj = result;
+						mHandleronRefresh.sendMessage(msg);
+					} catch (Exception e1) {
+						e1.printStackTrace();
 					}
-				};
-				thread.start();
+				}
+				if (micropost_type == 1) { // 有关我的
+					Map<String, String> map = new HashMap<String, String>();
+					map.put("user_id", user_id);
+					map.put("school_class_id", school_class_id);
+					map.put("page", page + "");
+					String result = "";
+					try {
+						result = HomeWorkTool.sendGETRequest(
+								Urlinterface.MY_MICROPOSTS, map);
+						Message msg = new Message();// 创建Message 对象
+						msg.what = 1;
+						msg.obj = result;
+						mHandleronRefresh.sendMessage(msg);
+					} catch (Exception e1) {
+						e1.printStackTrace();
+					}
+				}
 			}
-		}, 2000);
+		};
+		thread.start();
+
 	}
 
 	@Override
@@ -923,61 +913,57 @@ public class Classxinxiliu extends Activity implements IXListViewListener,
 		};
 		focus = -1;
 		page = page + 1;
-		handler.postDelayed(new Runnable() {
-			@Override
-			public void run() {
-				
-				if (page_own == 1) {
-				Thread thread = new Thread() {
-					public void run() {// 全部 页面加载 更多
-						if (page <= pages_count && micropost_type == 0) {
-							Map<String, String> map = new HashMap<String, String>();
-							map.put("student_id", id);
-							map.put("school_class_id", school_class_id);
-							map.put("page", page + "");
-							String result = "";
-							try {
-								result = HomeWorkTool.sendGETRequest(
-										Urlinterface.GET_MICROPOSTS, map);
-							} catch (Exception e1) {
-								e1.printStackTrace();
-							}
-							Message msg = new Message();// 创建Message 对象
-							msg.what = 0;
-							msg.obj = result;
-							mHandleronLoadMore.sendMessage(msg);
-						}
-						// 我的 页面加载 更多
-						if (page <= pages_count && micropost_type == 1) {
-							Map<String, String> map = new HashMap<String, String>();
-							map.put("user_id", user_id);
-							map.put("school_class_id", school_class_id);
-							map.put("page", page + "");
-							String result = "";
-							try {
-								result = HomeWorkTool.sendGETRequest(
-										Urlinterface.MY_MICROPOSTS, map);
-							} catch (Exception e1) {
-								e1.printStackTrace();
-							}
-							Message msg = new Message();// 创建Message 对象
-							msg.what = 1;
-							msg.obj = result;
-							mHandleronLoadMore.sendMessage(msg);
-						}
-					}
-				};
-				thread.start();
-			}
 
-				if(page_own==0){
-					focus = -1;
-					micropostAdapter.notifyDataSetChanged();
-					onLoad();
-			
-			}
+		if (page_own == 1) {
+			Thread thread = new Thread() {
+				public void run() {// 全部 页面加载 更多
+					if (page <= pages_count && micropost_type == 0) {
+						Map<String, String> map = new HashMap<String, String>();
+						map.put("student_id", id);
+						map.put("school_class_id", school_class_id);
+						map.put("page", page + "");
+						String result = "";
+						try {
+							result = HomeWorkTool.sendGETRequest(
+									Urlinterface.GET_MICROPOSTS, map);
+						} catch (Exception e1) {
+							e1.printStackTrace();
+						}
+						Message msg = new Message();// 创建Message 对象
+						msg.what = 0;
+						msg.obj = result;
+						mHandleronLoadMore.sendMessage(msg);
+					}
+					// 我的 页面加载 更多
+					if (page <= pages_count && micropost_type == 1) {
+						Map<String, String> map = new HashMap<String, String>();
+						map.put("user_id", user_id);
+						map.put("school_class_id", school_class_id);
+						map.put("page", page + "");
+						String result = "";
+						try {
+							result = HomeWorkTool.sendGETRequest(
+									Urlinterface.MY_MICROPOSTS, map);
+						} catch (Exception e1) {
+							e1.printStackTrace();
+						}
+						Message msg = new Message();// 创建Message 对象
+						msg.what = 1;
+						msg.obj = result;
+						mHandleronLoadMore.sendMessage(msg);
+					}
+				}
+			};
+			thread.start();
 		}
-		}, 2000);
+
+		if (page_own == 0) {
+			focus = -1;
+			micropostAdapter.notifyDataSetChanged();
+			onLoad();
+
+		}
+
 		// micropostAdapter.notifyDataSetChanged();
 		// onLoad();
 	}
@@ -1250,7 +1236,7 @@ public class Classxinxiliu extends Activity implements IXListViewListener,
 									.setListViewHeightBasedOnChildren(listView2);
 						}
 					}
-				}, 500);
+				}, 200);
 
 			}
 			if (mess.getReply_microposts_count() != null) {
