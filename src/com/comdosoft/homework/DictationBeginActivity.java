@@ -41,7 +41,6 @@ import android.widget.Toast;
 // 拼写答题    马龙    2014年1月21日
 public class DictationBeginActivity extends Activity implements
 		OnClickListener, HomeWorkParams, OnPreparedListener, Urlinterface {
-
 	private int linearLayoutIndex = 0;
 	private int smallIndex;
 	private int bigIndex = 0;
@@ -92,8 +91,8 @@ public class DictationBeginActivity extends Activity implements
 		findViewById(R.id.question_dictation_play).setOnClickListener(this);
 		mPd = new ProgressDialog(this);
 		mPd.setMessage(HomeWorkParams.PD_FINISH_QUESTION);
-
 		homeWork = (HomeWork) getApplication();
+		homeWork.setNewsFlag(true);
 		publish_question_package_id = homeWork.getP_q_package_id();
 		student_id = homeWork.getUser_id();
 		class_id = homeWork.getClass_id();

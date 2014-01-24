@@ -73,7 +73,7 @@ public class SpeakPrepareActivity extends Activity implements Urlinterface,
 		homework = (HomeWork) getApplication();
 		initialize();
 		question_speak_title.setText("朗读题");
-
+		homework.setNewsFlag(true);
 		list = homework.getQuestion_list();
 		history = homework.getQuestion_history();
 		Log.i("linshi", homework.getHistory_item() + "-=" + list.size());
@@ -173,7 +173,7 @@ public class SpeakPrepareActivity extends Activity implements Urlinterface,
 						homework.setBranch_questions(qlist);
 						homework.setQuestion_id(list.get(
 								homework.getHistory_item() - 1).getId());
-						homework.setHistory_item(homework.getHistory_item()-1);
+						homework.setHistory_item(homework.getHistory_item() - 1);
 					} else {
 						homework.setBranch_questions(list.get(
 								homework.getHistory_item()).getQuesttionList());

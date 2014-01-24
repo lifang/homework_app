@@ -40,7 +40,8 @@ import com.comdosoft.homework.tools.PredicateLayout;
 import com.comdosoft.homework.tools.Soundex_Levenshtein;
 import com.comdosoft.homework.tools.Urlinterface;
 
-public class SpeakBeginActivity extends Activity implements Urlinterface {
+public class SpeakBeginActivity extends Activity implements Urlinterface,
+		MediaPlayer.OnCompletionListener {
 	public String content;// 记录本题正确答案
 	private TextView question_speak_title;
 	private MediaPlayer player;
@@ -63,9 +64,10 @@ public class SpeakBeginActivity extends Activity implements Urlinterface {
 	private String message;
 	public String error_str = "";// 记录错误的词
 	private ProgressDialog prodialog;
-	private int type;
 	private int speak_number;
 	private int over_static;
+	private ImageView question_speak_img;
+
 	private Handler handler = new Handler() {
 		public void handleMessage(Message msg) {
 			Intent intent = new Intent();
@@ -116,9 +118,13 @@ public class SpeakBeginActivity extends Activity implements Urlinterface {
 				break;
 			case 6:
 				prodialog.dismiss();
-
 				MyDialog("恭喜完成今天的朗读作业!", "确认", "取消", 2);
-
+				break;
+			case 7:
+				question_speak_img.setBackgroundResource(R.drawable.jzlbgreen);
+				break;
+			case 8:
+				question_speak_img.setBackgroundResource(R.drawable.jzlb);
 				break;
 			}
 			super.handleMessage(msg);
@@ -135,6 +141,7 @@ public class SpeakBeginActivity extends Activity implements Urlinterface {
 		Log.i(tag, publish_question_package_id + "===");
 		student_id = homework.getUser_id();
 		school_class_id = homework.getClass_id();
+		homework.setNewsFlag(true);
 	}
 
 	// 初始化
@@ -147,6 +154,7 @@ public class SpeakBeginActivity extends Activity implements Urlinterface {
 		PredicateLayout = (PredicateLayout) findViewById(R.id.question_speak_content);
 		question_speak_tishi = (TextView) findViewById(R.id.question_speak_tishi);
 		question_speak_tishi.setVisibility(View.GONE);
+		question_speak_img = (ImageView) findViewById(R.id.question_speak_img);
 		player = new MediaPlayer();
 		ok_speak = new HashMap<Integer, String>();// 用于记录正确的词
 	}
@@ -222,8 +230,10 @@ public class SpeakBeginActivity extends Activity implements Urlinterface {
 			String path = IP + branch_questions.get(index).getUrl();
 			if (player.isPlaying()) {// 正在播放
 				stop();
+				handler.sendEmptyMessage(8);
 			} else {
 				play(path);
+				handler.sendEmptyMessage(7);
 			}
 			break;
 		case R.id.speak:// 语音
@@ -354,7 +364,6 @@ public class SpeakBeginActivity extends Activity implements Urlinterface {
 	// 自定义dialog设置
 	private void MyDialog(String title, String btn_one, String Btn_two,
 			final int type) {
-		this.type = type;
 		final Intent intent = new Intent();
 		final Dialog dialog = new Dialog(this, R.style.Transparent);
 		dialog.setContentView(R.layout.my_dialog);
@@ -520,6 +529,7 @@ public class SpeakBeginActivity extends Activity implements Urlinterface {
 			player.setDataSource(path);
 			player.prepare();// 进行缓冲
 			player.setOnPreparedListener(new MyPreparedListener(0));
+			player.setOnCompletionListener(this);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -579,5 +589,10 @@ public class SpeakBeginActivity extends Activity implements Urlinterface {
 			return true;
 		}
 		return super.onKeyDown(keyCode, event);
+	}
+
+	public void onCompletion(MediaPlayer mp) {
+		Log.i("linshi", "over");
+		handler.sendEmptyMessage(8);
 	}
 }

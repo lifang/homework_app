@@ -86,7 +86,7 @@
             android:layout_width="200dp"
             android:layout_height="200dp"
             android:layout_marginTop="30dp"
-            android:src="@drawable/dictation_laba" />
+            android:src="@drawable/dictation_laba1" />
 
         <TextView
             android:layout_width="400dp"

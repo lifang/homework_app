@@ -39,12 +39,7 @@
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
-<<<<<<< HEAD
             </intent-filter>
-x
-=======
-            </intent-filter>x
->>>>>>> 9bd8dee82bccbaaac328f1d8701ce9e92f4edbf3
         </activity>
         <activity
             android:name=".HomeWorkIngActivity"
@@ -76,14 +71,6 @@ x
         <activity
             android:name=".Classxinxiliu"
             android:windowSoftInputMode="adjustUnspecified|stateHidden" >
-<<<<<<< HEAD
-=======
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
->>>>>>> 9bd8dee82bccbaaac328f1d8701ce9e92f4edbf3
         </activity>
         <activity
             android:name="com.comdosoft.homework.SwitchClassActivity"
