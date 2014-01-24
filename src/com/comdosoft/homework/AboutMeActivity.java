@@ -232,8 +232,7 @@ public class AboutMeActivity extends Activity
 									mp.put("user_id", Amlist.get(position).getUser_id());
 									mp.put("school_class_id",String.valueOf(school_class_id));
 									mp.put("message_id", Amlist.get(position).getId());
-									hw.setNewsFlag(true);
-									hw.setLastcount(hw.getLastcount()-1);
+									
 									String json=HomeWorkTool.doPost(Urlinterface.read_message, mp);
 									Log.i("bbb", "message_id:"+Amlist.get(position).getId()+"json:"+json);
 									JSONObject jsonobject=new JSONObject(json);
@@ -247,6 +246,8 @@ public class AboutMeActivity extends Activity
 									}
 									else if(status.equals("success"))
 									{
+										hw.setNewsFlag(true);
+										hw.setLastcount(hw.getLastcount()-1);
 										hw.setNoselect_message(json);
 										Amlist.remove(position);
 										msg.what=2;
@@ -279,12 +280,14 @@ public class AboutMeActivity extends Activity
 									JSONObject jsonobject = new JSONObject(json);
 									String notice=jsonobject.getString("notice");
 									String status=(String) jsonobject.get("status");
+									
 									Message msg=new Message();
 									msg.obj=notice;
 									if(status.equals("success"))
 									{
 										msg.what=0;
 										Amlist.remove(position);
+										hw.setLastcount(hw.getLastcount()-1);
 										handler.sendMessage(msg);
 									}
 									else

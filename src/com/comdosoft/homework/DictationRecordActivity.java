@@ -26,6 +26,7 @@ import android.widget.LinearLayout.LayoutParams;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.comdosoft.homework.tools.HomeWork;
 import com.comdosoft.homework.tools.HomeWorkTool;
 import com.comdosoft.homework.tools.ListeningQuestionList;
 
@@ -43,11 +44,13 @@ public class DictationRecordActivity extends Activity implements
 	private List<String> smallList = new ArrayList<String>();
 	private List<String> errorList = new ArrayList<String>();
 	private MediaPlayer mediaPlayer = new MediaPlayer();
+	private HomeWork homeWork;
 
-	
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.question_dictation_record);
+		homeWork = (HomeWork) getApplication();
+		homeWork.setNewsFlag(true);
 		findViewById(R.id.question_dictation_exit).setOnClickListener(this);
 		findViewById(R.id.question_dictation_check).setOnClickListener(this);
 		findViewById(R.id.question_dictation_play).setOnClickListener(this);
@@ -122,7 +125,6 @@ public class DictationRecordActivity extends Activity implements
 		}
 	}
 
-	
 	public void onClick(View v) {
 		switch (v.getId()) {
 		case R.id.question_dictation_exit:
@@ -139,12 +141,10 @@ public class DictationRecordActivity extends Activity implements
 		}
 	}
 
-	
 	public void onPrepared(MediaPlayer mp) {
 		mp.start();
 	}
 
-	
 	public void onDestroy() {
 		mediaPlayer.release();
 		mediaPlayer = null;

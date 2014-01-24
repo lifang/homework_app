@@ -61,8 +61,8 @@ public class HomeWorkIngActivity extends Activity implements Urlinterface {
 			builder.setTitle("提示");
 			switch (msg.what) {
 			case 1:
+				prodialog.dismiss();
 				if (list.size() != 0) {
-
 					working_date_list.setAdapter(date_adapter);
 					working_content_list.setAdapter(question_adapter);
 					p_q_package_id = list.get(0).getId();
@@ -419,7 +419,7 @@ public class HomeWorkIngActivity extends Activity implements Urlinterface {
 			}
 			homework.setQuestion_list(questionlist);
 			homework.setQuestion_allNumber(questionlist.size());
-
+			Log.i("linshi", "1");
 			// 加載历史信息
 			List<List<String>> questionhistory = new ArrayList<List<String>>();
 			if (!new JSONObject(json).getString("user_answers").equals("")) {
@@ -437,7 +437,7 @@ public class HomeWorkIngActivity extends Activity implements Urlinterface {
 					}
 					questionhistory.add(question);
 				}
-
+				Log.i("linshi", "2");
 				// 解析听写记录
 				JSONArray answer = new JSONObject(json).getJSONObject(
 						"user_answers").getJSONArray("listening");
@@ -455,7 +455,7 @@ public class HomeWorkIngActivity extends Activity implements Urlinterface {
 					ListeningQuestionList.addAnswer(smallList);
 				}
 			}
-
+			Log.i("linshi", "3");
 			homework.setQuestion_history(questionhistory);
 			homework.setHistory_item(questionhistory.size());
 
@@ -477,7 +477,7 @@ public class HomeWorkIngActivity extends Activity implements Urlinterface {
 				ListeningQuestionList.addListeningPojo(new ListeningPojo(id,
 						question));
 			}
-
+			Log.i("linshi", "4");
 			// ListeningQuestionList.Record_Count = ListeningQuestionList
 			// .getRecordCount();
 
