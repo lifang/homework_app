@@ -8,6 +8,11 @@
         android:id="@+id/switchclass_oneTv"
         android:layout_width="479px"
         android:layout_height="55px"
+        android:layout_marginBottom="16px"
+        android:layout_marginTop="16px"
         android:background="@color/lvse"
-        android:gravity="center" />
+        android:gravity="center"
+        android:textColor="#FCE3CE"
+        android:textSize="24px" />
+
 </LinearLayout>

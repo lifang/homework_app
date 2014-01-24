@@ -2,18 +2,19 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="fill_parent"
     android:layout_height="fill_parent"
-    android:gravity="center_horizontal"
     android:orientation="horizontal" >
 
     <ImageView
         android:id="@+id/aboutme_oneIv"
         android:layout_width="80px"
+        android:layout_marginLeft="26px"
         android:layout_height="80px"
         android:contentDescription="@null" />
 
     <LinearLayout
         android:layout_width="911px"
         android:layout_height="180px"
+        android:layout_marginLeft="19px"
         android:background="@drawable/aboutme_one"
         android:orientation="vertical" >
 
@@ -25,7 +26,7 @@
                 android:id="@+id/aboutme_oneTv"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginLeft="25px"
+                android:layout_marginLeft="37px"
                 android:layout_marginTop="10px"
                 android:textColor="#92b81b"
                 android:textSize="24px" />
@@ -34,7 +35,7 @@
                 android:id="@+id/aboutme_oneTv2"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginLeft="25px"
+                android:layout_marginLeft="20px"
                 android:layout_marginTop="10px"
                 android:layout_toRightOf="@id/aboutme_oneTv"
                 android:textColor="#9da2ad"
@@ -42,11 +43,11 @@
 
             <ImageButton
                 android:id="@+id/aboutme_oneIb"
-                android:layout_width="50px"
-                android:layout_height="50px"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
                 android:layout_alignParentRight="true"
-                android:layout_marginRight="10px"
-                android:layout_marginTop="15px"
+                android:layout_marginRight="18px"
+                android:layout_marginTop="12px"
                 android:contentDescription="@null"
                 android:background="@drawable/aboutme_delete" />
         </RelativeLayout>
@@ -60,8 +61,9 @@
                 android:id="@+id/aboutme_oneTv3"
                 android:layout_width="400px"
                 android:layout_height="wrap_content"
-                android:layout_marginLeft="20px"
+                android:layout_marginLeft="45px"
                 android:layout_marginTop="10px"
+                android:maxLines="2"
                 android:textColor="#626060"
                 android:textSize="24px" />
 
@@ -74,7 +76,7 @@
                     android:id="@+id/aboutme_oneTv4"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginLeft="20px"
+                    android:layout_marginLeft="37px"
                     android:layout_marginTop="20px"
                     android:textColor="#c1bebf"
                     android:textSize="24px" />
@@ -85,6 +87,7 @@
                     android:layout_height="50px"
                     android:layout_alignParentRight="true"
                     android:layout_marginTop="10px"
+                    android:layout_marginRight="18px"
                     android:text="查看"
                     android:textColor="@color/lvse"
                     android:textSize="24px" />

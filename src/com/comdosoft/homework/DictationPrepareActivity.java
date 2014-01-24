@@ -10,6 +10,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 import com.comdosoft.homework.pojo.ListeningPojo;
 import com.comdosoft.homework.pojo.QuestionPojo;
+import com.comdosoft.homework.tools.HomeWork;
 import com.comdosoft.homework.tools.ListeningQuestionList;
 import com.comdosoft.homework.tools.Urlinterface;
 import android.app.Activity;
@@ -36,15 +37,35 @@ public class DictationPrepareActivity extends Activity implements
 	private List<String> mp3List = new ArrayList<String>();
 	private MediaPlayer mediaPlayer = new MediaPlayer();
 	private ImageView dictationImg;
+	private HomeWork homework;
+	private ProgressDialog mPd;
+	private Handler mHandler = new Handler() {
+		@Override
+		public void handleMessage(Message msg) {
+			super.handleMessage(msg);
+			switch (msg.what) {
+			case 1:
+				mPd.dismiss();
+				dictationImg.setImageResource(R.drawable.dictation_laba2);
+				break;
+			case 2:
+				dictationImg.setImageResource(R.drawable.dictation_laba1);
+				break;
+			}
+		}
+	};
 
-	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.question_dictation_prepare);
+		homework = (HomeWork) getApplication();
+		homework.setNewsFlag(true);
 		findViewById(R.id.question_dictation_next).setOnClickListener(this);
 		findViewById(R.id.question_dictation_exit).setOnClickListener(this);
 		dictationImg = (ImageView) findViewById(R.id.question_dictation_img);
 		dictationImg.setOnClickListener(this);
+		mPd = new ProgressDialog(this);
+		mPd.setMessage("正在缓冲...");
 		setMp3Url();
 		// new MyThread().start();
 	}
@@ -148,6 +169,7 @@ public class DictationPrepareActivity extends Activity implements
 	public void onClick(View v) {
 		switch (v.getId()) {
 		case R.id.question_dictation_img:
+			mPd.show();
 			playerAmr();
 			break;
 		case R.id.question_dictation_next:
@@ -169,6 +191,7 @@ public class DictationPrepareActivity extends Activity implements
 
 	@Override
 	public void onPrepared(MediaPlayer mp) {
+		mHandler.sendEmptyMessage(1);
 		mp.start();
 	}
 
@@ -182,6 +205,8 @@ public class DictationPrepareActivity extends Activity implements
 				mp.prepare();
 				mp.setOnPreparedListener(this);
 				mp.setOnCompletionListener(this);
+			} else {
+				mHandler.sendEmptyMessage(2);
 			}
 		} catch (IllegalArgumentException e) {
 			e.printStackTrace();

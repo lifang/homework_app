@@ -203,9 +203,8 @@ public class Classxinxiliu extends Activity implements IXListViewListener,
 					JSONArray jsonArray = array0.getJSONArray("classmates");
 					for (int i = 0; i < jsonArray.length(); i++) {
 						JSONObject jsonObject2 = (JSONObject) jsonArray.get(i);
-						// String stu_Url=(String)
-						// jsonObject2.get("avatar_url");
-						String stu_Url = null;
+						 String stu_Url=(String)
+						 jsonObject2.get("avatar_url");
 						int id = jsonObject2.getInt("id");
 						String stuname = jsonObject2.getString("name");
 						String nickname = jsonObject2.getString("nickname");

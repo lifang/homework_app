@@ -72,7 +72,7 @@ public class SpeakHistoryActivity extends Activity implements Urlinterface {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.question_speak_history);
 		homework = (HomeWork) getApplication();
-
+		homework.setNewsFlag(true);
 		initialize();
 
 		Toast.makeText(this, "查看历史信息", Toast.LENGTH_SHORT).show();

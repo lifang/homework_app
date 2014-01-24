@@ -101,7 +101,6 @@ public class SwitchClassActivity extends Activity {
 								JSONObject jsonobject2 = jsonobject
 										.getJSONObject("class");
 								int id = jsonobject2.getInt("id");
-								Log.i("aa", "id:"+id);
 								SharedPreferences preferences = getSharedPreferences(
 										Urlinterface.SHARED,
 										Context.MODE_PRIVATE);
@@ -130,13 +129,8 @@ public class SwitchClassActivity extends Activity {
 	}
 
 	public boolean onKeyDown(int keyCode, KeyEvent event) {
-		Intent intent = new Intent();
 		if (keyCode == KeyEvent.KEYCODE_BACK) {
 			SwitchClassActivity.this.finish();
-			hw.setMainItem(3);
-			intent.setClass(SwitchClassActivity.this,
-					HomeWorkMainActivity.class);
-			startActivity(intent);
 			return true;
 		}
 		return super.onKeyDown(keyCode, event);
@@ -191,7 +185,6 @@ public class SwitchClassActivity extends Activity {
 				scTv.setHeight(55);
 				scTv.setText(classlist.get(position).getName());
 				scTv.setGravity(Gravity.CENTER);
-				scTv.setTextSize(24);
 				scTv.setOnClickListener(new OnClickListener() {
 					public void onClick(View v) {
 						new Thread() {
@@ -201,6 +194,7 @@ public class SwitchClassActivity extends Activity {
 								Intent intent = new Intent(
 										SwitchClassActivity.this,
 										HomeWorkMainActivity.class);
+								hw.setNewsFlag(true);
 								SharedPreferences preferences = getSharedPreferences(
 										Urlinterface.SHARED,
 										Context.MODE_PRIVATE);
@@ -218,6 +212,5 @@ public class SwitchClassActivity extends Activity {
 			}
 			return convertView;
 		}
-
 	}
 }

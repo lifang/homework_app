@@ -1,6 +1,11 @@
 package com.comdosoft.homework;
 
 import java.lang.reflect.Field;
+import java.util.HashMap;
+
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import android.app.TabActivity;
 import android.content.Intent;
@@ -8,16 +13,22 @@ import android.content.SharedPreferences;
 import android.content.res.Resources;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Message;
 import android.util.Log;
 import android.view.Display;
 import android.view.Gravity;
+import android.view.View;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TabHost;
+import android.widget.TextView;
+import android.widget.Toast;
 import android.widget.TabHost.OnTabChangeListener;
 import android.widget.TabWidget;
 
 import com.comdosoft.homework.tools.HomeWork;
+import com.comdosoft.homework.tools.HomeWorkTool;
 import com.comdosoft.homework.tools.Urlinterface;
 
 public class HomeWorkMainActivity extends TabActivity implements Urlinterface {
@@ -27,14 +38,17 @@ public class HomeWorkMainActivity extends TabActivity implements Urlinterface {
 	public Field mBottomLeftStrip;
 	public Field mBottomRightStrip;
 	private HomeWork homework;
-
+	private int count;
+	private boolean flag = true;
+	private int lastCount;
+	private boolean isflag = true;
+	private int Size;
 	public static HomeWorkMainActivity instance = null;
 
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.homewrok_main);
 		homework = (HomeWork) getApplication();
-		
 		instance = this;
 		Display display = getWindowManager().getDefaultDisplay();
 		int Height = display.getHeight();
@@ -49,7 +63,7 @@ public class HomeWorkMainActivity extends TabActivity implements Urlinterface {
 		tabhost.addTab(spec1);
 
 		Intent intent2 = new Intent(this, HomeWorkIngActivity.class);
-		spec2 = tabhost.newTabSpec("spec2") 
+		spec2 = tabhost.newTabSpec("spec2")
 				.setIndicator("", res.getDrawable(R.drawable.th2_2))
 				.setContent(intent2);
 		tabhost.addTab(spec2);
@@ -67,6 +81,104 @@ public class HomeWorkMainActivity extends TabActivity implements Urlinterface {
 		tabhost.addTab(spec4);
 		tabhost.setCurrentTab(homework.getMainItem());
 		updateTabStyle(tabhost);
+		thread.start();
+	}
+
+	Thread thread = new Thread() {
+		public void run() {
+			indexNews();
+		}
+	};
+	Handler handler = new Handler() {
+		public void dispatchMessage(Message msg) {
+			super.dispatchMessage(msg);
+			switch (msg.what) {
+			case 0:
+				TextView textview = (TextView) tabhost.getTabWidget()
+						.getChildAt(2).findViewById(android.R.id.title);
+				textview.setPadding(27, 5, 5, 53);
+				if (homework.isNewsFlag() == true) {
+					if (msg.obj.toString().equals("0")) {
+					} else {
+						View mView = tabhost.getTabWidget().getChildAt(2);// 0是代表第一个Tab
+						ImageView imageView = (ImageView) mView
+								.findViewById(android.R.id.icon);// 获取控件imageView
+						imageView.setImageDrawable(getResources().getDrawable(
+								R.drawable.news)); // 改变我们需要的图标
+						textview.setText(msg.obj + "");
+					}
+				} else {
+					if (msg.obj.toString().equals("0")) {
+						textview.setText("");
+					} else {
+						textview.setText("");
+					}
+				}
+				break;
+			}
+		}
+	};
+
+	public void indexNews() {
+		SharedPreferences sp = getSharedPreferences(Urlinterface.SHARED, 0);
+		String user_id = sp.getString("user_id", "null");
+		String school_class_id = sp.getString("school_class_id", "null");
+		while (flag) {
+			try {
+				HashMap<String, String> mp = new HashMap<String, String>();
+				mp.put("user_id", user_id);
+				mp.put("school_class_id", school_class_id);
+				String json = HomeWorkTool.sendGETRequest(
+						Urlinterface.get_News, mp);
+				Message msg = new Message();
+				Size = getNewsJson(json);
+				Log.i("bbb", homework.isNewsFlag() + "判断");
+				if (homework.isNewsFlag()) {
+
+					if (homework.getLastcount() == getNewsJson(json)) {
+						count = lastCount;
+					} else {
+						count = getNewsJson(json) - homework.getLastcount();
+					}
+				} else {
+					if (homework.getLastcount() == getNewsJson(json)) {
+						count = 0;
+					} else {
+						count = getNewsJson(json) - homework.getLastcount();
+					}
+					count = 0;
+				}
+
+				Log.i("aa", count + "<---HOMe" + getNewsJson(json)
+						+ "<----getnew" + homework.getLastcount() + "<---");
+				msg.what = 0;
+				msg.obj = count;
+				handler.sendMessage(msg);
+				Thread.sleep(5000);
+			} catch (InterruptedException e) {
+				e.printStackTrace();
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+		}
+	}
+
+	public int getNewsJson(String json) {
+		try {
+			JSONObject jsonobject = new JSONObject(json);
+			String status = (String) jsonobject.get("status");
+			if (status.equals("success")) {
+				JSONArray jsonarray = jsonobject.getJSONArray("messages");
+				return jsonarray.length();
+			} else {
+				String notic = (String) jsonobject.get("notic");
+				Toast.makeText(getApplicationContext(), notic, 1).show();
+			}
+		} catch (JSONException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return 0;
 	}
 
 	private void updateTabStyle(final TabHost mTabHost) {
@@ -173,7 +285,6 @@ public class HomeWorkMainActivity extends TabActivity implements Urlinterface {
 				}
 
 			}
-
 			mTabHost.setOnTabChangedListener(new OnTabChangeListener() {
 				public void onTabChanged(String tabId) {
 					for (int i = 0; i < tabWidget.getChildCount(); i++) {
@@ -181,27 +292,39 @@ public class HomeWorkMainActivity extends TabActivity implements Urlinterface {
 								.getTabWidget().getChildAt(i);
 						ImageView img = (ImageView) tabWidget.getChildAt(i)
 								.findViewById(android.R.id.icon);
+						View mView = tabhost.getTabWidget().getChildAt(2);// 0是代表第一个Tab
 						if (mTabHost.getCurrentTab() == i) {
 							homework.setMainItem(i);
 							tabView.setBackgroundColor(res
 									.getColor(R.color.white));
 							switch (i) {
 							case 0:
+								homework.setNewsFlag(true);
 								img.setImageResource(R.drawable.th1);
 								break;
 							case 1:
+								homework.setNewsFlag(true);
 								img.setImageResource(R.drawable.th2);
 								break;
 							case 2:
+								homework.setNewsFlag(false);
+								homework.setLastcount(Size);
+								TextView textview = (TextView) tabhost
+										.getTabWidget().getChildAt(2)
+										.findViewById(android.R.id.title);
+								textview.setPadding(27, 5, 5, 53);
+								textview.setText("");
 								img.setImageResource(R.drawable.th3);
 								break;
 							case 3:
+								homework.setNewsFlag(true);
 								img.setImageResource(R.drawable.th4);
 								break;
 							}
 						} else {
 							tabView.setBackgroundColor(res
 									.getColor(R.color.lvse));
+
 							switch (i) {
 							case 0:
 								img.setImageResource(R.drawable.th1_1);
