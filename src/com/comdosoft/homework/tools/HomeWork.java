@@ -22,22 +22,45 @@ public class HomeWork extends Application {
 	private int class_id;
 	private int message_id;
 	private String noselect_message;
+	private int newCount;
+	private boolean newsFlag;
+	private int lastcount;
+	
+	public int getLastcount() {
+		return lastcount;
+	}
 	private int history_item;
-	public String getNoselect_message() {
-		return noselect_message;
+	public void setLastcount(int lastcount) {
+		this.lastcount = lastcount;
 	}
-
-	public void setNoselect_message(String noselect_message) {
-		this.noselect_message = noselect_message;
+	public boolean isNewsFlag() {
+		return newsFlag;
 	}
-
+	public void setNewsFlag(boolean newsFlag) {
+		this.newsFlag = newsFlag;
+	}
 	public HomeWork() {
+		this.setNewsFlag(true);
+		this.setNewCount(0);
 		this.setQuestion_index(0);
 		this.setHistory_item(0);
 		this.setMainItem(0);
 		this.setMessage_id(-1);
 	}
+	public int getNewCount() {
+		return newCount;
+	}
 
+	public void setNewCount(int newCount) {
+		this.newCount = newCount;
+	}
+	
+	public String getNoselect_message() {
+		return noselect_message;
+	}
+	public void setNoselect_message(String noselect_message) {
+		this.noselect_message = noselect_message;
+	}
 	public int getQuestion_index() {
 		return question_index;
 	}

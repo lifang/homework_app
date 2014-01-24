@@ -201,6 +201,7 @@ public class SwitchClassActivity extends Activity {
 								Intent intent = new Intent(
 										SwitchClassActivity.this,
 										HomeWorkMainActivity.class);
+								hw.setNewsFlag(true);
 								SharedPreferences preferences = getSharedPreferences(
 										Urlinterface.SHARED,
 										Context.MODE_PRIVATE);

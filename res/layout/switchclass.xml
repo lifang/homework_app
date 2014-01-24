@@ -2,7 +2,7 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#50ffffff" 
+    android:background="#30ffffff"
     android:gravity="center"
     android:orientation="vertical" >
 
@@ -11,8 +11,8 @@
         android:layout_width="479px"
         android:layout_height="55px"
         android:gravity="center"
-        android:textColor="#996633"
         android:text="@string/SwitchClass_Tv"
+        android:textColor="#FCE3CE"
         android:textSize="24px" />
 
     <LinearLayout
@@ -30,10 +30,10 @@
     </LinearLayout>
 
     <LinearLayout
-        android:layout_marginTop="5px"
         android:id="@+id/switchClassll"
         android:layout_width="479px"
         android:layout_height="55px"
+        android:layout_marginTop="5px"
         android:background="#ffffff"
         android:orientation="horizontal" >
 
