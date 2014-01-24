@@ -17,6 +17,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import android.app.Activity;
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.graphics.Bitmap;
@@ -100,8 +101,9 @@ public class Classxinxiliu extends Activity implements IXListViewListener,
 	private int width;
 	private int height;
 	private List<ClassStuPojo> stuList = new ArrayList<ClassStuPojo>();
-	private int message_id = -1;
-
+	private String lookStr_micropost_id="";
+	private ProgressDialog prodialog;
+	
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		requestWindowFeature(Window.FEATURE_NO_TITLE);
@@ -233,9 +235,16 @@ public class Classxinxiliu extends Activity implements IXListViewListener,
 				}
 
 				// 查看 跳到本界面的 处理操作
-				message_id = homework.getMessage_id();
-				if (message_id != -1) {
+			
+				String lookStr = homework.getNoselect_message();
+				
+				Micropost lookStr_micropost = new Micropost();
+				if (lookStr!=null&&!lookStr.equals("")) {
+				
 					care.clear();
+					page = 1;
+					number = 1;
+					micropost_type = 1;
 					page_own = 0; // 0 标记 用于表示从别的页面跳到本页面，在上拉加载时会用到
 					homework.setMessage_id(-1); // 将 公共变量message_id 设置为 -1
 					child_list = new ArrayList<Child_Micropost>();
@@ -246,9 +255,58 @@ public class Classxinxiliu extends Activity implements IXListViewListener,
 					Button b2 = (Button) findViewById(R.id.class_button_myself);
 					b2.setBackgroundDrawable(getResources().getDrawable(
 							R.drawable.an));
-					page = 1;
-					number = 1;
-					micropost_type = 1;
+//			
+//					{"status":"success","notice":"\u5df2\u9605\u8bfb\uff01",
+//						"micropost":[{"avatar_url":"/homework_system/avatars/students/2014-01/student_66.jpg"
+//							,"content":"ted85233","created_at":"2014-01-23T15:18:35+08:00"
+//								,"micropost_id":109,"name":"xhxksn "
+//						,"reply_microposts_count":1,
+//						"school_class_id":1,
+//						"user_id":66,"user_types":1}]}
+					
+					
+				JSONObject js;
+				try {
+					js = new JSONObject(lookStr);
+					String micropost = js.getString("micropost");
+					JSONArray jsonArray2;
+					try {
+						jsonArray2 = new JSONArray(micropost);
+						for (int i = 0; i < jsonArray2.length(); ++i) {
+							JSONObject o = (JSONObject) jsonArray2
+									.get(i);
+							lookStr_micropost_id = o.getString("micropost_id");
+							String user_id = o.getString("user_id");
+//							String user_types = "1";
+							
+							String user_types = o
+									.getString("user_types");
+							String name = o.getString("name");
+							String content = o.getString("content");
+							String avatar_url = o
+									.getString("avatar_url");
+							String created_at = o
+									.getString("created_at");
+
+							String reply_microposts_count = o
+									.getString("reply_microposts_count");
+
+							 lookStr_micropost = new Micropost(
+									 lookStr_micropost_id, user_id, user_types,
+									name, content, avatar_url,
+									created_at, reply_microposts_count);
+						
+						}
+
+					} catch (JSONException e) {
+						e.printStackTrace();
+					}
+				} catch (JSONException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+
+					
 					final Handler mHandler = new Handler() {
 						public void handleMessage(android.os.Message msg) {
 							switch (msg.what) {
@@ -267,7 +325,7 @@ public class Classxinxiliu extends Activity implements IXListViewListener,
 						public void run() {
 							try {
 								Map<String, String> map = new HashMap<String, String>();
-								map.put("micropost_id", message_id + "");
+								map.put("micropost_id", lookStr_micropost_id);
 								String re = HomeWorkTool.sendGETRequest(
 										Urlinterface.get_reply_microposts, map);
 								Message msg = new Message();// 创建Message 对象
@@ -284,7 +342,7 @@ public class Classxinxiliu extends Activity implements IXListViewListener,
 					int a = 0;
 					for (int i = 0; i < list.size(); i++) {
 
-						if (Integer.parseInt(list.get(i).getId()) == message_id) {
+						if (list.get(i).getId().equals(lookStr_micropost_id)) {
 							focus = i; // 要展开的 主消息 的 位置
 
 							break;
@@ -293,57 +351,10 @@ public class Classxinxiliu extends Activity implements IXListViewListener,
 						}
 					}
 					if (a == list.size() && a != 0) {// 若第一页主消息中没有 提示信息所在，，则
-														// 单独显示 该条提示信息
-						String gmess = homework.getNoselect_message();
-						// Toast.makeText(getApplicationContext(), gmess,
-						// 1).show();
+					
 						list = new ArrayList<Micropost>();
 						focus = 0; // 要展开的 主消息 的 位置
-						// 该处解析 消息 json 并放入 list
-						// {"status":"success","micropost":
-						// [{"id":85,"content":"rrrrr","avatar_url":"\/homework_system\/avatars\/students\/2014-01\/student_66.jpg",
-						// "name":"xhxksn
-						// ","created_at":"2014-01-21T18:13:21+08:00",
-						// "user_id":66,"school_class_id":1,"reply_microposts_count":6}]}
-						JSONObject js;
-						try {
-							js = new JSONObject(gmess);
-							String micropost = js.getString("micropost");
-							JSONArray jsonArray2;
-							try {
-								jsonArray2 = new JSONArray(micropost);
-
-								for (int i = 0; i < jsonArray2.length(); ++i) {
-									JSONObject o = (JSONObject) jsonArray2
-											.get(i);
-									String micropost_id = o.getString("id");
-									String user_id = o.getString("user_id");
-									String user_types = o
-											.getString("user_types");
-									String name = o.getString("name");
-									String content = o.getString("content");
-									String avatar_url = o
-											.getString("avatar_url");
-									String created_at = o
-											.getString("created_at");
-
-									String reply_microposts_count = o
-											.getString("reply_microposts_count");
-
-									Micropost micropost1 = new Micropost(
-											micropost_id, user_id, user_types,
-											name, content, avatar_url,
-											created_at, reply_microposts_count);
-									list.add(micropost1);
-								}
-
-							} catch (JSONException e) {
-								e.printStackTrace();
-							}
-						} catch (JSONException e) {
-							// TODO Auto-generated catch block
-							e.printStackTrace();
-						}
+						list.add(lookStr_micropost);
 
 					}
 				}
@@ -371,7 +382,9 @@ public class Classxinxiliu extends Activity implements IXListViewListener,
 
 	// 发表
 	public void class_fabiao(View v) {
-
+		prodialog = new ProgressDialog(Classxinxiliu.this);
+		  prodialog.setMessage(HomeWorkParams.PD_CLASS_INFO);
+		  prodialog.show();
 		final Handler class_fabiaoHandler = new Handler() {
 			public void handleMessage(android.os.Message msg) {
 				switch (msg.what) {
@@ -389,6 +402,7 @@ public class Classxinxiliu extends Activity implements IXListViewListener,
 										1).show();
 								fabiao_content.setText("");
 								child_list.clear();
+								prodialog.dismiss();
 								Button class_button_all = (Button) findViewById(R.id.class_button_all);
 								class_button_all.performClick();
 
@@ -912,10 +926,11 @@ public class Classxinxiliu extends Activity implements IXListViewListener,
 		handler.postDelayed(new Runnable() {
 			@Override
 			public void run() {
+				
+				if (page_own == 1) {
 				Thread thread = new Thread() {
 					public void run() {// 全部 页面加载 更多
-						if (page <= pages_count && micropost_type == 0
-								&& page_own == 1) {
+						if (page <= pages_count && micropost_type == 0) {
 							Map<String, String> map = new HashMap<String, String>();
 							map.put("student_id", id);
 							map.put("school_class_id", school_class_id);
@@ -933,8 +948,7 @@ public class Classxinxiliu extends Activity implements IXListViewListener,
 							mHandleronLoadMore.sendMessage(msg);
 						}
 						// 我的 页面加载 更多
-						if (page <= pages_count && micropost_type == 1
-								&& page_own == 1) {
+						if (page <= pages_count && micropost_type == 1) {
 							Map<String, String> map = new HashMap<String, String>();
 							map.put("user_id", user_id);
 							map.put("school_class_id", school_class_id);
@@ -955,6 +969,14 @@ public class Classxinxiliu extends Activity implements IXListViewListener,
 				};
 				thread.start();
 			}
+
+				if(page_own==0){
+					focus = -1;
+					micropostAdapter.notifyDataSetChanged();
+					onLoad();
+			
+			}
+		}
 		}, 2000);
 		// micropostAdapter.notifyDataSetChanged();
 		// onLoad();
