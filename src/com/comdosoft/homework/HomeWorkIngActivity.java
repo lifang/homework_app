@@ -111,7 +111,7 @@ public class HomeWorkIngActivity extends Activity implements Urlinterface {
 
 		prodialog = new ProgressDialog(HomeWorkIngActivity.this);
 		prodialog.setMessage(HomeWorkParams.PD_CLASS_INFO);
-		// prodialog.show();
+		prodialog.show();
 		// Thread thread = new Thread(new getClassInfo());
 		// thread.start();
 
@@ -397,6 +397,10 @@ public class HomeWorkIngActivity extends Activity implements Urlinterface {
 	// 解析题目json
 	public void QuestionJson(String json) {
 		try {
+			ListeningQuestionList.Record_Count = 0;
+			ListeningQuestionList.Small_Index = 0;
+			ListeningQuestionList.listeningList.clear();
+			ListeningQuestionList.answerList.clear();
 			// 阅读
 			questionlist = new ArrayList<ListeningPojo>();
 			JSONArray ja = new JSONObject(json).getJSONObject("package")
@@ -444,13 +448,17 @@ public class HomeWorkIngActivity extends Activity implements Urlinterface {
 					for (int j = 0; j < jArr.length(); j++) {
 						JSONObject jb = jArr.getJSONObject(j);
 						smallList.add(jb.getString("answer"));
+						ListeningQuestionList.Small_Index = j + 1;
 					}
+					ListeningQuestionList.Small_Index = 0;
+					ListeningQuestionList.Record_Count = i;
 					ListeningQuestionList.addAnswer(smallList);
 				}
 			}
 
 			homework.setQuestion_history(questionhistory);
 			homework.setHistory_item(questionhistory.size());
+
 			// ↑张秀楠------------↓马龙
 
 			// 解析听写题目
@@ -470,8 +478,8 @@ public class HomeWorkIngActivity extends Activity implements Urlinterface {
 						question));
 			}
 
-			ListeningQuestionList.Record_Count = ListeningQuestionList
-					.getRecordCount();
+			// ListeningQuestionList.Record_Count = ListeningQuestionList
+			// .getRecordCount();
 
 			handler.sendEmptyMessage(3);
 		} catch (JSONException e) {

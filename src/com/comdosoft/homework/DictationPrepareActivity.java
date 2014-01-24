@@ -36,17 +36,6 @@ public class DictationPrepareActivity extends Activity implements
 	private List<String> mp3List = new ArrayList<String>();
 	private MediaPlayer mediaPlayer = new MediaPlayer();
 	private ImageView dictationImg;
-	private ProgressDialog mPd;
-	private Handler mHandler = new Handler() {
-		@Override
-		public void handleMessage(Message msg) {
-			super.handleMessage(msg);
-			switch (msg.what) {
-			case 1:
-				break;
-			}
-		}
-	};
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -149,7 +138,6 @@ public class DictationPrepareActivity extends Activity implements
 			try {
 				analyzeJson(JSON);
 				setMp3Url();
-				mHandler.sendEmptyMessage(1);
 			} catch (Exception e) {
 				e.printStackTrace();
 			}
