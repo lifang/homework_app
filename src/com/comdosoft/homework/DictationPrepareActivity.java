@@ -36,19 +36,8 @@ public class DictationPrepareActivity extends Activity implements
 	private List<String> mp3List = new ArrayList<String>();
 	private MediaPlayer mediaPlayer = new MediaPlayer();
 	private ImageView dictationImg;
-	private ProgressDialog mPd;
-	private Handler mHandler = new Handler() {
-		
-		public void handleMessage(Message msg) {
-			super.handleMessage(msg);
-			switch (msg.what) {
-			case 1:
-				break;
-			}
-		}
-	};
 
-	
+	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.question_dictation_prepare);
@@ -56,13 +45,13 @@ public class DictationPrepareActivity extends Activity implements
 		findViewById(R.id.question_dictation_exit).setOnClickListener(this);
 		dictationImg = (ImageView) findViewById(R.id.question_dictation_img);
 		dictationImg.setOnClickListener(this);
-		// setMp3Url();
+		setMp3Url();
+		// new MyThread().start();
 	}
 
-	
+	@Override
 	protected void onRestart() {
 		super.onRestart();
-		Log.i("Ax", "onRestart");
 		setMp3Url();
 	}
 
@@ -132,9 +121,9 @@ public class DictationPrepareActivity extends Activity implements
 				ListeningQuestionList.addListeningPojo(new ListeningPojo(id,
 						question));
 
-				ListeningQuestionList.Record_Count = 0;
-				// ListeningQuestionList.Record_Count = ListeningQuestionList
-				// .getRecordCount();
+				// ListeningQuestionList.Record_Count = 0;
+				ListeningQuestionList.Record_Count = ListeningQuestionList
+						.getRecordCount();
 			}
 		} catch (JSONException e) {
 			e.printStackTrace();
@@ -143,60 +132,48 @@ public class DictationPrepareActivity extends Activity implements
 
 	// 获取听写题目json
 	class MyThread extends Thread {
-		
+		@Override
 		public void run() {
 			super.run();
 			try {
-				Map<String, String> map = new HashMap<String, String>();
-				map.put("student_id", "1");
-				map.put("publish_question_package_id", "1");
-				// analyzeJson(HomeWorkTool
-				// .sendGETRequest(
-				// "http://192.168.0.250:3004/api/students/into_daily_tasks",
-				// map));
 				analyzeJson(JSON);
 				setMp3Url();
-				mHandler.sendEmptyMessage(1);
 			} catch (Exception e) {
 				e.printStackTrace();
 			}
 		}
 	}
 
-	
+	@Override
 	public void onClick(View v) {
-		Intent intent = new Intent();
 		switch (v.getId()) {
 		case R.id.question_dictation_img:
 			playerAmr();
 			break;
 		case R.id.question_dictation_next:
-			DictationPrepareActivity.this.finish();
-			intent.setClass(this, DictationBeginActivity.class);
+			Intent intent = new Intent(this, DictationBeginActivity.class);
 			startActivity(intent);
 			break;
 		case R.id.question_dictation_exit:
 			this.finish();
-			intent.setClass(this, HomeWorkMainActivity.class);
-			startActivity(intent);
 			break;
 		}
 	}
 
-	
+	@Override
 	public void onDestroy() {
 		mediaPlayer.release();
 		mediaPlayer = null;
 		super.onDestroy();
 	}
 
-	
+	@Override
 	public void onPrepared(MediaPlayer mp) {
 		mp.start();
 	}
 
 	// 音频播放结束后继续播放下一个音频,直到所有音频播放完毕
-	
+	@Override
 	public void onCompletion(MediaPlayer mp) {
 		try {
 			if (++mp3Index < mp3List.size()) {

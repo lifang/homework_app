@@ -260,6 +260,7 @@ public class SettingActivity extends Activity implements Urlinterface {
 		Editor editor = preferences.edit();
 		editor.putString("user_id", "");
 		editor.putString("school_class_id", "");
+		editor.putString("id", "");
 		editor.commit();
 		Intent intent = new Intent();
 		intent.setClass(this, LoginActivity.class);//

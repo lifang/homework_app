@@ -403,7 +403,7 @@ public class HomeWorkTool implements Urlinterface {
 			listItem.measure(0, 0); // 计算子项View 的宽高
 
 			totalHeight += listItem.getMeasuredHeight(); // 统计所有子项的总高度.
-															// 网上代码没有 加52
+															
 
 		}
 

@@ -4,7 +4,9 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+
 import org.json.JSONObject;
+
 import android.app.Activity;
 import android.app.AlertDialog.Builder;
 import android.app.Dialog;
@@ -28,13 +30,15 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
+
 import com.comdosoft.homework.pojo.QuestionPojo;
 import com.comdosoft.homework.tools.HomeWork;
 import com.comdosoft.homework.tools.HomeWorkParams;
 import com.comdosoft.homework.tools.HomeWorkTool;
+import com.comdosoft.homework.tools.ListeningQuestionList;
+import com.comdosoft.homework.tools.PredicateLayout;
 import com.comdosoft.homework.tools.Soundex_Levenshtein;
 import com.comdosoft.homework.tools.Urlinterface;
-import com.comdosoft.homework.tools.PredicateLayout;
 
 public class SpeakBeginActivity extends Activity implements Urlinterface {
 	public String content;// 记录本题正确答案
@@ -52,8 +56,7 @@ public class SpeakBeginActivity extends Activity implements Urlinterface {
 	private int student_id;
 	private int school_class_id;
 	private int publish_question_package_id;
-	private int question_package_id;
-	private int question_id;
+	private int branch_question_id;
 	private HomeWork homework;
 	private List<QuestionPojo> branch_questions;
 	private int index = 0;
@@ -62,6 +65,7 @@ public class SpeakBeginActivity extends Activity implements Urlinterface {
 	private ProgressDialog prodialog;
 	private int type;
 	private int speak_number;
+	private int over_static;
 	private Handler handler = new Handler() {
 		public void handleMessage(Message msg) {
 			Intent intent = new Intent();
@@ -69,6 +73,7 @@ public class SpeakBeginActivity extends Activity implements Urlinterface {
 			builder.setTitle("提示");
 			switch (msg.what) {
 			case 0:
+				prodialog.dismiss();
 				index += 1;
 				PredicateLayout.removeAllViews();
 				question_speak_title.setText((index + 1) + "/"
@@ -77,6 +82,8 @@ public class SpeakBeginActivity extends Activity implements Urlinterface {
 				SetTextView();
 				break;
 			case 1:
+				prodialog.dismiss();
+				homework.setHistory_item(homework.getHistory_item() + 1);
 				MyDialog("你已经答完本题确认继续下一题吗?", "确认", "取消", 1);
 				break;
 			case 2:
@@ -126,7 +133,6 @@ public class SpeakBeginActivity extends Activity implements Urlinterface {
 		SetTextView();
 		publish_question_package_id = homework.getP_q_package_id();
 		Log.i(tag, publish_question_package_id + "===");
-		question_package_id = homework.getQ_package_id();
 		student_id = homework.getUser_id();
 		school_class_id = homework.getClass_id();
 	}
@@ -170,33 +176,40 @@ public class SpeakBeginActivity extends Activity implements Urlinterface {
 			MyDialog("你还没有做完题,确认要退出吗?", "确认", "取消", 0);
 			break;
 		case R.id.question_speak_next:
+			speak_number = 0;
 			stop();
-			int ye = homework.getQuestion_index();
-			if ((ye + 1) < homework.getQuestion_allNumber()) {
-				question_id = branch_questions.get(index).getId();
-				if ((index + 1) < branch_questions.size()) {
-					Thread thread = new Thread(new Record_answer_info());// 记录小题
-					thread.start();
-					handler.sendEmptyMessage(0);
-				} else {
-					prodialog = new ProgressDialog(SpeakBeginActivity.this);
-					prodialog.setMessage(HomeWorkParams.PD_FINISH_QUESTION);
-					prodialog.show();
-					Thread thread = new Thread(new Record_answer_info());// 记录小题
-					thread.start();
-				}
+			int ye = 0;
+			if (homework.getHistory_item() >= homework.getQuestion_list()
+					.size()) {
+				ye = homework.getQuestion_index();
 			} else {
-				question_id = branch_questions.get(index).getId();
+				ye = homework.getHistory_item();
+			}
+			if ((ye + 1) < homework.getQuestion_allNumber()) {
+				prodialog = new ProgressDialog(SpeakBeginActivity.this);
+				prodialog.setMessage(HomeWorkParams.PD_FINISH_QUESTION);
+				prodialog.show();
+				branch_question_id = branch_questions.get(index).getId();
+				if ((index + 1) < branch_questions.size()) {
+					over_static = 0;
+				} else {
+					over_static = 1;
+				}
 				Thread thread = new Thread(new Record_answer_info());// 记录小题
 				thread.start();
+			} else {
+				prodialog = new ProgressDialog(SpeakBeginActivity.this);
+				prodialog.setMessage(HomeWorkParams.PD_FINISH_QUESTION);
+				prodialog.show();
+				branch_question_id = branch_questions.get(index).getId();
 				if ((index + 1) < branch_questions.size()) {
-					handler.sendEmptyMessage(0);
+					over_static = 0;
 				} else {
-					prodialog = new ProgressDialog(SpeakBeginActivity.this);
-					prodialog.setMessage(HomeWorkParams.PD_FINISH_QUESTION);
-					prodialog.show();
-					new Thread(new SendWorkOver()).start();// 记录大題
+					over_static = 2;
+					// new Thread(new SendWorkOver()).start();// 记录大題
 				}
+				Thread thread = new Thread(new Record_answer_info());// 记录小题
+				thread.start();
 			}
 			break;
 		case R.id.question_speak_img:// 播放音频
@@ -281,12 +294,14 @@ public class SpeakBeginActivity extends Activity implements Urlinterface {
 
 			String speak = results.get(0);// 用户语音返回的字符串
 			str_list = new ArrayList<String>();
-			String s = content.replaceAll("(?i)[^a-zA-Z0-9\u4E00-\u9FA5]", " ");// 去除标点符号
-			String[] item = s.split(" ");
+			String[] item = content.split(" ");
 			for (int i = 0; i < item.length; i++) {
-				str_list.add(item[i]);
+				String is = item[i].replaceAll("(?i)[^a-zA-Z0-9\u4E00-\u9FA5]",
+						" ");// 去除标点符号
+				str_list.add(is);
 			}
 			// question_speak_tishi
+			Log.i(tag, speak + "->" + str_list);
 			List<int[]> code_list = Soundex_Levenshtein.Engine(speak, str_list);
 			if (code_list.size() > 0) {
 				for (int i = 0; i < code_list.size(); i++) {
@@ -366,8 +381,10 @@ public class SpeakBeginActivity extends Activity implements Urlinterface {
 				case 2:
 					dialog.dismiss();
 					homework.setQuestion_index(0);
-					handler.sendEmptyMessage(2);
-
+					SpeakBeginActivity.this.finish();
+					intent.setClass(SpeakBeginActivity.this,
+							HomeWorkMainActivity.class);
+					startActivity(intent);
 					break;
 				}
 			}
@@ -401,32 +418,46 @@ public class SpeakBeginActivity extends Activity implements Urlinterface {
 	class Record_answer_info implements Runnable {
 		public void run() {
 			Looper.prepare();
-			Log.i(tag, "错词：" + error_str);
-			Log.i(tag,
-					school_class_id + "-" + student_id + "-"
-							+ question_package_id + "-"
-							+ homework.getBranch_question_id() + "-"
-							+ question_id + "-");
+			Log.i("linshi", "错词：" + error_str);
+			Log.i("linshi",
+					student_id + "->" + school_class_id + "->"
+							+ publish_question_package_id + "->"
+							+ homework.getQuestion_id() + "->"
+							+ branch_question_id);
 			Map<String, String> map = new HashMap<String, String>();
 			map.put("school_class_id", school_class_id + "");
 			map.put("student_id", student_id + "");
 			map.put("publish_question_package_id", publish_question_package_id
 					+ "");
-			map.put("branch_question_id", homework.getBranch_question_id() + "");
-			map.put("question_id", question_id + "");
+			map.put("branch_question_id", branch_question_id + "");
+			map.put("question_id", homework.getQuestion_id() + "");
 			map.put("answer", error_str);
-			map.put("question_types", 0 + "");
+			map.put("question_types", 1 + "");
 
 			String json;
 			try {
 				json = HomeWorkTool.doPost(RECORD_ANSWER_INFO, map);
 				JSONObject obj = new JSONObject(json);
 				if (obj.getString("status").equals("success")) {
-					if ((homework.getQuestion_index() + 1) < homework
-							.getQuestion_allNumber()) {
-						if ((index + 1) > branch_questions.size()) {
-							handler.sendEmptyMessage(1);
+					switch (over_static) {
+					case 0:
+						handler.sendEmptyMessage(0);
+						break;
+					case 1:
+						handler.sendEmptyMessage(1);
+						break;
+					case 2:
+						Log.i(tag, ListeningQuestionList.Record_Count
+								+ "***"
+								+ ListeningQuestionList.getListeningPojoList()
+										.size());
+						if (ListeningQuestionList.Record_Count == ListeningQuestionList
+								.getListeningPojoList().size()) {
+							new Thread(new SendWorkOver()).start();
+						} else {
+							handler.sendEmptyMessage(6);
 						}
+						break;
 					}
 				}
 			} catch (Exception e) {
@@ -443,24 +474,16 @@ public class SpeakBeginActivity extends Activity implements Urlinterface {
 			Map<String, String> map = new HashMap<String, String>();
 			map.put("school_class_id", school_class_id + "");
 			map.put("student_id", student_id + "");
-			map.put("question_package_id", question_package_id + "");
 			map.put("publish_question_package_id", publish_question_package_id
 					+ "");
-			Log.i(tag, school_class_id + "-" + student_id + "-"
-					+ question_package_id + "-" + publish_question_package_id);
+			Log.i(tag, school_class_id + "-" + student_id + "-" + "-"
+					+ publish_question_package_id);
 			String json;
 			try {
 				json = HomeWorkTool.doPost(FINISH_QUESTION_PACKGE, map);
 				JSONObject obj = new JSONObject(json);
 				if (obj.getString("status").equals("success")) {
-					switch (type) {
-					case 1:
-						handler.sendEmptyMessage(6);
-						break;
-					case 2:
-						handler.sendEmptyMessage(5);
-						break;
-					}
+					handler.sendEmptyMessage(6);
 
 				} else {
 					message = obj.getString("notice");

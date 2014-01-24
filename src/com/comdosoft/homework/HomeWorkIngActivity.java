@@ -61,14 +61,21 @@ public class HomeWorkIngActivity extends Activity implements Urlinterface {
 			builder.setTitle("提示");
 			switch (msg.what) {
 			case 1:
-				working_date_list.setAdapter(date_adapter);
-				working_content_list.setAdapter(question_adapter);
-				p_q_package_id = list.get(0).getId();
-				prodialog = new ProgressDialog(HomeWorkIngActivity.this);
-				prodialog.setMessage(HomeWorkParams.PD_QUESTION_INFO);
-				prodialog.show();
-				Thread thread = new Thread(new getQuestion());
-				thread.start();
+				if (list.size() != 0) {
+
+					working_date_list.setAdapter(date_adapter);
+					working_content_list.setAdapter(question_adapter);
+					p_q_package_id = list.get(0).getId();
+					prodialog = new ProgressDialog(HomeWorkIngActivity.this);
+					prodialog.setMessage(HomeWorkParams.PD_QUESTION_INFO);
+					prodialog.show();
+					Thread thread = new Thread(new getQuestion());
+					thread.start();
+				} else {
+					builder.setMessage("暂无任何任务!");
+					builder.setPositiveButton("确定", null);
+					builder.show();
+				}
 				break;
 			case 2:
 				builder.setMessage(message);
@@ -98,12 +105,13 @@ public class HomeWorkIngActivity extends Activity implements Urlinterface {
 		SharedPreferences sp = getSharedPreferences(SHARED, 0);
 		student_id = sp.getString("user_id", "null");
 		school_class_id = sp.getString("school_class_id", "null");
+		Log.i(tag, school_class_id + "====");
 		homework.setClass_id(Integer.valueOf(school_class_id));
 		homework.setUser_id(Integer.valueOf(student_id));
 
 		prodialog = new ProgressDialog(HomeWorkIngActivity.this);
 		prodialog.setMessage(HomeWorkParams.PD_CLASS_INFO);
-		// prodialog.show();
+		prodialog.show();
 		// Thread thread = new Thread(new getClassInfo());
 		// thread.start();
 
@@ -144,7 +152,7 @@ public class HomeWorkIngActivity extends Activity implements Urlinterface {
 						} else {
 							homework.setWork_history(true);
 						}
-						HomeWorkIngActivity.this.finish();
+						HomeWorkMainActivity.instance.finish();
 						Intent intent = new Intent();
 						switch (position) {
 						case 0:
@@ -389,6 +397,10 @@ public class HomeWorkIngActivity extends Activity implements Urlinterface {
 	// 解析题目json
 	public void QuestionJson(String json) {
 		try {
+			ListeningQuestionList.Record_Count = 0;
+			ListeningQuestionList.Small_Index = 0;
+			ListeningQuestionList.listeningList.clear();
+			ListeningQuestionList.answerList.clear();
 			// 阅读
 			questionlist = new ArrayList<ListeningPojo>();
 			JSONArray ja = new JSONObject(json).getJSONObject("package")
@@ -436,12 +448,16 @@ public class HomeWorkIngActivity extends Activity implements Urlinterface {
 					for (int j = 0; j < jArr.length(); j++) {
 						JSONObject jb = jArr.getJSONObject(j);
 						smallList.add(jb.getString("answer"));
+						ListeningQuestionList.Small_Index = j + 1;
 					}
+					ListeningQuestionList.Small_Index = 0;
+					ListeningQuestionList.Record_Count = i;
 					ListeningQuestionList.addAnswer(smallList);
 				}
 			}
 
 			homework.setQuestion_history(questionhistory);
+			homework.setHistory_item(questionhistory.size());
 
 			// ↑张秀楠------------↓马龙
 
@@ -461,6 +477,9 @@ public class HomeWorkIngActivity extends Activity implements Urlinterface {
 				ListeningQuestionList.addListeningPojo(new ListeningPojo(id,
 						question));
 			}
+
+			// ListeningQuestionList.Record_Count = ListeningQuestionList
+			// .getRecordCount();
 
 			handler.sendEmptyMessage(3);
 		} catch (JSONException e) {

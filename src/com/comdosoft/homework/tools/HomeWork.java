@@ -11,7 +11,7 @@ public class HomeWork extends Application {
 	private int Question_allNumber;
 	private List<QuestionPojo> branch_questions;
 	private List<ListeningPojo> question_list;
-	private int branch_question_id;
+	private int question_id;
 	private int question_index;
 	private List<List<String>> question_history;
 	private int p_q_package_id;
@@ -29,6 +29,7 @@ public class HomeWork extends Application {
 	public int getLastcount() {
 		return lastcount;
 	}
+	private int history_item;
 	public void setLastcount(int lastcount) {
 		this.lastcount = lastcount;
 	}
@@ -42,6 +43,7 @@ public class HomeWork extends Application {
 		this.setNewsFlag(true);
 		this.setNewCount(0);
 		this.setQuestion_index(0);
+		this.setHistory_item(0);
 		this.setMainItem(0);
 		this.setMessage_id(-1);
 	}
@@ -53,11 +55,9 @@ public class HomeWork extends Application {
 		this.newCount = newCount;
 	}
 	
-
 	public String getNoselect_message() {
 		return noselect_message;
 	}
-
 	public void setNoselect_message(String noselect_message) {
 		this.noselect_message = noselect_message;
 	}
@@ -69,12 +69,12 @@ public class HomeWork extends Application {
 		this.question_index = question_index;
 	}
 
-	public int getBranch_question_id() {
-		return branch_question_id;
+	public int getQuestion_id() {
+		return question_id;
 	}
 
-	public void setBranch_question_id(int branch_question_id) {
-		this.branch_question_id = branch_question_id;
+	public void setQuestion_id(int question_id) {
+		this.question_id = question_id;
 	}
 
 	public List<QuestionPojo> getBranch_questions() {
@@ -162,6 +162,14 @@ public class HomeWork extends Application {
 	}
 	public void setMessage_id(int message_id) {
 		this.message_id = message_id;
+	}
+
+	public int getHistory_item() {
+		return history_item;
+	}
+
+	public void setHistory_item(int history_item) {
+		this.history_item = history_item;
 	}
 
 }

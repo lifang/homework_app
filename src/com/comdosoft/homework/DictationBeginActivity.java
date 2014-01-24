@@ -3,12 +3,16 @@ package com.comdosoft.homework;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+import java.util.Map.Entry;
 import java.util.Random;
 import com.comdosoft.homework.pojo.DictationPojo;
 import com.comdosoft.homework.pojo.QuestionPojo;
+import com.comdosoft.homework.tools.HomeWork;
 import com.comdosoft.homework.tools.HomeWorkParams;
+import com.comdosoft.homework.tools.HomeWorkTool;
 import com.comdosoft.homework.tools.ListeningQuestionList;
 import com.comdosoft.homework.tools.Soundex_Levenshtein;
 import com.comdosoft.homework.tools.Urlinterface;
@@ -20,6 +24,9 @@ import android.graphics.Color;
 import android.media.MediaPlayer;
 import android.media.MediaPlayer.OnPreparedListener;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Message;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -29,15 +36,19 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.LinearLayout.LayoutParams;
 import android.widget.TextView;
-
+import android.widget.Toast;
 
 // 拼写答题    马龙    2014年1月21日
 public class DictationBeginActivity extends Activity implements
 		OnClickListener, HomeWorkParams, OnPreparedListener, Urlinterface {
 
 	private int linearLayoutIndex = 0;
-	private int smallIndex = 0;
+	private int smallIndex;
 	private int bigIndex = 0;
+	private int class_id;
+	private int student_id;
+	private int publish_question_package_id;
+	private String log;
 	private String symbol;
 	private String mp3URL;
 	private List<Integer> indexList = new ArrayList<Integer>();
@@ -52,8 +63,23 @@ public class DictationBeginActivity extends Activity implements
 	private StringBuffer answer = new StringBuffer();
 	private MediaPlayer mediaPlayer = new MediaPlayer();
 	private ProgressDialog mPd;
+	private HomeWork homeWork;
+	private Handler handler = new Handler() {
+		@Override
+		public void handleMessage(Message msg) {
+			super.handleMessage(msg);
+			mPd.dismiss();
+			switch (msg.what) {
+			case 1:
+				break;
+			case 2:
+				MyDialog("恭喜完成今天的朗读作业!", "确认", "取消", 2);
+				break;
+			}
+		}
+	};
 
-	
+	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.question_dictation_begin);
@@ -65,6 +91,14 @@ public class DictationBeginActivity extends Activity implements
 		findViewById(R.id.question_dictation_check).setOnClickListener(this);
 		findViewById(R.id.question_dictation_play).setOnClickListener(this);
 		mPd = new ProgressDialog(this);
+		mPd.setMessage(HomeWorkParams.PD_FINISH_QUESTION);
+
+		homeWork = (HomeWork) getApplication();
+		publish_question_package_id = homeWork.getP_q_package_id();
+		student_id = homeWork.getUser_id();
+		class_id = homeWork.getClass_id();
+
+		smallIndex = ListeningQuestionList.Small_Index;
 
 		init();
 	}
@@ -79,7 +113,7 @@ public class DictationBeginActivity extends Activity implements
 		editLinearLayout.removeAllViews();
 
 		// 获取已答过题目记录数
-//		bigIndex = ListeningQuestionList.getRecordCount();
+		// bigIndex = ListeningQuestionList.getRecordCount();
 		bigIndex = ListeningQuestionList.Record_Count;
 
 		// 获取小题数据
@@ -187,19 +221,29 @@ public class DictationBeginActivity extends Activity implements
 				if (answer.length() > 0) {
 					answer.delete(answer.length() - 3, answer.length());
 				}
-				new MyTrehad().start();
+				mPd.show();
+				new MyTrehad(bigIndex, smallIndex).start();
+				ListeningQuestionList.Small_Index = ListeningQuestionList.Small_Index + 1;
 				if (smallIndex == qpList.size()) {
-					// 切换答题
+					// 切换大题
 					bigIndex++;
 					smallIndex = 0;
 
+					ListeningQuestionList.Small_Index = 0;
+					ListeningQuestionList.Record_Count = ListeningQuestionList.Record_Count + 1;
+
 					if (bigIndex == ListeningQuestionList
 							.getListeningPojoList().size()) {
-						MyDialog("恭喜完成今天的朗读作业!", "确认", "取消", 2);
-						return;
+						mPd.show();
+						if (homeWork.getHistory_item() == homeWork
+								.getQuestion_allNumber()) {
+							new SendWorkOver().start();
+						} else {
+							MyDialog("恭喜完成今天的朗读作业!", "确认", "取消", 2);
+							return;
+						}
 					}
 
-					ListeningQuestionList.Record_Count = ListeningQuestionList.Record_Count + 1;
 					MyDialog("你已经答完本题确认继续下一题吗?", "确认", "取消", 1);
 					return;
 				}
@@ -207,13 +251,6 @@ public class DictationBeginActivity extends Activity implements
 				init();
 			}
 		}
-	}
-
-	// 切换下一题
-	public void nextQuestion() {
-		mPd = new ProgressDialog(DictationBeginActivity.this);
-		mPd.setMessage(HomeWorkParams.PD_FINISH_QUESTION);
-		mPd.show();
 	}
 
 	// 播放音频
@@ -234,21 +271,48 @@ public class DictationBeginActivity extends Activity implements
 
 	// 提交答题记录
 	class MyTrehad extends Thread {
-		
+		private int bIndex, sIndex;
+
+		public void MyThread() {
+		}
+
+		public MyTrehad(int bIndex, int sIndex) {
+			super();
+			this.bIndex = bIndex;
+			this.sIndex = sIndex;
+		}
+
+		@Override
 		public void run() {
 			super.run();
 			Map<String, String> map = new HashMap<String, String>();
-			map.put("student_id", "1");
-			map.put("school_class_id ", "1");
-			map.put("publish_question_package_id", "1");
-			map.put("branch_question_id ", ListeningQuestionList
-					.getListeningPojo(0).getId() + "");
-			map.put("question_id",
-					qpList.get(smallIndex > 0 ? smallIndex - 1 : 0).getId()
-							+ "");
-			map.put("answer", answer.toString());
+			map.put("student_id", student_id + "");
+			map.put("school_class_id", class_id + "");
+			map.put("publish_question_package_id", publish_question_package_id
+					+ "");
+			map.put("branch_question_id", ListeningQuestionList
+					.getListeningPojo(bIndex).getId() + "");
+			map.put("question_id", qpList.get(sIndex - 1).getId() + "");
+			map.put("answer", answer.toString() + "");
 			map.put("question_types", "0");
+
+			log = HomeWorkTool.doPost(RECORD_ANSWER_INFO, map);
+			Log.i("Ax", log);
 			answer.delete(0, answer.length());
+			handler.sendEmptyMessage(1);
+		}
+	}
+
+	class SendWorkOver extends Thread {
+		public void run() {
+			Map<String, String> map = new HashMap<String, String>();
+			map.put("student_id", student_id + "");
+			map.put("school_class_id", class_id + "");
+			map.put("publish_question_package_id", publish_question_package_id
+					+ "");
+			log = HomeWorkTool.doPost(FINISH_QUESTION_PACKGE, map);
+			Log.i("Ax", log);
+			handler.sendEmptyMessage(2);
 		}
 	}
 
@@ -283,8 +347,6 @@ public class DictationBeginActivity extends Activity implements
 					myFinish();
 					break;
 				case 1:
-//					check.setText("检查");
-//					init();
 					Intent intent = new Intent();
 					intent.setClass(DictationBeginActivity.this,
 							DictationPrepareActivity.class);
@@ -317,7 +379,7 @@ public class DictationBeginActivity extends Activity implements
 		dialog.show();
 	}
 
-	
+	@Override
 	public void onClick(View v) {
 		switch (v.getId()) {
 		case R.id.question_dictation_exit:
@@ -332,12 +394,12 @@ public class DictationBeginActivity extends Activity implements
 		}
 	}
 
-	
+	@Override
 	public void onPrepared(MediaPlayer mp) {
 		mp.start();
 	}
 
-	
+	@Override
 	public void onDestroy() {
 		mediaPlayer.release();
 		mediaPlayer = null;
