@@ -24,7 +24,6 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.util.Log;
-import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -42,10 +41,9 @@ public class AboutMeActivity extends Activity
 	List<AboutMePojo> listam ;
 	private String user_id;
 	private String school_class_id;
-	private int count=0;
-	@SuppressWarnings("unused")
-	private int num;
+
 	HomeWork hw=(HomeWork) getApplication();
+	HomeWorkMainActivity hwma=new HomeWorkMainActivity();
 	protected void onCreate(Bundle savedInstanceState) {
 		// TODO Auto-generated method stub
 		super.onCreate(savedInstanceState);
@@ -54,7 +52,10 @@ public class AboutMeActivity extends Activity
 		SharedPreferences sp = getSharedPreferences(Urlinterface.SHARED, 0);
 		user_id = sp.getString("user_id", "null");
 		school_class_id = sp.getString("school_class_id", "null");
-
+		getnews();
+	}
+	public void getnews()
+	{
 		new Thread()
 		{
 			public void run()
@@ -63,7 +64,7 @@ public class AboutMeActivity extends Activity
 				{
 					try {
 						get_News();
-						Thread.sleep(20000);
+						Thread.sleep(60000);
 					} catch (InterruptedException e) {
 						// TODO Auto-generated catch block
 						e.printStackTrace();
@@ -84,6 +85,44 @@ public class AboutMeActivity extends Activity
 			}
 		}
 	};
+	//解析获取到的Json
+	public int getNewsJson(String json)
+	{
+		try {
+			JSONObject jsonobject=new JSONObject(json);
+			String status=(String) jsonobject.get("status");
+			if(status.equals("success"))
+			{
+				JSONArray jsonarray= jsonobject.getJSONArray("messages");
+				for(int i=0;i<jsonarray.length();i++)
+				{
+					JSONObject jsonobject2=jsonarray.getJSONObject(i);
+					List<String> liststr=divisionStr(jsonobject2.getString("content"));
+					String jsonstatus=liststr.get(0);
+					String content=liststr.get(1);
+					String created_at=divisionTime(jsonobject2.getString("created_at"));
+					String id=jsonobject2.getString("id");
+					String micropost_id=jsonobject2.getString("micropost_id");
+					String sender_avatar_url=jsonobject2.getString("sender_avatar_url");
+					String sender_name=jsonobject2.getString("sender_name");
+					String user_id=jsonobject2.getString("user_id");
+					listam.add(new AboutMePojo(id,micropost_id,user_id,sender_avatar_url,sender_name,jsonstatus,content,created_at));
+				}
+				return listam.size();
+			}
+			else
+			{
+				String	notic = (String) jsonobject.get("notic");
+				Toast.makeText(getApplicationContext(), notic, 1).show();
+			} 
+		} catch (JSONException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return 0;
+	}
+
+	//请求获取和我相关的消息
 	public void get_News()
 	{
 		listam=new ArrayList<AboutMePojo>();
@@ -92,50 +131,31 @@ public class AboutMeActivity extends Activity
 		{
 			public void run()
 			{
-				try {
-					HashMap<String,String> mp=new HashMap<String,String>();
-					mp.put("user_id",user_id);
-					mp.put("school_class_id", school_class_id);
-					String json = HomeWorkTool.sendGETRequest(Urlinterface.get_News, mp);
-					JSONObject jsonobject=new JSONObject(json);
-					String status=(String) jsonobject.get("status");
-					if(status.equals("success"))
-					{
-						JSONArray jsonarray= jsonobject.getJSONArray("messages");
-						for(int i=0;i<jsonarray.length();i++)
-						{
-							JSONObject jsonobject2=jsonarray.getJSONObject(i);
-							List<String> liststr=divisionStr(jsonobject2.getString("content"));
-							String jsonstatus=liststr.get(0);
-							String content=liststr.get(1);
-							String created_at=divisionTime(jsonobject2.getString("created_at"));
-							String id=jsonobject2.getString("id");
-							String micropost_id=jsonobject2.getString("micropost_id");
-							String sender_avatar_url=jsonobject2.getString("sender_avatar_url");
-							String sender_name=jsonobject2.getString("sender_name");
-							String user_id=jsonobject2.getString("user_id");
-							listam.add(new AboutMePojo(id,micropost_id,user_id,sender_avatar_url,sender_name,jsonstatus,content,created_at));
-						}
-						if(count<=listam.size())
-						{
-							num=listam.size()-count;
-							count=listam.size();
-						}
-						handler1.sendEmptyMessage(0);
-					}
-					else
-					{
-						String notic=(String) jsonobject.get("notic");
-						Toast.makeText(getApplicationContext(), notic, 1).show();
-					} 
-				} catch (Exception e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
+				
+				if(!httpGetNews(user_id,school_class_id).equals(null))
+				{
+					getNewsJson(httpGetNews(user_id,school_class_id));
 				}
+				handler1.sendEmptyMessage(0);
 			}
 
 		};	
 		thread.start();
+	}
+	//HTTP请求
+	public String httpGetNews(String user_id,String school_class_id)
+	{
+		try {
+			HashMap<String,String> mp=new HashMap<String,String>();
+			mp.put("user_id",user_id);
+			mp.put("school_class_id", school_class_id);
+			String json = HomeWorkTool.sendGETRequest(Urlinterface.get_News, mp);
+			return json;
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return null;
 	}
 	//分割content
 	public List<String> divisionStr(String str)
@@ -154,12 +174,13 @@ public class AboutMeActivity extends Activity
 		int temp2=timeStr.lastIndexOf("+");
 		return timeStr.substring(0, temp1)+" "+timeStr.substring(temp1+1, temp2);
 	}
+
+	//适配器
 	public class AboutMeAdapter extends BaseAdapter
 	{
 		private List<AboutMePojo> Amlist;
 		private Context context;
 		private ListView listview;
-		private int class_id;
 		AsyncImageLoader asyncImageLoader=new AsyncImageLoader();
 		HomeWork hw=(HomeWork) getApplication();
 		public AboutMeAdapter()
@@ -187,7 +208,7 @@ public class AboutMeActivity extends Activity
 			if(convertView==null)
 			{
 				convertView = inflater.inflate(R.layout.aboutme_one,null);
-				convertView.setPadding(0, 10, 0,10);
+				convertView.setPadding(0, 15, 0,15);
 				TextView tv1= (TextView) convertView.findViewById(R.id.aboutme_oneTv);
 				TextView tv2= (TextView) convertView.findViewById(R.id.aboutme_oneTv2);
 				TextView tv3= (TextView) convertView.findViewById(R.id.aboutme_oneTv3);
@@ -210,8 +231,11 @@ public class AboutMeActivity extends Activity
 									HashMap<String, String> mp=new HashMap();
 									mp.put("user_id", Amlist.get(position).getUser_id());
 									mp.put("school_class_id",String.valueOf(school_class_id));
-									mp.put("message_id", Amlist.get(position).getMicropost_id());
+									mp.put("message_id", Amlist.get(position).getId());
+									hw.setNewsFlag(true);
+									hw.setLastcount(hw.getLastcount()-1);
 									String json=HomeWorkTool.doPost(Urlinterface.read_message, mp);
+									Log.i("bbb", "message_id:"+Amlist.get(position).getId()+"json:"+json);
 									JSONObject jsonobject=new JSONObject(json);
 									String status=jsonobject.getString("status");
 									Message msg=new Message();
@@ -223,11 +247,8 @@ public class AboutMeActivity extends Activity
 									}
 									else if(status.equals("success"))
 									{
-										Log.i("aa",Amlist.get(position).getMicropost_id()+"");
-										hw.setMessage_id(Integer.valueOf(Amlist.get(position).getMicropost_id()));
-										Log.i("aa", hw.getMessage_id()+"消息ID");
-										Log.i("aa", "json:"+json);
 										hw.setNoselect_message(json);
+										Amlist.remove(position);
 										msg.what=2;
 										handler.sendMessage(msg);
 									}
@@ -262,7 +283,6 @@ public class AboutMeActivity extends Activity
 									msg.obj=notice;
 									if(status.equals("success"))
 									{
-										Log.i("aa",position+"aa");
 										msg.what=0;
 										Amlist.remove(position);
 										handler.sendMessage(msg);
@@ -295,6 +315,8 @@ public class AboutMeActivity extends Activity
 			return convertView;
 
 		}
+
+		//hadnler操作
 		Handler handler=new Handler()
 		{
 			public void dispatchMessage(Message msg) {
@@ -308,10 +330,12 @@ public class AboutMeActivity extends Activity
 					Toast.makeText(context, msg.obj.toString(), 0).show();
 					break;
 				case 2:
+					listview.setAdapter(new AboutMeAdapter(listam,getApplicationContext(),listview));
 					HomeWork hw=(HomeWork) getApplication();
 					hw.setMainItem(0);
 					Intent intent = new Intent(AboutMeActivity.this,HomeWorkMainActivity.class);
-					AboutMeActivity.this.finish();
+					intent.putExtra("type", 1);
+					HomeWorkMainActivity.instance.finish();
 					startActivity(intent);
 					break;
 				case 3:
@@ -322,6 +346,7 @@ public class AboutMeActivity extends Activity
 				}
 			}
 		};
+		//显示头像所用的回调
 		LoadFinishCallBack callback = new LoadFinishCallBack() {  
 			public void loadFinish(String strUrl, int i, Bitmap bitmap) {  
 				if (bitmap != null) {  
