@@ -108,7 +108,7 @@ public class SpeakBeginActivity extends Activity implements Urlinterface {
 				startActivity(intent);
 				break;
 			case 5:
-				// MyDialog("恭喜完成今天的朗读作业!", "确认", "取消", 2);
+				//MyDialog("恭喜完成今天的朗读作业!", "确认", "取消", 2);
 				prodialog.dismiss();
 				builder.setMessage("提交作业失败");
 				builder.setPositiveButton("确定", null);
@@ -196,7 +196,7 @@ public class SpeakBeginActivity extends Activity implements Urlinterface {
 					over_static = 1;
 				}
 				Thread thread = new Thread(new Record_answer_info());// 记录小题
-				thread.start();
+				thread.start(); 
 			} else {
 				prodialog = new ProgressDialog(SpeakBeginActivity.this);
 				prodialog.setMessage(HomeWorkParams.PD_FINISH_QUESTION);
