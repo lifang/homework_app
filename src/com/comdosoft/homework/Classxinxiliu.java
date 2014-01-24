@@ -59,6 +59,7 @@ public class Classxinxiliu extends Activity implements IXListViewListener,
 		HomeWorkParams, Urlinterface {
 	private XListView listView_mes; // 主 listview
 	private MicropostAdapter micropostAdapter; // 主消息 适配器
+
 	private List<Micropost> list = new ArrayList<Micropost>();
 	private List<Child_Micropost> child_list = new ArrayList<Child_Micropost>();
 
@@ -103,7 +104,8 @@ public class Classxinxiliu extends Activity implements IXListViewListener,
 	private List<ClassStuPojo> stuList = new ArrayList<ClassStuPojo>();
 	private String lookStr_micropost_id = "";
 	private ProgressDialog prodialog;
-
+	private Adapter ad; // 子消息 适配器
+	private Button huifu;  //  主消息 回复按钮
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		requestWindowFeature(Window.FEATURE_NO_TITLE);
@@ -254,15 +256,6 @@ public class Classxinxiliu extends Activity implements IXListViewListener,
 					Button b2 = (Button) findViewById(R.id.class_button_myself);
 					b2.setBackgroundDrawable(getResources().getDrawable(
 							R.drawable.an));
-					//
-					// {"status":"success","notice":"\u5df2\u9605\u8bfb\uff01",
-					// "micropost":[{"avatar_url":"/homework_system/avatars/students/2014-01/student_66.jpg"
-					// ,"content":"ted85233","created_at":"2014-01-23T15:18:35+08:00"
-					// ,"micropost_id":109,"name":"xhxksn "
-					// ,"reply_microposts_count":1,
-					// "school_class_id":1,
-					// "user_id":66,"user_types":1}]}
-
 					JSONObject js;
 					try {
 						js = new JSONObject(lookStr);
@@ -275,24 +268,18 @@ public class Classxinxiliu extends Activity implements IXListViewListener,
 								lookStr_micropost_id = o
 										.getString("micropost_id");
 								String user_id = o.getString("user_id");
-								// String user_types = "1";
-
 								String user_types = o.getString("user_types");
 								String name = o.getString("name");
 								String content = o.getString("content");
 								String avatar_url = o.getString("avatar_url");
 								String created_at = o.getString("created_at");
-
 								String reply_microposts_count = o
 										.getString("reply_microposts_count");
-
 								lookStr_micropost = new Micropost(
 										lookStr_micropost_id, user_id,
 										user_types, name, content, avatar_url,
 										created_at, reply_microposts_count);
-
 							}
-
 						} catch (JSONException e) {
 							e.printStackTrace();
 						}
@@ -308,7 +295,6 @@ public class Classxinxiliu extends Activity implements IXListViewListener,
 								final String json7 = (String) msg.obj;
 								child_list = new ArrayList<Child_Micropost>();
 								parseJson_childMicropost(json7);
-
 								break;
 							default:
 								break;
@@ -349,7 +335,6 @@ public class Classxinxiliu extends Activity implements IXListViewListener,
 						list = new ArrayList<Micropost>();
 						focus = 0; // 要展开的 主消息 的 位置
 						list.add(lookStr_micropost);
-
 					}
 				}
 
@@ -358,11 +343,8 @@ public class Classxinxiliu extends Activity implements IXListViewListener,
 						micropostAdapter = new MicropostAdapter();
 						listView_mes.setAdapter(micropostAdapter);
 						listView_mes.setXListViewListener(Classxinxiliu.this);
-
 					}
 				}, 500);
-
-				// handler = new Handler();
 				break;
 			case 1:
 				main_class_oneIV.setImageBitmap(bitamp);
@@ -370,7 +352,6 @@ public class Classxinxiliu extends Activity implements IXListViewListener,
 			default:
 				break;
 			}
-			// removeMessages(msg.what);
 		}
 	};
 
@@ -408,11 +389,6 @@ public class Classxinxiliu extends Activity implements IXListViewListener,
 							e.printStackTrace();
 						}
 
-					} else {
-						// Toast.makeText(getApplicationContext(),
-						// R.string.senderError,
-						// 1)
-						// .show();
 					}
 					break;
 				default:
@@ -425,7 +401,6 @@ public class Classxinxiliu extends Activity implements IXListViewListener,
 		if (fabiaoContents.length() == 0) {
 			Toast.makeText(getApplicationContext(), "内容不能为空", 0).show();
 		} else {
-
 			Thread thread = new Thread() {
 				public void run() {
 					try {
@@ -440,117 +415,6 @@ public class Classxinxiliu extends Activity implements IXListViewListener,
 						msg.what = 0;
 						msg.obj = senderjson;
 						class_fabiaoHandler.sendMessage(msg);
-					} catch (Exception e) {
-						e.printStackTrace();
-					}
-				}
-			};
-			thread.start();
-		}
-	}
-
-	/*
-	 * 
-	 * 回复信息
-	 */
-	public void reply_message(View v) {
-
-		final Handler mHandler = new Handler() {
-			public void handleMessage(android.os.Message msg) {
-				switch (msg.what) {
-				case 0:
-					final String json2 = (String) msg.obj;
-					if (json2.length() == 0) {
-
-					} else {
-						JSONObject array2;
-						try {
-							array2 = new JSONObject(json2);//
-							String status = array2.getString("status");
-							String notice = array2.getString("notice");
-
-							if ("success".equals(status)) {
-								Toast.makeText(getApplicationContext(), notice,
-										0).show();
-
-								final Handler mHandler = new Handler() {
-									public void handleMessage(
-											android.os.Message msg) {
-										switch (msg.what) {
-										case 0:
-											final String json7 = (String) msg.obj;
-											child_list = new ArrayList<Child_Micropost>();
-											parseJson_childMicropost(json7);
-											micropostAdapter = new MicropostAdapter();
-											listView_mes
-													.setAdapter(micropostAdapter);
-
-											listView_mes.setSelection(focus);
-											break;
-										default:
-											break;
-										}
-									}
-								};
-								Thread thread = new Thread() {
-									public void run() {
-										try {
-											Map<String, String> map = new HashMap<String, String>();
-											map.put("micropost_id",
-													micropost_id);
-											String js2 = HomeWorkTool
-													.sendGETRequest(
-															Urlinterface.get_reply_microposts,
-															map);
-											Message msg = new Message();// 创建Message
-																		// 对象
-											msg.what = 0;
-											msg.obj = js2;
-											mHandler.sendMessage(msg);
-										} catch (Exception e) {
-											e.printStackTrace();
-										}
-									}
-								};
-								thread.start();
-
-							} else {
-								Toast.makeText(getApplicationContext(), notice,
-										0).show();
-							}
-						} catch (JSONException e) {
-							e.printStackTrace();
-						}
-					}
-					break;
-				default:
-					break;
-				}
-			}
-		};
-
-		String reply_edit = Reply_edit.getText().toString();
-		if (reply_edit.length() == 0) {
-			Toast.makeText(getApplicationContext(), "内容不能为空", 0).show();
-		} else {
-			Thread thread = new Thread() {
-				public void run() {
-					try {
-						String reply_edit = Reply_edit.getText().toString();
-						Map<String, String> map = new HashMap<String, String>();
-						map.put("content", reply_edit);
-						map.put("sender_id", user_id);
-						map.put("sender_types", user_types);
-						map.put("micropost_id", micropost_id);
-						map.put("reciver_id", reciver_id);
-						map.put("reciver_types", reciver_types);
-						map.put("school_class_id", school_class_id);
-						String js1 = HomeWorkTool.doPost(
-								Urlinterface.reply_message, map);
-						Message msg = new Message();// 创建Message 对象
-						msg.what = 0;
-						msg.obj = js1;
-						mHandler.sendMessage(msg);
 					} catch (Exception e) {
 						e.printStackTrace();
 					}
@@ -578,16 +442,13 @@ public class Classxinxiliu extends Activity implements IXListViewListener,
 				String content = o.getString("content");
 				String avatar_url = o.getString("avatar_url");
 				String created_at = o.getString("created_at");
-
 				String reply_microposts_count = o
 						.getString("reply_microposts_count");
-
 				Micropost micropost = new Micropost(micropost_id, user_id,
 						user_types, name, content, avatar_url, created_at,
 						reply_microposts_count);
 				list.add(micropost);
 			}
-
 		} catch (JSONException e) {
 			e.printStackTrace();
 		}
@@ -605,7 +466,6 @@ public class Classxinxiliu extends Activity implements IXListViewListener,
 				array3 = new JSONObject(json3);
 				String status = array3.getString("status");
 				String notice = array3.getString("notice");
-
 				if ("success".equals(status)) {
 					String micropostsListJson = array3.getString("microposts");
 					JSONObject microposts = new JSONObject(micropostsListJson);
@@ -614,15 +474,12 @@ public class Classxinxiliu extends Activity implements IXListViewListener,
 							.getString("pages_count"));
 					String details_microposts = microposts
 							.getString("details_microposts");
-					// page":1,"pages_count":2,"details_microposts":
-
 					JSONArray follow_microposts_id = array3
 							.getJSONArray("follow_microposts_id");
 					for (int i = 0; i < follow_microposts_id.length(); ++i) {
 						String fmi = follow_microposts_id.getInt(i) + "";
 						care.add(fmi);
 					}
-
 					parseJson_details_microposts(details_microposts);
 				} else {
 					Toast.makeText(getApplicationContext(), notice, 1).show();
@@ -631,7 +488,6 @@ public class Classxinxiliu extends Activity implements IXListViewListener,
 				e.printStackTrace();
 			}
 		}
-
 	}
 
 	/*
@@ -820,7 +676,7 @@ public class Classxinxiliu extends Activity implements IXListViewListener,
 
 	@Override
 	public void onRefresh() {
-
+		list.clear();
 		focus = -1;
 		page = 1;
 		final Handler mHandleronRefresh = new Handler() {
@@ -845,7 +701,6 @@ public class Classxinxiliu extends Activity implements IXListViewListener,
 			}
 		};
 
-		list.clear();
 		Thread thread = new Thread() {
 			public void run() {// 获得第一页信息
 
@@ -870,7 +725,7 @@ public class Classxinxiliu extends Activity implements IXListViewListener,
 					Map<String, String> map = new HashMap<String, String>();
 					map.put("user_id", user_id);
 					map.put("school_class_id", school_class_id);
-					map.put("page", page + "");
+					map.put("page", "1");
 					String result = "";
 					try {
 						result = HomeWorkTool.sendGETRequest(
@@ -907,6 +762,11 @@ public class Classxinxiliu extends Activity implements IXListViewListener,
 					micropostAdapter.notifyDataSetChanged();
 					onLoad();
 					break;
+				case 2:
+					
+					micropostAdapter.notifyDataSetChanged();
+					onLoad();
+					break;
 				}
 			}
 		};
@@ -916,7 +776,8 @@ public class Classxinxiliu extends Activity implements IXListViewListener,
 		if (page_own == 1) {
 			Thread thread = new Thread() {
 				public void run() {// 全部 页面加载 更多
-					if (page <= pages_count && micropost_type == 0) {
+					if (page <= pages_count) {
+					if (micropost_type == 0) {
 						Map<String, String> map = new HashMap<String, String>();
 						map.put("student_id", id);
 						map.put("school_class_id", school_class_id);
@@ -934,7 +795,7 @@ public class Classxinxiliu extends Activity implements IXListViewListener,
 						mHandleronLoadMore.sendMessage(msg);
 					}
 					// 我的 页面加载 更多
-					if (page <= pages_count && micropost_type == 1) {
+					if (micropost_type == 1) {
 						Map<String, String> map = new HashMap<String, String>();
 						map.put("user_id", user_id);
 						map.put("school_class_id", school_class_id);
@@ -950,26 +811,28 @@ public class Classxinxiliu extends Activity implements IXListViewListener,
 						msg.what = 1;
 						msg.obj = result;
 						mHandleronLoadMore.sendMessage(msg);
+					}					
+					}else{
+						Message msg = new Message();// 创建Message 对象
+						msg.what = 2;
+						msg.obj = "";
+						mHandleronLoadMore.sendMessage(msg);	
 					}
 				}
 			};
 			thread.start();
 		}
-
 		if (page_own == 0) {
 			focus = -1;
 			micropostAdapter.notifyDataSetChanged();
 			onLoad();
-
 		}
-
-		// micropostAdapter.notifyDataSetChanged();
-		// onLoad();
 	}
 
 	public class MicropostAdapter extends BaseAdapter {
 
 		int huifu_num = 0;
+		
 
 		@Override
 		public int getCount() {
@@ -1004,7 +867,10 @@ public class Classxinxiliu extends Activity implements IXListViewListener,
 			final Button guanzhu = (Button) view
 					.findViewById(R.id.micropost_guanzhu); // 关注
 			Button lookMore = (Button) view.findViewById(R.id.lookMore); // 关注
-			Button huifu = (Button) view.findViewById(R.id.micropost_huifu); // 回复
+			huifu = (Button) view.findViewById(R.id.micropost_huifu); // 回复,用于显示隐藏的内容
+
+			Button Button_huifu = (Button) view.findViewById(R.id.Button_huifu); // 隐藏内容中的回复按钮
+
 			layout = view.findViewById(R.id.child_micropost); // 回复 隐藏的 内容
 			final Micropost mess = list.get(position);
 			if (HomeWorkTool.isConnect(getApplicationContext())) {
@@ -1171,11 +1037,10 @@ public class Classxinxiliu extends Activity implements IXListViewListener,
 										if ("success".equals(status)) {
 											// 删除成功的话,刷新界面
 											list.remove(DelNum);
+											focus = -1;
 											child_list.clear();
-											micropostAdapter = new MicropostAdapter();
-											listView_mes
-													.setAdapter(micropostAdapter);
-
+											micropostAdapter
+													.notifyDataSetChanged();
 										}
 										Toast.makeText(getApplicationContext(),
 												notice, 1).show();
@@ -1210,8 +1075,8 @@ public class Classxinxiliu extends Activity implements IXListViewListener,
 					thread.start();
 				}
 			});
-			View layout1 = view.findViewById(R.id.child_micropost); // 回复按钮下：
-																	// 隐藏部分的内容
+			final View layout1 = view.findViewById(R.id.child_micropost); // 回复按钮下：
+			// 隐藏部分的内容
 			if (focus == position && number == 1) {
 				layout1.setVisibility(View.VISIBLE);
 				Reply_edit = (EditText) layout1.findViewById(R.id.reply_edit);
@@ -1223,17 +1088,16 @@ public class Classxinxiliu extends Activity implements IXListViewListener,
 					public void run() {
 						Reply_edit.performClick();
 						if (child_list.size() != 0) {
-
-							listView2.setVisibility(View.VISIBLE);
 							Button lookMore = (Button) view
-									.findViewById(R.id.lookMore); // 关注
+									.findViewById(R.id.lookMore);
 							lookMore.setVisibility(View.VISIBLE);
-							listView2.setDivider(null);
-							Adapter ad = new Adapter();
-							listView2.setAdapter(ad);
-							HomeWorkTool
-									.setListViewHeightBasedOnChildren(listView2);
 						}
+						listView2.setVisibility(View.VISIBLE);
+						listView2.setDivider(null);
+						ad = new Adapter();
+						listView2.setAdapter(ad);
+						HomeWorkTool
+								.setListViewHeightBasedOnChildren(listView2);
 					}
 				}, 200);
 
@@ -1253,9 +1117,7 @@ public class Classxinxiliu extends Activity implements IXListViewListener,
 							case 0:
 								final String json6 = (String) msg.obj;
 								parseJson_childMicropost(json6);
-								micropostAdapter = new MicropostAdapter();
-								listView_mes.setAdapter(micropostAdapter);
-								listView_mes.setSelection(focus);
+								ad.notifyDataSetChanged();
 								break;
 							default:
 								break;
@@ -1348,17 +1210,145 @@ public class Classxinxiliu extends Activity implements IXListViewListener,
 					position_huifu_num = position;
 				}
 			});
+
+			// 点击 回复 默认 给主消息回复
+			Button_huifu.setOnClickListener(new OnClickListener() {
+
+				@Override
+				public void onClick(View v) {
+					final Handler mHandler = new Handler() {
+						public void handleMessage(android.os.Message msg) {
+							switch (msg.what) {
+							case 0:
+								final String json2 = (String) msg.obj;
+								if (json2.length() == 0) {
+
+								} else {
+									JSONObject array2;
+									try {
+										array2 = new JSONObject(json2);//
+										String status = array2
+												.getString("status");
+										String notice = array2
+												.getString("notice");
+
+										if ("success".equals(status)) {
+											Toast.makeText(
+													getApplicationContext(),
+													notice, 0).show();
+
+											final Handler mHandler = new Handler() {
+												public void handleMessage(
+														android.os.Message msg) {
+													switch (msg.what) {
+													case 0:
+														final String json7 = (String) msg.obj;
+														child_list = new ArrayList<Child_Micropost>();
+														parseJson_childMicropost(json7);
+														huifu = (Button) view
+																.findViewById(R.id.micropost_huifu); // 回复,用于显示隐藏的内容
+
+														huifu.setText(HomeWorkParams.REPLY
+																+ "("
+																+ child_list
+																		.size()
+																+ ")");
+														mess.setReply_microposts_count(child_list
+																.size() + "");
+														list.add(position, mess);
+												
+														 Button lookMore =
+														 (Button) view
+														 .findViewById(R.id.lookMore);
+														 lookMore.setVisibility(View.VISIBLE);
+														 ad = new Adapter();
+														  listView2
+														 .setAdapter(ad);
+														 HomeWorkTool
+														 .setListViewHeightBasedOnChildren(listView2);
+//														ad.notifyDataSetChanged();
+														break;
+													default:
+														break;
+													}
+												}
+											};
+											Thread thread = new Thread() {
+												public void run() {
+													try {
+														Map<String, String> map = new HashMap<String, String>();
+														map.put("micropost_id",
+																micropost_id);
+														String js2 = HomeWorkTool
+																.sendGETRequest(
+																		Urlinterface.get_reply_microposts,
+																		map);
+														Message msg = new Message();// 创建Message
+																					// 对象
+														msg.what = 0;
+														msg.obj = js2;
+														mHandler.sendMessage(msg);
+													} catch (Exception e) {
+														e.printStackTrace();
+													}
+												}
+											};
+											thread.start();
+
+										} else {
+											Toast.makeText(
+													getApplicationContext(),
+													notice, 0).show();
+										}
+									} catch (JSONException e) {
+										e.printStackTrace();
+									}
+								}
+								break;
+							default:
+								break;
+							}
+						}
+					};
+
+					String reply_edit = Reply_edit.getText().toString();
+					if (reply_edit.length() == 0) {
+						Toast.makeText(getApplicationContext(), "内容不能为空", 0)
+								.show();
+					} else {
+						Thread thread = new Thread() {
+							public void run() {
+								try {
+									String reply_edit = Reply_edit.getText()
+											.toString();
+									Map<String, String> map = new HashMap<String, String>();
+									map.put("content", reply_edit);
+									map.put("sender_id", user_id);
+									map.put("sender_types", user_types);
+									map.put("micropost_id", micropost_id);
+									map.put("reciver_id", reciver_id);
+									map.put("reciver_types", reciver_types);
+									map.put("school_class_id", school_class_id);
+									String js1 = HomeWorkTool.doPost(
+											Urlinterface.reply_message, map);
+									Message msg = new Message();// 创建Message 对象
+									msg.what = 0;
+									msg.obj = js1;
+									mHandler.sendMessage(msg);
+								} catch (Exception e) {
+									e.printStackTrace();
+								}
+							}
+						};
+						thread.start();
+					}
+				}
+			});
 			return view;
 		}
+
 	}
 
-	// 分割时间
-	public String divisionTime(String timeStr) {
-		int temp1 = timeStr.indexOf("T");
-		int temp2 = timeStr.lastIndexOf("+");
-		return timeStr.substring(0, temp1) + " "
-				+ timeStr.substring(temp1 + 1, temp2);
-	}
 
 	/*
 	 * 子消息 适配器
@@ -1384,28 +1374,25 @@ public class Classxinxiliu extends Activity implements IXListViewListener,
 		public View getView(final int position, View convertView,
 				ViewGroup parent) {
 			Log.i("111111111", child_list.size() + "--");
-			LayoutInflater inflater = Classxinxiliu.this.getLayoutInflater();
-			View child_view = inflater.inflate(R.layout.child_micropost_item,
-					null);
+			LayoutInflater inflater = Classxinxiliu.this
+					.getLayoutInflater();
+			View child_view = inflater.inflate(
+					R.layout.child_micropost_item, null);
 
 			final ImageView face = (ImageView) child_view
 					.findViewById(R.id.child_user_face); // 头像
 			TextView Micropost_whoToWho = (TextView) child_view
-					.findViewById(R.id.child_message_senderName); // 张三 回复 李四
-
+					.findViewById(R.id.child_message_senderName); // 张三 回复李四
 			TextView Micropost_content = (TextView) child_view
 					.findViewById(R.id.child_micropost_content); // 内容
-
 			Button delete = (Button) child_view
 					.findViewById(R.id.child_micropost_delete); // 删除
 			Button reply = (Button) child_view
 					.findViewById(R.id.child_micropost_huifu); // 回复
-
-			final Child_Micropost child_Micropost = child_list.get(position);
+			final Child_Micropost child_Micropost = child_list
+					.get(position);
 			if (HomeWorkTool.isConnect(getApplicationContext())) {
-
 				if (child_Micropost.getSender_avatar_url() != null) { // 设置头像
-
 					final Handler childHandler = new Handler() {
 						public void handleMessage(android.os.Message msg) {
 							switch (msg.what) {
@@ -1415,16 +1402,13 @@ public class Classxinxiliu extends Activity implements IXListViewListener,
 								break;
 							default:
 								break;
-
 							}
 						}
 					};
 					Thread thread = new Thread() {
 						public void run() {
 							try {
-
 								HttpClient hc = new DefaultHttpClient();
-
 								HttpGet hg = new HttpGet(
 										Urlinterface.IP
 												+ child_Micropost
@@ -1436,11 +1420,9 @@ public class Classxinxiliu extends Activity implements IXListViewListener,
 											.getEntity().getContent());
 									Drawable face_drawable = new BitmapDrawable(
 											bm);
-
-									Message msg = new Message();// 创建Message 对象
+									Message msg = new Message();// 创建Message对象
 									msg.what = 0;
 									msg.obj = face_drawable;
-
 									childHandler.sendMessage(msg);
 								} catch (Exception e) {
 
@@ -1457,13 +1439,8 @@ public class Classxinxiliu extends Activity implements IXListViewListener,
 			}
 			Micropost_whoToWho.setText(child_Micropost.getSender_name()
 					+ "  回复   " + child_Micropost.getReciver_name()); //
-			// SimpleDateFormat dateformat1=new
-			// SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-			// String a1=dateformat1.format(new
-			// Date(child_Micropost.getCreated_at()));
 			Micropost_content.setText(child_Micropost.getContent() + " ("
 					+ divisionTime(child_Micropost.getCreated_at()) + ")"); // 消息内容
-
 			if (user_id.equals(child_Micropost.getSender_id())
 					|| user_id.equals(list.get(focus).getUser_id())) {
 				delete.setVisibility(View.VISIBLE);
@@ -1488,18 +1465,21 @@ public class Classxinxiliu extends Activity implements IXListViewListener,
 												.getString("status");
 										String notice = array
 												.getString("notice");
-
 										if ("success".equals(status)) {
-											// 删除成功的话,刷新界面
-											// 删除成功的话,刷新界面
 											child_list.remove(DelNum);
-											micropostAdapter = new MicropostAdapter();
-											listView_mes
-													.setAdapter(micropostAdapter);
-											listView_mes.setSelection(focus);
-
+											huifu.setText(HomeWorkParams.REPLY
+													+ "("
+													+ child_list.size()
+													+ "111)"); // 该句代码没有效果
+											list.get(focus)
+													.setReply_microposts_count(
+															child_list
+																	.size()
+																	+ "");
+											ad.notifyDataSetChanged();
 										}
-										Toast.makeText(getApplicationContext(),
+										Toast.makeText(
+												getApplicationContext(),
 												notice, 1).show();
 									} catch (JSONException e) {
 										e.printStackTrace();
@@ -1508,7 +1488,6 @@ public class Classxinxiliu extends Activity implements IXListViewListener,
 								break;
 							default:
 								break;
-
 							}
 						}
 					};
@@ -1521,7 +1500,8 @@ public class Classxinxiliu extends Activity implements IXListViewListener,
 										child_Micropost.getId());
 
 								json = HomeWorkTool.doPost(
-										Urlinterface.DELETE_REPLY_POSTS, map);
+										Urlinterface.DELETE_REPLY_POSTS,
+										map);
 								Message msg = new Message();// 创建Message 对象
 								msg.what = 0;
 								msg.obj = json;
@@ -1546,4 +1526,13 @@ public class Classxinxiliu extends Activity implements IXListViewListener,
 			return child_view;
 		}
 	}
+	
+	// 分割时间
+	public String divisionTime(String timeStr) {
+		int temp1 = timeStr.indexOf("T");
+		int temp2 = timeStr.lastIndexOf("+");
+		return timeStr.substring(0, temp1) + " "
+				+ timeStr.substring(temp1 + 1, temp2);
+	}
+
 }
