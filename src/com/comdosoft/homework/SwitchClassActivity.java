@@ -219,6 +219,5 @@ public class SwitchClassActivity extends Activity {
 			}
 			return convertView;
 		}
-
 	}
 }

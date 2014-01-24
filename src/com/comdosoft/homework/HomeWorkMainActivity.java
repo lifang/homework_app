@@ -115,12 +115,16 @@ public class HomeWorkMainActivity extends TabActivity implements Urlinterface {
 				{
 					if(msg.obj.toString().equals("0"))
 					{
+						textview.setText("");
 					}
 					else
 					{
+<<<<<<< HEAD
 						Log.i("linshi", msg.obj.toString()+"");
+=======
+						textview.setText("");
+>>>>>>> 9bd8dee82bccbaaac328f1d8701ce9e92f4edbf3
 					}
-					
 				}
 				break;
 			}
@@ -321,16 +325,17 @@ public class HomeWorkMainActivity extends TabActivity implements Urlinterface {
 							case 0:
 								homework.setNewsFlag(true);
 								img.setImageResource(R.drawable.th1);
-								Log.i("bbb",homework.isNewsFlag()+"");
 								break;
 							case 1:
 								homework.setNewsFlag(true);
-								Log.i("bbb",homework.isNewsFlag()+"");
 								img.setImageResource(R.drawable.th2);
 								break;
 							case 2:
 								homework.setNewsFlag(false);
 								homework.setLastcount(Size);
+								TextView textview = (TextView)tabhost.getTabWidget().getChildAt(2).findViewById(android.R.id.title);
+								textview.setPadding(27, 5, 5,53);
+								textview.setText("");
 								img.setImageResource(R.drawable.th3);
 								break;
 							case 3:
