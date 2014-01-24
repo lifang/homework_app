@@ -108,7 +108,7 @@ public class SpeakBeginActivity extends Activity implements Urlinterface {
 				startActivity(intent);
 				break;
 			case 5:
-				//MyDialog("恭喜完成今天的朗读作业!", "确认", "取消", 2);
+				// MyDialog("恭喜完成今天的朗读作业!", "确认", "取消", 2);
 				prodialog.dismiss();
 				builder.setMessage("提交作业失败");
 				builder.setPositiveButton("确定", null);
@@ -176,40 +176,45 @@ public class SpeakBeginActivity extends Activity implements Urlinterface {
 			MyDialog("你还没有做完题,确认要退出吗?", "确认", "取消", 0);
 			break;
 		case R.id.question_speak_next:
-			speak_number = 0;
-			stop();
-			int ye = 0;
-			if (homework.getHistory_item() >= homework.getQuestion_list()
-					.size()) {
-				ye = homework.getQuestion_index();
-			} else {
-				ye = homework.getHistory_item();
-			}
-			if ((ye + 1) < homework.getQuestion_allNumber()) {
-				prodialog = new ProgressDialog(SpeakBeginActivity.this);
-				prodialog.setMessage(HomeWorkParams.PD_FINISH_QUESTION);
-				prodialog.show();
-				branch_question_id = branch_questions.get(index).getId();
-				if ((index + 1) < branch_questions.size()) {
-					over_static = 0;
+			if (speak_number > 0) {
+				speak_number = 0;
+				stop();
+				int ye = 0;
+				if (homework.getHistory_item() >= homework.getQuestion_list()
+						.size()) {
+					ye = homework.getQuestion_index();
 				} else {
-					over_static = 1;
+					ye = homework.getHistory_item();
 				}
-				Thread thread = new Thread(new Record_answer_info());// 记录小题
-				thread.start(); 
-			} else {
-				prodialog = new ProgressDialog(SpeakBeginActivity.this);
-				prodialog.setMessage(HomeWorkParams.PD_FINISH_QUESTION);
-				prodialog.show();
-				branch_question_id = branch_questions.get(index).getId();
-				if ((index + 1) < branch_questions.size()) {
-					over_static = 0;
+				if ((ye + 1) < homework.getQuestion_allNumber()) {
+					prodialog = new ProgressDialog(SpeakBeginActivity.this);
+					prodialog.setMessage(HomeWorkParams.PD_FINISH_QUESTION);
+					prodialog.show();
+					branch_question_id = branch_questions.get(index).getId();
+					if ((index + 1) < branch_questions.size()) {
+						over_static = 0;
+					} else {
+						over_static = 1;
+					}
+					Thread thread = new Thread(new Record_answer_info());// 记录小题
+					thread.start();
 				} else {
-					over_static = 2;
-					// new Thread(new SendWorkOver()).start();// 记录大題
+					prodialog = new ProgressDialog(SpeakBeginActivity.this);
+					prodialog.setMessage(HomeWorkParams.PD_FINISH_QUESTION);
+					prodialog.show();
+					branch_question_id = branch_questions.get(index).getId();
+					if ((index + 1) < branch_questions.size()) {
+						over_static = 0;
+					} else {
+						over_static = 2;
+						// new Thread(new SendWorkOver()).start();// 记录大題
+					}
+					Thread thread = new Thread(new Record_answer_info());// 记录小题
+					thread.start();
 				}
-				Thread thread = new Thread(new Record_answer_info());// 记录小题
-				thread.start();
+			} else {
+				Toast.makeText(SpeakBeginActivity.this, "请先完成本题作业!",
+						Toast.LENGTH_SHORT).show();
 			}
 			break;
 		case R.id.question_speak_img:// 播放音频

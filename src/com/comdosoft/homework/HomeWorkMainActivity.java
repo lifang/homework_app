@@ -118,10 +118,7 @@ public class HomeWorkMainActivity extends TabActivity implements Urlinterface {
 					}
 					else
 					{
-						View mView = tabhost.getTabWidget().getChildAt(2);//0是代表第一个Tab
-						ImageView imageView = (ImageView)mView.findViewById(android.R.id.icon);//获取控件imageView
-						imageView .setImageDrawable(getResources().getDrawable(R.drawable.news)); //改变我们需要的图标
-						textview.setText(msg.obj+"");
+						Log.i("linshi", msg.obj.toString()+"");
 					}
 					
 				}
@@ -175,10 +172,8 @@ public class HomeWorkMainActivity extends TabActivity implements Urlinterface {
 				handler.sendMessage(msg);
 				Thread.sleep(5000);
 			} catch (InterruptedException e) {
-				// TODO Auto-generated catch block
 				e.printStackTrace();
 			} catch (Exception e) {
-				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
 		}
@@ -335,13 +330,11 @@ public class HomeWorkMainActivity extends TabActivity implements Urlinterface {
 								break;
 							case 2:
 								homework.setNewsFlag(false);
-								Log.i("bbb",homework.isNewsFlag()+"");
 								homework.setLastcount(Size);
 								img.setImageResource(R.drawable.th3);
 								break;
 							case 3:
 								homework.setNewsFlag(true);
-								Log.i("bbb",homework.isNewsFlag()+"");
 								img.setImageResource(R.drawable.th4);
 								break;
 							}
