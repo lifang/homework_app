@@ -125,6 +125,7 @@
                     android:background="#ede9ea"
                     android:text="@string/lookmore"
                     android:textSize="24px"
+                    android:padding="20px"
                     android:visibility="gone" />
             </RelativeLayout>
 
