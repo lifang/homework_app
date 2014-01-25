@@ -38,7 +38,7 @@ public class SpeakHistoryActivity extends Activity implements Urlinterface {
 	private List<QuestionPojo> branch_questions;
 	private int index = 0;
 	private int question_history_size;
-
+	private ImageView question_speak_img;
 	public String error_str = "";// 记录错误的词
 	private Handler handler = new Handler() {
 		public void handleMessage(Message msg) {
@@ -62,6 +62,12 @@ public class SpeakHistoryActivity extends Activity implements Urlinterface {
 				}
 				break;
 			case 1:
+				question_speak_img.setImageDrawable(getResources().getDrawable(
+						R.drawable.jzlbgreen));
+				break;
+			case 2:
+				question_speak_img.setImageDrawable(getResources().getDrawable(
+						R.drawable.jzlb));
 				break;
 			}
 			super.handleMessage(msg);
@@ -88,6 +94,7 @@ public class SpeakHistoryActivity extends Activity implements Urlinterface {
 	public void initialize() {
 		branch_questions = homework.getBranch_questions();
 		content = branch_questions.get(0).getContent();
+		question_speak_img = (ImageView) findViewById(R.id.question_speak_img);
 		question_speak_title = (TextView) findViewById(R.id.question_speak_title);
 		question_speak_title.setText((index + 1) + "/"
 				+ branch_questions.size());
@@ -139,8 +146,10 @@ public class SpeakHistoryActivity extends Activity implements Urlinterface {
 			// 从文件系统播放
 			String path = IP + branch_questions.get(index).getUrl();
 			if (player.isPlaying()) {// 正在播放
+				handler.sendEmptyMessage(2);
 				stop();
 			} else {
+				handler.sendEmptyMessage(1);
 				play(path);
 			}
 			break;

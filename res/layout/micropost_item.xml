@@ -94,13 +94,13 @@
                     android:gravity="top" />
 
                 <Button
-                    android:id="@+id/micropost_huifu"
+                    android:id="@+id/Button_huifu"
                     android:layout_width="73.9px"
                     android:layout_height="32.5px"
                     android:layout_alignParentRight="true"
                     android:layout_below="@+id/reply_edit"
                     android:background="#92b81b"
-                    android:onClick="reply_message"
+                   
                     android:text="@string/huifu"
                     android:textColor="#FFFFFF"
                     android:textSize="24px" />
@@ -109,9 +109,12 @@
                     android:id="@+id/aa"
                     android:layout_width="fill_parent"
                     android:layout_height="20px"
-                    android:layout_below="@+id/micropost_huifu"
+                    android:layout_below="@+id/Button_huifu"
                     android:background="#ede9ea"
-                    android:fadingEdge="none"
+                     android:cacheColorHint="#00000000"
+            android:fadingEdge="none"
+            android:listSelector="#00000000"
+
                     android:visibility="gone" />
 
                 <Button
@@ -122,6 +125,7 @@
                     android:background="#ede9ea"
                     android:text="@string/lookmore"
                     android:textSize="24px"
+                    android:padding="20px"
                     android:visibility="gone" />
             </RelativeLayout>
 
