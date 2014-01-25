@@ -18,6 +18,7 @@ import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.comdosoft.homework.pojo.ListeningPojo;
@@ -39,9 +40,10 @@ public class SpeakPrepareActivity extends Activity implements Urlinterface,
 	private List<QuestionPojo> questionlist;
 	private List<List<String>> history;
 	private List<String> mp3List;
+	private ImageView question_speak_img;
 	private Handler handler = new Handler() {
 		public void handleMessage(android.os.Message msg) {
-			prodialog.dismiss();
+			
 			Builder builder = new Builder(SpeakPrepareActivity.this);
 			builder.setTitle("提示");
 			switch (msg.what) {
@@ -54,14 +56,24 @@ public class SpeakPrepareActivity extends Activity implements Urlinterface,
 				// question_speak_content.setText(content);
 				break;
 			case 2:
+				prodialog.dismiss();
 				builder.setMessage(message);
 				builder.setPositiveButton("确定", null);
 				builder.show();
 				break;
 			case 3:
+				prodialog.dismiss();
 				player.stop();
 				player.release();
 				player = null;
+				break;
+			case 4:
+				Log.i("linshi", "kai");
+				question_speak_img.setImageDrawable(getResources().getDrawable(R.drawable.jzlbgreen));
+				break;
+			case 5:
+				Log.i("linshi", "guan");
+				question_speak_img.setImageDrawable(getResources().getDrawable(R.drawable.jzlb));
 				break;
 			}
 		};
@@ -126,6 +138,7 @@ public class SpeakPrepareActivity extends Activity implements Urlinterface,
 	public void initialize() {
 		question_speak_title = (TextView) findViewById(R.id.question_speak_title);
 		question_speak_content = (TextView) findViewById(R.id.question_speak_content);
+		question_speak_img = (ImageView) findViewById(R.id.question_speak_img);
 		player = new MediaPlayer();
 
 	}
@@ -197,8 +210,10 @@ public class SpeakPrepareActivity extends Activity implements Urlinterface,
 			}
 			// 从文件系统播放
 			if (player.isPlaying()) {// 正在播放
+				handler.sendEmptyMessage(5);
 				stop();
 			} else {
+				handler.sendEmptyMessage(4);
 				play(mp3List.get(mp3Index));
 			}
 			break;
