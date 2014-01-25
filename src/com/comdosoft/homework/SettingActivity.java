@@ -160,6 +160,8 @@ public class SettingActivity extends Activity implements Urlinterface {
 							editor.putString("nickname", nicknameS);
 
 							editor.commit();
+							name.setText(nameS);
+							nickname.setText(nicknameS);
 
 						} else {
 							Toast.makeText(getApplicationContext(), notice, 0)
