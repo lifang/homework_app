@@ -189,8 +189,8 @@ public class SettingActivity extends Activity implements Urlinterface {
 			public void run() {
 				try {
 
-					String nicknames = nickname.getText().toString();
-					String names = name.getText().toString();
+					 nicknameS = nickname.getText().toString();
+					 nameS = name.getText().toString();
 					MultipartEntity entity = new MultipartEntity();
 
 					entity.addPart("student_id", new StringBody(id));
@@ -227,8 +227,8 @@ public class SettingActivity extends Activity implements Urlinterface {
 
 					}
 
-					entity.addPart("nickname", new StringBody(nicknames));
-					entity.addPart("name", new StringBody(names));
+					entity.addPart("nickname", new StringBody(nicknameS));
+					entity.addPart("name", new StringBody(nameS));
 
 					json = HomeWorkTool.sendPhostimg(
 							Urlinterface.MODIFY_PERSON_INFO, entity);
