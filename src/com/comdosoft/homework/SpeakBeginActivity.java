@@ -121,10 +121,10 @@ public class SpeakBeginActivity extends Activity implements Urlinterface,
 				MyDialog("恭喜完成今天的朗读作业!", "确认", "取消", 2);
 				break;
 			case 7:
-				question_speak_img.setBackgroundResource(R.drawable.jzlbgreen);
+				question_speak_img.setImageDrawable(getResources().getDrawable(R.drawable.jzlbgreen));
 				break;
 			case 8:
-				question_speak_img.setBackgroundResource(R.drawable.jzlb);
+				question_speak_img.setImageDrawable(getResources().getDrawable(R.drawable.jzlb));
 				break;
 			}
 			super.handleMessage(msg);
@@ -229,11 +229,11 @@ public class SpeakBeginActivity extends Activity implements Urlinterface,
 			// 从文件系统播放
 			String path = IP + branch_questions.get(index).getUrl();
 			if (player.isPlaying()) {// 正在播放
-				stop();
 				handler.sendEmptyMessage(8);
+				stop();
 			} else {
-				play(path);
 				handler.sendEmptyMessage(7);
+				play(path);
 			}
 			break;
 		case R.id.speak:// 语音
