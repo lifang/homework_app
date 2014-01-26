@@ -157,7 +157,6 @@ public class SettingActivity extends Activity implements Urlinterface {
 							editor.putString("name", nameS);
 							editor.putString("user_id", id);
 							editor.putString("id", id);
-//							editor.putString("avatar_url", avatar_url);
 							editor.putString("nickname", nicknameS);
 
 							editor.commit();
