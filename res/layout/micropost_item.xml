@@ -89,7 +89,7 @@
                     android:layout_height="127px"
                     android:layout_marginTop="40px"
                     android:focusable="true"
-                    android:focusableInTouchMode="true"
+           
                       android:textSize="24px"
                     android:gravity="top" />
 
