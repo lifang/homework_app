@@ -14,6 +14,7 @@ import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.media.MediaPlayer;
+import android.media.MediaPlayer.OnPreparedListener;
 import android.media.MediaRecorder;
 import android.net.Uri;
 import android.os.Bundle;
@@ -41,7 +42,7 @@ import com.comdosoft.homework.tools.Soundex_Levenshtein;
 import com.comdosoft.homework.tools.Urlinterface;
 
 public class SpeakBeginActivity extends Activity implements Urlinterface,
-		MediaPlayer.OnCompletionListener {
+		OnPreparedListener {
 	public String content;// 记录本题正确答案
 	private TextView question_speak_title;
 	private MediaPlayer player;
@@ -67,7 +68,8 @@ public class SpeakBeginActivity extends Activity implements Urlinterface,
 	private int speak_number;
 	private int over_static;
 	private ImageView question_speak_img;
-
+	private String path;
+	private boolean playFlag = false;
 	private Handler handler = new Handler() {
 		public void handleMessage(Message msg) {
 			Intent intent = new Intent();
@@ -121,10 +123,15 @@ public class SpeakBeginActivity extends Activity implements Urlinterface,
 				MyDialog("恭喜完成今天的朗读作业!", "确认", "取消", 2);
 				break;
 			case 7:
-				question_speak_img.setImageDrawable(getResources().getDrawable(R.drawable.jzlbgreen));
+				question_speak_img.setImageDrawable(getResources().getDrawable(
+						R.drawable.jzlbgreen));
 				break;
 			case 8:
-				question_speak_img.setImageDrawable(getResources().getDrawable(R.drawable.jzlb));
+				question_speak_img.setImageDrawable(getResources().getDrawable(
+						R.drawable.jzlb));
+				break;
+			case 9:
+				prodialog.dismiss();
 				break;
 			}
 			super.handleMessage(msg);
@@ -227,13 +234,20 @@ public class SpeakBeginActivity extends Activity implements Urlinterface,
 			break;
 		case R.id.question_speak_img:// 播放音频
 			// 从文件系统播放
-			String path = IP + branch_questions.get(index).getUrl();
+			path = IP + branch_questions.get(index).getUrl();
 			if (player.isPlaying()) {// 正在播放
-				handler.sendEmptyMessage(8);
 				stop();
 			} else {
-				handler.sendEmptyMessage(7);
-				play(path);
+				if (playFlag) {
+					handler.sendEmptyMessage(7);
+					player.start();
+				} else {
+					playFlag = true;
+					prodialog = new ProgressDialog(SpeakBeginActivity.this);
+					prodialog.setMessage("正在缓冲...");
+					prodialog.show();
+					new Thread(new setPlay()).start();
+				}
 			}
 			break;
 		case R.id.speak:// 语音
@@ -465,8 +479,9 @@ public class SpeakBeginActivity extends Activity implements Urlinterface,
 								+ "***"
 								+ ListeningQuestionList.getListeningPojoList()
 										.size());
-						if (ListeningQuestionList.Record_Count == ListeningQuestionList
-								.getListeningPojoList().size()) {
+						if (ListeningQuestionList.getListeningPojoList().size() != 0
+								&& ListeningQuestionList.Record_Count == ListeningQuestionList
+										.getListeningPojoList().size()) {
 							new Thread(new SendWorkOver()).start();
 						} else {
 							handler.sendEmptyMessage(6);
@@ -510,6 +525,12 @@ public class SpeakBeginActivity extends Activity implements Urlinterface,
 		}
 	}
 
+	class setPlay implements Runnable {
+		public void run() {
+			play(path);
+		}
+	}
+
 	/**
 	 * 播放音乐
 	 * 
@@ -528,34 +549,22 @@ public class SpeakBeginActivity extends Activity implements Urlinterface,
 			 */
 			player.setDataSource(path);
 			player.prepare();// 进行缓冲
-			player.setOnPreparedListener(new MyPreparedListener(0));
-			player.setOnCompletionListener(this);
+			player.setOnPreparedListener(this);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
 	}
 
-	private final class MyPreparedListener implements
-			android.media.MediaPlayer.OnPreparedListener {
-		private int playPosition;
-
-		public MyPreparedListener(int playPosition) {
-			this.playPosition = playPosition;
-		}
-
-		@Override
-		public void onPrepared(MediaPlayer mp) {
-			player.start();// 开始播放
-			if (playPosition > 0) {
-				player.seekTo(playPosition);
-			}
-		}
-
+	public void onPrepared(MediaPlayer mp) {
+		handler.sendEmptyMessage(9);
+		handler.sendEmptyMessage(7);
+		player.start();// 开始播放
 	}
 
 	public void stop() {
+		handler.sendEmptyMessage(8);
 		if (player.isPlaying()) {
-			player.stop();
+			player.pause();
 		}
 	}
 
@@ -568,7 +577,7 @@ public class SpeakBeginActivity extends Activity implements Urlinterface,
 	// 停止音频
 	protected void onStop() {
 		if (player.isPlaying()) {// 正在播放
-			player.stop();// 停止
+			player.stop();
 		}
 		super.onStop();
 	}
