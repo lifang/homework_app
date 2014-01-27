@@ -98,7 +98,9 @@ public class HomeWorkMainActivity extends TabActivity implements Urlinterface {
 				TextView textview = (TextView) tabhost.getTabWidget()
 						.getChildAt(2).findViewById(android.R.id.title);
 				textview.setPadding(27, 5, 5, 53);
-				textview.setTextColor(Color.parseColor("#ff3300"));
+				textview.setTextSize(10);
+				
+				textview.setTextColor(Color.parseColor("#ffffff"));
 				if (homework.isNewsFlag() == true) {
 					if (msg.obj.toString().equals("0")) {
 					} else {
