@@ -228,7 +228,7 @@ public class AboutMeActivity extends Activity
 							public void run()
 							{
 								try {
-									HashMap<String, String> mp=new HashMap();
+									HashMap<String, String> mp=new HashMap<String, String>();
 									mp.put("user_id", Amlist.get(position).getUser_id());
 									mp.put("school_class_id",String.valueOf(school_class_id));
 									mp.put("message_id", Amlist.get(position).getId());
@@ -238,7 +238,6 @@ public class AboutMeActivity extends Activity
 									JSONObject jsonobject=new JSONObject(json);
 									String status=jsonobject.getString("status");
 									Message msg=new Message();
-									//									
 									if(status.equals("error"))
 									{
 										msg.what=3;
@@ -280,7 +279,6 @@ public class AboutMeActivity extends Activity
 									JSONObject jsonobject = new JSONObject(json);
 									String notice=jsonobject.getString("notice");
 									String status=(String) jsonobject.get("status");
-									
 									Message msg=new Message();
 									msg.obj=notice;
 									if(status.equals("success"))
@@ -296,7 +294,6 @@ public class AboutMeActivity extends Activity
 										handler.sendMessage(msg);
 									}
 								} catch (JSONException e) {
-									// TODO Auto-generated catch block
 									e.printStackTrace();
 								}
 							}

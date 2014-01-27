@@ -134,7 +134,6 @@ public class HomeWorkMainActivity extends TabActivity implements Urlinterface {
 						Urlinterface.get_News, mp);
 				Message msg = new Message();
 				Size = getNewsJson(json);
-				Log.i("bbb", homework.isNewsFlag() + "判断");
 				if (homework.isNewsFlag()) {
 
 					if (homework.getLastcount() == getNewsJson(json)) {
@@ -150,9 +149,6 @@ public class HomeWorkMainActivity extends TabActivity implements Urlinterface {
 					}
 					count = 0;
 				}
-
-				Log.i("aa", count + "<---HOMe" + getNewsJson(json)
-						+ "<----getnew" + homework.getLastcount() + "<---");
 				msg.what = 0;
 				msg.obj = count;
 				handler.sendMessage(msg);
