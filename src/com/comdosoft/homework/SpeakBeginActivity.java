@@ -479,9 +479,11 @@ public class SpeakBeginActivity extends Activity implements Urlinterface,
 								+ "***"
 								+ ListeningQuestionList.getListeningPojoList()
 										.size());
-						if (ListeningQuestionList.getListeningPojoList().size() != 0
-								&& ListeningQuestionList.Record_Count == ListeningQuestionList
-										.getListeningPojoList().size()) {
+						if (ListeningQuestionList.Record_Count == ListeningQuestionList
+								.getListeningPojoList().size()) {
+							new Thread(new SendWorkOver()).start();
+						} else if (ListeningQuestionList.getListeningPojoList()
+								.size() == 0) {
 							new Thread(new SendWorkOver()).start();
 						} else {
 							handler.sendEmptyMessage(6);

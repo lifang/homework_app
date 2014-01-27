@@ -130,6 +130,7 @@ public class SwitchClassActivity extends Activity {
 
 	public boolean onKeyDown(int keyCode, KeyEvent event) {
 		if (keyCode == KeyEvent.KEYCODE_BACK) {
+			
 			SwitchClassActivity.this.finish();
 			return true;
 		}
@@ -199,6 +200,8 @@ public class SwitchClassActivity extends Activity {
 										Urlinterface.SHARED,
 										Context.MODE_PRIVATE);
 								Editor editor = preferences.edit();
+								HomeWorkMainActivity.instance.finish();
+								hw.setLastcount(0);
 								editor.putString("school_class_id", String
 										.valueOf(classlist.get(position)
 												.getId()));

@@ -11,6 +11,7 @@ import android.app.TabActivity;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.res.Resources;
+import android.graphics.Color;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
@@ -98,6 +99,7 @@ public class HomeWorkMainActivity extends TabActivity implements Urlinterface {
 				TextView textview = (TextView) tabhost.getTabWidget()
 						.getChildAt(2).findViewById(android.R.id.title);
 				textview.setPadding(27, 5, 5, 53);
+				textview.setTextColor(Color.parseColor("#ff3300"));
 				if (homework.isNewsFlag() == true) {
 					if (msg.obj.toString().equals("0")) {
 					} else {

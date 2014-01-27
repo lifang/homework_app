@@ -34,6 +34,7 @@ import android.provider.MediaStore;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageButton;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.comdosoft.homework.tools.HomeWorkTool;
@@ -60,7 +61,7 @@ public class SettingActivity extends Activity implements Urlinterface {
 	private String nicknameS = ""; //
 	private String id = "8"; // 用户 id，，切记 不是 user_id
 	private String user_id = "8"; // 用户 id，，切记 不是 user_id
-	private String avatar_url = "/homework_system/avatars/students/2014-01/student_5.jpg"; // 用户头像
+	private String avatar_url = ""; // 用户头像
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -143,10 +144,10 @@ public class SettingActivity extends Activity implements Urlinterface {
 
 					try {
 						array = new JSONObject(res);
-						String status = array.getString("status");
+						Boolean status = array.getBoolean("status");
 						String notice = array.getString("notice");
 
-						if ("success".equals(status)) {
+						if (status==true) {
 
 							Toast.makeText(getApplicationContext(), notice, 0)
 									.show();
@@ -156,7 +157,6 @@ public class SettingActivity extends Activity implements Urlinterface {
 							editor.putString("name", nameS);
 							editor.putString("user_id", id);
 							editor.putString("id", id);
-							editor.putString("avatar_url", avatar_url);
 							editor.putString("nickname", nicknameS);
 
 							editor.commit();
@@ -188,8 +188,8 @@ public class SettingActivity extends Activity implements Urlinterface {
 			public void run() {
 				try {
 
-					String nicknames = nickname.getText().toString();
-					String names = name.getText().toString();
+					 nicknameS = nickname.getText().toString();
+					 nameS = name.getText().toString();
 					MultipartEntity entity = new MultipartEntity();
 
 					entity.addPart("student_id", new StringBody(id));
@@ -226,8 +226,8 @@ public class SettingActivity extends Activity implements Urlinterface {
 
 					}
 
-					entity.addPart("nickname", new StringBody(nicknames));
-					entity.addPart("name", new StringBody(names));
+					entity.addPart("nickname", new StringBody(nicknameS));
+					entity.addPart("name", new StringBody(nameS));
 
 					json = HomeWorkTool.sendPhostimg(
 							Urlinterface.MODIFY_PERSON_INFO, entity);
@@ -242,8 +242,13 @@ public class SettingActivity extends Activity implements Urlinterface {
 				}
 			}
 		};
+		
+		if (nickname.length() == 0 || name.length() == 0) {
+			Toast.makeText(getApplicationContext(),
+					"姓名或昵称不能为空", 0).show();
+		} else {
 		thread.start();
-
+		}
 	}
 
 	public void changeClass(View v) {

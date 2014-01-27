@@ -68,6 +68,7 @@ public class DictationRecordActivity extends Activity implements
 		smallList = bigList.get(bigIndex);
 		String[] sArr = smallList.get(smallIndex).split("-!-");
 
+		errorList.add("你需要多听,多写的词:");
 		for (int i = 0; i < sArr.length; i++) {
 			errorList.add(sArr[i]);
 		}
@@ -76,8 +77,13 @@ public class DictationRecordActivity extends Activity implements
 			smallIndex++;
 		}
 
-		for (int i = 0; i < errorList.size(); i++) {
-			initView(i);
+		if (errorList.size() > 2) {
+			linearLayout.setVisibility(linearLayout.VISIBLE);
+			for (int i = 0; i < errorList.size(); i++) {
+				initView(i);
+			}
+		} else {
+			linearLayout.setVisibility(LinearLayout.GONE);
 		}
 
 		mp3URL = ListeningQuestionList.getListeningPojo(bigIndex)
@@ -89,17 +95,16 @@ public class DictationRecordActivity extends Activity implements
 
 	public void initView(int i) {
 		TextView tv = new TextView(getApplicationContext());
-		LayoutParams lp = new LayoutParams(LayoutParams.FILL_PARENT, 40);
+		LayoutParams lp = new LayoutParams(LayoutParams.FILL_PARENT, 80);
 		tv.setLayoutParams(lp);
 		tv.setGravity(Gravity.CENTER_VERTICAL);
 		tv.setText("  " + errorList.get(i));
 		tv.setTextColor(Color.rgb(157, 156, 156));
 		tv.setTextSize(24);
-		if (i % 2 == 0) {
+		if (i % 2 != 0) {
 			tv.setBackgroundColor(Color.rgb(231, 231, 231));
-		}
-		if (errorList.size() <= 1) {
-			tv.setVisibility(LinearLayout.GONE);
+		} else {
+			tv.setBackgroundColor(Color.rgb(255, 255, 255));
 		}
 		linearLayout.addView(tv);
 	}

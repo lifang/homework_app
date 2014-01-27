@@ -6,14 +6,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Random;
-import com.comdosoft.homework.pojo.DictationPojo;
-import com.comdosoft.homework.pojo.QuestionPojo;
-import com.comdosoft.homework.tools.HomeWork;
-import com.comdosoft.homework.tools.HomeWorkParams;
-import com.comdosoft.homework.tools.HomeWorkTool;
-import com.comdosoft.homework.tools.ListeningQuestionList;
-import com.comdosoft.homework.tools.Soundex_Levenshtein;
-import com.comdosoft.homework.tools.Urlinterface;
+
 import android.app.Activity;
 import android.app.Dialog;
 import android.app.ProgressDialog;
@@ -26,7 +19,6 @@ import android.os.Handler;
 import android.os.Message;
 import android.util.Log;
 import android.view.Gravity;
-import android.view.KeyEvent;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
@@ -36,10 +28,18 @@ import android.widget.LinearLayout;
 import android.widget.LinearLayout.LayoutParams;
 import android.widget.TextView;
 
-// 拼写答题    马龙    2014年1月25日
+import com.comdosoft.homework.pojo.DictationPojo;
+import com.comdosoft.homework.pojo.QuestionPojo;
+import com.comdosoft.homework.tools.HomeWork;
+import com.comdosoft.homework.tools.HomeWorkParams;
+import com.comdosoft.homework.tools.HomeWorkTool;
+import com.comdosoft.homework.tools.ListeningQuestionList;
+import com.comdosoft.homework.tools.Soundex_Levenshtein;
+import com.comdosoft.homework.tools.Urlinterface;
+
+// 拼写答题    马龙    2014年1月21日
 public class DictationBeginActivity extends Activity implements
 		OnClickListener, HomeWorkParams, OnPreparedListener, Urlinterface {
-
 	private int linearLayoutIndex = 0;
 	private int smallIndex;
 	private int bigIndex = 0;
@@ -49,7 +49,6 @@ public class DictationBeginActivity extends Activity implements
 	private String log;
 	private String symbol;
 	private String mp3URL;
-	private String content;
 	private boolean playFlag = false;
 	private List<Integer> indexList = new ArrayList<Integer>();
 	private List<QuestionPojo> qpList = new ArrayList<QuestionPojo>();
@@ -67,7 +66,6 @@ public class DictationBeginActivity extends Activity implements
 	private HomeWork homeWork;
 	private LayoutParams etlp;
 	private Handler handler = new Handler() {
-		@Override
 		public void handleMessage(Message msg) {
 			super.handleMessage(msg);
 			switch (msg.what) {
@@ -103,6 +101,14 @@ public class DictationBeginActivity extends Activity implements
 		mPlayImg.setOnClickListener(this);
 
 		mPd = new ProgressDialog(this);
+		mPd.setMessage(HomeWorkParams.PD_FINISH_QUESTION);
+		homeWork = (HomeWork) getApplication();
+		homeWork.setNewsFlag(true);
+		publish_question_package_id = homeWork.getP_q_package_id();
+		student_id = homeWork.getUser_id();
+		class_id = homeWork.getClass_id();
+
+		smallIndex = ListeningQuestionList.Small_Index;
 
 		homeWork = (HomeWork) getApplication();
 		publish_question_package_id = homeWork.getP_q_package_id();
@@ -137,7 +143,7 @@ public class DictationBeginActivity extends Activity implements
 
 		// 获取当前大&小题数据
 		mp3URL = IP + qpList.get(smallIndex).getUrl();
-		content = qpList.get(smallIndex).getContent();
+		String content = qpList.get(smallIndex).getContent();
 		String[] sArr = content.substring(0, content.length() - 1).split(" ");
 		for (int i = 0; i < sArr.length; i++) {
 			dictationList.add(new DictationPojo(sArr[i], 0));
@@ -213,9 +219,12 @@ public class DictationBeginActivity extends Activity implements
 						dictationList.get(i).setFlag(1);
 						etList.get(i).setTextColor(Color.rgb(146, 184, 27));
 					} else {
+						dictationList.get(i).setFlag(0);
 						answer.append(s).append("-!-");
 						etList.get(i).setTextColor(Color.rgb(240, 134, 41));
 					}
+				} else {
+					dictationList.get(i).setFlag(0);
 				}
 			}
 
@@ -231,23 +240,18 @@ public class DictationBeginActivity extends Activity implements
 			if (indexList.size() > 0) {
 				mesText.setVisibility(LinearLayout.VISIBLE);
 				Random r = new Random(System.currentTimeMillis());
-				sb.append("\n"
+				sb.append("\n◆"
 						+ dictationList.get(
 								indexList.get(r.nextInt(indexList.size())))
 								.getValue());
 				mesText.setText(sb.toString());
 			} else {
-				mesText.setVisibility(LinearLayout.VISIBLE);
 				check.setText("Next");
-				mesText.setText(content);
+				mesText.setVisibility(LinearLayout.GONE);
 			}
 
 		} else {
 			// Next
-			if (mesText.getVisibility() == LinearLayout.VISIBLE) {
-				mesText.setVisibility(LinearLayout.GONE);
-			}
-
 			if (bigIndex < ListeningQuestionList.getListeningPojoList().size()) {
 				if (answer.length() > 0) {
 					answer.delete(answer.length() - 3, answer.length());
@@ -270,10 +274,10 @@ public class DictationBeginActivity extends Activity implements
 						if (homeWork.getHistory_item() == homeWork
 								.getQuestion_allNumber()) {
 							new SendWorkOver().start();
-						} else {
-							MyDialog("恭喜完成今天的朗读作业!", "确认", "取消", 2);
-							return;
+						} else if (homeWork.getQuestion_allNumber() == 0) {
+							new SendWorkOver().start();
 						}
+						MyDialog("恭喜完成今天的朗读作业!", "确认", "取消", 2);
 					}
 
 					MyDialog("你已经答完本题确认继续下一题吗?", "确认", "取消", 1);
@@ -298,7 +302,6 @@ public class DictationBeginActivity extends Activity implements
 			this.sIndex = sIndex;
 		}
 
-		@Override
 		public void run() {
 			super.run();
 			Map<String, String> map = new HashMap<String, String>();
@@ -329,6 +332,7 @@ public class DictationBeginActivity extends Activity implements
 			log = HomeWorkTool.doPost(FINISH_QUESTION_PACKGE, map);
 			Log.i("Ax", log);
 			handler.sendEmptyMessage(1);
+			handler.sendEmptyMessage(2);
 		}
 	}
 
@@ -363,7 +367,6 @@ public class DictationBeginActivity extends Activity implements
 					myFinish();
 					break;
 				case 1:
-					DictationBeginActivity.this.finish();
 					Intent intent = new Intent();
 					intent.setClass(DictationBeginActivity.this,
 							DictationPrepareActivity.class);
@@ -480,11 +483,4 @@ public class DictationBeginActivity extends Activity implements
 		super.onStop();
 	}
 
-	public boolean onKeyDown(int keyCode, KeyEvent event) {
-		if (keyCode == KeyEvent.KEYCODE_BACK) {
-			MyDialog("你还没有做完题,确认要退出吗?", "确认", "取消", 0);
-			return true;
-		}
-		return super.onKeyDown(keyCode, event);
-	}
 }
