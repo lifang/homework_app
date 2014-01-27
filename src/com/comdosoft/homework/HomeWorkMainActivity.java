@@ -99,7 +99,9 @@ public class HomeWorkMainActivity extends TabActivity implements Urlinterface {
 				TextView textview = (TextView) tabhost.getTabWidget()
 						.getChildAt(2).findViewById(android.R.id.title);
 				textview.setPadding(27, 5, 5, 53);
-				textview.setTextColor(Color.parseColor("#ff3300"));
+				textview.setTextSize(10);
+				
+				textview.setTextColor(Color.parseColor("#ffffff"));
 				if (homework.isNewsFlag() == true) {
 					if (msg.obj.toString().equals("0")) {
 					} else {
@@ -135,7 +137,6 @@ public class HomeWorkMainActivity extends TabActivity implements Urlinterface {
 						Urlinterface.get_News, mp);
 				Message msg = new Message();
 				Size = getNewsJson(json);
-				Log.i("bbb", homework.isNewsFlag() + "判断");
 				if (homework.isNewsFlag()) {
 
 					if (homework.getLastcount() == getNewsJson(json)) {
@@ -151,9 +152,6 @@ public class HomeWorkMainActivity extends TabActivity implements Urlinterface {
 					}
 					count = 0;
 				}
-
-				Log.i("aa", count + "<---HOMe" + getNewsJson(json)
-						+ "<----getnew" + homework.getLastcount() + "<---");
 				msg.what = 0;
 				msg.obj = count;
 				handler.sendMessage(msg);
