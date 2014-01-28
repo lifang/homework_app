@@ -21,9 +21,11 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.comdosoft.homework.SpeakBeginActivity.setPlay;
 import com.comdosoft.homework.pojo.ListeningPojo;
 import com.comdosoft.homework.pojo.QuestionPojo;
 import com.comdosoft.homework.tools.HomeWork;
+import com.comdosoft.homework.tools.HomeWorkParams;
 import com.comdosoft.homework.tools.Urlinterface;
 
 public class SpeakPrepareActivity extends Activity implements Urlinterface,
@@ -41,9 +43,10 @@ public class SpeakPrepareActivity extends Activity implements Urlinterface,
 	private List<List<String>> history;
 	private List<String> mp3List;
 	private ImageView question_speak_img;
+	private boolean playFlag = false;
 	private Handler handler = new Handler() {
 		public void handleMessage(android.os.Message msg) {
-			
+
 			Builder builder = new Builder(SpeakPrepareActivity.this);
 			builder.setTitle("提示");
 			switch (msg.what) {
@@ -56,24 +59,27 @@ public class SpeakPrepareActivity extends Activity implements Urlinterface,
 				// question_speak_content.setText(content);
 				break;
 			case 2:
-				prodialog.dismiss();
 				builder.setMessage(message);
 				builder.setPositiveButton("确定", null);
 				builder.show();
 				break;
 			case 3:
-				prodialog.dismiss();
 				player.stop();
 				player.release();
 				player = null;
 				break;
 			case 4:
 				Log.i("linshi", "kai");
-				question_speak_img.setImageDrawable(getResources().getDrawable(R.drawable.jzlbgreen));
+				question_speak_img.setImageDrawable(getResources().getDrawable(
+						R.drawable.jzlbgreen));
 				break;
 			case 5:
 				Log.i("linshi", "guan");
-				question_speak_img.setImageDrawable(getResources().getDrawable(R.drawable.jzlb));
+				question_speak_img.setImageDrawable(getResources().getDrawable(
+						R.drawable.jzlb));
+				break;
+			case 6:
+				prodialog.dismiss();
 				break;
 			}
 		};
@@ -209,12 +215,19 @@ public class SpeakPrepareActivity extends Activity implements Urlinterface,
 				mp3List.add(IP + questionlist.get(i).getUrl());
 			}
 			// 从文件系统播放
-			if (player.isPlaying()) {// 正在播放
-				handler.sendEmptyMessage(5);
+			if (player.isPlaying()) {// 暂停播放
 				stop();
 			} else {
-				handler.sendEmptyMessage(4);
-				play(mp3List.get(mp3Index));
+				if (playFlag) {
+					handler.sendEmptyMessage(4);
+					player.start();
+				} else {
+					playFlag = true;
+					prodialog = new ProgressDialog(SpeakPrepareActivity.this);
+					prodialog.setMessage("正在缓冲...");
+					prodialog.show();
+					new Thread(new setPlay()).start();
+				}
 			}
 			break;
 		}
@@ -253,6 +266,13 @@ public class SpeakPrepareActivity extends Activity implements Urlinterface,
 	 * 
 	 * @param playPosition
 	 */
+
+	class setPlay implements Runnable {
+		public void run() {
+			play(mp3List.get(mp3Index));
+		}
+	}
+
 	private void play(String path) {
 		try {
 			player.reset();// 把各项参数恢复到初始状态
@@ -267,19 +287,21 @@ public class SpeakPrepareActivity extends Activity implements Urlinterface,
 			player.setDataSource(path);
 			player.prepare();// 进行缓冲
 			player.setOnPreparedListener(this);
-			player.setOnCompletionListener(this);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
 	}
 
 	public void onPrepared(MediaPlayer mp) {
+		handler.sendEmptyMessage(6);
+		handler.sendEmptyMessage(4);
 		mp.start();
 	}
 
 	public void stop() {
+		handler.sendEmptyMessage(5);
 		if (player.isPlaying()) {
-			player.stop();
+			player.pause();
 		}
 	}
 

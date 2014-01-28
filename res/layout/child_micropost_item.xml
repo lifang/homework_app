@@ -73,8 +73,7 @@
             android:layout_height="5px"
             android:layout_alignParentLeft="true"
             android:layout_below="@+id/relativeLayout1"
-            android:layout_marginTop="22px"
-            android:focusable="false" />
+            android:layout_marginTop="22px" />
     </RelativeLayout>
 
 </LinearLayout>

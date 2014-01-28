@@ -29,6 +29,7 @@ import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.comdosoft.homework.pojo.ListeningPojo;
 import com.comdosoft.homework.pojo.QuestionPojo;
@@ -152,19 +153,32 @@ public class HomeWorkIngActivity extends Activity implements Urlinterface {
 						} else {
 							homework.setWork_history(true);
 						}
-						HomeWorkMainActivity.instance.finish();
 						Intent intent = new Intent();
 						switch (position) {
 						case 0:
-							intent.setClass(HomeWorkIngActivity.this,
-									DictationPrepareActivity.class);
+							if (ListeningQuestionList.listeningList.size() != 0) {
+								HomeWorkMainActivity.instance.finish();
+								intent.setClass(HomeWorkIngActivity.this,
+										DictationPrepareActivity.class);
+								startActivity(intent);
+							} else {
+								Toast.makeText(HomeWorkIngActivity.this,
+										"本任务暂无作业..", Toast.LENGTH_SHORT).show();
+							}
 							break;
 						case 1:
-							intent.setClass(HomeWorkIngActivity.this,
-									SpeakPrepareActivity.class);
+							if (questionlist.size() != 0) {
+								HomeWorkMainActivity.instance.finish();
+								intent.setClass(HomeWorkIngActivity.this,
+										SpeakPrepareActivity.class);
+								startActivity(intent);
+							} else {
+								Toast.makeText(HomeWorkIngActivity.this,
+										"本任务暂无作业..", Toast.LENGTH_SHORT).show();
+							}
 							break;
 						}
-						startActivity(intent);
+
 					}
 				});
 	}
@@ -405,21 +419,44 @@ public class HomeWorkIngActivity extends Activity implements Urlinterface {
 			questionlist = new ArrayList<ListeningPojo>();
 			JSONArray ja = new JSONObject(json).getJSONObject("package")
 					.getJSONArray("reading");
-			for (int i = 0; i < ja.length(); i++) {
-				JSONObject jn = ja.getJSONObject(i);
-				JSONArray jArr = jn.getJSONArray("branch_questions");
-				int id = jn.getInt("id");
-				List<QuestionPojo> question = new ArrayList<QuestionPojo>();
-				for (int j = 0; j < jArr.length(); j++) {
-					JSONObject jb = jArr.getJSONObject(j);
-					question.add(new QuestionPojo(jb.getInt("id"), jb
-							.getString("content"), jb.getString("resource_url")));
+			if (ja.length() != 0) {
+				for (int i = 0; i < ja.length(); i++) {
+					JSONObject jn = ja.getJSONObject(i);
+					JSONArray jArr = jn.getJSONArray("branch_questions");
+					int id = jn.getInt("id");
+					List<QuestionPojo> question = new ArrayList<QuestionPojo>();
+					for (int j = 0; j < jArr.length(); j++) {
+						JSONObject jb = jArr.getJSONObject(j);
+						question.add(new QuestionPojo(jb.getInt("id"), jb
+								.getString("content"), jb
+								.getString("resource_url")));
+					}
+					questionlist.add(new ListeningPojo(id, question));
 				}
-				questionlist.add(new ListeningPojo(id, question));
 			}
 			homework.setQuestion_list(questionlist);
+			homework.getQuestion_allNumber();
 			homework.setQuestion_allNumber(questionlist.size());
-			Log.i("linshi", "1");
+
+			// 解析听写题目
+			JSONArray jarray = new JSONObject(json).getJSONObject("package")
+					.getJSONArray("listening");
+			if (jarray.length() != 0) {
+				for (int i = 0; i < jarray.length(); i++) {
+					JSONObject jn = jarray.getJSONObject(i);
+					JSONArray jArr = jn.getJSONArray("branch_questions");
+					int id = jn.getInt("id");
+					List<QuestionPojo> question = new ArrayList<QuestionPojo>();
+					for (int j = 0; j < jArr.length(); j++) {
+						JSONObject jb = jArr.getJSONObject(j);
+						question.add(new QuestionPojo(jb.getInt("id"), jb
+								.getString("content"), jb
+								.getString("resource_url")));
+					}
+					ListeningQuestionList.addListeningPojo(new ListeningPojo(
+							id, question));
+				}
+			}
 			// 加載历史信息
 			List<List<String>> questionhistory = new ArrayList<List<String>>();
 			if (!new JSONObject(json).getString("user_answers").equals("")) {
@@ -437,7 +474,6 @@ public class HomeWorkIngActivity extends Activity implements Urlinterface {
 					}
 					questionhistory.add(question);
 				}
-				Log.i("linshi", "2");
 				// 解析听写记录
 				JSONArray answer = new JSONObject(json).getJSONObject(
 						"user_answers").getJSONArray("listening");
@@ -450,36 +486,25 @@ public class HomeWorkIngActivity extends Activity implements Urlinterface {
 						smallList.add(jb.getString("answer"));
 						ListeningQuestionList.Small_Index = j + 1;
 					}
-					ListeningQuestionList.Small_Index = 0;
-					ListeningQuestionList.Record_Count = i;
+					if (ListeningQuestionList.getListeningPojo(i)
+							.getQuesttionList().size() == jArr.length()) {
+						ListeningQuestionList.Small_Index = 0;
+						ListeningQuestionList.Record_Count = i + 1;
+					} else {
+						ListeningQuestionList.Record_Count = i;
+					}
+					Log.i("linshi",
+							"size----"
+									+ ListeningQuestionList.getListeningPojo(i)
+											.getQuesttionList().size() + "--"
+									+ jArr.length());
 					ListeningQuestionList.addAnswer(smallList);
 				}
 			}
-			Log.i("linshi", "3");
+			Log.i("linshi", ListeningQuestionList.Small_Index
+					+ "-----cccccccccccc");
 			homework.setQuestion_history(questionhistory);
 			homework.setHistory_item(questionhistory.size());
-
-			// ↑张秀楠------------↓马龙
-
-			// 解析听写题目
-			JSONArray jarray = new JSONObject(json).getJSONObject("package")
-					.getJSONArray("listening");
-			for (int i = 0; i < jarray.length(); i++) {
-				JSONObject jn = jarray.getJSONObject(i);
-				JSONArray jArr = jn.getJSONArray("branch_questions");
-				int id = jn.getInt("id");
-				List<QuestionPojo> question = new ArrayList<QuestionPojo>();
-				for (int j = 0; j < jArr.length(); j++) {
-					JSONObject jb = jArr.getJSONObject(j);
-					question.add(new QuestionPojo(jb.getInt("id"), jb
-							.getString("content"), jb.getString("resource_url")));
-				}
-				ListeningQuestionList.addListeningPojo(new ListeningPojo(id,
-						question));
-			}
-			Log.i("linshi", "4");
-			// ListeningQuestionList.Record_Count = ListeningQuestionList
-			// .getRecordCount();
 
 			handler.sendEmptyMessage(3);
 		} catch (JSONException e) {

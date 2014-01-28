@@ -2,18 +2,16 @@ package com.comdosoft.homework;
 
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 import com.comdosoft.homework.pojo.ListeningPojo;
 import com.comdosoft.homework.pojo.QuestionPojo;
-import com.comdosoft.homework.tools.HomeWork;
 import com.comdosoft.homework.tools.ListeningQuestionList;
 import com.comdosoft.homework.tools.Urlinterface;
 import android.app.Activity;
+import android.app.Dialog;
 import android.app.ProgressDialog;
 import android.content.Intent;
 import android.media.MediaPlayer;
@@ -23,12 +21,15 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.util.Log;
+import android.view.KeyEvent;
 import android.view.View;
 import android.view.View.OnClickListener;
+import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.TextView;
 import android.widget.Toast;
 
-// 拼写准备    马龙    2014年1月21日
+// 拼写准备    马龙    2014年1月25日
 public class DictationPrepareActivity extends Activity implements
 		OnClickListener, OnPreparedListener, OnCompletionListener, Urlinterface {
 
@@ -37,7 +38,7 @@ public class DictationPrepareActivity extends Activity implements
 	private List<String> mp3List = new ArrayList<String>();
 	private MediaPlayer mediaPlayer = new MediaPlayer();
 	private ImageView dictationImg;
-	private HomeWork homework;
+	private boolean playFlag = false;
 	private ProgressDialog mPd;
 	private Handler mHandler = new Handler() {
 		@Override
@@ -51,15 +52,20 @@ public class DictationPrepareActivity extends Activity implements
 			case 2:
 				dictationImg.setImageResource(R.drawable.dictation_laba1);
 				break;
+			case 3:
+				mPd.show();
+				break;
+			case 4:
+				dictationImg.setImageResource(R.drawable.dictation_laba2);
+				break;
 			}
 		}
 	};
 
+	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.question_dictation_prepare);
-		homework = (HomeWork) getApplication();
-		homework.setNewsFlag(true);
 		findViewById(R.id.question_dictation_next).setOnClickListener(this);
 		findViewById(R.id.question_dictation_exit).setOnClickListener(this);
 		dictationImg = (ImageView) findViewById(R.id.question_dictation_img);
@@ -80,8 +86,8 @@ public class DictationPrepareActivity extends Activity implements
 	public void setMp3Url() {
 		mp3List.clear();
 		mp3Index = 0;
-		// int index = ListeningQuestionList.getRecordCount();
-		int index = ListeningQuestionList.Record_Count;
+		int index = ListeningQuestionList.Record_Count == ListeningQuestionList.listeningList
+				.size() ? 0 : ListeningQuestionList.Record_Count;
 		ListeningPojo lp = ListeningQuestionList.getListeningPojo(index);
 		List<QuestionPojo> qpList = lp.getQuesttionList();
 		for (int i = 0; i < qpList.size(); i++) {
@@ -165,28 +171,73 @@ public class DictationPrepareActivity extends Activity implements
 		}
 	}
 
-	@Override
-	public void onClick(View v) {
-		switch (v.getId()) {
-		case R.id.question_dictation_img:
-			mPd.show();
+	class MyMediaPlay extends Thread {
+
+		@Override
+		public void run() {
+			super.run();
 			playerAmr();
-			break;
-		case R.id.question_dictation_next:
-			Intent intent = new Intent(this, DictationBeginActivity.class);
-			startActivity(intent);
-			break;
-		case R.id.question_dictation_exit:
-			this.finish();
-			break;
+		}
+
+	}
+
+	public void stop() {
+		if (mediaPlayer.isPlaying()) {
+			mediaPlayer.pause();
 		}
 	}
 
 	@Override
+	public void onClick(View v) {
+		switch (v.getId()) {
+		case R.id.question_dictation_img:
+			if (mediaPlayer.isPlaying()) {
+				mHandler.sendEmptyMessage(2);
+				stop();
+			} else {
+				mHandler.sendEmptyMessage(1);
+				if (playFlag) {
+					mediaPlayer.start();
+				} else {
+					playFlag = true;
+					mHandler.sendEmptyMessage(3);
+					new MyMediaPlay().start();
+				}
+			}
+			break;
+		case R.id.question_dictation_next:
+			Intent intent = new Intent();
+			if (ListeningQuestionList.Record_Count == ListeningQuestionList.listeningList
+					.size()) {
+				intent.setClass(this, DictationRecordActivity.class);
+			} else {
+				intent.setClass(this, DictationBeginActivity.class);
+			}
+			startActivity(intent);
+			break;
+		case R.id.question_dictation_exit:
+			MyDialog("你还没有做完题,确认要退出吗?", "确认", "取消", 0);
+			break;
+		}
+	}
+
+	// 销毁音频
+	@Override
 	public void onDestroy() {
-		mediaPlayer.release();
-		mediaPlayer = null;
+		if (mediaPlayer != null) {
+			mediaPlayer.stop();
+			mediaPlayer.release();
+			mediaPlayer = null;
+		}
 		super.onDestroy();
+	}
+
+	// 停止音频
+	protected void onStop() {
+		if (mediaPlayer.isPlaying()) {// 正在播放
+			mediaPlayer.stop();// 停止
+		}
+		super.onStop();
 	}
 
 	@Override
@@ -205,8 +256,6 @@ public class DictationPrepareActivity extends Activity implements
 				mp.prepare();
 				mp.setOnPreparedListener(this);
 				mp.setOnCompletionListener(this);
-			} else {
-				mHandler.sendEmptyMessage(2);
 			}
 		} catch (IllegalArgumentException e) {
 			e.printStackTrace();
@@ -215,6 +264,54 @@ public class DictationPrepareActivity extends Activity implements
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
+	}
+
+	// 自定义dialog设置
+	private void MyDialog(String title, String btn_one, String Btn_two,
+			final int type) {
+		final Dialog dialog = new Dialog(this, R.style.Transparent);
+		dialog.setContentView(R.layout.my_dialog);
+		dialog.setCancelable(true);
+
+		ImageView dialog_img = (ImageView) dialog.findViewById(R.id.dialog_img);
+		TextView title_tv = (TextView) dialog.findViewById(R.id.dialog_title);
+		Button dialog_ok = (Button) dialog.findViewById(R.id.dialog_ok);
+		Button dialog_no = (Button) dialog.findViewById(R.id.dialog_no);
+
+		title_tv.setText(title);
+		dialog_ok.setText(btn_one);
+		dialog_no.setText(Btn_two);
+
+		dialog_ok.setOnClickListener(new View.OnClickListener() {
+			public void onClick(View v) {
+				dialog.dismiss();
+				DictationPrepareActivity.this.finish();
+				Intent intent = new Intent();
+				intent.setClass(DictationPrepareActivity.this,
+						HomeWorkMainActivity.class);
+				startActivity(intent);
+			}
+		});
+		dialog_no.setOnClickListener(new View.OnClickListener() {
+			public void onClick(View v) {
+				dialog.dismiss();
+			}
+		});
+		if (type == 2) {
+			dialog_no.setVisibility(View.GONE);
+			dialog_ok.setBackgroundColor(getResources().getColor(R.color.lvse));
+		} else {
+			dialog_img.setVisibility(View.GONE);
+		}
+		dialog.show();
+	}
+
+	public boolean onKeyDown(int keyCode, KeyEvent event) {
+		if (keyCode == KeyEvent.KEYCODE_BACK) {
+			MyDialog("你还没有做完题,确认要退出吗?", "确认", "取消", 0);
+			return true;
+		}
+		return super.onKeyDown(keyCode, event);
 	}
 
 }

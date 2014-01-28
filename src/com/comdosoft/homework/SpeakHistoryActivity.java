@@ -4,9 +4,11 @@ import java.util.List;
 
 import android.app.Activity;
 import android.app.Dialog;
+import android.app.ProgressDialog;
 import android.content.Intent;
 import android.graphics.Color;
 import android.media.MediaPlayer;
+import android.media.MediaPlayer.OnPreparedListener;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
@@ -25,7 +27,8 @@ import com.comdosoft.homework.pojo.QuestionPojo;
 import com.comdosoft.homework.tools.HomeWork;
 import com.comdosoft.homework.tools.Urlinterface;
 
-public class SpeakHistoryActivity extends Activity implements Urlinterface {
+public class SpeakHistoryActivity extends Activity implements Urlinterface,
+		OnPreparedListener {
 
 	public String content;// 记录本题正确答案
 	private TextView question_speak_title;
@@ -39,7 +42,10 @@ public class SpeakHistoryActivity extends Activity implements Urlinterface {
 	private int index = 0;
 	private int question_history_size;
 	private ImageView question_speak_img;
+	private String path;
 	public String error_str = "";// 记录错误的词
+	private ProgressDialog prodialog;
+	private boolean playFlag = false;
 	private Handler handler = new Handler() {
 		public void handleMessage(Message msg) {
 			switch (msg.what) {
@@ -68,6 +74,9 @@ public class SpeakHistoryActivity extends Activity implements Urlinterface {
 			case 2:
 				question_speak_img.setImageDrawable(getResources().getDrawable(
 						R.drawable.jzlb));
+				break;
+			case 3:
+				prodialog.dismiss();
 				break;
 			}
 			super.handleMessage(msg);
@@ -144,13 +153,20 @@ public class SpeakHistoryActivity extends Activity implements Urlinterface {
 			break;
 		case R.id.question_speak_img:// 播放音频
 			// 从文件系统播放
-			String path = IP + branch_questions.get(index).getUrl();
+			path = IP + branch_questions.get(index).getUrl();
 			if (player.isPlaying()) {// 正在播放
-				handler.sendEmptyMessage(2);
 				stop();
 			} else {
-				handler.sendEmptyMessage(1);
-				play(path);
+				if (playFlag) {
+					handler.sendEmptyMessage(1);
+					player.start();
+				} else {
+					playFlag = true;
+					prodialog = new ProgressDialog(SpeakHistoryActivity.this);
+					prodialog.setMessage("正在缓冲...");
+					prodialog.show();
+					new Thread(new setPlay()).start();
+				}
 			}
 			break;
 		}
@@ -252,6 +268,12 @@ public class SpeakHistoryActivity extends Activity implements Urlinterface {
 		dialog.show();
 	}
 
+	class setPlay implements Runnable {
+		public void run() {
+			play(path);
+		}
+	}
+
 	/**
 	 * 播放音乐
 	 * 
@@ -270,32 +292,22 @@ public class SpeakHistoryActivity extends Activity implements Urlinterface {
 			 */
 			player.setDataSource(path);
 			player.prepare();// 进行缓冲
-			player.setOnPreparedListener(new MyPreparedListener(0));
+			player.setOnPreparedListener(this);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
 	}
 
-	private final class MyPreparedListener implements
-			android.media.MediaPlayer.OnPreparedListener {
-		private int playPosition;
-
-		public MyPreparedListener(int playPosition) {
-			this.playPosition = playPosition;
-		}
-
-		public void onPrepared(MediaPlayer mp) {
-			player.start();// 开始播放
-			if (playPosition > 0) {
-				player.seekTo(playPosition);
-			}
-		}
-
+	public void onPrepared(MediaPlayer mp) {
+		handler.sendEmptyMessage(1);
+		handler.sendEmptyMessage(3);
+		player.start();// 开始播放
 	}
 
 	public void stop() {
+		handler.sendEmptyMessage(2);
 		if (player.isPlaying()) {
-			player.stop();
+			player.pause();
 		}
 	}
 
@@ -308,7 +320,7 @@ public class SpeakHistoryActivity extends Activity implements Urlinterface {
 	// 暂停音频
 	protected void onStop() {
 		if (player.isPlaying()) {// 正在播放
-			player.pause();// 暂停
+			player.stop();// 停止
 		}
 		super.onStop();
 	}
@@ -324,7 +336,6 @@ public class SpeakHistoryActivity extends Activity implements Urlinterface {
 	}
 
 	public boolean onKeyDown(int keyCode, KeyEvent event) {
-		Intent intent = new Intent();
 		if (keyCode == KeyEvent.KEYCODE_BACK) {
 			MyDialog("确认要退出吗?", "确认", "取消", 0);
 			return true;

@@ -19,6 +19,7 @@ import android.os.Message;
 import android.util.Log;
 import android.view.Display;
 import android.view.Gravity;
+import android.view.KeyEvent;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
@@ -345,5 +346,13 @@ public class HomeWorkMainActivity extends TabActivity implements Urlinterface {
 				}
 			});
 		}
+	}
+
+	public boolean onKeyDown(int keyCode, KeyEvent event) {
+		if (keyCode == KeyEvent.KEYCODE_BACK) {
+			System.exit(0);
+			return true;
+		}
+		return super.onKeyDown(keyCode, event);
 	}
 }

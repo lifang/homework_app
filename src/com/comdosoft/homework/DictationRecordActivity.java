@@ -2,32 +2,26 @@ package com.comdosoft.homework;
 
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
-
-import org.apache.http.HttpResponse;
-import org.apache.http.client.ClientProtocolException;
-import org.apache.http.client.methods.HttpGet;
-import org.apache.http.impl.client.DefaultHttpClient;
-import org.apache.http.util.EntityUtils;
-
 import android.app.Activity;
+import android.app.Dialog;
+import android.content.Intent;
 import android.graphics.Color;
 import android.media.MediaPlayer;
 import android.media.MediaPlayer.OnPreparedListener;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.Gravity;
+import android.view.KeyEvent;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.LinearLayout;
 import android.widget.LinearLayout.LayoutParams;
+import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.comdosoft.homework.tools.HomeWork;
-import com.comdosoft.homework.tools.HomeWorkTool;
 import com.comdosoft.homework.tools.ListeningQuestionList;
 
 // 拼写记录    马龙    2014年1月20日
@@ -74,18 +68,22 @@ public class DictationRecordActivity extends Activity implements
 		smallList = bigList.get(bigIndex);
 		String[] sArr = smallList.get(smallIndex).split("-!-");
 
+		errorList.add("你需要多听,多写的词:");
 		for (int i = 0; i < sArr.length; i++) {
-			if (i == 0 || i % 2 == 0) {
-				errorList.add(sArr[i]);
-			}
+			errorList.add(sArr[i]);
 		}
 
 		if (smallIndex < smallList.size()) {
 			smallIndex++;
 		}
 
-		for (int i = 0; i < errorList.size(); i++) {
-			initView(i);
+		if (errorList.size() > 2) {
+			linearLayout.setVisibility(linearLayout.VISIBLE);
+			for (int i = 0; i < errorList.size(); i++) {
+				initView(i);
+			}
+		} else {
+			linearLayout.setVisibility(LinearLayout.GONE);
 		}
 
 		mp3URL = ListeningQuestionList.getListeningPojo(bigIndex)
@@ -97,14 +95,16 @@ public class DictationRecordActivity extends Activity implements
 
 	public void initView(int i) {
 		TextView tv = new TextView(getApplicationContext());
-		LayoutParams lp = new LayoutParams(LayoutParams.FILL_PARENT, 40);
+		LayoutParams lp = new LayoutParams(LayoutParams.FILL_PARENT, 80);
 		tv.setLayoutParams(lp);
 		tv.setGravity(Gravity.CENTER_VERTICAL);
 		tv.setText("  " + errorList.get(i));
 		tv.setTextColor(Color.rgb(157, 156, 156));
 		tv.setTextSize(24);
-		if (i % 2 == 0) {
+		if (i % 2 != 0) {
 			tv.setBackgroundColor(Color.rgb(231, 231, 231));
+		} else {
+			tv.setBackgroundColor(Color.rgb(255, 255, 255));
 		}
 		linearLayout.addView(tv);
 	}
@@ -128,10 +128,14 @@ public class DictationRecordActivity extends Activity implements
 	public void onClick(View v) {
 		switch (v.getId()) {
 		case R.id.question_dictation_exit:
-			this.finish();
+			MyDialog("确认要退出吗?", "确认", "取消", 0);
 			break;
 		case R.id.question_dictation_check:
-			if (smallIndex < smallList.size()) {
+			if (smallIndex == smallList.size()
+					&& bigIndex == bigList.size() - 1) {
+				MyDialog("确认要退出吗?", "确认", "取消", 0);
+			} else if (smallIndex <= smallList.size()
+					&& bigIndex < bigList.size()) {
 				initData();
 			}
 			break;
@@ -151,4 +155,51 @@ public class DictationRecordActivity extends Activity implements
 		super.onDestroy();
 	}
 
+	// 自定义dialog设置
+	private void MyDialog(String title, String btn_one, String Btn_two,
+			final int type) {
+		final Dialog dialog = new Dialog(this, R.style.Transparent);
+		dialog.setContentView(R.layout.my_dialog);
+		dialog.setCancelable(true);
+
+		ImageView dialog_img = (ImageView) dialog.findViewById(R.id.dialog_img);
+		TextView title_tv = (TextView) dialog.findViewById(R.id.dialog_title);
+		Button dialog_ok = (Button) dialog.findViewById(R.id.dialog_ok);
+		Button dialog_no = (Button) dialog.findViewById(R.id.dialog_no);
+
+		title_tv.setText(title);
+		dialog_ok.setText(btn_one);
+		dialog_no.setText(Btn_two);
+
+		dialog_ok.setOnClickListener(new View.OnClickListener() {
+			public void onClick(View v) {
+				dialog.dismiss();
+				DictationRecordActivity.this.finish();
+				Intent intent = new Intent();
+				intent.setClass(DictationRecordActivity.this,
+						HomeWorkMainActivity.class);
+				startActivity(intent);
+			}
+		});
+		dialog_no.setOnClickListener(new View.OnClickListener() {
+			public void onClick(View v) {
+				dialog.dismiss();
+			}
+		});
+		if (type == 2) {
+			dialog_no.setVisibility(View.GONE);
+			dialog_ok.setBackgroundColor(getResources().getColor(R.color.lvse));
+		} else {
+			dialog_img.setVisibility(View.GONE);
+		}
+		dialog.show();
+	}
+
+	public boolean onKeyDown(int keyCode, KeyEvent event) {
+		if (keyCode == KeyEvent.KEYCODE_BACK) {
+			MyDialog("确认要退出吗?", "确认", "取消", 0);
+			return true;
+		}
+		return super.onKeyDown(keyCode, event);
+	}
 }
