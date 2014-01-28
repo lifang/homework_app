@@ -1222,9 +1222,9 @@ private String avatar_url;
 
 			// 点击 回复 默认 给主消息回复
 			huifu.setOnClickListener(new OnClickListener() {
-
 				@Override
 				public void onClick(View v) {
+					Log.i("aa","判断是否点击");
 					prodialog = new ProgressDialog(Classxinxiliu.this);
 					prodialog.setMessage(HomeWorkParams.PD_CLASS_INFO);
 					prodialog.show();
@@ -1248,6 +1248,7 @@ private String avatar_url;
 						public void handleMessage(android.os.Message msg) {
 							switch (msg.what) {
 							case 0:
+								Log.i("aa","case0");
 								final String json7 = (String) msg.obj;
 								child_list = new ArrayList<Child_Micropost>();
 								parseJson_childMicropost(json7);
@@ -1291,6 +1292,7 @@ private String avatar_url;
 						public void handleMessage(android.os.Message msg) {
 							switch (msg.what) {
 							case 0:
+								Log.i("aa","小回复");
 								final String json2 = (String) msg.obj;
 								if (json2.length() == 0) {
 
@@ -1325,7 +1327,6 @@ private String avatar_url;
 																.getReply_microposts_count()) + 1;
 														mess.setReply_microposts_count(a
 																+ "");
-														list.add(position, mess);
 
 														huifu.setText(HomeWorkParams.REPLY
 																+ "(" + a + ")");
@@ -1399,7 +1400,7 @@ private String avatar_url;
 						Thread thread = new Thread() {
 							public void run() {
 								try {
-									
+									Log.i("aa","pandua");
 									String reply_edit = Reply_edit.getText()
 											.toString();
 									Map<String, String> map = new HashMap<String, String>();
@@ -1451,7 +1452,6 @@ private String avatar_url;
 			@Override
 			public View getView(final int position2, View convertView,
 					ViewGroup parent) {
-				Log.i("111111111", child_list.size() + "--");
 				LayoutInflater inflater = Classxinxiliu.this
 						.getLayoutInflater();
 				View child_view = inflater.inflate(

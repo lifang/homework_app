@@ -39,7 +39,7 @@
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
+            </intent-filter>x
         </activity>
         <activity
             android:name=".HomeWorkIngActivity"
@@ -71,6 +71,11 @@
         <activity
             android:name=".Classxinxiliu"
             android:windowSoftInputMode="adjustUnspecified|stateHidden" >
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
         </activity>
         <activity
             android:name="com.comdosoft.homework.SwitchClassActivity"
