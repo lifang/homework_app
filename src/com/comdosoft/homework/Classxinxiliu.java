@@ -82,8 +82,8 @@ public class Classxinxiliu extends Activity implements IXListViewListener,
 	private String reciver_id = null; // 接收者 id
 	private String user_types = "1";
 	private String reciver_types = null;// 接收者 类型
-private String avatar_url;
-	
+	private String avatar_url;
+
 	private int focus = -1; // 焦点，用于记录 要展开的 item 位置
 	private int number = 0;
 	private int position_huifu_num = -1;
@@ -201,12 +201,12 @@ private String avatar_url;
 					JSONObject student = array0.getJSONObject("student"); // 获得学生的信息
 					// id = student.getString("id");
 					// user_id = student.getString("user_id");
-					 avatar_url = student.getString("avatar_url"); // 获取本人头像昂所有在地址
-					 SharedPreferences preferences = getSharedPreferences(
-								SHARED, Context.MODE_PRIVATE);
-						Editor editor = preferences.edit();
-						editor.putString("avatar_url", avatar_url);
-						editor.commit();
+					avatar_url = student.getString("avatar_url"); // 获取本人头像昂所有在地址
+					SharedPreferences preferences = getSharedPreferences(
+							SHARED, Context.MODE_PRIVATE);
+					Editor editor = preferences.edit();
+					editor.putString("avatar_url", avatar_url);
+					editor.commit();
 					user_name = student.getString("name");
 					String nick_name = student.getString("nickname");
 					String notice = array0.getString("notice");
@@ -226,16 +226,13 @@ private String avatar_url;
 						int id = jsonObject2.getInt("id");
 						String stuname = jsonObject2.getString("name");
 						String nickname = jsonObject2.getString("nickname");
-						if(Integer.valueOf(user_id)==id)
-						{
-							
-						}
-						else
-						{
+						if (Integer.valueOf(user_id) == id) {
+
+						} else {
 							stuList.add(new ClassStuPojo(id, stuname, stu_Url,
 									nickname));
 						}
-						
+
 					}
 					main_class_classGv.setNumColumns(3);
 					main_class_classGv.setAdapter(new MainClssStuAdapter(
@@ -311,7 +308,6 @@ private String avatar_url;
 							e.printStackTrace();
 						}
 					} catch (JSONException e) {
-						// TODO Auto-generated catch block
 						e.printStackTrace();
 					}
 
@@ -874,6 +870,7 @@ private String avatar_url;
 		int huifu_num = 0;
 		private Adapter ad; // 子消息 适配器
 		private EditText Reply_edit; // 回复 编辑框
+
 		@Override
 		public int getCount() {
 			return list.size();// 数据总数
@@ -964,8 +961,9 @@ private String avatar_url;
 					guanzhu.setText("已关注"); // 显示 已关注
 				}
 			}
-			if (micropost_type == 1||user_id.equals(mess.getUser_id().toString())) {
-				guanzhu.setVisibility(View.GONE);  //  自己的消息不关注
+			if (micropost_type == 1
+					|| user_id.equals(mess.getUser_id().toString())) {
+				guanzhu.setVisibility(View.GONE); // 自己的消息不关注
 			}
 			// 点击关注
 			guanzhu.setOnClickListener(new OnClickListener() {
@@ -1057,7 +1055,6 @@ private String avatar_url;
 			button1.setTag(position);
 			// 点击删除按钮
 			button1.setOnClickListener(new OnClickListener() {
-				@Override
 				public void onClick(View v) {
 					final Handler mHandler = new Handler() {
 						public void handleMessage(android.os.Message msg) {
@@ -1121,6 +1118,7 @@ private String avatar_url;
 					thread.start();
 				}
 			});
+
 			final View layout1 = view.findViewById(R.id.child_micropost); // 回复按钮下：
 			// 隐藏部分的内容
 			if (focus == position && number == 1) {
@@ -1211,19 +1209,16 @@ private String avatar_url;
 							};
 							thread.start();
 						}
-					}else{
-						Toast.makeText(
-								getApplicationContext(),
-								"已是最后一页", 0).show();	
-						
+					} else {
+						Toast.makeText(getApplicationContext(), "已是最后一页", 0)
+								.show();
+
 					}
 				}
 			});
 
 			// 点击 回复 默认 给主消息回复
 			huifu.setOnClickListener(new OnClickListener() {
-
-				@Override
 				public void onClick(View v) {
 					prodialog = new ProgressDialog(Classxinxiliu.this);
 					prodialog.setMessage(HomeWorkParams.PD_CLASS_INFO);
@@ -1243,7 +1238,6 @@ private String avatar_url;
 						child_page = 1;
 					}
 
-					//
 					final Handler mHandler = new Handler() {
 						public void handleMessage(android.os.Message msg) {
 							switch (msg.what) {
@@ -1317,7 +1311,7 @@ private String avatar_url;
 														final String json7 = (String) msg.obj;
 														child_list = new ArrayList<Child_Micropost>();
 														parseJson_childMicropost(json7);
-//														prodialog.dismiss();
+														// prodialog.dismiss();
 														huifu = (Button) view
 																.findViewById(R.id.micropost_huifu); // 回复,用于显示隐藏的内容
 
@@ -1391,15 +1385,15 @@ private String avatar_url;
 						Toast.makeText(getApplicationContext(), "内容不能为空", 0)
 								.show();
 					} else {
-//						prodialog = new ProgressDialog(
-//								Classxinxiliu.this);
-//						prodialog
-//								.setMessage(HomeWorkParams.PD_CLASS_INFO);
-//						prodialog.show();
+						// prodialog = new ProgressDialog(
+						// Classxinxiliu.this);
+						// prodialog
+						// .setMessage(HomeWorkParams.PD_CLASS_INFO);
+						// prodialog.show();
 						Thread thread = new Thread() {
 							public void run() {
 								try {
-									
+
 									String reply_edit = Reply_edit.getText()
 											.toString();
 									Map<String, String> map = new HashMap<String, String>();
@@ -1525,7 +1519,6 @@ private String avatar_url;
 				}
 				delete.setTag(position2);
 				delete.setOnClickListener(new OnClickListener() {
-					@Override
 					public void onClick(View v) {
 						child_DelNum = Integer.parseInt(v.getTag().toString());
 
@@ -1545,18 +1538,19 @@ private String avatar_url;
 													.getString("notice");
 											if ("success".equals(status)) {
 												child_list.remove(child_DelNum);
-												
-//												View v=listView_mes
-//												.getChildAt(focus);
-//												
-//												Button b=(Button) v.findViewById(R.id.micropost_huifu);
+
+												// View v=listView_mes
+												// .getChildAt(focus);
+												//
+												// Button b=(Button)
+												// v.findViewById(R.id.micropost_huifu);
 												int a = Integer
 														.parseInt(list
 																.get(focus)
 																.getReply_microposts_count()) - 1;
-////			
-//												b.setText(HomeWorkParams.REPLY
-//														+ "(" + a + ")");
+												// //
+												// b.setText(HomeWorkParams.REPLY
+												// + "(" + a + ")");
 												list.get(focus)
 														.setReply_microposts_count(
 																a + "");
@@ -1606,10 +1600,12 @@ private String avatar_url;
 				reply.setOnClickListener(new OnClickListener() {
 					@Override
 					public void onClick(View v) {
-//						View view =(View) listView_mes
-//						.getChildAt(focus);
-//						View layout1 = view.findViewById(R.id.child_micropost);
-//						Reply_edit = (EditText) layout1.findViewById(R.id.reply_edit);
+						// View view =(View) listView_mes
+						// .getChildAt(focus);
+						// View layout1 =
+						// view.findViewById(R.id.child_micropost);
+						// Reply_edit = (EditText)
+						// layout1.findViewById(R.id.reply_edit);
 						Reply_edit.setHint(user_name + " 回复  "
 								+ child_Micropost.getSender_name() + " :");
 						reciver_id = child_Micropost.getSender_id();
