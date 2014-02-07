@@ -39,7 +39,7 @@
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>x
+            </intent-filter>
         </activity>
         <activity
             android:name=".HomeWorkIngActivity"
@@ -47,8 +47,7 @@
         </activity>
         <activity
             android:name=".DictationBeginActivity"
-            android:label="@string/app_name"
-            android:launchMode="singleTask" >
+            android:label="@string/app_name" >
         </activity>
         <activity android:name=".RegistrationActivity" />
         <activity
@@ -70,7 +69,8 @@
             android:name=".SettingActivity"
             android:windowSoftInputMode="adjustUnspecified|stateHidden" />
         <activity
-            android:name=".Classxinxiliu">
+            android:name=".Classxinxiliu"
+            android:windowSoftInputMode="adjustUnspecified|stateHidden" >
         </activity>
         <activity
             android:name="com.comdosoft.homework.SwitchClassActivity"
@@ -79,9 +79,7 @@
         </activity>
         <activity android:name="com.comdosoft.homework.AboutMeActivity" >
         </activity>
-        <activity
-            android:name=".DictationRecordActivity"
-            android:launchMode="singleTask" />
+        <activity android:name=".DictationRecordActivity" />
         <activity
             android:name="com.tencent.tauth.AuthActivity"
             android:launchMode="singleTask"

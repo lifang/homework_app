@@ -108,8 +108,9 @@ public class SwitchClassActivity extends Activity {
 								editor.putString("school_class_id",
 										String.valueOf(id));
 								editor.commit();
-								HomeWork hw = (HomeWork) getApplication();
+								hw.setLastcount(0);
 								hw.setMainItem(0);
+								HomeWorkMainActivity.instance.finish();
 								Intent intent = new Intent(
 										SwitchClassActivity.this,
 										HomeWorkMainActivity.class);
@@ -130,7 +131,6 @@ public class SwitchClassActivity extends Activity {
 
 	public boolean onKeyDown(int keyCode, KeyEvent event) {
 		if (keyCode == KeyEvent.KEYCODE_BACK) {
-			
 			SwitchClassActivity.this.finish();
 			return true;
 		}
