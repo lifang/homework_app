@@ -92,6 +92,11 @@ public class HomeWorkIngActivity extends Activity implements Urlinterface {
 				builder.setPositiveButton("确定", null);
 				builder.show();
 				break;
+			case 5:
+				builder.setMessage("获取任务列表失败");
+				builder.setPositiveButton("确定", null);
+				builder.show();
+				break;
 			}
 		};
 	};
@@ -331,6 +336,8 @@ public class HomeWorkIngActivity extends Activity implements Urlinterface {
 				JSONObject obj = new JSONObject(json);
 				if (obj.getString("status").equals("success")) {
 					analyzeJson(json);
+				}else{
+					handler.sendEmptyMessage(5);
 				}
 			} catch (Exception e) {
 				e.printStackTrace();
@@ -343,6 +350,7 @@ public class HomeWorkIngActivity extends Activity implements Urlinterface {
 	class getQuestion implements Runnable {
 		public void run() {
 			Looper.prepare();
+			questionlist = new ArrayList<ListeningPojo>();
 			Map<String, String> maps = new HashMap<String, String>();
 			maps.put("student_id", student_id + "");
 			maps.put("publish_question_package_id", p_q_package_id + "");
@@ -416,7 +424,6 @@ public class HomeWorkIngActivity extends Activity implements Urlinterface {
 			ListeningQuestionList.listeningList.clear();
 			ListeningQuestionList.answerList.clear();
 			// 阅读
-			questionlist = new ArrayList<ListeningPojo>();
 			JSONArray ja = new JSONObject(json).getJSONObject("package")
 					.getJSONArray("reading");
 			if (ja.length() != 0) {

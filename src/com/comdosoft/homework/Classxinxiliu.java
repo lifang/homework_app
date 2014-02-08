@@ -28,11 +28,6 @@ import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
-import android.text.Editable;
-import android.text.Layout;
-import android.text.Selection;
-import android.text.SpannableStringBuilder;
-import android.text.TextWatcher;
 import android.util.Log;
 import android.view.Display;
 import android.view.LayoutInflater;
@@ -82,8 +77,8 @@ public class Classxinxiliu extends Activity implements IXListViewListener,
 	private String reciver_id = null; // 接收者 id
 	private String user_types = "1";
 	private String reciver_types = null;// 接收者 类型
-	private String avatar_url;
-
+private String avatar_url;
+	
 	private int focus = -1; // 焦点，用于记录 要展开的 item 位置
 	private int number = 0;
 	private int position_huifu_num = -1;
@@ -201,24 +196,24 @@ public class Classxinxiliu extends Activity implements IXListViewListener,
 					JSONObject student = array0.getJSONObject("student"); // 获得学生的信息
 					// id = student.getString("id");
 					// user_id = student.getString("user_id");
-					avatar_url = student.getString("avatar_url"); // 获取本人头像昂所有在地址
-					SharedPreferences preferences = getSharedPreferences(
-							SHARED, Context.MODE_PRIVATE);
-					Editor editor = preferences.edit();
-					editor.putString("avatar_url", avatar_url);
-					editor.commit();
+					 avatar_url = student.getString("avatar_url"); // 获取本人头像昂所有在地址
+					 user_Url = Urlinterface.IP + avatar_url;
+						thread1.start();
+					 SharedPreferences preferences = getSharedPreferences(
+								SHARED, Context.MODE_PRIVATE);
+						Editor editor = preferences.edit();
+						editor.putString("avatar_url", avatar_url);
+						editor.commit();
 					user_name = student.getString("name");
 					String nick_name = student.getString("nickname");
 					String notice = array0.getString("notice");
-					user_Url = Urlinterface.IP + avatar_url;
-					thread1.start();
 					main_class_oneTv1.setText(user_name); // 设置本名
 					main_class_oneTv2.setText(nick_name); // 设置外号
 					JSONObject class1 = array0.getJSONObject("class"); // 或得班级信息
 					String class_name = class1.getString("name"); // 获取class_name
 					main_class_classesTv.setText(class_name);
 					school_class_id = class1.getString("id");
-					// 循环获取班级学生的信息classmates
+//					 循环获取班级学生的信息classmates
 					JSONArray jsonArray = array0.getJSONArray("classmates");
 					for (int i = 0; i < jsonArray.length(); i++) {
 						JSONObject jsonObject2 = (JSONObject) jsonArray.get(i);
@@ -226,13 +221,16 @@ public class Classxinxiliu extends Activity implements IXListViewListener,
 						int id = jsonObject2.getInt("id");
 						String stuname = jsonObject2.getString("name");
 						String nickname = jsonObject2.getString("nickname");
-						if (Integer.valueOf(user_id) == id) {
-
-						} else {
+						if(Integer.valueOf(user_id)==id)
+						{
+							
+						}
+						else
+						{
 							stuList.add(new ClassStuPojo(id, stuname, stu_Url,
 									nickname));
 						}
-
+						
 					}
 					main_class_classGv.setNumColumns(3);
 					main_class_classGv.setAdapter(new MainClssStuAdapter(
@@ -308,6 +306,7 @@ public class Classxinxiliu extends Activity implements IXListViewListener,
 							e.printStackTrace();
 						}
 					} catch (JSONException e) {
+						// TODO Auto-generated catch block
 						e.printStackTrace();
 					}
 
@@ -870,7 +869,6 @@ public class Classxinxiliu extends Activity implements IXListViewListener,
 		int huifu_num = 0;
 		private Adapter ad; // 子消息 适配器
 		private EditText Reply_edit; // 回复 编辑框
-
 		@Override
 		public int getCount() {
 			return list.size();// 数据总数
@@ -961,9 +959,8 @@ public class Classxinxiliu extends Activity implements IXListViewListener,
 					guanzhu.setText("已关注"); // 显示 已关注
 				}
 			}
-			if (micropost_type == 1
-					|| user_id.equals(mess.getUser_id().toString())) {
-				guanzhu.setVisibility(View.GONE); // 自己的消息不关注
+			if (micropost_type == 1||user_id.equals(mess.getUser_id().toString())) {
+				guanzhu.setVisibility(View.GONE);  //  自己的消息不关注
 			}
 			// 点击关注
 			guanzhu.setOnClickListener(new OnClickListener() {
@@ -1055,6 +1052,7 @@ public class Classxinxiliu extends Activity implements IXListViewListener,
 			button1.setTag(position);
 			// 点击删除按钮
 			button1.setOnClickListener(new OnClickListener() {
+				@Override
 				public void onClick(View v) {
 					final Handler mHandler = new Handler() {
 						public void handleMessage(android.os.Message msg) {
@@ -1118,7 +1116,6 @@ public class Classxinxiliu extends Activity implements IXListViewListener,
 					thread.start();
 				}
 			});
-
 			final View layout1 = view.findViewById(R.id.child_micropost); // 回复按钮下：
 			// 隐藏部分的内容
 			if (focus == position && number == 1) {
@@ -1209,17 +1206,20 @@ public class Classxinxiliu extends Activity implements IXListViewListener,
 							};
 							thread.start();
 						}
-					} else {
-						Toast.makeText(getApplicationContext(), "已是最后一页", 0)
-								.show();
-
+					}else{
+						Toast.makeText(
+								getApplicationContext(),
+								"已是最后一页", Toast.LENGTH_SHORT).show();	
+						
 					}
 				}
 			});
 
 			// 点击 回复 默认 给主消息回复
 			huifu.setOnClickListener(new OnClickListener() {
+				@Override
 				public void onClick(View v) {
+					Log.i("aa","判断是否点击");
 					prodialog = new ProgressDialog(Classxinxiliu.this);
 					prodialog.setMessage(HomeWorkParams.PD_CLASS_INFO);
 					prodialog.show();
@@ -1238,10 +1238,12 @@ public class Classxinxiliu extends Activity implements IXListViewListener,
 						child_page = 1;
 					}
 
+					//
 					final Handler mHandler = new Handler() {
 						public void handleMessage(android.os.Message msg) {
 							switch (msg.what) {
 							case 0:
+								Log.i("aa","case0");
 								final String json7 = (String) msg.obj;
 								child_list = new ArrayList<Child_Micropost>();
 								parseJson_childMicropost(json7);
@@ -1285,6 +1287,7 @@ public class Classxinxiliu extends Activity implements IXListViewListener,
 						public void handleMessage(android.os.Message msg) {
 							switch (msg.what) {
 							case 0:
+								Log.i("aa","小回复");
 								final String json2 = (String) msg.obj;
 								if (json2.length() == 0) {
 
@@ -1311,7 +1314,7 @@ public class Classxinxiliu extends Activity implements IXListViewListener,
 														final String json7 = (String) msg.obj;
 														child_list = new ArrayList<Child_Micropost>();
 														parseJson_childMicropost(json7);
-														// prodialog.dismiss();
+//														prodialog.dismiss();
 														huifu = (Button) view
 																.findViewById(R.id.micropost_huifu); // 回复,用于显示隐藏的内容
 
@@ -1319,7 +1322,6 @@ public class Classxinxiliu extends Activity implements IXListViewListener,
 																.getReply_microposts_count()) + 1;
 														mess.setReply_microposts_count(a
 																+ "");
-														list.add(position, mess);
 
 														huifu.setText(HomeWorkParams.REPLY
 																+ "(" + a + ")");
@@ -1385,15 +1387,15 @@ public class Classxinxiliu extends Activity implements IXListViewListener,
 						Toast.makeText(getApplicationContext(), "内容不能为空", 0)
 								.show();
 					} else {
-						// prodialog = new ProgressDialog(
-						// Classxinxiliu.this);
-						// prodialog
-						// .setMessage(HomeWorkParams.PD_CLASS_INFO);
-						// prodialog.show();
+//						prodialog = new ProgressDialog(
+//								Classxinxiliu.this);
+//						prodialog
+//								.setMessage(HomeWorkParams.PD_CLASS_INFO);
+//						prodialog.show();
 						Thread thread = new Thread() {
 							public void run() {
 								try {
-
+									Log.i("aa","pandua");
 									String reply_edit = Reply_edit.getText()
 											.toString();
 									Map<String, String> map = new HashMap<String, String>();
@@ -1445,7 +1447,6 @@ public class Classxinxiliu extends Activity implements IXListViewListener,
 			@Override
 			public View getView(final int position2, View convertView,
 					ViewGroup parent) {
-				Log.i("111111111", child_list.size() + "--");
 				LayoutInflater inflater = Classxinxiliu.this
 						.getLayoutInflater();
 				View child_view = inflater.inflate(
@@ -1519,6 +1520,7 @@ public class Classxinxiliu extends Activity implements IXListViewListener,
 				}
 				delete.setTag(position2);
 				delete.setOnClickListener(new OnClickListener() {
+					@Override
 					public void onClick(View v) {
 						child_DelNum = Integer.parseInt(v.getTag().toString());
 
@@ -1538,19 +1540,18 @@ public class Classxinxiliu extends Activity implements IXListViewListener,
 													.getString("notice");
 											if ("success".equals(status)) {
 												child_list.remove(child_DelNum);
-
-												// View v=listView_mes
-												// .getChildAt(focus);
-												//
-												// Button b=(Button)
-												// v.findViewById(R.id.micropost_huifu);
+												
+//												View v=listView_mes
+//												.getChildAt(focus);
+//												
+//												Button b=(Button) v.findViewById(R.id.micropost_huifu);
 												int a = Integer
 														.parseInt(list
 																.get(focus)
 																.getReply_microposts_count()) - 1;
-												// //
-												// b.setText(HomeWorkParams.REPLY
-												// + "(" + a + ")");
+////			
+//												b.setText(HomeWorkParams.REPLY
+//														+ "(" + a + ")");
 												list.get(focus)
 														.setReply_microposts_count(
 																a + "");
@@ -1600,12 +1601,10 @@ public class Classxinxiliu extends Activity implements IXListViewListener,
 				reply.setOnClickListener(new OnClickListener() {
 					@Override
 					public void onClick(View v) {
-						// View view =(View) listView_mes
-						// .getChildAt(focus);
-						// View layout1 =
-						// view.findViewById(R.id.child_micropost);
-						// Reply_edit = (EditText)
-						// layout1.findViewById(R.id.reply_edit);
+//						View view =(View) listView_mes
+//						.getChildAt(focus);
+//						View layout1 = view.findViewById(R.id.child_micropost);
+//						Reply_edit = (EditText) layout1.findViewById(R.id.reply_edit);
 						Reply_edit.setHint(user_name + " 回复  "
 								+ child_Micropost.getSender_name() + " :");
 						reciver_id = child_Micropost.getSender_id();
