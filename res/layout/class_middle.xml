@@ -1,35 +1,21 @@
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="fill_parent"
-    android:layout_height="fill_parent" >
+    android:layout_height="fill_parent"
+    android:background="#f6f2f3"
+    android:orientation="horizontal" >
 
-    <RelativeLayout
-        android:id="@+id/classRelativeLayout_left"
-        android:layout_width="705px"
-        android:layout_height="fill_parent" >
-
-        <EditText
-            android:id="@+id/class_left"
-            android:layout_width="3.34px"
-            android:layout_height="fill_parent"
-            android:background="#FFFFFF"
-            android:focusable="false" />
-
-        <EditText
-            android:id="@+id/class_right"
-            android:layout_width="3.34px"
-            android:layout_height="fill_parent"
-            android:layout_alignParentRight="true"
-            android:layout_alignParentTop="true"
-            android:background="#FFFFFF"
-            android:focusable="false" >
-        </EditText>
+    <LinearLayout
+        android:layout_width="720px"
+        android:layout_height="fill_parent"
+        android:layout_marginLeft="3.34px"
+        android:layout_marginRight="3.34px"
+        android:orientation="vertical" >
 
         <RelativeLayout
             android:id="@+id/relativeLayout1"
             android:layout_width="fill_parent"
-            android:layout_height="match_parent"
-            android:layout_marginLeft="3.34px"
-            android:layout_marginRight="3.34px"
+            android:layout_height="wrap_content"
             android:background="#f6f2f3"
             android:focusable="true"
             android:focusableInTouchMode="true"
@@ -91,24 +77,39 @@
                 android:text="@string/class_button_myself"
                 android:textColor="#FFFFFF"
                 android:textSize="24px" />
+        </RelativeLayout>
 
-            <com.comdosoft.homework.pull.XListView
-                android:id="@+id/pull_refresh_list"
-                android:layout_width="fill_parent"
+        <com.comdosoft.homework.tools.PullToRefreshView
+            xmlns:android="http://schemas.android.com/apk/res/android"
+            android:id="@+id/main_pull_refresh_view"
+            android:layout_width="720px"
+            android:layout_height="fill_parent"
+            android:descendantFocusability="afterDescendants"
+            android:orientation="vertical" >
+
+            <ScrollView
+                android:layout_width="match_parent"
                 android:layout_height="fill_parent"
-                android:layout_below="@+id/class_button_myself"
-                android:background="#f6f2f3"
                 android:cacheColorHint="#00000000"
                 android:fadingEdge="none"
                 android:listSelector="#00000000"
-                android:scrollbars="none" />
-        </RelativeLayout>
-    </RelativeLayout>
+                android:scrollbars="none" >
+
+                <LinearLayout
+                    android:id="@+id/layout"
+                    android:layout_width="match_parent"
+                    android:layout_height="fill_parent"
+                    android:paddingLeft="10dp"
+                    android:paddingRight="10dp"
+                    android:orientation="vertical" >
+                </LinearLayout>
+            </ScrollView>
+        </com.comdosoft.homework.tools.PullToRefreshView>
+    </LinearLayout>
 
     <LinearLayout
         android:layout_width="fill_parent"
         android:layout_height="fill_parent"
-        android:layout_toRightOf="@+id/classRelativeLayout_left"
         android:background="#636362"
         android:gravity="center_horizontal"
         android:orientation="vertical" >
@@ -163,4 +164,4 @@
         </LinearLayout>
     </LinearLayout>
 
-</RelativeLayout>
+</LinearLayout>

@@ -88,6 +88,8 @@ public class AboutMeActivity extends Activity
 	//解析获取到的Json
 	public int getNewsJson(String json)
 	{
+		
+		Log.i("aaa", json);
 		try {
 			JSONObject jsonobject=new JSONObject(json);
 			String status=(String) jsonobject.get("status");
@@ -232,9 +234,9 @@ public class AboutMeActivity extends Activity
 									mp.put("user_id", Amlist.get(position).getUser_id());
 									mp.put("school_class_id",String.valueOf(school_class_id));
 									mp.put("message_id", Amlist.get(position).getId());
-									
+									Log.i("aaa", Amlist.get(position).getUser_id()+"/"+String.valueOf(school_class_id)+"/"+Amlist.get(position).getId());
 									String json=HomeWorkTool.doPost(Urlinterface.read_message, mp);
-									Log.i("bbb", "message_id:"+Amlist.get(position).getId()+"json:"+json);
+//									Log.i("bbb", "message_id:"+Amlist.get(position).getId()+"json:"+json);
 									JSONObject jsonobject=new JSONObject(json);
 									String status=jsonobject.getString("status");
 									Message msg=new Message();

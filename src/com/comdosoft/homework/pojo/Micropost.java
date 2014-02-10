@@ -97,7 +97,12 @@ public class Micropost
 	public void setCreated_at(String created_at) {
 		this.created_at = created_at;
 	}
-	
 
-	
+	@Override
+	public String toString() {
+		return "Micropost [id=" + id + ", user_id=" + user_id + ", user_types="
+				+ user_types + ", name=" + name + ", content=" + content
+				+ ", avatar_url=" + avatar_url + ", created_at=" + created_at
+				+ ", reply_microposts_count=" + reply_microposts_count + "]";
+	}
 }

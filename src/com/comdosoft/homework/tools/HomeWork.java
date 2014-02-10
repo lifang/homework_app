@@ -3,9 +3,14 @@ package com.comdosoft.homework.tools;
 import java.util.List;
 
 import android.app.Application;
+import android.content.Context;
 
 import com.comdosoft.homework.pojo.ListeningPojo;
 import com.comdosoft.homework.pojo.QuestionPojo;
+import com.nostra13.universalimageloader.cache.disc.naming.Md5FileNameGenerator;
+import com.nostra13.universalimageloader.core.ImageLoader;
+import com.nostra13.universalimageloader.core.ImageLoaderConfiguration;
+import com.nostra13.universalimageloader.core.assist.QueueProcessingType;
 
 public class HomeWork extends Application {
 	private int Question_allNumber;
@@ -25,20 +30,25 @@ public class HomeWork extends Application {
 	private int newCount;
 	private boolean newsFlag;
 	private int lastcount;
-	
+
 	public int getLastcount() {
 		return lastcount;
 	}
+
 	private int history_item;
+
 	public void setLastcount(int lastcount) {
 		this.lastcount = lastcount;
 	}
+
 	public boolean isNewsFlag() {
 		return newsFlag;
 	}
+
 	public void setNewsFlag(boolean newsFlag) {
 		this.newsFlag = newsFlag;
 	}
+
 	public HomeWork() {
 		this.setNewsFlag(true);
 		this.setNewCount(0);
@@ -47,6 +57,7 @@ public class HomeWork extends Application {
 		this.setMainItem(0);
 		this.setMessage_id(-1);
 	}
+
 	public int getNewCount() {
 		return newCount;
 	}
@@ -54,13 +65,15 @@ public class HomeWork extends Application {
 	public void setNewCount(int newCount) {
 		this.newCount = newCount;
 	}
-	
+
 	public String getNoselect_message() {
 		return noselect_message;
 	}
+
 	public void setNoselect_message(String noselect_message) {
 		this.noselect_message = noselect_message;
 	}
+
 	public int getQuestion_index() {
 		return question_index;
 	}
@@ -160,6 +173,7 @@ public class HomeWork extends Application {
 	public int getMessage_id() {
 		return message_id;
 	}
+
 	public void setMessage_id(int message_id) {
 		this.message_id = message_id;
 	}
@@ -172,4 +186,25 @@ public class HomeWork extends Application {
 		this.history_item = history_item;
 	}
 
+	public void onCreate() {
+		super.onCreate();
+		initImageLoader(getApplicationContext());
+	}
+
+	public static void initImageLoader(Context context) {
+		// This configuration tuning is custom. You can tune every option, you
+		// may tune some of them,
+		// or you can create default configuration by
+		// ImageLoaderConfiguration.createDefault(this);
+		// method.
+		ImageLoaderConfiguration config = new ImageLoaderConfiguration.Builder(
+				context).threadPriority(Thread.NORM_PRIORITY - 2)
+				.denyCacheImageMultipleSizesInMemory()
+				.discCacheFileNameGenerator(new Md5FileNameGenerator())
+				.tasksProcessingOrder(QueueProcessingType.LIFO)
+				.writeDebugLogs() // Remove for release app
+				.build();
+		// Initialize ImageLoader with configuration.
+		ImageLoader.getInstance().init(config);
+	}
 }
