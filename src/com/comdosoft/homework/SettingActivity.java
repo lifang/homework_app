@@ -79,7 +79,14 @@ public class SettingActivity extends Activity implements Urlinterface {
 			nameS = preferences.getString("name", "");
 
 		}
+		File file = new File(Environment.getExternalStorageDirectory()
+				+ "/1" + IMAGE_FILE_NAME);
 
+			if (file.exists()) {
+				file.delete();
+
+			}
+		
 		layout = this.findViewById(R.id.set_photolayout); // 隐藏内容
 		faceImage = (ImageButton) findViewById(R.id.set_touxiang);
 		nickname = (EditText) findViewById(R.id.set_nickname);
@@ -199,32 +206,33 @@ public class SettingActivity extends Activity implements Urlinterface {
 						entity.addPart("avatar", new FileBody(new File(
 								Environment.getExternalStorageDirectory()
 										+ "/1" + IMAGE_FILE_NAME)));
-					} else {
-						Drawable normal = getResources().getDrawable(
-								R.drawable.moren);
-						File file = new File(
-								Environment.getExternalStorageDirectory()
-										+ "/moren.jpg");
-
-						if (file.exists()) {
-							file.delete();
-
-						}
-						Bitmap bitmap = ((BitmapDrawable) normal).getBitmap();
-						file.createNewFile();
-						FileOutputStream stream = new FileOutputStream(file);
-						ByteArrayOutputStream stream1 = new ByteArrayOutputStream();
-						bitmap.compress(Bitmap.CompressFormat.JPEG, 60, stream);
-						byte[] buf = stream1.toByteArray(); // 将图片流以字符串形式存储下来
-						// byte[] buf = s.getBytes();
-						stream.write(buf);
-						stream.close();
-
-						entity.addPart("avatar", new FileBody(new File(
-								Environment.getExternalStorageDirectory()
-										+ "/moren.jpg")));
-
-					}
+					} 
+//					else {
+//						Drawable normal = getResources().getDrawable(
+//								R.drawable.moren);
+//						File file = new File(
+//								Environment.getExternalStorageDirectory()
+//										+ "/moren.jpg");
+//
+//						if (file.exists()) {
+//							file.delete();
+//
+//						}
+//						Bitmap bitmap = ((BitmapDrawable) normal).getBitmap();
+//						file.createNewFile();
+//						FileOutputStream stream = new FileOutputStream(file);
+//						ByteArrayOutputStream stream1 = new ByteArrayOutputStream();
+//						bitmap.compress(Bitmap.CompressFormat.JPEG, 60, stream);
+//						byte[] buf = stream1.toByteArray(); // 将图片流以字符串形式存储下来
+//						// byte[] buf = s.getBytes();
+//						stream.write(buf);
+//						stream.close();
+//
+//						entity.addPart("avatar", new FileBody(new File(
+//								Environment.getExternalStorageDirectory()
+//										+ "/moren.jpg")));
+//
+//					}
 
 					entity.addPart("nickname", new StringBody(nicknameS));
 					entity.addPart("name", new StringBody(nameS));
