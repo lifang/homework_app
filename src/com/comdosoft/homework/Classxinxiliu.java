@@ -12,14 +12,19 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import android.app.Activity;
+import android.app.AlertDialog;
+import android.app.Dialog;
+import android.app.AlertDialog.Builder;
 import android.app.ProgressDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.SharedPreferences;
 import android.content.SharedPreferences.Editor;
 import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
+import android.text.Layout;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -88,6 +93,7 @@ public class Classxinxiliu extends Activity implements OnHeaderRefreshListener,
 	private int list_item;// list集合的最后一位索引
 	private int user_types = 1;
 	public List<Boolean> gk_list;// 回复开关集合
+	public List<RelativeLayout> item_huifu;// 回复开关集合
 	private int micropost_type;// 微博类型 0表是全部 1表示我的
 	private List<Micropost> list;
 	private List<String> care;
@@ -160,6 +166,16 @@ public class Classxinxiliu extends Activity implements OnHeaderRefreshListener,
 						R.drawable.an));
 				break;
 
+			case 6:
+				
+				focus = -1;
+				list.clear();
+				click_list();
+				final String json_all21 = (String) msg.obj;
+			
+					parseJson_Myself(json_all21);
+				
+				break;
 			}
 		}
 	};
@@ -168,6 +184,7 @@ public class Classxinxiliu extends Activity implements OnHeaderRefreshListener,
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.class_middle);
 		hw = (HomeWork) getApplication();
+		
 		main_class_classGv = (GridView) findViewById(R.id.main_class_classGv);
 		main_class_classesTv = (TextView) findViewById(R.id.main_class_classesTv);
 		main_class_oneIV = (ImageView) findViewById(
@@ -208,7 +225,15 @@ public class Classxinxiliu extends Activity implements OnHeaderRefreshListener,
 		thread.start();
 	}
 
+	@Override
+	protected void onResume() {
+		super.onResume();
+		Thread thread = new Thread(new get_class_info());
+		thread.start();
+	}
+
 	public void init() {
+		item_huifu=new ArrayList<RelativeLayout>();
 		micropost_type = 0;// 默认现实全部
 		mPullToRefreshView = (PullToRefreshView) findViewById(R.id.main_pull_refresh_view);
 		mPullToRefreshView.setOnHeaderRefreshListener(this);
@@ -251,6 +276,7 @@ public class Classxinxiliu extends Activity implements OnHeaderRefreshListener,
 		Reply_edit_list.add(Reply_edit);
 		guanzhu_list.add(guanzhu);
 		gk_list.add(true);
+//		item_huifu.add(convertView);
 		final Button lookMore = (Button) convertView
 				.findViewById(R.id.lookMore); // 查看更多
 		lookMore.setOnClickListener(new View.OnClickListener() {
@@ -259,9 +285,9 @@ public class Classxinxiliu extends Activity implements OnHeaderRefreshListener,
 			}
 		});
 
-		Button huifu = (Button) convertView.findViewById(R.id.micropost_huifu);
+		Button huifu = (Button) convertView.findViewById(R.id.micropost_huifu);// 回复,用于显示隐藏的内容
 		btlist.add(huifu);
-		// 回复,用于显示隐藏的内容
+		
 		Button Button_huifu = (Button) convertView
 				.findViewById(R.id.Button_huifu); // 隐藏内容中的回复按钮
 
@@ -311,11 +337,38 @@ public class Classxinxiliu extends Activity implements OnHeaderRefreshListener,
 		}
 		button1.setOnClickListener(new View.OnClickListener() {
 			public void onClick(View v) {
-				del_micropost(i, mess);
+				
+				
+				Dialog dialog = new AlertDialog.Builder(Classxinxiliu.this)
+				.setTitle("提示")
+				.setMessage("您确认要删除么?")
+				.setPositiveButton("确认", new DialogInterface.OnClickListener() {
+					@Override
+					public void onClick(DialogInterface dialog, int which)
+					{
+						del_micropost(i, mess);
+						
+					}
+				})
+				.setNegativeButton("取消", new DialogInterface.OnClickListener()
+				{
+
+					@Override
+					public void onClick(DialogInterface dialog, int which)
+					{
+
+						dialog.dismiss();
+					}
+				}).create();
+
+		dialog.show();
+				
+				
 			}
 		});
 		final RelativeLayout layout1 = (RelativeLayout) convertView
 				.findViewById(R.id.child_micropost); // 回复界面
+		item_huifu.add(layout1);
 		// 隐藏部分的内容
 		huifu.setOnClickListener(new View.OnClickListener() {
 
@@ -466,8 +519,6 @@ public class Classxinxiliu extends Activity implements OnHeaderRefreshListener,
 											child_list.remove(item);
 											ziAdapter_list.get(focus)
 													.notifyDataSetChanged();
-											// list_list.get(focus).setAdapter(
-											// new ZiAdapter());
 											HomeWorkTool
 													.setListViewHeightBasedOnChildren(list_list
 															.get(focus));
@@ -475,7 +526,6 @@ public class Classxinxiliu extends Activity implements OnHeaderRefreshListener,
 													HomeWorkParams.REPLY + "("
 															+ child_list.size()
 															+ ")");
-
 										}
 										Toast.makeText(getApplicationContext(),
 												notice, Toast.LENGTH_SHORT)
@@ -490,13 +540,12 @@ public class Classxinxiliu extends Activity implements OnHeaderRefreshListener,
 							}
 						}
 					};
-					Thread thread = new Thread() {
+					final Thread thread = new Thread() {
 						public void run() {
 							try {
 								Map<String, String> map = new HashMap<String, String>();
 								map.put("reply_micropost_id",
 										child_Micropost.getId());
-
 								String child_delete_json = HomeWorkTool.doPost(
 										Urlinterface.DELETE_REPLY_POSTS, map);
 								Message msg = new Message();// 创建Message 对象
@@ -508,7 +557,33 @@ public class Classxinxiliu extends Activity implements OnHeaderRefreshListener,
 							}
 						}
 					};
-					thread.start();
+					
+					
+					
+					Dialog dialog = new AlertDialog.Builder(Classxinxiliu.this)
+					.setTitle("提示")
+					.setMessage("您确认要删除么?")
+					.setPositiveButton("确认", new DialogInterface.OnClickListener() {
+						@Override
+						public void onClick(DialogInterface dialog, int which)
+						{
+							thread.start();
+							
+						}
+					})
+					.setNegativeButton("取消", new DialogInterface.OnClickListener()
+					{
+
+						@Override
+						public void onClick(DialogInterface dialog, int which)
+						{
+
+							dialog.dismiss();
+						}
+					}).create();
+
+			dialog.show();
+					
 				}
 			});
 
@@ -610,13 +685,35 @@ public class Classxinxiliu extends Activity implements OnHeaderRefreshListener,
 
 	private void setSkipJson() {
 		// 查看 跳到本界面的 处理操作
-
+		
+		Thread thread = new Thread() {
+			public void run() {
+				try {
+					Map<String, String> map = new HashMap<String, String>();
+					map.put("user_id", user_id);
+					map.put("school_class_id", school_class_id);
+					map.put("page", page + "");
+					json = HomeWorkTool.sendGETRequest(
+							Urlinterface.MY_MICROPOSTS, map);
+					Message msg = new Message();// 创建Message 对象
+					msg.what = 6;
+					msg.obj = json;
+					handler.sendMessage(msg);
+//					handler.sendEmptyMessage(4);// 关闭prodialog
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
+			}
+		};
+		thread.start();
+		
+		
 		lookStr = hw.getNoselect_message();
 		Log.i("linshi", "1");
 		Micropost lookStr_micropost = new Micropost();
 		if (lookStr != null && !lookStr.equals("")) {
 			Log.i("linshi", "2");
-			care.clear();
+//			care.clear();
 			page = 1;
 			micropost_type = 1;
 			hw.setNoselect_message(""); // 将 公共变量Noselect_message
@@ -1056,7 +1153,8 @@ public class Classxinxiliu extends Activity implements OnHeaderRefreshListener,
 		};
 
 		String reply_edit = Reply_edit.getText().toString();
-		if (reply_edit.length() == 0) {
+		String kongge = reply_edit.replaceAll(" ", "");
+		if (reply_edit.length() == 0||kongge.equals("")) {
 			Toast.makeText(getApplicationContext(), "内容不能为空",
 					Toast.LENGTH_SHORT).show();
 		} else {
@@ -1127,7 +1225,8 @@ public class Classxinxiliu extends Activity implements OnHeaderRefreshListener,
 		};
 
 		final String fabiaoContents = fabiao_content.getText().toString();
-		if (fabiaoContents.length() == 0) {
+		String kongge = fabiaoContents.replaceAll(" ", "");
+		if (fabiaoContents.length() == 0||kongge.equals("")) {
 			Toast.makeText(getApplicationContext(), "内容不能为空",
 					Toast.LENGTH_SHORT).show();
 		} else {
@@ -1163,7 +1262,14 @@ public class Classxinxiliu extends Activity implements OnHeaderRefreshListener,
 			EditText Reply_edit, final ListView listView2, final Button lookMore) {
 		child_list = new ArrayList<Child_Micropost>();
 		if (gk_list.get(i) == true) {
+		
 			gk_list.set(i, false);
+		for (int j = 0; j < item_huifu.size(); j++) {
+			if (j!=i) {
+				item_huifu.get(j).setVisibility(View.GONE);
+				
+			}
+		}
 			focus = i;
 			micropost_id = mess.getId();// 点击 回复 默认 给主消息回复 记录 主消息 id
 			reciver_id = mess.getUser_id();
@@ -1353,7 +1459,11 @@ public class Classxinxiliu extends Activity implements OnHeaderRefreshListener,
 				json = HomeWorkTool.sendGETRequest(Urlinterface.get_class_info,
 						map);
 				setJson(json);
+				lookStr = hw.getNoselect_message();
+				
+				if (lookStr != null && !lookStr.equals("")) {
 				setSkipJson();
+				}
 				handler.sendEmptyMessage(0);
 			} catch (Exception e) {
 				e.printStackTrace();
@@ -1407,9 +1517,26 @@ public class Classxinxiliu extends Activity implements OnHeaderRefreshListener,
 	public void click_list() {
 		Linear_layout.removeAllViews();
 		Reply_edit_list.clear();
-		guanzhu_list.clear();
+//		guanzhu_list.clear();
 		gk_list.clear();
 		btlist.clear();
 		ziAdapter_list.clear();
 	}
+	
+
+//	protected void dialog() {
+//	 AlertDialog.Builder builder = new Builder(this);
+//	 builder.setMessage("确认退出吗？");
+//	 builder.setTitle("提示");
+//	  builder.setPositiveButton("确认", new DialogInterface.OnClickListener() {
+//  public void onClick(DialogInterface dialog, int which) {
+//		  
+//	  }});
+// builder.setNegativeButton("取消", new DialogInterface.OnClickListener() {
+//  public void onClick(DialogInterface dialog, int which) {}});
+//	  builder.create().show();
+//	　　 }
+
+
+	
 }
