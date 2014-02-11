@@ -466,8 +466,6 @@ public class Classxinxiliu extends Activity implements OnHeaderRefreshListener,
 											child_list.remove(item);
 											ziAdapter_list.get(focus)
 													.notifyDataSetChanged();
-											// list_list.get(focus).setAdapter(
-											// new ZiAdapter());
 											HomeWorkTool
 													.setListViewHeightBasedOnChildren(list_list
 															.get(focus));
@@ -475,7 +473,6 @@ public class Classxinxiliu extends Activity implements OnHeaderRefreshListener,
 													HomeWorkParams.REPLY + "("
 															+ child_list.size()
 															+ ")");
-
 										}
 										Toast.makeText(getApplicationContext(),
 												notice, Toast.LENGTH_SHORT)
@@ -496,7 +493,6 @@ public class Classxinxiliu extends Activity implements OnHeaderRefreshListener,
 								Map<String, String> map = new HashMap<String, String>();
 								map.put("reply_micropost_id",
 										child_Micropost.getId());
-
 								String child_delete_json = HomeWorkTool.doPost(
 										Urlinterface.DELETE_REPLY_POSTS, map);
 								Message msg = new Message();// 创建Message 对象
@@ -1056,7 +1052,8 @@ public class Classxinxiliu extends Activity implements OnHeaderRefreshListener,
 		};
 
 		String reply_edit = Reply_edit.getText().toString();
-		if (reply_edit.length() == 0) {
+		String kongge = reply_edit.replaceAll(" ", "");
+		if (reply_edit.length() == 0||kongge.equals("")) {
 			Toast.makeText(getApplicationContext(), "内容不能为空",
 					Toast.LENGTH_SHORT).show();
 		} else {
@@ -1127,7 +1124,8 @@ public class Classxinxiliu extends Activity implements OnHeaderRefreshListener,
 		};
 
 		final String fabiaoContents = fabiao_content.getText().toString();
-		if (fabiaoContents.length() == 0) {
+		String kongge = fabiaoContents.replaceAll(" ", "");
+		if (fabiaoContents.length() == 0||kongge.equals("")) {
 			Toast.makeText(getApplicationContext(), "内容不能为空",
 					Toast.LENGTH_SHORT).show();
 		} else {

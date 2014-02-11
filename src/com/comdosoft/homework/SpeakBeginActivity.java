@@ -14,6 +14,7 @@ import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.media.MediaPlayer;
+import android.media.MediaPlayer.OnCompletionListener;
 import android.media.MediaPlayer.OnPreparedListener;
 import android.media.MediaRecorder;
 import android.net.Uri;
@@ -42,7 +43,7 @@ import com.comdosoft.homework.tools.Soundex_Levenshtein;
 import com.comdosoft.homework.tools.Urlinterface;
 
 public class SpeakBeginActivity extends Activity implements Urlinterface,
-		OnPreparedListener {
+		OnPreparedListener, OnCompletionListener {
 	public String content;// 记录本题正确答案
 	private TextView question_speak_title;
 	private MediaPlayer player;
@@ -194,6 +195,8 @@ public class SpeakBeginActivity extends Activity implements Urlinterface,
 			if (speak_number > 0) {
 				speak_number = 0;
 				stop();
+				playFlag = false;
+				question_speak_tishi.setVisibility(View.GONE);
 				int ye = 0;
 				if (homework.getHistory_item() >= homework.getQuestion_list()
 						.size()) {
@@ -251,7 +254,6 @@ public class SpeakBeginActivity extends Activity implements Urlinterface,
 			}
 			break;
 		case R.id.speak:// 语音
-
 			if (speak_number < 4) {
 				speak_number += 1;
 				Toast.makeText(SpeakBeginActivity.this,
@@ -329,7 +331,6 @@ public class SpeakBeginActivity extends Activity implements Urlinterface,
 						" ");// 去除标点符号
 				str_list.add(is);
 			}
-			// question_speak_tishi
 			Log.i(tag, speak + "->" + str_list);
 			List<int[]> code_list = Soundex_Levenshtein.Engine(speak, str_list);
 			if (code_list.size() > 0) {
@@ -341,7 +342,7 @@ public class SpeakBeginActivity extends Activity implements Urlinterface,
 								str_list.get(code_list.get(i)[0]));
 						view_list.get(code_list.get(i)[0]).setBackgroundColor(
 								getResources().getColor(R.color.lvse));
-					} else if (code_list.get(i)[1] >= 4) {
+					} else {
 						if (!error_str
 								.contains(str_list.get(code_list.get(i)[0]))) {
 							error_str += str_list.get(code_list.get(i)[0])
@@ -349,16 +350,9 @@ public class SpeakBeginActivity extends Activity implements Urlinterface,
 						}
 						view_list.get(code_list.get(i)[0]).setBackgroundColor(
 								getResources().getColor(R.color.juhuang));
-					} else {
-						if (!error_str
-								.contains(str_list.get(code_list.get(i)[0]))) {
-							error_str += str_list.get(code_list.get(i)[0])
-									+ ";||;";
-						}
-						view_list.get(code_list.get(i)[0]).setBackgroundColor(
-								getResources().getColor(R.color.shenhui));
 					}
 				}
+
 			} else {
 				for (int i = 0; i < code_list.size(); i++) {
 					view_list.get(code_list.get(i)[0]).setBackgroundColor(
@@ -366,10 +360,11 @@ public class SpeakBeginActivity extends Activity implements Urlinterface,
 				}
 			}
 			Log.i(tag, ok_speak.size() + "-" + str_list.size());
-			if (ok_speak.size() != str_list.size()) {
-				question_speak_tishi.setVisibility(View.VISIBLE);
+			question_speak_tishi.setVisibility(View.VISIBLE);
+			if (ok_speak.size() == str_list.size()) {
+				question_speak_tishi.setText(R.string.question_speak_tishi_ok);
 			} else {
-				question_speak_tishi.setVisibility(View.GONE);
+				question_speak_tishi.setText(R.string.question_speak_tishi);
 			}
 		}
 		super.onActivityResult(requestCode, resultCode, data);
@@ -540,6 +535,7 @@ public class SpeakBeginActivity extends Activity implements Urlinterface,
 	 */
 	private void play(String path) {
 		try {
+			Log.i("linshi", path + "/" + index);
 			player.reset();// 把各项参数恢复到初始状态
 			/**
 			 * 通过MediaPlayer.setDataSource()
@@ -552,6 +548,7 @@ public class SpeakBeginActivity extends Activity implements Urlinterface,
 			player.setDataSource(path);
 			player.prepare();// 进行缓冲
 			player.setOnPreparedListener(this);
+			player.setOnCompletionListener(this);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}

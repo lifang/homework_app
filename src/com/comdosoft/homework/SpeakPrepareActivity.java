@@ -21,11 +21,9 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.comdosoft.homework.SpeakBeginActivity.setPlay;
 import com.comdosoft.homework.pojo.ListeningPojo;
 import com.comdosoft.homework.pojo.QuestionPojo;
 import com.comdosoft.homework.tools.HomeWork;
-import com.comdosoft.homework.tools.HomeWorkParams;
 import com.comdosoft.homework.tools.Urlinterface;
 
 public class SpeakPrepareActivity extends Activity implements Urlinterface,
@@ -104,11 +102,7 @@ public class SpeakPrepareActivity extends Activity implements Urlinterface,
 				content += questionlist.get(i).getContent() + "\n";
 			}
 		} else {
-			Log.i(tag, history.size() + "-->" + list.size());
-			// int history_item = 0;
-			// if (history.size() != 0) {
-			// history_item = history.size() - 1;
-			// }
+			Log.i("linshi", history.size() + "-->" + list.size());
 			if (homework.getHistory_item() == 0) {
 				questionlist = list.get(homework.getHistory_item())
 						.getQuesttionList();
@@ -170,25 +164,23 @@ public class SpeakPrepareActivity extends Activity implements Urlinterface,
 				// history_item = history.size() - 1;
 				// }
 				if (homework.getHistory_item() == 0) {
-					homework.setBranch_questions(list.get(
-							homework.getHistory_item()).getQuesttionList());
-					homework.setQuestion_id(list
-							.get(homework.getHistory_item()).getId());
+					homework.setBranch_questions(list.get(0).getQuesttionList());
+					homework.setQuestion_id(list.get(0).getId());
 				} else {
 					int number = list.get(homework.getHistory_item() - 1)
 							.getQuesttionList().size();// 题目实际题数
 					int size = homework.getQuestion_history()
 							.get(homework.getHistory_item() - 1).size();// 已做题数
-
+					Log.i("suanfa", size + "-");
 					if (number > size) {
 						List<QuestionPojo> qlist = list.get(
 								homework.getHistory_item() - 1)
 								.getQuesttionList();
-						for (int i = 0; i < qlist.size(); i++) {
-							if (i < size) {
-								qlist.remove(i);
-							}
+						Log.i("suanfa", qlist.size() + "-");
+						for (int i = 0; i < size; i++) {
+							qlist.remove(0);
 						}
+						Log.i("suanfa", qlist.size()+"三---"+qlist.get(0).getContent());
 						homework.setBranch_questions(qlist);
 						homework.setQuestion_id(list.get(
 								homework.getHistory_item() - 1).getId());
@@ -212,6 +204,7 @@ public class SpeakPrepareActivity extends Activity implements Urlinterface,
 		case R.id.question_speak_img:
 			mp3List = new ArrayList<String>();
 			for (int i = 0; i < questionlist.size(); i++) {
+				Log.i("linshi", IP + questionlist.get(i).getUrl());
 				mp3List.add(IP + questionlist.get(i).getUrl());
 			}
 			// 从文件系统播放
@@ -287,6 +280,7 @@ public class SpeakPrepareActivity extends Activity implements Urlinterface,
 			player.setDataSource(path);
 			player.prepare();// 进行缓冲
 			player.setOnPreparedListener(this);
+			player.setOnCompletionListener(this);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -330,8 +324,9 @@ public class SpeakPrepareActivity extends Activity implements Urlinterface,
 	}
 
 	// 音频播放结束后继续播放下一个音频,直到所有音频播放完毕
-	@Override
 	public void onCompletion(MediaPlayer mp) {
+		Log.i("linshi", mp3List.get(mp3Index));
+		handler.sendEmptyMessage(5);
 		try {
 			if (++mp3Index < mp3List.size()) {
 				mp.reset();

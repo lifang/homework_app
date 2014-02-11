@@ -21,6 +21,7 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
 import android.util.Log;
+import android.view.Display;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -115,6 +116,13 @@ public class HomeWorkIngActivity extends Activity implements Urlinterface {
 		homework.setClass_id(Integer.valueOf(school_class_id));
 		homework.setUser_id(Integer.valueOf(student_id));
 
+		Display display = this.getWindowManager().getDefaultDisplay();
+		int width = display.getWidth();
+		int height = display.getHeight();
+		
+		Toast.makeText(getApplicationContext(), width+"/"+height, Toast.LENGTH_SHORT).show();
+		
+		
 		prodialog = new ProgressDialog(HomeWorkIngActivity.this);
 		prodialog.setMessage(HomeWorkParams.PD_CLASS_INFO);
 		prodialog.show();
@@ -319,6 +327,10 @@ public class HomeWorkIngActivity extends Activity implements Urlinterface {
 						+ list.get(index).getReading_schedule());
 				break;
 			}
+			if (list.get(index)
+						.getListening_schedule().equals("0/0")) {
+//				convertView.setVisibility(View.GONE);
+			}
 			return convertView;
 		}
 	}
@@ -470,13 +482,14 @@ public class HomeWorkIngActivity extends Activity implements Urlinterface {
 				// 解析阅读记录
 				JSONArray user_answers = new JSONObject(json).getJSONObject(
 						"user_answers").getJSONArray("reading");
-
+				Log.i("linshi", "user_answers.length"+user_answers.length());
 				for (int i = 0; i < user_answers.length(); i++) {
 					JSONObject jn = user_answers.getJSONObject(i);
 					JSONArray jArr = jn.getJSONArray("branch_questions");
 					List<String> question = new ArrayList<String>();
 					for (int j = 0; j < jArr.length(); j++) {
 						JSONObject jb = jArr.getJSONObject(j);
+						Log.i("linshi", jb.getString("answer"));
 						question.add(jb.getString("answer"));
 					}
 					questionhistory.add(question);
@@ -510,6 +523,7 @@ public class HomeWorkIngActivity extends Activity implements Urlinterface {
 			}
 			Log.i("linshi", ListeningQuestionList.Small_Index
 					+ "-----cccccccccccc");
+			Log.i("linshi", "setHistory_item:"+questionhistory.size());
 			homework.setQuestion_history(questionhistory);
 			homework.setHistory_item(questionhistory.size());
 

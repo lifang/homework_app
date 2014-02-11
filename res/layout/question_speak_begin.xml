@@ -112,6 +112,5 @@
         android:gravity="center"
         android:textSize="18sp"
         android:textColor="#6E6B6B"
-        android:text="@string/question_speak_tishi"
         android:lineSpacingExtra="15dp"/>
 </LinearLayout>

@@ -309,7 +309,7 @@ public class HomeWorkTool implements Urlinterface {
 				params = params.deleteCharAt(params.length() - 1);
 			}
 			URL url = new URL(reqUrl);
-			Log.i(tag, url.toString());
+			Log.i("linshi", url.toString());
 			url_con = (HttpURLConnection) url.openConnection();
 			url_con.setRequestMethod("POST");
 			System.setProperty("sun.net.client.defaultConnectTimeout",
@@ -331,7 +331,7 @@ public class HomeWorkTool implements Urlinterface {
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
-		Log.i(tag, tempLine);
+		Log.i("linshi", tempLine);
 		return tempLine;
 	}
 

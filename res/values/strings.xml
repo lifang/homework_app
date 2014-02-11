@@ -29,7 +29,7 @@
     <string name="question_speak_start">开始</string>
     <string name="question_speak_over">完成</string>
     <string name="question_speak_next">继续</string>
-    <string name="question_speak_tishi">还有几个词你读的还不是很正确哦,再听听录音,正确的朗读出来吧！</string>
+    <string name="question_speak_tishi">看到橙色的这些词了吗,你的发音还不够标准哦,在来试试吧！</string>
     <string name="newwork_text">new!</string>
     <string name="work_content_text">完成情况:</string>
     <string name="question_dictation_check">检查</string>
@@ -49,5 +49,7 @@
     <string name="SwitchClass_Tv">切换班级</string>
     <string name="SwitchClass_Et">输入班级验证码加入新班级</string>
     <string name="senderError">发表失败</string>
-
+	<string name="question_speak_tishi_ok">你的发音真的很不错哦,让我们在来读读其它的句子吧！</string>
+    
+    
 </resources>
