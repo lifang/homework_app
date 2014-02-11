@@ -28,6 +28,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.View.OnClickListener;
+import android.view.Window;
 import android.widget.BaseAdapter;
 import android.widget.ImageButton;
 import android.widget.ImageView;
@@ -333,12 +334,11 @@ public class AboutMeActivity extends Activity
 					break;
 				case 2:
 					listview.setAdapter(new AboutMeAdapter(listam,getApplicationContext(),listview));
-					HomeWork hw=(HomeWork) getApplication();
-					hw.setMainItem(0);
-					Intent intent = new Intent(AboutMeActivity.this,HomeWorkMainActivity.class);
-					intent.putExtra("type", 1);
-					HomeWorkMainActivity.instance.finish();
-					startActivity(intent);
+					HomeWorkMainActivity.instance.tabhost.setCurrentTab(0);
+//					Intent intent = new Intent(AboutMeActivity.this,HomeWorkMainActivity.class);
+//					intent.putExtra("type", 1);
+//					HomeWorkMainActivity.instance.finish();
+//					startActivity(intent);
 					break;
 				case 3:
 					Toast.makeText(AboutMeActivity.this, "信息错误", 0).show();
