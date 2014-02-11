@@ -6,13 +6,13 @@
 
     <TextView
         android:id="@+id/switchclass_oneTv"
-        android:layout_width="287px"
-        android:layout_height="33px"
-        android:layout_marginBottom="9px"
-        android:layout_marginTop="9px"
+        android:layout_width="479px"
+        android:layout_height="55px"
+        android:layout_marginBottom="16px"
+        android:layout_marginTop="16px"
         android:background="@color/lvse"
         android:gravity="center"
         android:textColor="#FCE3CE"
-        android:textSize="14px" />
+        android:textSize="24px" />
 
 </LinearLayout>
