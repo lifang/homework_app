@@ -17,6 +17,7 @@
             android:layout_width="182px"
             android:layout_height="182px"
             android:contentDescription="@drawable/ic_launcher"
+            android:scaleType="center"
             android:src="@drawable/ic_launcher" />
     </LinearLayout>
 

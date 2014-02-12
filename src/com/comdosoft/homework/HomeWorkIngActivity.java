@@ -119,26 +119,27 @@ public class HomeWorkIngActivity extends Activity implements Urlinterface {
 		Display display = this.getWindowManager().getDefaultDisplay();
 		int width = display.getWidth();
 		int height = display.getHeight();
-		
-		Toast.makeText(getApplicationContext(), width+"/"+height, Toast.LENGTH_SHORT).show();
-		
-		
-		prodialog = new ProgressDialog(HomeWorkIngActivity.this);
-		prodialog.setMessage(HomeWorkParams.PD_CLASS_INFO);
-		prodialog.show();
-		// Thread thread = new Thread(new getClassInfo());
-		// thread.start();
 
-		// work_list = new ArrayList<WorkDatePojo>();
-		// question_list = new ArrayList<QuestionCasePojo>();
-		// for (int i = 0; i < 5; i++) {
-		// WorkDatePojo work = new WorkDatePojo(1, "2014年1月3日", 1);
-		// work_list.add(work);
-		// }
+		Toast.makeText(getApplicationContext(), width + "/" + height,
+				Toast.LENGTH_SHORT).show();
 
-		Thread thread = new Thread(new getClassInfo());
-		thread.start();
+		if (HomeWorkTool.isConnect(HomeWorkIngActivity.this)) {
+			prodialog = new ProgressDialog(HomeWorkIngActivity.this);
+			prodialog.setMessage(HomeWorkParams.PD_CLASS_INFO);
+			prodialog.show();
+			// Thread thread = new Thread(new getClassInfo());
+			// thread.start();
 
+			// work_list = new ArrayList<WorkDatePojo>();
+			// question_list = new ArrayList<QuestionCasePojo>();
+			// for (int i = 0; i < 5; i++) {
+			// WorkDatePojo work = new WorkDatePojo(1, "2014年1月3日", 1);
+			// work_list.add(work);
+			// }
+
+			Thread thread = new Thread(new getClassInfo());
+			thread.start();
+		}
 		working_date_list
 				.setOnItemClickListener(new AdapterView.OnItemClickListener() {
 					public void onItemClick(AdapterView<?> parent, View view,
@@ -327,9 +328,8 @@ public class HomeWorkIngActivity extends Activity implements Urlinterface {
 						+ list.get(index).getReading_schedule());
 				break;
 			}
-			if (list.get(index)
-						.getListening_schedule().equals("0/0")) {
-//				convertView.setVisibility(View.GONE);
+			if (list.get(index).getListening_schedule().equals("0/0")) {
+				// convertView.setVisibility(View.GONE);
 			}
 			return convertView;
 		}
@@ -348,7 +348,7 @@ public class HomeWorkIngActivity extends Activity implements Urlinterface {
 				JSONObject obj = new JSONObject(json);
 				if (obj.getString("status").equals("success")) {
 					analyzeJson(json);
-				}else{
+				} else {
 					handler.sendEmptyMessage(5);
 				}
 			} catch (Exception e) {
@@ -482,7 +482,7 @@ public class HomeWorkIngActivity extends Activity implements Urlinterface {
 				// 解析阅读记录
 				JSONArray user_answers = new JSONObject(json).getJSONObject(
 						"user_answers").getJSONArray("reading");
-				Log.i("linshi", "user_answers.length"+user_answers.length());
+				Log.i("linshi", "user_answers.length" + user_answers.length());
 				for (int i = 0; i < user_answers.length(); i++) {
 					JSONObject jn = user_answers.getJSONObject(i);
 					JSONArray jArr = jn.getJSONArray("branch_questions");
@@ -523,7 +523,7 @@ public class HomeWorkIngActivity extends Activity implements Urlinterface {
 			}
 			Log.i("linshi", ListeningQuestionList.Small_Index
 					+ "-----cccccccccccc");
-			Log.i("linshi", "setHistory_item:"+questionhistory.size());
+			Log.i("linshi", "setHistory_item:" + questionhistory.size());
 			homework.setQuestion_history(questionhistory);
 			homework.setHistory_item(questionhistory.size());
 

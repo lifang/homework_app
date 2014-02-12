@@ -3,9 +3,10 @@ package com.comdosoft.homework.tools;
 import java.util.ArrayList;
 import java.util.List;
 
+import android.util.Log;
+
 public class Soundex_Levenshtein {
 	private static final String SOUNDEX_DIGITS = "01230120022455012623010202";
-
 
 	// s:用户输入文本 tl:正确答案
 	public static List<int[]> Engine(String s, List<String> tl) {
@@ -29,6 +30,7 @@ public class Soundex_Levenshtein {
 			}
 			arr[0] = k;
 			arr[1] = temp;
+			Log.i("suanfa", k+"==>>"+temp);
 			str.add(arr);
 		}
 
