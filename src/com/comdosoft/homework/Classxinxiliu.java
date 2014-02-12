@@ -304,8 +304,9 @@ public class Classxinxiliu extends Activity implements OnHeaderRefreshListener,
 		if (HomeWorkTool.isConnect(Classxinxiliu.this)) {
 			Thread thread = new Thread(new get_class_info());
 			thread.start();
-		}else {
-			Toast.makeText(getApplicationContext(), HomeWorkParams.INTERNET, 0).show();
+		} else {
+			Toast.makeText(getApplicationContext(), HomeWorkParams.INTERNET, 0)
+					.show();
 		}
 		lass_count2 = 1;
 	}
@@ -321,6 +322,9 @@ public class Classxinxiliu extends Activity implements OnHeaderRefreshListener,
 
 				thread.start();
 			}
+		} else {
+			Toast.makeText(getApplicationContext(), HomeWorkParams.INTERNET, 0)
+					.show();
 		}
 	}
 
@@ -523,7 +527,14 @@ public class Classxinxiliu extends Activity implements OnHeaderRefreshListener,
 					}
 				}
 			};
-			thread.start();
+
+			if (HomeWorkTool.isConnect(Classxinxiliu.this)) {
+
+				thread.start();
+			} else {
+				Toast.makeText(getApplicationContext(),
+						HomeWorkParams.INTERNET, 0).show();
+			}
 
 			// if (page_own == 0) {
 			// focus = -1;
@@ -663,7 +674,17 @@ public class Classxinxiliu extends Activity implements OnHeaderRefreshListener,
 										public void onClick(
 												DialogInterface dialog,
 												int which) {
-											thread.start();
+
+											if (HomeWorkTool
+													.isConnect(Classxinxiliu.this)) {
+
+												thread.start();
+											} else {
+												Toast.makeText(
+														getApplicationContext(),
+														HomeWorkParams.INTERNET,
+														0).show();
+											}
 
 										}
 									})
@@ -814,7 +835,13 @@ public class Classxinxiliu extends Activity implements OnHeaderRefreshListener,
 				}
 			}
 		};
-		thread.start();
+		if (HomeWorkTool.isConnect(Classxinxiliu.this)) {
+
+			thread.start();
+		} else {
+			Toast.makeText(getApplicationContext(), HomeWorkParams.INTERNET, 0)
+					.show();
+		}
 		//
 		//
 		// Thread thread = new Thread() {
@@ -1068,7 +1095,14 @@ public class Classxinxiliu extends Activity implements OnHeaderRefreshListener,
 				}
 			}
 		};
-		gzthread.start();
+		if (HomeWorkTool.isConnect(Classxinxiliu.this)) {
+
+			gzthread.start();
+		} else {
+			Toast.makeText(getApplicationContext(), HomeWorkParams.INTERNET, 0)
+					.show();
+		}
+
 	}
 
 	// 删除
@@ -1130,7 +1164,13 @@ public class Classxinxiliu extends Activity implements OnHeaderRefreshListener,
 				}
 			}
 		};
-		thread.start();
+		if (HomeWorkTool.isConnect(Classxinxiliu.this)) {
+
+			thread.start();
+		} else {
+			Toast.makeText(getApplicationContext(), HomeWorkParams.INTERNET, 0)
+					.show();
+		}
 	}
 
 	// 回复
@@ -1203,7 +1243,13 @@ public class Classxinxiliu extends Activity implements OnHeaderRefreshListener,
 										}
 									}
 								};
-								thread.start();
+								if (HomeWorkTool.isConnect(Classxinxiliu.this)) {
+
+									thread.start();
+								} else {
+									Toast.makeText(getApplicationContext(), HomeWorkParams.INTERNET, 0)
+											.show();
+								}
 
 							} else {
 								Toast.makeText(getApplicationContext(), notice,
@@ -1250,7 +1296,13 @@ public class Classxinxiliu extends Activity implements OnHeaderRefreshListener,
 					}
 				}
 			};
-			thread.start();
+			if (HomeWorkTool.isConnect(Classxinxiliu.this)) {
+
+				thread.start();
+			} else {
+				Toast.makeText(getApplicationContext(), HomeWorkParams.INTERNET, 0)
+						.show();
+			}
 		}
 	}
 
@@ -1321,7 +1373,13 @@ public class Classxinxiliu extends Activity implements OnHeaderRefreshListener,
 			prodialog = new ProgressDialog(Classxinxiliu.this);
 			prodialog.setMessage("正在发表...");
 			prodialog.show();
-			thread.start();
+			if (HomeWorkTool.isConnect(Classxinxiliu.this)) {
+
+				thread.start();
+			} else {
+				Toast.makeText(getApplicationContext(), HomeWorkParams.INTERNET, 0)
+						.show();
+			}
 		}
 	}
 
@@ -1415,7 +1473,13 @@ public class Classxinxiliu extends Activity implements OnHeaderRefreshListener,
 						}
 					}
 				};
-				thread.start();
+				if (HomeWorkTool.isConnect(Classxinxiliu.this)) {
+
+					thread.start();
+				} else {
+					Toast.makeText(getApplicationContext(), HomeWorkParams.INTERNET, 0)
+							.show();
+				}
 			} else {
 				if (child_list.size() > 0) {// 如果没有子消息，隐藏加载更多按钮
 					lookMore.setVisibility(View.VISIBLE);
@@ -1471,7 +1535,13 @@ public class Classxinxiliu extends Activity implements OnHeaderRefreshListener,
 					}
 				}
 			};
-			thread.start();
+			if (HomeWorkTool.isConnect(Classxinxiliu.this)) {
+
+				thread.start();
+			} else {
+				Toast.makeText(getApplicationContext(), HomeWorkParams.INTERNET, 0)
+						.show();
+			}
 		} else {
 			Toast.makeText(getApplicationContext(), "已是最后一页",
 					Toast.LENGTH_SHORT).show();
@@ -1514,7 +1584,13 @@ public class Classxinxiliu extends Activity implements OnHeaderRefreshListener,
 				}
 			}
 		};
-		thread.start();
+		if (HomeWorkTool.isConnect(Classxinxiliu.this)) {
+
+			thread.start();
+		} else {
+			Toast.makeText(getApplicationContext(), HomeWorkParams.INTERNET, 0)
+					.show();
+		}
 	}
 
 	/*
@@ -1555,7 +1631,13 @@ public class Classxinxiliu extends Activity implements OnHeaderRefreshListener,
 				}
 			}
 		};
-		thread.start();
+		if (HomeWorkTool.isConnect(Classxinxiliu.this)) {
+
+			thread.start();
+		} else {
+			Toast.makeText(getApplicationContext(), HomeWorkParams.INTERNET, 0)
+					.show();
+		}
 	}
 
 	class get_class_info implements Runnable {
@@ -1625,7 +1707,13 @@ public class Classxinxiliu extends Activity implements OnHeaderRefreshListener,
 				}
 			}
 		};
-		thread.start();
+		if (HomeWorkTool.isConnect(Classxinxiliu.this)) {
+
+			thread.start();
+		} else {
+			Toast.makeText(getApplicationContext(), HomeWorkParams.INTERNET, 0)
+					.show();
+		}
 	}
 
 	public void click_list() {
