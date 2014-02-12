@@ -99,8 +99,10 @@ public class HomeWorkMainActivity extends TabActivity implements Urlinterface {
 	Thread thread = new Thread() {
 		public void run() {
 			indexNews();
+			getHomeWork();
 		}
 	};
+
 	Handler handler = new Handler() {
 		public void dispatchMessage(Message msg) {
 			super.dispatchMessage(msg);
@@ -150,7 +152,6 @@ public class HomeWorkMainActivity extends TabActivity implements Urlinterface {
 				Message msg = new Message();
 				Size = getNewsJson(json);
 				if (homework.isNewsFlag()) {
-
 					if (homework.getLastcount() == getNewsJson(json)) {
 						count = lastCount;
 					} else {
@@ -176,6 +177,22 @@ public class HomeWorkMainActivity extends TabActivity implements Urlinterface {
 		}
 	}
 
+	public void getHomeWork(){
+		SharedPreferences sp = getSharedPreferences(Urlinterface.SHARED, 0);
+		String id = sp.getString("id", "null");
+		String school_class_id = sp.getString("school_class_id", "null");
+		HashMap<String, String> mp = new HashMap<String, String>();
+		mp.put("student_id", id);
+		mp.put("school_class_id", school_class_id);
+		try {
+			String json = HomeWorkTool.sendGETRequest(Urlinterface.NEW_HOMEWORK, mp);
+			
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		
+	}
+	
 	public int getNewsJson(String json) {
 		try {
 			JSONObject jsonobject = new JSONObject(json);
@@ -188,7 +205,6 @@ public class HomeWorkMainActivity extends TabActivity implements Urlinterface {
 				Toast.makeText(getApplicationContext(), notic, Toast.LENGTH_SHORT).show();
 			}
 		} catch (JSONException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 		return 0;

@@ -247,13 +247,10 @@ public class SettingActivity extends Activity implements Urlinterface {
 			Intent intent = new Intent();
 			intent.setClass(this, SwitchClassActivity.class);//
 			startActivity(intent);
-
 		}
 		else {
 			Toast.makeText(getApplicationContext(), HomeWorkParams.INTERNET, 0).show();
 		}
-	
-		
 	}
 
 	public void exit_user(View v) {
