@@ -69,12 +69,12 @@ public class SpeakPrepareActivity extends Activity implements Urlinterface,
 			case 4:
 				Log.i("linshi", "kai");
 				question_speak_img.setImageDrawable(getResources().getDrawable(
-						R.drawable.jzlbgreen));
+						R.drawable.dictation_laba2));
 				break;
 			case 5:
 				Log.i("linshi", "guan");
 				question_speak_img.setImageDrawable(getResources().getDrawable(
-						R.drawable.jzlb));
+						R.drawable.dictation_laba1));
 				break;
 			case 6:
 				prodialog.dismiss();

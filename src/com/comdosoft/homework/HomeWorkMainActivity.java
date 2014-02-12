@@ -44,7 +44,7 @@ public class HomeWorkMainActivity extends TabActivity implements Urlinterface {
 	private boolean flag = true;
 	private int lastCount;
 	private int Size;
-	private String num;
+	private String num="0";
 	public static HomeWorkMainActivity instance = null;
 
 	public void onCreate(Bundle savedInstanceState) {
@@ -83,7 +83,10 @@ public class HomeWorkMainActivity extends TabActivity implements Urlinterface {
 		tabhost.addTab(spec4);
 		tabhost.setCurrentTab(homework.getMainItem());
 		updateTabStyle(tabhost);
+		if (HomeWorkTool.isConnect(HomeWorkMainActivity.this)) 
+		{
 		thread.start();
+		}
 	}
 
 	Thread thread = new Thread() {

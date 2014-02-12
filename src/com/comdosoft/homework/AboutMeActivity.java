@@ -90,8 +90,6 @@ public class AboutMeActivity extends Activity {
 
 	// 解析获取到的Json
 	public int getNewsJson(String json) {
-
-		Log.i("aaa", json);
 		try {
 			JSONObject jsonobject = new JSONObject(json);
 			String status = (String) jsonobject.get("status");
@@ -115,13 +113,13 @@ public class AboutMeActivity extends Activity {
 							sender_avatar_url, sender_name, jsonstatus,
 							content, created_at));
 				}
+				Log.i("suanfa",listam.size()+"");
 				return listam.size();
 			} else {
 				String notic = (String) jsonobject.get("notic");
 				Toast.makeText(getApplicationContext(), notic, 1).show();
 			}
 		} catch (JSONException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 		return 0;

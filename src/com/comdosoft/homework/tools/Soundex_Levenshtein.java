@@ -8,7 +8,7 @@ import android.util.Log;
 public class Soundex_Levenshtein {
 	private static final String SOUNDEX_DIGITS = "01230120022455012623010202";
 
-	// s:用户输入文本 tl:正确答案
+	// 听写的算法 s:用户输入文本 tl:正确答案
 	public static List<int[]> Engine(String s, List<String> tl) {
 		List<String> ml = new ArrayList<String>();
 		List<int[]> str = new ArrayList<int[]>();
@@ -30,10 +30,36 @@ public class Soundex_Levenshtein {
 			}
 			arr[0] = k;
 			arr[1] = temp;
-			Log.i("suanfa", k+"==>>"+temp);
+			Log.i("suanfa", k + "==>>" + temp);
 			str.add(arr);
 		}
 
+		return str;
+	}
+
+	// 朗读的算法 s:用户输入文本 tl:正确答案
+	public static List<int[]> Engine2(String s, List<String> tl) {
+		Log.i("linshi", s + "----");
+		List<String> ml = new ArrayList<String>();
+		List<int[]> str = new ArrayList<int[]>();
+		String[] arrT = s.split(" ");
+		for (int i = 0; i < arrT.length; i++) {
+			ml.add(arrT[i].toString());
+		}
+		for (int i = 0; i < ml.size(); i++) {
+			int[] arr = new int[2];
+			int temp = 0;
+			for (int j = 0; j < tl.size(); j++) {
+				int value = dragonEngine(ml.get(i), tl.get(j));
+				if (value >= temp) {
+					temp = value;
+				}
+			}
+			arr[0] = i;
+			arr[1] = temp;
+			Log.i("linshi", i + "==>>" + temp);
+			str.add(arr);
+		}
 		return str;
 	}
 

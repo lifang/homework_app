@@ -314,6 +314,70 @@ public class SpeakBeginActivity extends Activity implements Urlinterface,
 		}
 	}
 
+	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+		// 回调获取从谷歌得到的数据
+		if (requestCode == VOICE_RECOGNITION_REQUEST_CODE
+				&& resultCode == RESULT_OK) {
+			// stopService(service_intent);
+			// 取得语音的字符
+			ArrayList<String> results = data
+					.getStringArrayListExtra(RecognizerIntent.EXTRA_RESULTS);
+
+			String speak = results.get(0);// 用户语音返回的字符串
+			Log.i("suanfa", "语音返回--->" + speak);
+			str_list = new ArrayList<String>();
+			content = content.replaceAll("(?i)[^a-zA-Z0-9\u4E00-\u9FA5]", " ");//去除标点符号 
+			content = content.replaceAll(" s", "s");// 去除标点符号
+			content = content.replaceAll("  ", " ");
+			Log.i("suanfa", "正确答案->" + content);
+			String[] item = speak.split(" ");
+			for (int i = 0; i < item.length; i++) {
+				Log.i("suanfa", item[i] + "--->2");
+				str_list.add(item[i]);
+			}
+			List<int[]> code_list = Soundex_Levenshtein.Engine(content,
+					str_list);
+			if (code_list.size() > 0) {
+				for (int i = 0; i < code_list.size(); i++) {
+					Log.i(tag, str_list.get(code_list.get(i)[0]) + "->相似度:"
+							+ code_list.get(i)[1]);
+					if (code_list.get(i)[1] >= 7) {
+						ok_speak.put(code_list.get(i)[0],
+								str_list.get(code_list.get(i)[0]));
+						view_list.get(code_list.get(i)[0]).setBackgroundColor(
+								getResources().getColor(R.color.lvse));
+					} else {
+						if (!error_str
+								.contains(str_list.get(code_list.get(i)[0]))) {
+							error_str += str_list.get(code_list.get(i)[0])
+									+ "-!-";
+						}
+						view_list.get(code_list.get(i)[0]).setBackgroundColor(
+								getResources().getColor(R.color.juhuang));
+					}
+				}
+
+			} else {
+				for (int i = 0; i < code_list.size(); i++) {
+					view_list.get(code_list.get(i)[0]).setBackgroundColor(
+							getResources().getColor(R.color.shenhui));
+				}
+			}
+			Log.i(tag, ok_speak.size() + "-" + str_list.size());
+			question_speak_tishi.setVisibility(View.VISIBLE);
+			if (ok_speak.size() == str_list.size()) {
+				question_speak_tishi.setText(R.string.question_speak_tishi_ok);
+			} else {
+				question_speak_tishi.setText(R.string.question_speak_tishi);
+			}
+		} else {
+			if (speak_number > 0) {
+				speak_number -= 1;
+			}
+		}
+		super.onActivityResult(requestCode, resultCode, data);
+	}
+
 	// protected void onActivityResult(int requestCode, int resultCode, Intent
 	// data) {
 	// // 回调获取从谷歌得到的数据
@@ -325,21 +389,15 @@ public class SpeakBeginActivity extends Activity implements Urlinterface,
 	// .getStringArrayListExtra(RecognizerIntent.EXTRA_RESULTS);
 	//
 	// String speak = results.get(0);// 用户语音返回的字符串
-	// Log.i("suanfa", "语音返回--->"+speak);
 	// str_list = new ArrayList<String>();
-	// content = content.replaceAll("(?i)[^a-zA-Z0-9\u4E00-\u9FA5]"," ");//
-	// 去除标点符号
-	// content = content.replaceAll(" s","s");// 去除标点符号
-	// content = content.replaceAll("  ", " ");
-	// Log.i("suanfa", "正确答案->"+content);
-	// String[] item = speak.split(" ");
+	// String[] item = content.split(" ");
 	// for (int i = 0; i < item.length; i++) {
-	// // String is = item[i].replaceAll("(?i)[^a-zA-Z0-9\u4E00-\u9FA5]",
-	// // " ");// 去除标点符号
-	// Log.i("suanfa", item[i]+"--->2");
-	// str_list.add(item[i]);
+	// String is = item[i].replaceAll("(?i)[^a-zA-Z0-9\u4E00-\u9FA5]",
+	// " ");// 去除标点符号
+	// str_list.add(is);
 	// }
-	// List<int[]> code_list = Soundex_Levenshtein.Engine(content, str_list);
+	// Log.i(tag, speak + "->" + str_list);
+	// List<int[]> code_list = Soundex_Levenshtein.Engine(speak, str_list);
 	// if (code_list.size() > 0) {
 	// for (int i = 0; i < code_list.size(); i++) {
 	// Log.i(tag, str_list.get(code_list.get(i)[0]) + "->相似度:"
@@ -375,71 +433,11 @@ public class SpeakBeginActivity extends Activity implements Urlinterface,
 	// }
 	// }else{
 	// if(speak_number > 0){
-	// speak_number-=1;
+	// speak_number -= 1;
 	// }
 	// }
 	// super.onActivityResult(requestCode, resultCode, data);
 	// }
-
-	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-		// 回调获取从谷歌得到的数据
-		if (requestCode == VOICE_RECOGNITION_REQUEST_CODE
-				&& resultCode == RESULT_OK) {
-			// stopService(service_intent);
-			// 取得语音的字符
-			ArrayList<String> results = data
-					.getStringArrayListExtra(RecognizerIntent.EXTRA_RESULTS);
-
-			String speak = results.get(0);// 用户语音返回的字符串
-			str_list = new ArrayList<String>();
-			String[] item = content.split(" ");
-			for (int i = 0; i < item.length; i++) {
-				String is = item[i].replaceAll("(?i)[^a-zA-Z0-9\u4E00-\u9FA5]",
-						" ");// 去除标点符号
-				str_list.add(is);
-			}
-			Log.i(tag, speak + "->" + str_list);
-			List<int[]> code_list = Soundex_Levenshtein.Engine(speak, str_list);
-			if (code_list.size() > 0) {
-				for (int i = 0; i < code_list.size(); i++) {
-					Log.i(tag, str_list.get(code_list.get(i)[0]) + "->相似度:"
-							+ code_list.get(i)[1]);
-					if (code_list.get(i)[1] >= 7) {
-						ok_speak.put(code_list.get(i)[0],
-								str_list.get(code_list.get(i)[0]));
-						view_list.get(code_list.get(i)[0]).setBackgroundColor(
-								getResources().getColor(R.color.lvse));
-					} else {
-						if (!error_str
-								.contains(str_list.get(code_list.get(i)[0]))) {
-							error_str += str_list.get(code_list.get(i)[0])
-									+ "-!-";
-						}
-						view_list.get(code_list.get(i)[0]).setBackgroundColor(
-								getResources().getColor(R.color.juhuang));
-					}
-				}
-
-			} else {
-				for (int i = 0; i < code_list.size(); i++) {
-					view_list.get(code_list.get(i)[0]).setBackgroundColor(
-							getResources().getColor(R.color.shenhui));
-				}
-			}
-			Log.i(tag, ok_speak.size() + "-" + str_list.size());
-			question_speak_tishi.setVisibility(View.VISIBLE);
-			if (ok_speak.size() == str_list.size()) {
-				question_speak_tishi.setText(R.string.question_speak_tishi_ok);
-			} else {
-				question_speak_tishi.setText(R.string.question_speak_tishi);
-			}
-		}else{
-			 if(speak_number > 0){
-				speak_number -= 1;
-			}
-		}
-		super.onActivityResult(requestCode, resultCode, data);
-	}
 
 	// 自定义dialog设置
 	private void MyDialog(String title, String btn_one, String Btn_two,

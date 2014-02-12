@@ -304,6 +304,8 @@ public class Classxinxiliu extends Activity implements OnHeaderRefreshListener,
 		if (HomeWorkTool.isConnect(Classxinxiliu.this)) {
 			Thread thread = new Thread(new get_class_info());
 			thread.start();
+		}else {
+			Toast.makeText(getApplicationContext(), HomeWorkParams.INTERNET, 0).show();
 		}
 		lass_count2 = 1;
 	}

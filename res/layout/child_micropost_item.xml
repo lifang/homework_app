@@ -12,8 +12,8 @@
 
         <ImageView
             android:id="@+id/child_user_face"
-            android:layout_width="82px"
-            android:layout_height="82px"
+            android:layout_width="49px"
+            android:layout_height="49px"
             android:src="@drawable/moren" />
 
         <RelativeLayout
@@ -21,7 +21,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignTop="@+id/child_user_face"
-            android:layout_marginLeft="19px"
+            android:layout_marginLeft="12px"
             android:layout_toRightOf="@+id/child_user_face" >
 
             <TextView
@@ -38,7 +38,7 @@
                 android:layout_height="wrap_content"
                 android:layout_alignParentLeft="true"
                 android:layout_below="@+id/child_message_senderName"
-                android:paddingRight="10px"
+                android:paddingRight="6px"
                 android:text="啊啊啊啊啊啊啊啊啊啊速度等等等等等等等等等等等等等等等等等等等等等等等等等等等等等等等等等等等等(2013/12/06 15:33)"
                 android:textColor="#626060"
                 android:textSize="24px" />
@@ -59,7 +59,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_below="@+id/child_micropost_content"
-                android:layout_marginRight="26px"
+                android:layout_marginRight="15.6px"
                 android:layout_toLeftOf="@+id/child_micropost_huifu"
                 android:background="#00000000"
                 android:text="@string/delete"
@@ -70,10 +70,10 @@
 
         <EditText
             android:layout_width="fill_parent"
-            android:layout_height="5px"
+            android:layout_height="3px"
             android:layout_alignParentLeft="true"
             android:layout_below="@+id/relativeLayout1"
-            android:layout_marginTop="22px" />
+            android:layout_marginTop="13.2px" />
     </RelativeLayout>
 
 </LinearLayout>
