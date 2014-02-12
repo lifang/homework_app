@@ -43,8 +43,8 @@ public class HomeWorkMainActivity extends TabActivity implements Urlinterface {
 	private int count;
 	private boolean flag = true;
 	private int lastCount;
-	private boolean isflag = true;
 	private int Size;
+	private String num;
 	public static HomeWorkMainActivity instance = null;
 
 	public void onCreate(Bundle savedInstanceState) {
@@ -103,6 +103,7 @@ public class HomeWorkMainActivity extends TabActivity implements Urlinterface {
 				
 				textview.setTextColor(Color.parseColor("#ffffff"));
 				if (homework.isNewsFlag() == true) {
+					num=msg.obj.toString();
 					if (msg.obj.toString().equals("0")) {
 					} else {
 						View mView = tabhost.getTabWidget().getChildAt(2);// 0是代表第一个Tab
@@ -111,6 +112,7 @@ public class HomeWorkMainActivity extends TabActivity implements Urlinterface {
 						imageView.setImageDrawable(getResources().getDrawable(
 								R.drawable.news)); // 改变我们需要的图标
 						textview.setText(msg.obj + "");
+						num="0";
 					}
 				} else {
 					if (msg.obj.toString().equals("0")) {
@@ -293,7 +295,6 @@ public class HomeWorkMainActivity extends TabActivity implements Urlinterface {
 								.getTabWidget().getChildAt(i);
 						ImageView img = (ImageView) tabWidget.getChildAt(i)
 								.findViewById(android.R.id.icon);
-						View mView = tabhost.getTabWidget().getChildAt(2);// 0是代表第一个Tab
 						if (mTabHost.getCurrentTab() == i) {
 							homework.setMainItem(i);
 							tabView.setBackgroundColor(res
@@ -334,7 +335,14 @@ public class HomeWorkMainActivity extends TabActivity implements Urlinterface {
 								img.setImageResource(R.drawable.th2_2);
 								break;
 							case 2:
-								img.setImageResource(R.drawable.th3_3);
+								if(homework.isNewsFlag()&&!num.equals("0"))
+								{
+									img.setImageResource(R.drawable.news);
+								}
+								else
+								{
+									img.setImageResource(R.drawable.th3_3);
+								}
 								break;
 							case 3:
 								img.setImageResource(R.drawable.th4_4);

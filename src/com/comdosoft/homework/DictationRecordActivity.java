@@ -23,10 +23,11 @@ import android.widget.Toast;
 
 import com.comdosoft.homework.tools.HomeWork;
 import com.comdosoft.homework.tools.ListeningQuestionList;
+import com.comdosoft.homework.tools.Urlinterface;
 
 // 拼写记录    马龙    2014年1月20日
 public class DictationRecordActivity extends Activity implements
-		OnClickListener, OnPreparedListener {
+		OnClickListener, OnPreparedListener,Urlinterface {
 
 	private int bigIndex = 0;
 	private int smallIndex = 0;
@@ -66,18 +67,22 @@ public class DictationRecordActivity extends Activity implements
 
 		bigList = ListeningQuestionList.getAnswerList();
 		smallList = bigList.get(bigIndex);
-		String[] sArr = smallList.get(smallIndex).split("-!-");
 
 		errorList.add("你需要多听,多写的词:");
-		for (int i = 0; i < sArr.length; i++) {
-			errorList.add(sArr[i]);
+
+		String answer = smallList.get(smallIndex);
+		if (answer != null && !answer.equals("")) {
+			String[] sArr = answer.split("-!-");
+			for (int i = 0; i < sArr.length; i++) {
+				errorList.add(sArr[i]);
+			}
 		}
 
 		if (smallIndex < smallList.size()) {
 			smallIndex++;
 		}
 
-		if (errorList.size() > 2) {
+		if (errorList.size() >= 2) {
 			linearLayout.setVisibility(linearLayout.VISIBLE);
 			for (int i = 0; i < errorList.size(); i++) {
 				initView(i);
@@ -88,6 +93,7 @@ public class DictationRecordActivity extends Activity implements
 
 		mp3URL = ListeningQuestionList.getListeningPojo(bigIndex)
 				.getQuesttionList().get(smallIndex - 1).getUrl();
+		Toast.makeText(getApplicationContext(), mp3URL + "", 0).show();
 		topic.setText(ListeningQuestionList.getListeningPojo(bigIndex)
 				.getQuesttionList().get(smallIndex - 1).getContent());
 		page.setText(smallIndex + "/" + smallList.size());
@@ -113,7 +119,7 @@ public class DictationRecordActivity extends Activity implements
 	public void playerAmr() {
 		try {
 			mediaPlayer.reset();
-			mediaPlayer.setDataSource(mp3URL);
+			mediaPlayer.setDataSource(IP + mp3URL);
 			mediaPlayer.prepare();
 			mediaPlayer.setOnPreparedListener(this);
 		} catch (IllegalArgumentException e) {

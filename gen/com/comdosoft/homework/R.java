@@ -276,6 +276,7 @@ public final class R {
         public static final int question_speak_over=0x7f06001a;
         public static final int question_speak_start=0x7f060019;
         public static final int question_speak_tishi=0x7f06001c;
+        public static final int question_speak_tishi_ok=0x7f060030;
         public static final int reg_fanhui=0x7f060009;
         public static final int saveUpdata=0x7f060027;
         public static final int senderError=0x7f06002f;

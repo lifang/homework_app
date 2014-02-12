@@ -25,6 +25,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.Toast;
 import android.widget.LinearLayout.LayoutParams;
 import android.widget.TextView;
 
@@ -37,10 +38,11 @@ import com.comdosoft.homework.tools.ListeningQuestionList;
 import com.comdosoft.homework.tools.Soundex_Levenshtein;
 import com.comdosoft.homework.tools.Urlinterface;
 
-// 拼写答题    马龙    2014年1月21日
+// 拼写答题    马龙    2014年2月10日
 public class DictationBeginActivity extends Activity implements
 		OnClickListener, HomeWorkParams, OnPreparedListener, Urlinterface {
 	private int linearLayoutIndex = 0;
+	private int mesLinearLayoutIndex = 0;
 	private int smallIndex;
 	private int bigIndex = 0;
 	private int class_id;
@@ -54,7 +56,9 @@ public class DictationBeginActivity extends Activity implements
 	private List<QuestionPojo> qpList = new ArrayList<QuestionPojo>();
 	private List<DictationPojo> dictationList = new ArrayList<DictationPojo>();
 	private List<EditText> etList = new ArrayList<EditText>();
+	private List<TextView> tvList = new ArrayList<TextView>();
 	private List<LinearLayout> linearLayoutList = new ArrayList<LinearLayout>();
+	private List<LinearLayout> mesLinearLayoutList = new ArrayList<LinearLayout>();
 	private LinearLayout editLinearLayout;
 	private TextView mesText;
 	private TextView page;
@@ -73,7 +77,6 @@ public class DictationBeginActivity extends Activity implements
 				mPd.dismiss();
 				break;
 			case 2:
-				mPd.dismiss();
 				mPlayImg.setImageResource(R.drawable.dictation_laba4);
 				break;
 			case 3:
@@ -128,10 +131,14 @@ public class DictationBeginActivity extends Activity implements
 	public void init() {
 		// 清除数据
 		linearLayoutIndex = 0;
+		mesLinearLayoutIndex = 0;
 		etList.clear();
 		dictationList.clear();
 		linearLayoutList.clear();
+		mesLinearLayoutList.clear();
 		editLinearLayout.removeAllViews();
+
+		handler.sendEmptyMessage(3);
 
 		// 获取已答过题目记录数
 		// bigIndex = ListeningQuestionList.getRecordCount();
@@ -157,6 +164,7 @@ public class DictationBeginActivity extends Activity implements
 		}
 		for (int i = 0; i < linearLayoutList.size(); i++) {
 			editLinearLayout.addView(linearLayoutList.get(i));
+			editLinearLayout.addView(mesLinearLayoutList.get(i));
 		}
 
 		page.setText(1 + smallIndex++ + "/" + qpList.size());
@@ -164,14 +172,9 @@ public class DictationBeginActivity extends Activity implements
 
 	// 动态添加答题格子
 	public void initView(int i) {
-		// LayoutInflater li = LayoutInflater.from(this);
-		// LinearLayout l = (LinearLayout) li.inflate(
-		// R.layout.question_dictation_begin_item, null);
-		// EditText et = (EditText) l.findViewById(R.id.question_item_edit);
-		// l.removeView(et);
 		EditText et = new EditText(getApplicationContext());
 		String value = dictationList.get(i).getValue();
-		// et.setText(value);
+		et.setText(value);
 		et.setWidth(value.length() * 20 + 80);
 		et.setHeight(40);
 		et.setGravity(Gravity.CENTER);
@@ -182,7 +185,7 @@ public class DictationBeginActivity extends Activity implements
 			linear.setOrientation(LinearLayout.HORIZONTAL);
 			LayoutParams lp = new LayoutParams(LayoutParams.WRAP_CONTENT,
 					LayoutParams.WRAP_CONTENT);
-			lp.topMargin = 20;
+			lp.topMargin = 10;
 			linear.setLayoutParams(lp);
 			linearLayoutList.add(linear);
 			if (i > 0) {
@@ -199,11 +202,38 @@ public class DictationBeginActivity extends Activity implements
 			tv.setTextSize(24);
 			LayoutParams lp = new LayoutParams(LayoutParams.WRAP_CONTENT,
 					LayoutParams.WRAP_CONTENT);
-			lp.topMargin = 20;
+			lp.topMargin = 10;
 			lp.leftMargin = 10;
 			tv.setLayoutParams(lp);
 			linearLayoutList.get(linearLayoutIndex).addView(tv);
 		}
+
+		initMesView(i);
+	}
+
+	// 初始化不完全正确提示
+	public void initMesView(int i) {
+		TextView et = new TextView(getApplicationContext());
+		String value = dictationList.get(i).getValue();
+		et.setText(value);
+		et.setWidth(value.length() * 20 + 80);
+		et.setHeight(20);
+		et.setTextSize(16);
+		et.setTextColor(Color.rgb(110, 107, 107));
+		et.setGravity(Gravity.CENTER);
+		et.setLayoutParams(etlp);
+		et.setSingleLine(true);
+		et.setVisibility(View.INVISIBLE);
+		if (i == 0 || i % 4 == 0) {
+			LinearLayout linear = new LinearLayout(getApplicationContext());
+			linear.setOrientation(LinearLayout.HORIZONTAL);
+			mesLinearLayoutList.add(linear);
+			if (i > 0) {
+				mesLinearLayoutIndex++;
+			}
+		}
+		tvList.add(et);
+		mesLinearLayoutList.get(mesLinearLayoutIndex).addView(et);
 	}
 
 	// 检查算法
@@ -217,11 +247,17 @@ public class DictationBeginActivity extends Activity implements
 							dictationList.get(i).getValue());
 					if (value > 5) {
 						dictationList.get(i).setFlag(1);
-						etList.get(i).setTextColor(Color.rgb(146, 184, 27));
+						etList.get(i).setTextColor(Color.rgb(240, 134, 41));
+						tvList.get(i).setVisibility(View.VISIBLE);
 					} else {
 						dictationList.get(i).setFlag(0);
 						answer.append(s).append("-!-");
-						etList.get(i).setTextColor(Color.rgb(240, 134, 41));
+						tvList.get(i).setVisibility(View.INVISIBLE);
+						etList.get(i).setTextColor(Color.rgb(255, 0, 0));
+					}
+					if (dictationList.get(i).getValue().equals(s)) {
+						tvList.get(i).setVisibility(View.INVISIBLE);
+						etList.get(i).setTextColor(Color.rgb(146, 184, 27));
 					}
 				} else {
 					dictationList.get(i).setFlag(0);
@@ -246,7 +282,7 @@ public class DictationBeginActivity extends Activity implements
 								.getValue());
 				mesText.setText(sb.toString());
 			} else {
-				check.setText("Next");
+				check.setText("继续");
 				mesText.setVisibility(LinearLayout.GONE);
 			}
 
@@ -278,6 +314,7 @@ public class DictationBeginActivity extends Activity implements
 							new SendWorkOver().start();
 						}
 						MyDialog("恭喜完成今天的朗读作业!", "确认", "取消", 2);
+						return;
 					}
 
 					MyDialog("你已经答完本题确认继续下一题吗?", "确认", "取消", 1);
@@ -416,13 +453,11 @@ public class DictationBeginActivity extends Activity implements
 	}
 
 	class MyMediaPlay extends Thread {
-
 		@Override
 		public void run() {
 			super.run();
 			playerAmr();
 		}
-
 	}
 
 	public void stop() {
@@ -441,19 +476,20 @@ public class DictationBeginActivity extends Activity implements
 			check();
 			break;
 		case R.id.question_dictation_play:
-			if (mediaPlayer.isPlaying()) {
-				handler.sendEmptyMessage(3);
-				stop();
-			} else {
-				handler.sendEmptyMessage(2);
-				if (playFlag) {
-					mediaPlayer.start();
-				} else {
-					playFlag = true;
-					handler.sendEmptyMessage(4);
-					new MyMediaPlay().start();
-				}
-			}
+			// if (mediaPlayer.isPlaying()) {
+			// handler.sendEmptyMessage(3);
+			// stop();
+			// } else {
+			// handler.sendEmptyMessage(2);
+			// if (playFlag) {
+			// mediaPlayer.start();
+			// } else {
+			// playFlag = true;
+			// handler.sendEmptyMessage(4);
+			// new MyMediaPlay().start();
+			// }
+			// }
+			playerAmr();
 			break;
 		}
 	}
