@@ -1,0 +1,63 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:background="@color/white"
+    android:orientation="horizontal" >
+
+    <LinearLayout
+        android:layout_width="390px"
+        android:layout_height="fill_parent"
+        android:layout_marginRight="3dp"
+        android:background="@color/qianhui"
+        android:orientation="vertical" >
+
+        <ListView
+            android:id="@+id/working_date_list"
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent"
+            android:cacheColorHint="#00000000"
+            android:fadingEdge="none"
+            android:listSelector="#00000000"
+            android:scrollbars="none" />
+    </LinearLayout>
+
+    <RelativeLayout
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:background="@color/work_content_laytou_bg" >
+
+        <ImageView
+            android:id="@+id/work_content_img"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="40dp"
+            android:layout_marginTop="40dp"
+            android:contentDescription="@string/app_name"
+            android:src="@drawable/sj" />
+
+        <TextView
+            android:id="@+id/title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignBottom="@id/work_content_img"
+            android:layout_marginLeft="10dp"
+            android:layout_toRightOf="@id/work_content_img"
+            android:text="@string/work_content_text"
+            android:textColor="@color/work_content_textcolor"
+            android:textSize="24px" />
+
+        <ListView
+            android:id="@+id/working_content_list"
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent"
+            android:layout_alignLeft="@id/title"
+            android:layout_below="@id/title"
+            android:layout_marginTop="50dp"
+            android:cacheColorHint="#00000000"
+            android:divider="@null"
+            android:fadingEdge="none"
+            android:listSelector="#00000000"
+            android:scrollbars="none" />
+    </RelativeLayout>
+
+</LinearLayout>

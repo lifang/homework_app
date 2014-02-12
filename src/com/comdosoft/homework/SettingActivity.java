@@ -33,8 +33,7 @@ import android.os.Message;
 import android.provider.MediaStore;
 import android.view.View;
 import android.widget.EditText;
-import android.widget.ImageButton;
-import android.widget.TextView;
+import android.widget.ImageView;
 import android.widget.Toast;
 
 import com.comdosoft.homework.tools.HomeWorkTool;
@@ -43,7 +42,7 @@ import com.comdosoft.homework.tools.Urlinterface;
 public class SettingActivity extends Activity implements Urlinterface {
 
 	// 设置 界面
-	private ImageButton faceImage;
+	private ImageView faceImage;
 	private EditText nickname;//
 	private EditText name; //
 	private View layout;// 选择头像界面
@@ -53,9 +52,7 @@ public class SettingActivity extends Activity implements Urlinterface {
 	private static final String IMAGE_FILE_NAME = "faceImage.jpg";
 
 	/* 请求码 */
-	private static final int IMAGE_REQUEST_CODE = 0;
-	private static final int CAMERA_REQUEST_CODE = 1;
-	private static final int RESULT_REQUEST_CODE = 2;
+
 	private Bitmap bm = null;
 	private String nameS = ""; //
 	private String nicknameS = ""; //
@@ -88,7 +85,7 @@ public class SettingActivity extends Activity implements Urlinterface {
 			}
 		
 		layout = this.findViewById(R.id.set_photolayout); // 隐藏内容
-		faceImage = (ImageButton) findViewById(R.id.set_touxiang);
+		faceImage = (ImageView) findViewById(R.id.set_touxiang);
 		nickname = (EditText) findViewById(R.id.set_nickname);
 		name = (EditText) findViewById(R.id.set_name);
 		name.setText(nameS);
@@ -96,8 +93,6 @@ public class SettingActivity extends Activity implements Urlinterface {
 		// if (HomeWorkTool.isConnect(getApplicationContext())) {
 
 		if (avatar_url != null || avatar_url.length() != 0) { // 设置头像
-			// HttpGet hg = new HttpGet(Urlinterface.IP
-			// + avatar_url);//
 
 			GetCSDNLogoTask task = new GetCSDNLogoTask();
 			task.execute(Urlinterface.IP + avatar_url);//
@@ -207,32 +202,7 @@ public class SettingActivity extends Activity implements Urlinterface {
 								Environment.getExternalStorageDirectory()
 										+ "/1" + IMAGE_FILE_NAME)));
 					} 
-//					else {
-//						Drawable normal = getResources().getDrawable(
-//								R.drawable.moren);
-//						File file = new File(
-//								Environment.getExternalStorageDirectory()
-//										+ "/moren.jpg");
-//
-//						if (file.exists()) {
-//							file.delete();
-//
-//						}
-//						Bitmap bitmap = ((BitmapDrawable) normal).getBitmap();
-//						file.createNewFile();
-//						FileOutputStream stream = new FileOutputStream(file);
-//						ByteArrayOutputStream stream1 = new ByteArrayOutputStream();
-//						bitmap.compress(Bitmap.CompressFormat.JPEG, 60, stream);
-//						byte[] buf = stream1.toByteArray(); // 将图片流以字符串形式存储下来
-//						// byte[] buf = s.getBytes();
-//						stream.write(buf);
-//						stream.close();
-//
-//						entity.addPart("avatar", new FileBody(new File(
-//								Environment.getExternalStorageDirectory()
-//										+ "/moren.jpg")));
-//
-//					}
+
 
 					entity.addPart("nickname", new StringBody(nicknameS));
 					entity.addPart("name", new StringBody(nameS));
@@ -323,7 +293,7 @@ public class SettingActivity extends Activity implements Urlinterface {
 
 		}
 
-		startActivityForResult(intentFromCapture, CAMERA_REQUEST_CODE);
+		startActivityForResult(intentFromCapture, 2);
 
 	}
 
@@ -333,40 +303,60 @@ public class SettingActivity extends Activity implements Urlinterface {
 	public void set_congxiangce(View v) {
 		layout.setVisibility(View.GONE);
 
-		Intent intentFromGallery = new Intent();
-		intentFromGallery.setType("image/*"); // 设置文件类型
-		intentFromGallery.setAction(Intent.ACTION_GET_CONTENT);
-		startActivityForResult(intentFromGallery, IMAGE_REQUEST_CODE);
+Intent intentFromGallery = new Intent(Intent.ACTION_PICK, null);
+		
+		/**
+		 * 下面这句话，与其它方式写是一样的效果，如果：
+		 * intent.setData(MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+		 * intent.setType(""image/*");设置数据类型
+		 * 如果朋友们要限制上传到服务器的图片类型时可以直接写如："image/jpeg 、 image/png等的类型"
+		 * 这个地方小马有个疑问，希望高手解答下：就是这个数据URI与类型为什么要分两种形式来写呀？有什么区别？
+		 */
+		intentFromGallery.setDataAndType(
+				MediaStore.Images.Media.EXTERNAL_CONTENT_URI,
+				"image/*");
+		startActivityForResult(intentFromGallery, 1);
 
 	}
 
 	@Override
 	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-		// 结果码不等于取消时候
-		if (resultCode != RESULT_CANCELED) {
-
-			switch (requestCode) {
-			case IMAGE_REQUEST_CODE:
-				startPhotoZoom(data.getData());
-				break;
-			case CAMERA_REQUEST_CODE:
-				if (HomeWorkTool.isHasSdcard()) {
-					File tempFile = new File(
-							Environment.getExternalStorageDirectory() + "/"
-									+ IMAGE_FILE_NAME);
-					startPhotoZoom(Uri.fromFile(tempFile));
-				} else {
-					Toast.makeText(this, "未找到存储卡，无法存储照片！", Toast.LENGTH_LONG)
-							.show();
-				}
-
-				break;
-			case RESULT_REQUEST_CODE:
-				if (data != null) {
-					getImageToView(data);
-				}
-				break;
+		switch (requestCode) {
+		// 如果是直接从相册获取
+		case 1:
+			startPhotoZoom(data.getData());
+			break;
+		// 如果是调用相机拍照时
+		case 2:
+			
+			
+			if (HomeWorkTool.isHasSdcard()) {
+				File temp = new File(Environment.getExternalStorageDirectory()
+						+ "/xiaoma.jpg");
+				startPhotoZoom(Uri.fromFile(temp));
+			} else {
+				Toast.makeText(this, "未找到存储卡，无法存储照片！", Toast.LENGTH_LONG)
+						.show();
 			}
+			
+			break;
+		// 取得裁剪后的图片
+		case 3:
+			/**
+			 * 非空判断大家一定要验证，如果不验证的话，
+			 * 在剪裁之后如果发现不满意，要重新裁剪，丢弃
+			 * 当前功能时，会报NullException，小马只
+			 * 在这个地方加下，大家可以根据不同情况在合适的
+			 * 地方做判断处理类似情况
+			 * 
+			 */
+			if(data != null){
+				getImageToView(data);
+			}
+			break;
+		default:
+			break;
+
 		}
 		super.onActivityResult(requestCode, resultCode, data);
 	}
@@ -386,10 +376,10 @@ public class SettingActivity extends Activity implements Urlinterface {
 		intent.putExtra("aspectX", 1);
 		intent.putExtra("aspectY", 1);
 		// outputX outputY 是裁剪图片宽高
-		intent.putExtra("outputX", 350);
-		intent.putExtra("outputY", 400);
+		intent.putExtra("outputX", 176);
+		intent.putExtra("outputY", 186);
 		intent.putExtra("return-data", true);
-		startActivityForResult(intent, 2);
+		startActivityForResult(intent, 3);
 	}
 
 	/**
@@ -402,7 +392,7 @@ public class SettingActivity extends Activity implements Urlinterface {
 		if (extras != null) {
 			Bitmap photo = extras.getParcelable("data");
 			Drawable drawable = new BitmapDrawable(photo);
-			faceImage.setImageDrawable(drawable);
+			faceImage.setBackgroundDrawable(drawable);
 			File file = new File(Environment.getExternalStorageDirectory()
 					+ "/1" + IMAGE_FILE_NAME);
 

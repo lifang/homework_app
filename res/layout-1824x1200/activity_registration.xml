@@ -14,7 +14,7 @@
 android:focusableInTouchMode="true"
     >
 
-    <ImageView
+    <ImageButton
         android:id ="@+id/reg_touxiang"
         android:layout_width="176px"
         android:layout_height="186px"

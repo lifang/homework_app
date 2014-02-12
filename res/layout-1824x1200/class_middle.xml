@@ -1,0 +1,167 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:background="#f6f2f3"
+    android:orientation="horizontal" >
+
+    <LinearLayout
+        android:layout_width="720px"
+        android:layout_height="fill_parent"
+        android:layout_marginLeft="3.34px"
+        android:layout_marginRight="3.34px"
+        android:orientation="vertical" >
+
+        <RelativeLayout
+            android:id="@+id/relativeLayout1"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:background="#f6f2f3"
+            android:focusable="true"
+            android:focusableInTouchMode="true"
+            android:padding="24px" >
+
+            <EditText
+                android:id="@+id/class_fabiao_content"
+                android:layout_width="fill_parent"
+                android:layout_height="154px"
+                android:focusable="true"
+                android:focusableInTouchMode="true"
+                android:gravity="top"
+                android:hint="@string/class_fabiao_tishi"
+                android:textSize="24px" />
+
+            <Button
+                android:id="@+id/button_fabiao"
+                android:layout_width="73.9px"
+                android:layout_height="32.5px"
+                android:layout_alignRight="@+id/class_fabiao_content"
+                android:layout_below="@+id/class_fabiao_content"
+                android:layout_marginTop="18.53px"
+                android:background="#92b81b"
+                android:onClick="class_fabiao"
+                android:text="@string/class_fabiao"
+                android:textColor="#FFFFFF"
+                android:textSize="24px" />
+
+            <EditText
+                android:id="@+id/class_ed1"
+                android:layout_width="fill_parent"
+                android:layout_height="5px"
+                android:layout_below="@+id/button_fabiao"
+                android:layout_centerHorizontal="true"
+                android:layout_marginTop="30px"
+                android:focusable="false" />
+
+            <Button
+                android:id="@+id/class_button_all"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/class_fabiao_content"
+                android:layout_marginTop="58.53px"
+                android:background="@drawable/an"
+                android:onClick="class_button_all"
+                android:text="@string/class_button_all"
+                android:textColor="#FFFFFF"
+                android:textSize="24px" />
+
+            <Button
+                android:id="@+id/class_button_myself"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignBottom="@+id/class_button_all"
+                android:layout_marginLeft="10px"
+                android:layout_toRightOf="@+id/class_button_all"
+                android:background="@drawable/an2"
+                android:onClick="class_button_myself"
+                android:text="@string/class_button_myself"
+                android:textColor="#FFFFFF"
+                android:textSize="24px" />
+        </RelativeLayout>
+
+        <com.comdosoft.homework.tools.PullToRefreshView
+            xmlns:android="http://schemas.android.com/apk/res/android"
+            android:id="@+id/main_pull_refresh_view"
+            android:layout_width="720px"
+            android:layout_height="fill_parent"
+            android:descendantFocusability="afterDescendants"
+            android:orientation="vertical" >
+
+            <ScrollView
+                android:layout_width="match_parent"
+                android:layout_height="fill_parent"
+                android:cacheColorHint="#00000000"
+                android:fadingEdge="none"
+                android:listSelector="#00000000"
+                android:scrollbars="none" >
+
+                <LinearLayout
+                    android:id="@+id/layout"
+                    android:layout_width="match_parent"
+                    android:layout_height="fill_parent"
+                    android:paddingLeft="10dp"
+                    android:paddingRight="10dp"
+                    android:orientation="vertical" >
+                </LinearLayout>
+            </ScrollView>
+        </com.comdosoft.homework.tools.PullToRefreshView>
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:background="#636362"
+        android:gravity="center_horizontal"
+        android:orientation="vertical" >
+
+        <include
+            android:id="@+id/main_class_classes_include"
+            android:layout_width="395px"
+            android:layout_height="250px"
+            android:layout_marginTop="20px"
+            layout="@layout/main_class_one" />
+
+        <LinearLayout
+            android:id="@+id/main_class_classesll"
+            android:layout_width="394px"
+            android:layout_height="wrap_content"
+            android:background="#636362"
+            android:gravity="center"
+            android:orientation="horizontal" >
+
+            <View
+                android:id="@+id/main_class_view1"
+                android:layout_width="72dp"
+                android:layout_height="2dp"
+                android:background="#ffffff" />
+
+            <TextView
+                android:id="@+id/main_class_classesTv"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/main_class_classesTv"
+                android:textSize="24px" />
+
+            <View
+                android:id="@+id/main_class_view2"
+                android:layout_width="72dp"
+                android:layout_height="2dp"
+                android:background="#ffffff" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/main_class_classesll2"
+            android:layout_width="394px"
+            android:layout_height="wrap_content"
+            android:background="#636362"
+            android:orientation="horizontal" >
+
+            <GridView
+                android:id="@+id/main_class_classGv"
+                android:layout_width="394px"
+                android:layout_height="wrap_content" >
+            </GridView>
+        </LinearLayout>
+    </LinearLayout>
+
+</LinearLayout>
