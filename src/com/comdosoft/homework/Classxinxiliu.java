@@ -1654,7 +1654,7 @@ public class Classxinxiliu extends Activity implements OnHeaderRefreshListener,
 
 				} else {
 					Map<String, String> map = new HashMap<String, String>();
-					map.put("student_id", user_id);
+					map.put("student_id", id);
 					map.put("school_class_id", school_class_id);
 
 					json = HomeWorkTool.sendGETRequest(
