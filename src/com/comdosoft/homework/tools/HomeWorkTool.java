@@ -205,7 +205,6 @@ public class HomeWorkTool implements Urlinterface {
 	// get请求
 	public static String sendGETRequest(String path, Map<String, String> map)
 			throws Exception {
-		Log.i(tag, "AAA");
 		String json = "error";
 		StringBuilder url = new StringBuilder(path);
 		url.append("?");
@@ -214,20 +213,18 @@ public class HomeWorkTool implements Urlinterface {
 			url.append("&");
 		}
 		url.deleteCharAt(url.length() - 1);
-		Log.i(tag, url.toString());
+		Log.i("homework", url.toString());
 		HttpURLConnection conn = (HttpURLConnection) new URL(url.toString())
 				.openConnection();
 		conn.setConnectTimeout(5000);
 		conn.setRequestMethod("GET");
-		Log.i(tag, "参数:" + conn.getResponseCode());
 		if (conn.getResponseCode() == HttpURLConnection.HTTP_OK) {
-			Log.i(tag, "提交参数成功");
 			InputStream is = conn.getInputStream();
 			byte[] data = readInputStream(is);
 			is.close();
 			json = new String(data);
-			Log.i(tag, json + "---");
 		}
+		Log.i("homework", json);
 		return json;
 	}
 

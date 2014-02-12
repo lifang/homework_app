@@ -56,7 +56,10 @@ public class AboutMeActivity extends Activity {
 
 		getnews();
 	}
-
+	protected void onResume() {
+		super.onResume();
+		getnews();
+	}
 	public void getnews() {
 		new Thread() {
 			public void run() {

@@ -3,6 +3,7 @@ package com.comdosoft.homework;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Random;
@@ -13,6 +14,7 @@ import android.app.ProgressDialog;
 import android.content.Intent;
 import android.graphics.Color;
 import android.media.MediaPlayer;
+import android.media.MediaPlayer.OnCompletionListener;
 import android.media.MediaPlayer.OnPreparedListener;
 import android.os.Bundle;
 import android.os.Handler;
@@ -27,7 +29,6 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.LinearLayout.LayoutParams;
 import android.widget.TextView;
-
 import com.comdosoft.homework.pojo.DictationPojo;
 import com.comdosoft.homework.pojo.QuestionPojo;
 import com.comdosoft.homework.tools.HomeWork;
@@ -39,7 +40,8 @@ import com.comdosoft.homework.tools.Urlinterface;
 
 // 拼写答题    马龙    2014年2月10日
 public class DictationBeginActivity extends Activity implements
-		OnClickListener, HomeWorkParams, OnPreparedListener, Urlinterface {
+		OnClickListener, HomeWorkParams, OnPreparedListener,
+		OnCompletionListener, Urlinterface {
 	private int linearLayoutIndex = 0;
 	private int mesLinearLayoutIndex = 0;
 	private int smallIndex;
@@ -59,6 +61,7 @@ public class DictationBeginActivity extends Activity implements
 	private List<TextView> tvList = new ArrayList<TextView>();
 	private List<LinearLayout> linearLayoutList = new ArrayList<LinearLayout>();
 	private List<LinearLayout> mesLinearLayoutList = new ArrayList<LinearLayout>();
+	private Map<String, Integer> errorMap = new HashMap<String, Integer>();
 	private LinearLayout editLinearLayout;
 	private TextView mesText;
 	private TextView page;
@@ -137,9 +140,11 @@ public class DictationBeginActivity extends Activity implements
 		dictationList.clear();
 		linearLayoutList.clear();
 		mesLinearLayoutList.clear();
+		errorMap.clear();
 		editLinearLayout.removeAllViews();
 		mesText.setVisibility(LinearLayout.GONE);
 
+		playFlag = false;
 		handler.sendEmptyMessage(3);
 
 		// 获取已答过题目记录数
@@ -260,6 +265,7 @@ public class DictationBeginActivity extends Activity implements
 						tvList.get(i).setVisibility(View.VISIBLE);
 					} else {
 						// 错误
+						errorMap.put(dictationList.get(i).getValue(), 1);
 						dictationList.get(i).setFlag(0);
 						answer.append(s).append("-!-");
 						tvList.get(i).setVisibility(View.INVISIBLE);
@@ -326,7 +332,7 @@ public class DictationBeginActivity extends Activity implements
 						} else if (homeWork.getQuestion_allNumber() == 0) {
 							new SendWorkOver().start();
 						}
-						MyDialog("恭喜完成今天的朗读作业!", "确认", "取消", 2);
+						MyDialog("恭喜完成今天的听写作业!", "确认", "取消", 2);
 						return;
 					}
 
@@ -354,6 +360,16 @@ public class DictationBeginActivity extends Activity implements
 
 		public void run() {
 			super.run();
+			StringBuffer sb = new StringBuffer();
+			Iterator iterator = errorMap.entrySet().iterator();
+			while (iterator.hasNext()) {
+				Map.Entry<String, Integer> entry = (Map.Entry<String, Integer>) iterator
+						.next();
+				sb.append(entry.getKey()).append("-!-");
+			}
+			if (answer.length() > 0) {
+				answer.delete(answer.length() - 3, answer.length());
+			}
 			Map<String, String> map = new HashMap<String, String>();
 			map.put("student_id", student_id + "");
 			map.put("school_class_id", class_id + "");
@@ -362,12 +378,14 @@ public class DictationBeginActivity extends Activity implements
 			map.put("question_id",
 					ListeningQuestionList.getListeningPojo(bIndex).getId() + "");
 			map.put("branch_question_id", qpList.get(sIndex - 1).getId() + "");
-			map.put("answer", answer.toString() + "");
+			map.put("answer", sb.toString() + "");
 			map.put("question_types", "0");
 
 			log = HomeWorkTool.doPost(RECORD_ANSWER_INFO, map);
 			Log.i("Ax", log);
+			Log.i("Ax", sb.toString());
 			answer.delete(0, answer.length());
+			sb.delete(0, sb.length());
 			handler.sendEmptyMessage(1);
 		}
 	}
@@ -456,6 +474,7 @@ public class DictationBeginActivity extends Activity implements
 			mediaPlayer.setDataSource(mp3URL);
 			mediaPlayer.prepare();
 			mediaPlayer.setOnPreparedListener(this);
+			mediaPlayer.setOnCompletionListener(this);
 		} catch (IllegalArgumentException e) {
 			e.printStackTrace();
 		} catch (IllegalStateException e) {
@@ -489,28 +508,31 @@ public class DictationBeginActivity extends Activity implements
 			check();
 			break;
 		case R.id.question_dictation_play:
-			// if (mediaPlayer.isPlaying()) {
-			// handler.sendEmptyMessage(3);
-			// stop();
-			// } else {
-			// handler.sendEmptyMessage(2);
-			// if (playFlag) {
-			// mediaPlayer.start();
-			// } else {
-			// playFlag = true;
-			// handler.sendEmptyMessage(4);
-			// new MyMediaPlay().start();
-			// }
-			// }
-			playerAmr();
+			if (!playFlag) {
+				new MyMediaPlay().start();
+				playFlag = true;
+				handler.sendEmptyMessage(4);
+			} else if (mediaPlayer.isPlaying()) {
+				handler.sendEmptyMessage(3);
+				mediaPlayer.pause();
+			} else {
+				handler.sendEmptyMessage(2);
+				mediaPlayer.start();
+			}
 			break;
 		}
 	}
 
 	@Override
 	public void onPrepared(MediaPlayer mp) {
+		handler.sendEmptyMessage(1);
 		handler.sendEmptyMessage(2);
 		mp.start();
+	}
+
+	@Override
+	public void onCompletion(MediaPlayer mp) {
+		handler.sendEmptyMessage(3);
 	}
 
 	// 销毁音频
