@@ -168,7 +168,8 @@ public class RegistrationActivity extends Activity implements Urlinterface {
 			
 			if (HomeWorkTool.isHasSdcard()) {
 				File temp = new File(Environment.getExternalStorageDirectory()
-						+ "/xiaoma.jpg");
+						+ "/"
+						+ IMAGE_FILE_NAME);
 				startPhotoZoom(Uri.fromFile(temp));
 			} else {
 				Toast.makeText(this, "未找到存储卡，无法存储照片！", Toast.LENGTH_LONG)
