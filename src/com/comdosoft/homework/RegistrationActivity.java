@@ -37,6 +37,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.comdosoft.homework.tools.HomeWork;
+import com.comdosoft.homework.tools.HomeWorkParams;
 import com.comdosoft.homework.tools.HomeWorkTool;
 import com.comdosoft.homework.tools.Urlinterface;
 import com.comdosoft.homework.Classxinxiliu;
@@ -408,7 +409,14 @@ public class RegistrationActivity extends Activity implements Urlinterface {
 					}
 				}
 			};
-			thread.start();
+			
+			if (HomeWorkTool.isConnect(RegistrationActivity.this)) {
+				thread.start();
+			}
+			else {
+				Toast.makeText(getApplicationContext(), HomeWorkParams.INTERNET, 0).show();
+			}
+			
 
 		}
 		return null;
