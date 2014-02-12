@@ -83,10 +83,10 @@ public class HomeWorkMainActivity extends TabActivity implements Urlinterface {
 		tabhost.addTab(spec4);
 		tabhost.setCurrentTab(homework.getMainItem());
 		updateTabStyle(tabhost);
-		if (HomeWorkTool.isConnect(HomeWorkMainActivity.this)) 
-		{
-		thread.start();
-		}
+//		if (HomeWorkTool.isConnect(HomeWorkMainActivity.this)) 
+//		{
+//		thread.start();
+//		}
 	}
 
 	Thread thread = new Thread() {
