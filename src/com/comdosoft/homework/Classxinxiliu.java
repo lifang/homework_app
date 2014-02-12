@@ -111,7 +111,7 @@ public class Classxinxiliu extends Activity implements OnHeaderRefreshListener,
 	private String user_Url;
 	private int width;
 	private int height;
-	private List<ClassStuPojo> stuList = new ArrayList<ClassStuPojo>();
+	private List<ClassStuPojo> stuList ;
 	private ArrayList<Child_Micropost> child_list;
 	private Handler handler = new Handler() {
 		public void handleMessage(Message msg) {
@@ -304,6 +304,8 @@ public class Classxinxiliu extends Activity implements OnHeaderRefreshListener,
 		if (HomeWorkTool.isConnect(Classxinxiliu.this)) {
 			Thread thread = new Thread(new get_class_info());
 			thread.start();
+		}else {
+			Toast.makeText(getApplicationContext(), HomeWorkParams.INTERNET, 0).show();
 		}
 		lass_count2 = 1;
 	}
@@ -718,6 +720,7 @@ public class Classxinxiliu extends Activity implements OnHeaderRefreshListener,
 	private void setJson(String json) {
 
 		try {
+			stuList= new ArrayList<ClassStuPojo>();
 			JSONObject obj = new JSONObject(json);
 			// 学生信息
 			JSONObject student = obj.getJSONObject("student"); // 获得学生的信息
@@ -1237,6 +1240,7 @@ public class Classxinxiliu extends Activity implements OnHeaderRefreshListener,
 						map.put("reciver_id", reciver_id);
 						map.put("reciver_types", reciver_types);
 						map.put("school_class_id", school_class_id);
+						Log.i("bbb","sender_id:"+user_id+"sender_types"+user_types +"micropost_id"+micropost_id+"reciver_id"+reciver_id+"reciver_types"+reciver_types+"school_class_id"+school_class_id);
 						String js1 = HomeWorkTool.doPost(
 								Urlinterface.reply_message, map);
 						Message msg = new Message();// 创建Message 对象

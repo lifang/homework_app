@@ -37,6 +37,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.comdosoft.homework.tools.HomeWork;
+import com.comdosoft.homework.tools.HomeWorkParams;
 import com.comdosoft.homework.tools.HomeWorkTool;
 import com.comdosoft.homework.tools.Urlinterface;
 import com.comdosoft.homework.Classxinxiliu;
@@ -168,7 +169,8 @@ public class RegistrationActivity extends Activity implements Urlinterface {
 			
 			if (HomeWorkTool.isHasSdcard()) {
 				File temp = new File(Environment.getExternalStorageDirectory()
-						+ "/xiaoma.jpg");
+						+ "/"
+						+ IMAGE_FILE_NAME);
 				startPhotoZoom(Uri.fromFile(temp));
 			} else {
 				Toast.makeText(this, "未找到存储卡，无法存储照片！", Toast.LENGTH_LONG)
@@ -407,7 +409,14 @@ public class RegistrationActivity extends Activity implements Urlinterface {
 					}
 				}
 			};
-			thread.start();
+			
+			if (HomeWorkTool.isConnect(RegistrationActivity.this)) {
+				thread.start();
+			}
+			else {
+				Toast.makeText(getApplicationContext(), HomeWorkParams.INTERNET, 0).show();
+			}
+			
 
 		}
 		return null;
