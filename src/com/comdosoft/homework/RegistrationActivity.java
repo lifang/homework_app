@@ -32,6 +32,7 @@ import android.view.View;
 import android.view.Window;
 import android.widget.EditText;
 import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -41,7 +42,7 @@ import com.comdosoft.homework.tools.Urlinterface;
 import com.comdosoft.homework.Classxinxiliu;
 
 public class RegistrationActivity extends Activity implements Urlinterface {
-	private ImageButton faceImage;
+	private ImageView faceImage;
 	private EditText reg_nicheng;//
 	private EditText reg_xingming; //
 	private EditText reg_banjiyanzhengma;
@@ -54,9 +55,7 @@ public class RegistrationActivity extends Activity implements Urlinterface {
 	private static final String IMAGE_FILE_NAME = "faceImage.jpg";
 
 	/* 请求码 */
-	private static final int IMAGE_REQUEST_CODE = 0;
-	private static final int CAMERA_REQUEST_CODE = 1;
-	private static final int RESULT_REQUEST_CODE = 2;
+
 	private String json = "";
 
 	@Override
@@ -66,7 +65,13 @@ public class RegistrationActivity extends Activity implements Urlinterface {
 
 		setContentView(R.layout.activity_registration);
 		hw = (HomeWork) getApplication();
+		File file = new File(Environment.getExternalStorageDirectory()
+				+ "/1" + IMAGE_FILE_NAME);
 
+			if (file.exists()) {
+				file.delete();
+
+			}
 		// Date d = new Date();
 		// open_id = d.toString();
 		// 上面两句代码 用来获得不一样的 qq_uid，，，测试 用，，后期删除
@@ -76,7 +81,7 @@ public class RegistrationActivity extends Activity implements Urlinterface {
 
 		layout = this.findViewById(R.id.reg_photolayout); // 隐藏内容
 		layout2 = this.findViewById(R.id.reg_photolayout2); // 隐藏内容
-		faceImage = (ImageButton) findViewById(R.id.reg_touxiang);
+		faceImage = (ImageView) findViewById(R.id.reg_touxiang);
 		reg_nicheng = (EditText) findViewById(R.id.reg_nicheng);
 		reg_xingming = (EditText) findViewById(R.id.reg_xingming);
 		reg_banjiyanzhengma = (EditText) findViewById(R.id.reg_banjiyanzhengma);
@@ -124,7 +129,7 @@ public class RegistrationActivity extends Activity implements Urlinterface {
 
 		}
 
-		startActivityForResult(intentFromCapture, CAMERA_REQUEST_CODE);
+		startActivityForResult(intentFromCapture, 2);
 
 	}
 
@@ -134,40 +139,60 @@ public class RegistrationActivity extends Activity implements Urlinterface {
 	public void reg_congxiangce(View v) {
 		layout.setVisibility(View.GONE);
 
-		Intent intentFromGallery = new Intent();
-		intentFromGallery.setType("image/*"); // 设置文件类型
-		intentFromGallery.setAction(Intent.ACTION_GET_CONTENT);
-		startActivityForResult(intentFromGallery, IMAGE_REQUEST_CODE);
+		Intent intentFromGallery = new Intent(Intent.ACTION_PICK, null);
+				
+				/**
+				 * 下面这句话，与其它方式写是一样的效果，如果：
+				 * intent.setData(MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+				 * intent.setType(""image/*");设置数据类型
+				 * 如果朋友们要限制上传到服务器的图片类型时可以直接写如："image/jpeg 、 image/png等的类型"
+				 * 这个地方小马有个疑问，希望高手解答下：就是这个数据URI与类型为什么要分两种形式来写呀？有什么区别？
+				 */
+				intentFromGallery.setDataAndType(
+						MediaStore.Images.Media.EXTERNAL_CONTENT_URI,
+						"image/*");
+				startActivityForResult(intentFromGallery, 1);
 
 	}
 
 	@Override
 	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-		// 结果码不等于取消时候
-		if (resultCode != RESULT_CANCELED) {
-
-			switch (requestCode) {
-			case IMAGE_REQUEST_CODE:
-				startPhotoZoom(data.getData());
-				break;
-			case CAMERA_REQUEST_CODE:
-				if (HomeWorkTool.isHasSdcard()) {
-					File tempFile = new File(
-							Environment.getExternalStorageDirectory() + "/"
-									+ IMAGE_FILE_NAME);
-					startPhotoZoom(Uri.fromFile(tempFile));
-				} else {
-					Toast.makeText(this, "未找到存储卡，无法存储照片！", Toast.LENGTH_LONG)
-							.show();
-				}
-
-				break;
-			case RESULT_REQUEST_CODE:
-				if (data != null) {
-					getImageToView(data);
-				}
-				break;
+		switch (requestCode) {
+		// 如果是直接从相册获取
+		case 1:
+			startPhotoZoom(data.getData());
+			break;
+		// 如果是调用相机拍照时
+		case 2:
+			
+			
+			if (HomeWorkTool.isHasSdcard()) {
+				File temp = new File(Environment.getExternalStorageDirectory()
+						+ "/xiaoma.jpg");
+				startPhotoZoom(Uri.fromFile(temp));
+			} else {
+				Toast.makeText(this, "未找到存储卡，无法存储照片！", Toast.LENGTH_LONG)
+						.show();
 			}
+			
+			break;
+		// 取得裁剪后的图片
+		case 3:
+			/**
+			 * 非空判断大家一定要验证，如果不验证的话，
+			 * 在剪裁之后如果发现不满意，要重新裁剪，丢弃
+			 * 当前功能时，会报NullException，小马只
+			 * 在这个地方加下，大家可以根据不同情况在合适的
+			 * 地方做判断处理类似情况
+			 * 
+			 */
+			if(data != null){
+				getImageToView(data);
+			}
+			break;
+		default:
+			break;
+
 		}
 		super.onActivityResult(requestCode, resultCode, data);
 	}
@@ -187,10 +212,10 @@ public class RegistrationActivity extends Activity implements Urlinterface {
 		intent.putExtra("aspectX", 1);
 		intent.putExtra("aspectY", 1);
 		// outputX outputY 是裁剪图片宽高
-		intent.putExtra("outputX", 350);
-		intent.putExtra("outputY", 400);
+		intent.putExtra("outputX", 176);
+		intent.putExtra("outputY", 186);
 		intent.putExtra("return-data", true);
-		startActivityForResult(intent, 2);
+		startActivityForResult(intent, 3);
 	}
 
 	/**
@@ -222,7 +247,7 @@ public class RegistrationActivity extends Activity implements Urlinterface {
 				// byte[] buf = s.getBytes();
 				stream.write(buf);
 				stream.close();
-				faceImage.setImageDrawable(drawable);
+				faceImage.setBackgroundDrawable(drawable);
 			} catch (IOException e) {
 
 				e.printStackTrace();

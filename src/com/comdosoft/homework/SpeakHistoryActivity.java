@@ -8,6 +8,7 @@ import android.app.ProgressDialog;
 import android.content.Intent;
 import android.graphics.Color;
 import android.media.MediaPlayer;
+import android.media.MediaPlayer.OnCompletionListener;
 import android.media.MediaPlayer.OnPreparedListener;
 import android.os.Bundle;
 import android.os.Handler;
@@ -28,7 +29,7 @@ import com.comdosoft.homework.tools.HomeWork;
 import com.comdosoft.homework.tools.Urlinterface;
 
 public class SpeakHistoryActivity extends Activity implements Urlinterface,
-		OnPreparedListener {
+		OnPreparedListener,OnCompletionListener {
 
 	public String content;// 记录本题正确答案
 	private TextView question_speak_title;
@@ -128,6 +129,7 @@ public class SpeakHistoryActivity extends Activity implements Urlinterface,
 			MyDialog("确认要退出吗?", "确认", "取消", 0);
 			break;
 		case R.id.question_speak_next:
+			playFlag = false;
 			stop();
 			int ye = homework.getQuestion_index();
 			if ((ye + 1) < homework.getQuestion_allNumber()) {
@@ -293,6 +295,7 @@ public class SpeakHistoryActivity extends Activity implements Urlinterface,
 			player.setDataSource(path);
 			player.prepare();// 进行缓冲
 			player.setOnPreparedListener(this);
+			player.setOnCompletionListener(this);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -334,7 +337,11 @@ public class SpeakHistoryActivity extends Activity implements Urlinterface,
 		}
 		super.onDestroy();
 	}
-
+	
+	public void onCompletion(MediaPlayer mp) {
+		handler.sendEmptyMessage(2);
+	}
+	
 	public boolean onKeyDown(int keyCode, KeyEvent event) {
 		if (keyCode == KeyEvent.KEYCODE_BACK) {
 			MyDialog("确认要退出吗?", "确认", "取消", 0);
