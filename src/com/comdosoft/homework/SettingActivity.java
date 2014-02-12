@@ -242,10 +242,18 @@ public class SettingActivity extends Activity implements Urlinterface {
 	}
 
 	public void changeClass(View v) {
-		Intent intent = new Intent();
-		intent.setClass(this, SwitchClassActivity.class);//
-		startActivity(intent);
+		
+		if (HomeWorkTool.isConnect(SettingActivity.this)) {
+			Intent intent = new Intent();
+			intent.setClass(this, SwitchClassActivity.class);//
+			startActivity(intent);
 
+		}
+		else {
+			Toast.makeText(getApplicationContext(), HomeWorkParams.INTERNET, 0).show();
+		}
+	
+		
 	}
 
 	public void exit_user(View v) {
