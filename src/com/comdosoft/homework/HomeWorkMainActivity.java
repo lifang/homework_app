@@ -112,7 +112,7 @@ public class HomeWorkMainActivity extends TabActivity implements Urlinterface {
 						imageView.setImageDrawable(getResources().getDrawable(
 								R.drawable.news)); // 改变我们需要的图标
 						textview.setText(msg.obj + "");
-						num="0";
+						
 					}
 				} else {
 					if (msg.obj.toString().equals("0")) {
@@ -316,6 +316,7 @@ public class HomeWorkMainActivity extends TabActivity implements Urlinterface {
 										.findViewById(android.R.id.title);
 								textview.setPadding(27, 5, 5, 53);
 								textview.setText("");
+								num="0";
 								img.setImageResource(R.drawable.th3);
 								break;
 							case 3:
