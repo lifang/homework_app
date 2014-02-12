@@ -14,7 +14,7 @@
             android:id="@+id/child_user_face"
             android:layout_width="82px"
             android:layout_height="82px"
-            android:background="@drawable/moren" />
+            android:src="@drawable/moren" />
 
         <RelativeLayout
             android:id="@+id/relativeLayout1"
