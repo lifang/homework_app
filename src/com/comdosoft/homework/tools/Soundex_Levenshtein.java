@@ -39,7 +39,7 @@ public class Soundex_Levenshtein {
 
 	// 朗读的算法 s:用户输入文本 tl:正确答案
 	public static List<int[]> Engine2(String s, List<String> tl) {
-		Log.i("linshi", s + "----");
+		Log.i("suanfa", s + "----");
 		List<String> ml = new ArrayList<String>();
 		List<int[]> str = new ArrayList<int[]>();
 		String[] arrT = s.split(" ");
@@ -50,9 +50,13 @@ public class Soundex_Levenshtein {
 			int[] arr = new int[2];
 			int temp = 0;
 			for (int j = 0; j < tl.size(); j++) {
-				int value = dragonEngine(ml.get(i), tl.get(j));
-				if (value >= temp) {
-					temp = value;
+				if (tl.get(j).matches("[\\u4E00-\\u9FA5]+")) {
+					temp = 0;
+				} else {
+					int value = dragonEngine(ml.get(i), tl.get(j));
+					if (value >= temp) {
+						temp = value;
+					}
 				}
 			}
 			arr[0] = i;

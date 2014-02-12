@@ -110,7 +110,7 @@ public class HomeWorkIngActivity extends Activity implements Urlinterface {
 		index = 0;
 
 		SharedPreferences sp = getSharedPreferences(SHARED, 0);
-		student_id = sp.getString("user_id", "null");
+		student_id = sp.getString("id", "null");
 		school_class_id = sp.getString("school_class_id", "null");
 		Log.i(tag, school_class_id + "====");
 		homework.setClass_id(Integer.valueOf(school_class_id));

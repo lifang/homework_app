@@ -26,10 +26,12 @@ import android.widget.Toast;
 
 import com.comdosoft.homework.pojo.QuestionPojo;
 import com.comdosoft.homework.tools.HomeWork;
+import com.comdosoft.homework.tools.HomeWorkParams;
+import com.comdosoft.homework.tools.HomeWorkTool;
 import com.comdosoft.homework.tools.Urlinterface;
 
 public class SpeakHistoryActivity extends Activity implements Urlinterface,
-		OnPreparedListener,OnCompletionListener {
+		OnPreparedListener, OnCompletionListener {
 
 	public String content;// 记录本题正确答案
 	private TextView question_speak_title;
@@ -147,21 +149,27 @@ public class SpeakHistoryActivity extends Activity implements Urlinterface,
 			}
 			break;
 		case R.id.question_speak_img:// 播放音频
-			// 从文件系统播放
-			path = IP + branch_questions.get(index).getUrl();
-			if (player.isPlaying()) {// 正在播放
-				stop();
-			} else {
-				if (playFlag) {
-					handler.sendEmptyMessage(1);
-					player.start();
+			if (HomeWorkTool.isConnect(getApplicationContext())) {
+				// 从文件系统播放
+				path = IP + branch_questions.get(index).getUrl();
+				if (player.isPlaying()) {// 正在播放
+					stop();
 				} else {
-					playFlag = true;
-					prodialog = new ProgressDialog(SpeakHistoryActivity.this);
-					prodialog.setMessage("正在缓冲...");
-					prodialog.show();
-					new Thread(new setPlay()).start();
+					if (playFlag) {
+						handler.sendEmptyMessage(1);
+						player.start();
+					} else {
+						playFlag = true;
+						prodialog = new ProgressDialog(
+								SpeakHistoryActivity.this);
+						prodialog.setMessage("正在缓冲...");
+						prodialog.show();
+						new Thread(new setPlay()).start();
+					}
 				}
+			} else {
+				Toast.makeText(getApplicationContext(),
+						HomeWorkParams.INTERNET, Toast.LENGTH_SHORT).show();
 			}
 			break;
 		}
@@ -330,11 +338,11 @@ public class SpeakHistoryActivity extends Activity implements Urlinterface,
 		}
 		super.onDestroy();
 	}
-	
+
 	public void onCompletion(MediaPlayer mp) {
 		handler.sendEmptyMessage(2);
 	}
-	
+
 	public boolean onKeyDown(int keyCode, KeyEvent event) {
 		if (keyCode == KeyEvent.KEYCODE_BACK) {
 			MyDialog("确认要退出吗?", "确认", "取消", 0);

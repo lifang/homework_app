@@ -32,6 +32,7 @@
             android:layout_height="42px"
             android:layout_marginTop="13px"
             android:gravity="center"
+            android:maxLength="8"
             android:textSize="24px" />
 
         <TextView
@@ -48,6 +49,7 @@
             android:layout_height="42px"
             android:layout_marginTop="13px"
             android:gravity="center"
+            android:maxLength="8"
             android:textSize="24px" />
 
         <TextView
