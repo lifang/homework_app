@@ -4,6 +4,7 @@ import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.nio.charset.Charset;
 
 import org.apache.http.HttpResponse;
 import org.apache.http.client.HttpClient;
@@ -36,6 +37,7 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.Toast;
 
+import com.comdosoft.homework.tools.HomeWorkParams;
 import com.comdosoft.homework.tools.HomeWorkTool;
 import com.comdosoft.homework.tools.Urlinterface;
 
@@ -90,7 +92,7 @@ public class SettingActivity extends Activity implements Urlinterface {
 		name = (EditText) findViewById(R.id.set_name);
 		name.setText(nameS);
 		nickname.setText(nicknameS);
-		// if (HomeWorkTool.isConnect(getApplicationContext())) {
+		 if (HomeWorkTool.isConnect(getApplicationContext())) {
 
 		if (avatar_url != null || avatar_url.length() != 0) { // 设置头像
 
@@ -100,6 +102,9 @@ public class SettingActivity extends Activity implements Urlinterface {
 			faceImage.setOnClickListener(listener);
 
 		}
+		 }else {
+				Toast.makeText(getApplicationContext(), HomeWorkParams.INTERNET, 0).show();
+			}
 	}
 
 	class GetCSDNLogoTask extends AsyncTask<String, Integer, Drawable> {
@@ -204,8 +209,8 @@ public class SettingActivity extends Activity implements Urlinterface {
 					} 
 
 
-					entity.addPart("nickname", new StringBody(nicknameS));
-					entity.addPart("name", new StringBody(nameS));
+					entity.addPart("nickname", new StringBody(nicknameS, Charset.forName("UTF-8")));
+					entity.addPart("name", new StringBody(nameS, Charset.forName("UTF-8")));
 
 					json = HomeWorkTool.sendPhostimg(
 							Urlinterface.MODIFY_PERSON_INFO, entity);
@@ -225,7 +230,14 @@ public class SettingActivity extends Activity implements Urlinterface {
 			Toast.makeText(getApplicationContext(),
 					"姓名或昵称不能为空", 0).show();
 		} else {
-		thread.start();
+			
+			if (HomeWorkTool.isConnect(SettingActivity.this)) {
+				thread.start();
+			}
+			else {
+				Toast.makeText(getApplicationContext(), HomeWorkParams.INTERNET, 0).show();
+			}
+		
 		}
 	}
 
@@ -332,7 +344,8 @@ Intent intentFromGallery = new Intent(Intent.ACTION_PICK, null);
 			
 			if (HomeWorkTool.isHasSdcard()) {
 				File temp = new File(Environment.getExternalStorageDirectory()
-						+ "/xiaoma.jpg");
+						+ "/"
+						+ IMAGE_FILE_NAME);
 				startPhotoZoom(Uri.fromFile(temp));
 			} else {
 				Toast.makeText(this, "未找到存储卡，无法存储照片！", Toast.LENGTH_LONG)
