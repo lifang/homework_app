@@ -20,10 +20,13 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.comdosoft.homework.pojo.ListeningPojo;
 import com.comdosoft.homework.pojo.QuestionPojo;
 import com.comdosoft.homework.tools.HomeWork;
+import com.comdosoft.homework.tools.HomeWorkParams;
+import com.comdosoft.homework.tools.HomeWorkTool;
 import com.comdosoft.homework.tools.Urlinterface;
 
 public class SpeakPrepareActivity extends Activity implements Urlinterface,
@@ -180,7 +183,8 @@ public class SpeakPrepareActivity extends Activity implements Urlinterface,
 						for (int i = 0; i < size; i++) {
 							qlist.remove(0);
 						}
-						Log.i("suanfa", qlist.size()+"三---"+qlist.get(0).getContent());
+						Log.i("suanfa", qlist.size() + "三---"
+								+ qlist.get(0).getContent());
 						homework.setBranch_questions(qlist);
 						homework.setQuestion_id(list.get(
 								homework.getHistory_item() - 1).getId());
@@ -202,25 +206,31 @@ public class SpeakPrepareActivity extends Activity implements Urlinterface,
 			}
 			break;
 		case R.id.question_speak_img:
-			mp3List = new ArrayList<String>();
-			for (int i = 0; i < questionlist.size(); i++) {
-				Log.i("linshi", IP + questionlist.get(i).getUrl());
-				mp3List.add(IP + questionlist.get(i).getUrl());
-			}
-			// 从文件系统播放
-			if (player.isPlaying()) {// 暂停播放
-				stop();
-			} else {
-				if (playFlag) {
-					handler.sendEmptyMessage(4);
-					player.start();
-				} else {
-					playFlag = true;
-					prodialog = new ProgressDialog(SpeakPrepareActivity.this);
-					prodialog.setMessage("正在缓冲...");
-					prodialog.show();
-					new Thread(new setPlay()).start();
+			if (HomeWorkTool.isConnect(getApplicationContext())) {
+				mp3List = new ArrayList<String>();
+				for (int i = 0; i < questionlist.size(); i++) {
+					Log.i("linshi", IP + questionlist.get(i).getUrl());
+					mp3List.add(IP + questionlist.get(i).getUrl());
 				}
+				// 从文件系统播放
+				if (player.isPlaying()) {// 暂停播放
+					stop();
+				} else {
+					if (playFlag) {
+						handler.sendEmptyMessage(4);
+						player.start();
+					} else {
+						playFlag = true;
+						prodialog = new ProgressDialog(
+								SpeakPrepareActivity.this);
+						prodialog.setMessage("正在缓冲...");
+						prodialog.show();
+						new Thread(new setPlay()).start();
+					}
+				}
+			} else {
+				Toast.makeText(getApplicationContext(),
+						HomeWorkParams.INTERNET, Toast.LENGTH_SHORT).show();
 			}
 			break;
 		}

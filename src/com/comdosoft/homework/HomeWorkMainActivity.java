@@ -7,6 +7,7 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import android.app.AlertDialog.Builder;
 import android.app.TabActivity;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -24,10 +25,10 @@ import android.view.View;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TabHost;
-import android.widget.TextView;
-import android.widget.Toast;
 import android.widget.TabHost.OnTabChangeListener;
 import android.widget.TabWidget;
+import android.widget.TextView;
+import android.widget.Toast;
 
 import com.comdosoft.homework.tools.HomeWork;
 import com.comdosoft.homework.tools.HomeWorkTool;
@@ -86,6 +87,12 @@ public class HomeWorkMainActivity extends TabActivity implements Urlinterface {
 		if (HomeWorkTool.isConnect(HomeWorkMainActivity.this)) 
 		{
 		thread.start();
+		}else{
+			Builder builder = new Builder(HomeWorkMainActivity.this);
+			builder.setTitle("提示");
+			builder.setMessage(R.string.internet_error);
+			builder.setPositiveButton("确定", null);
+			builder.show();
 		}
 	}
 
@@ -160,7 +167,7 @@ public class HomeWorkMainActivity extends TabActivity implements Urlinterface {
 				msg.what = 0;
 				msg.obj = count;
 				handler.sendMessage(msg);
-				Thread.sleep(5000);
+				Thread.sleep(60000);
 			} catch (InterruptedException e) {
 				e.printStackTrace();
 			} catch (Exception e) {
@@ -178,7 +185,7 @@ public class HomeWorkMainActivity extends TabActivity implements Urlinterface {
 				return jsonarray.length();
 			} else {
 				String notic = (String) jsonobject.get("notic");
-				Toast.makeText(getApplicationContext(), notic, 1).show();
+				Toast.makeText(getApplicationContext(), notic, Toast.LENGTH_SHORT).show();
 			}
 		} catch (JSONException e) {
 			// TODO Auto-generated catch block
