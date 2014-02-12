@@ -25,7 +25,6 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
-import android.widget.Toast;
 import android.widget.LinearLayout.LayoutParams;
 import android.widget.TextView;
 
@@ -51,6 +50,7 @@ public class DictationBeginActivity extends Activity implements
 	private String log;
 	private String symbol;
 	private String mp3URL;
+	private boolean mesFlag = false;
 	private boolean playFlag = false;
 	private List<Integer> indexList = new ArrayList<Integer>();
 	private List<QuestionPojo> qpList = new ArrayList<QuestionPojo>();
@@ -130,6 +130,7 @@ public class DictationBeginActivity extends Activity implements
 	// 初始化
 	public void init() {
 		// 清除数据
+		mesFlag = false;
 		linearLayoutIndex = 0;
 		mesLinearLayoutIndex = 0;
 		etList.clear();
@@ -137,6 +138,7 @@ public class DictationBeginActivity extends Activity implements
 		linearLayoutList.clear();
 		mesLinearLayoutList.clear();
 		editLinearLayout.removeAllViews();
+		mesText.setVisibility(LinearLayout.GONE);
 
 		handler.sendEmptyMessage(3);
 
@@ -245,19 +247,23 @@ public class DictationBeginActivity extends Activity implements
 				if (s != null && !s.equals("")) {
 					int value = Soundex_Levenshtein.dragonEngine(s,
 							dictationList.get(i).getValue());
-					if (value > 5) {
+					if (dictationList.get(i).getValue().equals(s)) {
+						// 全对
+						dictationList.get(i).setFlag(1);
+						tvList.get(i).setVisibility(View.INVISIBLE);
+						etList.get(i).setTextColor(Color.rgb(146, 184, 27));
+					} else if (value > 5) {
+						// 半对
+						mesFlag = true;
 						dictationList.get(i).setFlag(1);
 						etList.get(i).setTextColor(Color.rgb(240, 134, 41));
 						tvList.get(i).setVisibility(View.VISIBLE);
 					} else {
+						// 错误
 						dictationList.get(i).setFlag(0);
 						answer.append(s).append("-!-");
 						tvList.get(i).setVisibility(View.INVISIBLE);
 						etList.get(i).setTextColor(Color.rgb(255, 0, 0));
-					}
-					if (dictationList.get(i).getValue().equals(s)) {
-						tvList.get(i).setVisibility(View.INVISIBLE);
-						etList.get(i).setTextColor(Color.rgb(146, 184, 27));
 					}
 				} else {
 					dictationList.get(i).setFlag(0);
@@ -266,14 +272,18 @@ public class DictationBeginActivity extends Activity implements
 
 			// 答错提示剩余单词
 			indexList.clear();
-			StringBuffer sb = new StringBuffer();
-			sb.append(QUESTION_DICTATION_ERROR_MES);
 			for (int i = 0; i < dictationList.size(); i++) {
 				if (dictationList.get(i).getFlag() == 0) {
 					indexList.add(i);
 				}
 			}
 			if (indexList.size() > 0) {
+				StringBuffer sb = new StringBuffer();
+				if (mesFlag) {
+					sb.append(QUESTION_DICTATION_ERROR_MES_TWO);
+				} else {
+					sb.append(QUESTION_DICTATION_ERROR_MES);
+				}
 				mesText.setVisibility(LinearLayout.VISIBLE);
 				Random r = new Random(System.currentTimeMillis());
 				sb.append("\n◆"
@@ -282,8 +292,11 @@ public class DictationBeginActivity extends Activity implements
 								.getValue());
 				mesText.setText(sb.toString());
 			} else {
+				if (mesFlag) {
+					mesText.setVisibility(LinearLayout.VISIBLE);
+					mesText.setText(QUESTION_DICTATION_ERROR_MES_ONE);
+				}
 				check.setText("继续");
-				mesText.setVisibility(LinearLayout.GONE);
 			}
 
 		} else {

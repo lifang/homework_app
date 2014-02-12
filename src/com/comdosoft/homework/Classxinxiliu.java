@@ -1273,8 +1273,8 @@ public class Classxinxiliu extends Activity implements OnHeaderRefreshListener,
 			gk_list.set(i, false);
 		for (int j = 0; j < item_huifu.size(); j++) {
 			if (j!=i) {
+				Log.i("linshi", "点击："+i+"===>>>"+j+"隐藏");
 				item_huifu.get(j).setVisibility(View.GONE);
-				
 			}
 		}
 			focus = i;
