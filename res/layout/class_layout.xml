@@ -9,12 +9,12 @@
         android:layout_height="wrap_content"
         android:background="#f6f2f3"
         android:orientation="vertical"
-        android:paddingTop="22px" >
+        android:paddingTop="37px" >
 
         <ImageView
             android:id="@+id/user_face"
-            android:layout_width="49px"
-            android:layout_height="49px"
+            android:layout_width="82px"
+            android:layout_height="82px"
             android:src="@drawable/moren" />
 
         <RelativeLayout
@@ -23,7 +23,7 @@
             android:layout_height="wrap_content"
             android:layout_alignRight="@+id/message_content"
             android:layout_alignTop="@+id/user_face"
-            android:layout_marginLeft="11.4px"
+            android:layout_marginLeft="19px"
             android:layout_toRightOf="@+id/user_face" >
 
             <TextView
@@ -49,7 +49,7 @@
                 android:layout_height="wrap_content"
                 android:layout_alignParentLeft="true"
                 android:layout_below="@+id/message_senderName"
-                android:paddingRight="6px"
+                android:paddingRight="10px"
                 android:textColor="#626060"
                 android:textSize="24px" />
 
@@ -79,8 +79,8 @@
                 <EditText
                     android:id="@+id/reply_edit"
                     android:layout_width="fill_parent"
-                    android:layout_height="76.2px"
-                    android:layout_marginTop="24px"
+                    android:layout_height="127px"
+                    android:layout_marginTop="40px"
                     android:focusable="true"
                     android:focusableInTouchMode="true"
                     android:gravity="top"
@@ -88,8 +88,8 @@
 
                 <Button
                     android:id="@+id/Button_huifu"
-                    android:layout_width="44.4px"
-                    android:layout_height="20px"
+                    android:layout_width="73.9px"
+                    android:layout_height="32.5px"
                     android:layout_alignParentRight="true"
                     android:layout_below="@+id/reply_edit"
                     android:background="#92b81b"
@@ -100,15 +100,15 @@
                 <ListView
                     android:id="@+id/aa"
                     android:layout_width="fill_parent"
-                    android:layout_height="12px"
+                    android:layout_height="20px"
                     android:layout_below="@+id/Button_huifu"
                     android:background="#ede9ea"
                     android:cacheColorHint="#00000000"
                     android:divider="@null"
                     android:fadingEdge="none"
                     android:listSelector="#00000000"
-                    android:paddingLeft="3dp"
-                    android:paddingRight="3dp"
+                    android:paddingLeft="5dp"
+                    android:paddingRight="5dp"
                     android:visibility="gone" />
 
                 <Button
@@ -117,7 +117,7 @@
                     android:layout_height="wrap_content"
                     android:layout_below="@+id/aa"
                     android:background="#ede9ea"
-                    android:padding="12px"
+                    android:padding="20px"
                     android:text="@string/lookmore"
                     android:textSize="24px"
                     android:visibility="gone" />
@@ -130,7 +130,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_below="@+id/micropost_content"
-                android:layout_marginRight="16px"
+                android:layout_marginRight="26px"
                 android:layout_toLeftOf="@+id/micropost_huifu"
                 android:background="#00000000"
                 android:text="@string/guanzhu"
@@ -151,10 +151,10 @@
 
         <EditText
             android:layout_width="fill_parent"
-            android:layout_height="3px"
+            android:layout_height="5px"
             android:layout_alignParentLeft="true"
             android:layout_below="@+id/relativeLayout1"
-            android:layout_marginTop="13.2px"
+            android:layout_marginTop="22px"
             android:focusable="false" />
     </RelativeLayout>
 

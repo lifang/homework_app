@@ -6,7 +6,7 @@
     android:orientation="horizontal" >
 
     <LinearLayout
-        android:layout_width="720px"
+        android:layout_width="432px"
         android:layout_height="fill_parent"
         android:layout_marginLeft="3.34px"
         android:layout_marginRight="3.34px"
@@ -82,7 +82,7 @@
         <com.comdosoft.homework.tools.PullToRefreshView
             xmlns:android="http://schemas.android.com/apk/res/android"
             android:id="@+id/main_pull_refresh_view"
-            android:layout_width="720px"
+            android:layout_width="432px"
             android:layout_height="fill_parent"
             android:descendantFocusability="afterDescendants"
             android:orientation="vertical" >
@@ -130,9 +130,10 @@
             android:orientation="horizontal" >
 
             <View
+                android:layout_marginLeft="10dp"
                 android:id="@+id/main_class_view1"
-                android:layout_width="72dp"
-                android:layout_height="2dp"
+                android:layout_width="62dp"
+                android:layout_height="1dp"
                 android:background="#ffffff" />
 
             <TextView
@@ -144,7 +145,8 @@
 
             <View
                 android:id="@+id/main_class_view2"
-                android:layout_width="72dp"
+                android:layout_marginRight="10dp"
+                android:layout_width="62dp"
                 android:layout_height="2dp"
                 android:background="#ffffff" />
         </LinearLayout>

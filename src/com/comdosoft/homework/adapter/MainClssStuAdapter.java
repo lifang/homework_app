@@ -17,6 +17,7 @@ import android.widget.BaseAdapter;
 import android.widget.GridView;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.LinearLayout.LayoutParams;
 import android.widget.TextView;
 public class MainClssStuAdapter extends BaseAdapter
 {
@@ -59,6 +60,8 @@ public class MainClssStuAdapter extends BaseAdapter
 			oneView.main_class_oneTv1=(TextView) convertView.findViewById(R.id.main_class_oneTv1);
 			oneView.main_class_oneTv2=(TextView) convertView.findViewById(R.id.main_class_oneTv2);
 			oneView.main_class_oneIV.setLayoutParams(new LinearLayout.LayoutParams(80, 80));
+			oneView.main_class_oneTv1.setLayoutParams(new LinearLayout.LayoutParams(70,35));
+			oneView.main_class_oneTv2.setLayoutParams(new LinearLayout.LayoutParams(70,35));
 			convertView.setPadding((int)(184*0.1), (int)(height*0.75*0.9*0.01), (int)(184*0.1), (int)(height*0.75*0.9*0.01));
 			convertView.setTag(oneView);
 		}
