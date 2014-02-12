@@ -1,160 +1,148 @@
-﻿
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+﻿<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="fill_parent"
-    android:layout_height="fill_parent">
+    android:layout_height="fill_parent" >
 
-<LinearLayout 
-   
-    android:layout_width="fill_parent"
-    android:layout_height="fill_parent"
-    android:background="@drawable/bj"
-    android:orientation="vertical"
-    android:gravity="center_horizontal"
-    android:focusable="true"
-android:focusableInTouchMode="true"
-    >
+    <LinearLayout
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:background="@drawable/bj"
+        android:focusable="true"
+        android:focusableInTouchMode="true"
+        android:gravity="center_horizontal"
+        android:orientation="vertical" >
 
-    <ImageView
-        android:id ="@+id/reg_touxiang"
-        android:layout_width="176px"
-        android:layout_height="186px"
-        android:background="@drawable/moren"
-        android:layout_marginTop="494px"
-      />
+        <ImageView
+            android:id="@+id/reg_touxiang"
+            android:layout_width="106px"
+            android:layout_height="112px"
+            android:layout_marginTop="296px"
+            android:background="@drawable/moren" />
 
-   
-
-    
-     <TextView
-       
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:textColor="#000000"
-        android:layout_marginTop="76px"
-        android:text="@string/nicheng"
-        android:textSize="24px" />
-     
-          <EditText
-        android:id="@+id/reg_nicheng"
-        android:layout_width="480px"
-            android:layout_height="71px"
-        android:layout_marginTop="22px"
-        android:gravity="center"
-        
-        android:textSize="24px" />
-           <TextView
-       
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:textColor="#000000"
-        android:layout_marginTop="22px"
-        android:text="@string/xingming"
-        android:textSize="24px" />
-     
-          <EditText
-        android:id="@+id/reg_xingming"
-         android:layout_width="480px"
-            android:layout_height="71px"
-        android:layout_marginTop="22px"
-        android:gravity="center"
-        
-        android:textSize="24px" />    
-                   <TextView
-       
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:textColor="#000000"
-        android:layout_marginTop="22px"
-        android:text="@string/banjiyanzhengma"
-        android:textSize="24px" />
-     
-          <EditText
-        android:id="@+id/reg_banjiyanzhengma"
-         android:layout_width="480px"
-            android:layout_height="71px"
-        android:gravity="center"
-       
-        android:layout_marginTop="22px"
-        android:textSize="24px" /> 
-                  <Button
-     
-       android:layout_width="480px"
-            android:layout_height="71px"
-        android:gravity="center"
-        android:layout_marginTop="69px"
-        android:background="#FFFF00"
-        android:onClick="reg_queren"
-        android:text="@string/queren"
-        android:textSize="24px" /> 
-    
-    
-    
-</LinearLayout>
-   <!-- 下面的内容一开始是隐藏起来的 -->
-
-            <LinearLayout
-                android:id="@+id/reg_photolayout"
-                android:layout_width="fill_parent"
-                android:layout_height="fill_parent"
-                 android:gravity="center_horizontal"
-                android:background="#e0000000"
-                android:orientation="vertical"
-                 android:visibility="gone" 
-                 >
-<Button
-            android:id="@+id/paizhaoshangchuan"
-            android:layout_width="480px"
-            android:layout_height="71px"
-        android:layout_marginTop="885px"
-        android:background="#FF8C00"
-            android:onClick="reg_paizhaoshangchuan"
-            android:textColor="#FFFFFF"
-            android:textSize="24px"
-            android:text="@string/takephoto" />
-<Button
-            android:id="@+id/congxiangce"
-           android:layout_width="480px"
-            android:layout_height="71px"
-         android:background="#FF8C00"
-             android:onClick="reg_congxiangce"
-             android:layout_marginTop="28px"
-            android:textColor="#FFFFFF"
-            android:textSize="24px"
-            android:text="@string/fromphotostore" />
-            </LinearLayout>
-            <!-- 上面的内容一开始是隐藏起来的 -->
-            
-            
-             <!-- 下面的内容一开始是隐藏起来的 -->
-
-            <LinearLayout
-                android:id="@+id/reg_photolayout2"
-                android:layout_width="fill_parent"
-                android:layout_height="fill_parent"
-                 android:gravity="center_horizontal"
-                android:background="#e0000000"
-                android:orientation="vertical"
-                 android:visibility="gone" 
-                 >
-<TextView
-           android:id="@+id/regerror"
+        <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-        android:layout_marginTop="856px"
-        android:background="#00000000"
+            android:layout_marginTop="46px"
+            android:text="@string/nicheng"
+            android:textColor="#000000"
+            android:textSize="24px" />
+
+        <EditText
+            android:id="@+id/reg_nicheng"
+            android:layout_width="288px"
+            android:layout_height="42px"
+            android:layout_marginTop="13px"
+            android:gravity="center"
+            android:textSize="24px" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="13px"
+            android:text="@string/xingming"
+            android:textColor="#000000"
+            android:textSize="24px" />
+
+        <EditText
+            android:id="@+id/reg_xingming"
+            android:layout_width="288px"
+            android:layout_height="42px"
+            android:layout_marginTop="13px"
+            android:gravity="center"
+            android:textSize="24px" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="13px"
+            android:text="@string/banjiyanzhengma"
+            android:textColor="#000000"
+            android:textSize="24px" />
+
+        <EditText
+            android:id="@+id/reg_banjiyanzhengma"
+            android:layout_width="288px"
+            android:layout_height="42px"
+            android:layout_marginTop="13px"
+            android:gravity="center"
+            android:textSize="24px" />
+
+        <Button
+            android:layout_width="288px"
+            android:layout_height="42px"
+            android:layout_marginTop="42px"
+            android:background="#FFFF00"
+            android:gravity="center"
+            android:onClick="reg_queren"
+            android:text="@string/queren"
+            android:textSize="24px" />
+    </LinearLayout>
+    <!-- 下面的内容一开始是隐藏起来的 -->
+
+    <LinearLayout
+        android:id="@+id/reg_photolayout"
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:background="#e0000000"
+        android:gravity="center_horizontal"
+        android:orientation="vertical"
+        android:visibility="gone" >
+
+        <Button
+            android:id="@+id/paizhaoshangchuan"
+            android:layout_width="288px"
+            android:layout_height="42px"
+            android:layout_marginTop="531px"
+            android:background="#FF8C00"
+            android:onClick="reg_paizhaoshangchuan"
+            android:text="@string/takephoto"
             android:textColor="#FFFFFF"
-            android:textSize="24px"
-             />
-<Button
-          android:id="@+id/reg_error"
-            android:layout_width="480px"
-            android:layout_height="51px"
-         android:background="#FF8C00"
-             android:onClick="reg_fanhui"
-             android:layout_marginTop="50px"
+            android:textSize="24px" />
+
+        <Button
+            android:id="@+id/congxiangce"
+            android:layout_width="288px"
+            android:layout_height="42px"
+            android:layout_marginTop="17px"
+            android:background="#FF8C00"
+            android:onClick="reg_congxiangce"
+            android:text="@string/fromphotostore"
             android:textColor="#FFFFFF"
-            android:textSize="24px"
-            android:text="@string/reg_fanhui" />
-            </LinearLayout>
-            <!-- 上面的内容一开始是隐藏起来的 -->
+            android:textSize="24px" />
+    </LinearLayout>
+    <!-- 上面的内容一开始是隐藏起来的 -->
+
+
+    <!-- 下面的内容一开始是隐藏起来的 -->
+
+    <LinearLayout
+        android:id="@+id/reg_photolayout2"
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:background="#e0000000"
+        android:gravity="center_horizontal"
+        android:orientation="vertical"
+        android:visibility="gone" >
+
+        <TextView
+            android:id="@+id/regerror"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="514px"
+            android:background="#00000000"
+            android:textColor="#FFFFFF"
+            android:textSize="24px" />
+
+        <Button
+            android:id="@+id/reg_error"
+            android:layout_width="288px"
+            android:layout_height="31px"
+            android:layout_marginTop="30px"
+            android:background="#FF8C00"
+            android:onClick="reg_fanhui"
+            android:text="@string/reg_fanhui"
+            android:textColor="#FFFFFF"
+            android:textSize="24px" />
+    </LinearLayout>
+    <!-- 上面的内容一开始是隐藏起来的 -->
+
 </RelativeLayout>
