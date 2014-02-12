@@ -17,20 +17,23 @@
             android:layout_width="182px"
             android:layout_height="182px"
             android:contentDescription="@drawable/ic_launcher"
+            android:scaleType="center"
             android:src="@drawable/ic_launcher" />
     </LinearLayout>
 
     <TextView
         android:id="@+id/main_class_oneTv1"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="200px"
+        android:layout_height="40px"
+        android:gravity="center"
         android:text="@string/main_class_oneTv1"
         android:textSize="24px" />
 
     <TextView
         android:id="@+id/main_class_oneTv2"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="200px"
+        android:layout_height="40px"
+           android:gravity="center"
         android:text="@string/main_class_oneTv2"
         android:textSize="24px" />
 

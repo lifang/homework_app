@@ -130,9 +130,10 @@
             android:orientation="horizontal" >
 
             <View
+                android:layout_marginLeft="10dp"
                 android:id="@+id/main_class_view1"
-                android:layout_width="72dp"
-                android:layout_height="2dp"
+                android:layout_width="62dp"
+                android:layout_height="1dp"
                 android:background="#ffffff" />
 
             <TextView
@@ -144,7 +145,8 @@
 
             <View
                 android:id="@+id/main_class_view2"
-                android:layout_width="72dp"
+                android:layout_marginRight="10dp"
+                android:layout_width="62dp"
                 android:layout_height="2dp"
                 android:background="#ffffff" />
         </LinearLayout>

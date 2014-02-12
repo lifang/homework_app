@@ -117,6 +117,7 @@
         <include
             android:id="@+id/main_class_classes_include"
             android:layout_width="395px"
+            android:layout_gravity="center"
             android:layout_height="250px"
             android:layout_marginTop="20px"
             layout="@layout/main_class_one" />
@@ -130,9 +131,10 @@
             android:orientation="horizontal" >
 
             <View
+                android:layout_marginLeft="10px"
                 android:id="@+id/main_class_view1"
-                android:layout_width="72dp"
-                android:layout_height="2dp"
+                android:layout_width="62dp"
+                android:layout_height="1dp"
                 android:background="#ffffff" />
 
             <TextView
@@ -144,8 +146,9 @@
 
             <View
                 android:id="@+id/main_class_view2"
-                android:layout_width="72dp"
-                android:layout_height="2dp"
+                android:layout_marginRight="10px"
+                android:layout_width="62dp"
+                android:layout_height="1dp"
                 android:background="#ffffff" />
         </LinearLayout>
 
