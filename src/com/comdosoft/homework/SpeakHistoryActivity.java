@@ -91,13 +91,6 @@ public class SpeakHistoryActivity extends Activity implements Urlinterface,
 		homework.setNewsFlag(true);
 		initialize();
 
-		Toast.makeText(this, "查看历史信息", Toast.LENGTH_SHORT).show();
-		// for (int j = 0; j <
-		// homework.getQuestion_history().get(homework.getQuestion_index()).get.length;
-		// j++) {
-		//
-		// }
-		// initView(i);
 	}
 
 	// 初始化
