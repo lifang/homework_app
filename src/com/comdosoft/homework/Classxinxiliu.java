@@ -260,18 +260,18 @@ public class Classxinxiliu extends Activity implements OnHeaderRefreshListener,
 		setContentView(R.layout.class_middle);
 		hw = (HomeWork) getApplication();
 
-		main_class_classGv = (GridView) findViewById(R.id.main_class_classGv);
-		main_class_classesTv = (TextView) findViewById(R.id.main_class_classesTv);
-		main_class_oneIV = (ImageView) findViewById(
-				R.id.main_class_classes_include).findViewById(
-				R.id.main_class_oneIV);
-		main_class_oneTv1 = (TextView) findViewById(
-				R.id.main_class_classes_include).findViewById(
-				R.id.main_class_oneTv1);
-		main_class_oneTv2 = (TextView) findViewById(
-				R.id.main_class_classes_include).findViewById(
-				R.id.main_class_oneTv2);
-		main_class_classGv.setNumColumns(3);
+//		main_class_classGv = (GridView) findViewById(R.id.main_class_classGv);
+//		main_class_classesTv = (TextView) findViewById(R.id.main_class_classesTv);
+//		main_class_oneIV = (ImageView) findViewById(
+//				R.id.main_class_classes_include).findViewById(
+//				R.id.main_class_oneIV);
+//		main_class_oneTv1 = (TextView) findViewById(
+//				R.id.main_class_classes_include).findViewById(
+//				R.id.main_class_oneTv1);
+//		main_class_oneTv2 = (TextView) findViewById(
+//				R.id.main_class_classes_include).findViewById(
+//				R.id.main_class_oneTv2);
+//		main_class_classGv.setNumColumns(3);
 
 		SharedPreferences preferences = getSharedPreferences(SHARED,
 				Context.MODE_PRIVATE);
