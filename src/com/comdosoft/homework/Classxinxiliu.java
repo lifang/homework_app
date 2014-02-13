@@ -115,6 +115,7 @@ public class Classxinxiliu extends Activity implements OnHeaderRefreshListener,
 		public void handleMessage(Message msg) {
 			switch (msg.what) {
 			case 0:
+				prodialog.dismiss();
 				init();
 //				main_class_oneTv1.setText(user_name); // 设置本名
 //				main_class_oneTv2.setText(nick_name); // 设置外号
@@ -251,6 +252,13 @@ public class Classxinxiliu extends Activity implements OnHeaderRefreshListener,
 					setlayout(i);
 				}
 				break;
+			case 7:
+//				final String sd = (String) msg.obj;
+//				Toast.makeText(getApplicationContext(), sd, Toast.LENGTH_SHORT)
+//				.show();
+				Toast.makeText(getApplicationContext(), "111", Toast.LENGTH_SHORT)
+				.show();
+				break;
 			}
 		}
 	};
@@ -260,18 +268,18 @@ public class Classxinxiliu extends Activity implements OnHeaderRefreshListener,
 		setContentView(R.layout.class_middle);
 		hw = (HomeWork) getApplication();
 
-		main_class_classGv = (GridView) findViewById(R.id.main_class_classGv);
-		main_class_classesTv = (TextView) findViewById(R.id.main_class_classesTv);
-		main_class_oneIV = (ImageView) findViewById(
-				R.id.main_class_classes_include).findViewById(
-				R.id.main_class_oneIV);
-		main_class_oneTv1 = (TextView) findViewById(
-				R.id.main_class_classes_include).findViewById(
-				R.id.main_class_oneTv1);
-		main_class_oneTv2 = (TextView) findViewById(
-				R.id.main_class_classes_include).findViewById(
-				R.id.main_class_oneTv2);
-		main_class_classGv.setNumColumns(3);
+//		main_class_classGv = (GridView) findViewById(R.id.main_class_classGv);
+//		main_class_classesTv = (TextView) findViewById(R.id.main_class_classesTv);
+//		main_class_oneIV = (ImageView) findViewById(
+//				R.id.main_class_classes_include).findViewById(
+//				R.id.main_class_oneIV);
+//		main_class_oneTv1 = (TextView) findViewById(
+//				R.id.main_class_classes_include).findViewById(
+//				R.id.main_class_oneTv1);
+//		main_class_oneTv2 = (TextView) findViewById(
+//				R.id.main_class_classes_include).findViewById(
+//				R.id.main_class_oneTv2);
+//		main_class_classGv.setNumColumns(3);
 
 		SharedPreferences preferences = getSharedPreferences(SHARED,
 				Context.MODE_PRIVATE);
@@ -300,8 +308,12 @@ public class Classxinxiliu extends Activity implements OnHeaderRefreshListener,
 		lass_count = 1;
 		lass_count2 = 2;
 		if (HomeWorkTool.isConnect(Classxinxiliu.this)) {
+			prodialog = new ProgressDialog(Classxinxiliu.this);
+			prodialog.setMessage(HomeWorkParams.PD_CLASS_INFO);
+			prodialog.show();
 			Thread thread = new Thread(new get_class_info());
 			thread.start();
+			
 		} else {
 			Toast.makeText(getApplicationContext(), HomeWorkParams.INTERNET, 0)
 					.show();
@@ -397,6 +409,7 @@ public class Classxinxiliu extends Activity implements OnHeaderRefreshListener,
 		if (mess.getAvatar_url().equals("")
 				|| mess.getAvatar_url().equals("null")) {
 		} else {
+//			face.setScaleType(ImageView.ScaleType.FIT_XY);
 			imageLoader.displayImage(IP + mess.getAvatar_url(), face, options,
 					animateFirstListener);
 		}
@@ -588,6 +601,7 @@ public class Classxinxiliu extends Activity implements OnHeaderRefreshListener,
 					.findViewById(R.id.child_micropost_huifu); // 回复
 			final Child_Micropost child_Micropost = child_list.get(position2);
 			if (child_Micropost.getSender_avatar_url() != null) { // 设置头像
+//				face.setScaleType(ImageView.ScaleType.FIT_XY);
 				imageLoader.displayImage(IP
 						+ child_list.get(position2).getSender_avatar_url(),
 						face, options, animateFirstListener);
@@ -763,28 +777,33 @@ public class Classxinxiliu extends Activity implements OnHeaderRefreshListener,
 					.getString("details_microposts");
 			// page":1,"pages_count":2,"details_microposts":
 			parseJson_details_microposts(details_microposts);
-
+			
 			// 班级头像和名字
 			JSONObject class1 = obj.getJSONObject("class"); // 或得班级信息
 			String class_name = class1.getString("name"); // 获取class_name
 			classname = class1.getString("name");
 
 			school_class_id = class1.getString("id");
+			
 			// 循环获取班级学生的信息classmates
-			JSONArray jsonArray = obj.getJSONArray("classmates");
-			for (int i = 0; i < jsonArray.length(); i++) {
-				JSONObject jsonObject2 = (JSONObject) jsonArray.get(i);
-				String stu_Url = (String) jsonObject2.get("avatar_url");
-				int id = jsonObject2.getInt("id");
-				String stuname = jsonObject2.getString("name");
-				String nickname = jsonObject2.getString("nickname");
-				if (Integer.valueOf(user_id) == id) {
-
-				} else {
-					stuList.add(new ClassStuPojo(id, stuname, stu_Url, nickname));
-				}
-
-			}
+//			Message msg = new Message();// 创建Message 对象
+//			msg.what = 7;
+//			msg.obj = school_class_id;
+//			handler.sendMessage(msg);
+//			handler.sendEmptyMessage(7);
+//				JSONArray jsonArray = obj.getJSONArray("classmates");
+//			for (int i = 0; i < jsonArray.length(); i++) {
+//				JSONObject jsonObject2 = (JSONObject) jsonArray.get(i);
+//				String stu_Url =  jsonObject2.getString("avatar_url");
+//				int id = jsonObject2.getInt("id");
+//				String stuname = jsonObject2.getString("name");
+//				String nickname = jsonObject2.getString("nickname");
+//				if (Integer.valueOf(user_id) == id) {
+//
+//				} else {
+//					stuList.add(new ClassStuPojo(id, stuname, stu_Url, nickname));
+//				}
+//			}
 			Log.i("linshi", stuList.size() + "");
 
 			// 微博id
@@ -1024,7 +1043,13 @@ public class Classxinxiliu extends Activity implements OnHeaderRefreshListener,
 	// 添加关注
 	public void add_concern(final int i, final Micropost mess) {
 		prodialog = new ProgressDialog(Classxinxiliu.this);
-		prodialog.setMessage("正在添加关注");
+		if (guanzhu_list.get(i).getText().toString().equals("关注")) {
+			prodialog.setMessage("正在添加关注");
+		} else if (guanzhu_list.get(i).getText().toString()
+				.equals("已关注")) {
+			prodialog.setMessage("正在取消关注");
+		}
+		
 		prodialog.show();
 		final Handler gzHandler = new Handler() {
 			public void handleMessage(android.os.Message msg) {
@@ -1435,7 +1460,7 @@ public class Classxinxiliu extends Activity implements OnHeaderRefreshListener,
 			int si = Integer.parseInt(list.get(focus)
 					.getReply_microposts_count().toString());
 
-			if (si > 0 || !lookStr.equals("")) {
+//			if (si > 0 || !lookStr.equals("")) {
 				prodialog = new ProgressDialog(Classxinxiliu.this);
 				prodialog.setMessage("正在加载中");
 				prodialog.show();
@@ -1480,15 +1505,16 @@ public class Classxinxiliu extends Activity implements OnHeaderRefreshListener,
 					Toast.makeText(getApplicationContext(), HomeWorkParams.INTERNET, 0)
 							.show();
 				}
-			} else {
-				if (child_list.size() > 0) {// 如果没有子消息，隐藏加载更多按钮
-					lookMore.setVisibility(View.VISIBLE);
-				} else {
-					lookMore.setVisibility(View.GONE);
-				}
-				listView2.setAdapter(ziAdapter_list.get(focus));
-				HomeWorkTool.setListViewHeightBasedOnChildren(listView2);
-			}
+//			}
+//			else {
+//				if (child_list.size() > 0) {// 如果没有子消息，隐藏加载更多按钮
+//					lookMore.setVisibility(View.VISIBLE);
+//				} else {
+//					lookMore.setVisibility(View.GONE);
+//				}
+//				listView2.setAdapter(ziAdapter_list.get(focus));
+//				HomeWorkTool.setListViewHeightBasedOnChildren(listView2);
+//			}
 
 		} else {
 			gk_list.set(i, true);
@@ -1651,6 +1677,7 @@ public class Classxinxiliu extends Activity implements OnHeaderRefreshListener,
 					setSkipJson();
 
 				} else {
+					
 					Map<String, String> map = new HashMap<String, String>();
 					map.put("student_id", id);
 					map.put("school_class_id", school_class_id);
@@ -1670,6 +1697,7 @@ public class Classxinxiliu extends Activity implements OnHeaderRefreshListener,
 	}
 
 	public void shuaxin() {
+		click_list();
 		Thread thread = new Thread() {
 			public void run() {// 获得第一页信息
 
@@ -1721,7 +1749,7 @@ public class Classxinxiliu extends Activity implements OnHeaderRefreshListener,
 	public void click_list() {
 		Linear_layout.removeAllViews();
 		Reply_edit_list.clear();
-		// guanzhu_list.clear();
+		 guanzhu_list.clear();
 		gk_list.clear();
 		btlist.clear();
 		ziAdapter_list.clear();

@@ -78,33 +78,34 @@ public class SettingActivity extends Activity implements Urlinterface {
 			nameS = preferences.getString("name", "");
 
 		}
-		File file = new File(Environment.getExternalStorageDirectory()
-				+ "/1" + IMAGE_FILE_NAME);
+		File file = new File(Environment.getExternalStorageDirectory() + "/1"
+				+ IMAGE_FILE_NAME);
 
-			if (file.exists()) {
-				file.delete();
+		if (file.exists()) {
+			file.delete();
 
-			}
-		
+		}
+
 		layout = this.findViewById(R.id.set_photolayout); // 隐藏内容
 		faceImage = (ImageView) findViewById(R.id.set_touxiang);
 		nickname = (EditText) findViewById(R.id.set_nickname);
 		name = (EditText) findViewById(R.id.set_name);
 		name.setText(nameS);
 		nickname.setText(nicknameS);
-		 if (HomeWorkTool.isConnect(getApplicationContext())) {
+		if (HomeWorkTool.isConnect(getApplicationContext())) {
 
-		if (avatar_url != null || avatar_url.length() != 0) { // 设置头像
+			if (avatar_url != null || avatar_url.length() != 0) { // 设置头像
 
-			GetCSDNLogoTask task = new GetCSDNLogoTask();
-			task.execute(Urlinterface.IP + avatar_url);//
+				GetCSDNLogoTask task = new GetCSDNLogoTask();
+				task.execute(Urlinterface.IP + avatar_url);//
 
-			faceImage.setOnClickListener(listener);
+				faceImage.setOnClickListener(listener);
 
-		}
-		 }else {
-				Toast.makeText(getApplicationContext(), HomeWorkParams.INTERNET, 0).show();
 			}
+		} else {
+			Toast.makeText(getApplicationContext(), HomeWorkParams.INTERNET, 0)
+					.show();
+		}
 	}
 
 	class GetCSDNLogoTask extends AsyncTask<String, Integer, Drawable> {
@@ -154,7 +155,7 @@ public class SettingActivity extends Activity implements Urlinterface {
 						Boolean status = array.getBoolean("status");
 						String notice = array.getString("notice");
 
-						if (status==true) {
+						if (status == true) {
 
 							Toast.makeText(getApplicationContext(), notice, 0)
 									.show();
@@ -195,8 +196,8 @@ public class SettingActivity extends Activity implements Urlinterface {
 			public void run() {
 				try {
 
-					 nicknameS = nickname.getText().toString();
-					 nameS = name.getText().toString();
+					nicknameS = nickname.getText().toString();
+					nameS = name.getText().toString();
 					MultipartEntity entity = new MultipartEntity();
 
 					entity.addPart("student_id", new StringBody(id));
@@ -206,11 +207,12 @@ public class SettingActivity extends Activity implements Urlinterface {
 						entity.addPart("avatar", new FileBody(new File(
 								Environment.getExternalStorageDirectory()
 										+ "/1" + IMAGE_FILE_NAME)));
-					} 
+					}
 
-
-					entity.addPart("nickname", new StringBody(nicknameS, Charset.forName("UTF-8")));
-					entity.addPart("name", new StringBody(nameS, Charset.forName("UTF-8")));
+					entity.addPart("nickname", new StringBody(nicknameS,
+							Charset.forName("UTF-8")));
+					entity.addPart("name",
+							new StringBody(nameS, Charset.forName("UTF-8")));
 
 					json = HomeWorkTool.sendPhostimg(
 							Urlinterface.MODIFY_PERSON_INFO, entity);
@@ -225,31 +227,31 @@ public class SettingActivity extends Activity implements Urlinterface {
 				}
 			}
 		};
-		
+
 		if (nickname.length() == 0 || name.length() == 0) {
 			Toast.makeText(getApplicationContext(),
-					"姓名或昵称不能为空", 0).show();
+					HomeWorkParams.NAME_NICKNAME_ISNULL, 0).show();
 		} else {
-			
+
 			if (HomeWorkTool.isConnect(SettingActivity.this)) {
 				thread.start();
+			} else {
+				Toast.makeText(getApplicationContext(),
+						HomeWorkParams.INTERNET, 0).show();
 			}
-			else {
-				Toast.makeText(getApplicationContext(), HomeWorkParams.INTERNET, 0).show();
-			}
-		
+
 		}
 	}
 
 	public void changeClass(View v) {
-		
+
 		if (HomeWorkTool.isConnect(SettingActivity.this)) {
 			Intent intent = new Intent();
 			intent.setClass(this, SwitchClassActivity.class);//
 			startActivity(intent);
-		}
-		else {
-			Toast.makeText(getApplicationContext(), HomeWorkParams.INTERNET, 0).show();
+		} else {
+			Toast.makeText(getApplicationContext(), HomeWorkParams.INTERNET, 0)
+					.show();
 		}
 	}
 
@@ -285,32 +287,38 @@ public class SettingActivity extends Activity implements Urlinterface {
 	public void set_paizhaoshangchuan(View v) {
 
 		layout.setVisibility(View.GONE);
+		try {
 
-		Intent intentFromCapture = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-		// 判断存储卡是否可以用，可用进行存储
-		if (HomeWorkTool.isHasSdcard()) {
+			Intent intentFromCapture = new Intent(
+					MediaStore.ACTION_IMAGE_CAPTURE);
+			// 判断存储卡是否可以用，可用进行存储
+			if (HomeWorkTool.isHasSdcard()) {
 
-			File file = new File(Environment.getExternalStorageDirectory()
-					+ "/" + IMAGE_FILE_NAME);
+				File file = new File(Environment.getExternalStorageDirectory()
+						+ "/" + IMAGE_FILE_NAME);
 
-			if (file.exists()) {
-				file.delete();
+				if (file.exists()) {
+					file.delete();
+
+				}
+				file = new File(Environment.getExternalStorageDirectory() + "/"
+						+ IMAGE_FILE_NAME);
+				if (!file.exists()) {
+					intentFromCapture.putExtra(MediaStore.EXTRA_OUTPUT, Uri
+							.fromFile(new File(Environment
+									.getExternalStorageDirectory(),
+									IMAGE_FILE_NAME)));
+
+				}
 
 			}
-			file = new File(Environment.getExternalStorageDirectory() + "/"
-					+ IMAGE_FILE_NAME);
-			if (!file.exists()) {
-				intentFromCapture
-						.putExtra(MediaStore.EXTRA_OUTPUT, Uri
-								.fromFile(new File(Environment
-										.getExternalStorageDirectory(),
-										IMAGE_FILE_NAME)));
 
-			}
+			startActivityForResult(intentFromCapture, 2);
+		} catch (Exception e) {
 
+			Toast.makeText(getApplicationContext(), HomeWorkParams.CAPTURE, 0)
+					.show();
 		}
-
-		startActivityForResult(intentFromCapture, 2);
 
 	}
 
@@ -320,8 +328,8 @@ public class SettingActivity extends Activity implements Urlinterface {
 	public void set_congxiangce(View v) {
 		layout.setVisibility(View.GONE);
 
-Intent intentFromGallery = new Intent(Intent.ACTION_PICK, null);
-		
+		Intent intentFromGallery = new Intent(Intent.ACTION_PICK, null);
+
 		/**
 		 * 下面这句话，与其它方式写是一样的效果，如果：
 		 * intent.setData(MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
@@ -330,8 +338,7 @@ Intent intentFromGallery = new Intent(Intent.ACTION_PICK, null);
 		 * 这个地方小马有个疑问，希望高手解答下：就是这个数据URI与类型为什么要分两种形式来写呀？有什么区别？
 		 */
 		intentFromGallery.setDataAndType(
-				MediaStore.Images.Media.EXTERNAL_CONTENT_URI,
-				"image/*");
+				MediaStore.Images.Media.EXTERNAL_CONTENT_URI, "image/*");
 		startActivityForResult(intentFromGallery, 1);
 
 	}
@@ -345,30 +352,25 @@ Intent intentFromGallery = new Intent(Intent.ACTION_PICK, null);
 			break;
 		// 如果是调用相机拍照时
 		case 2:
-			
-			
+
 			if (HomeWorkTool.isHasSdcard()) {
 				File temp = new File(Environment.getExternalStorageDirectory()
-						+ "/"
-						+ IMAGE_FILE_NAME);
+						+ "/" + IMAGE_FILE_NAME);
 				startPhotoZoom(Uri.fromFile(temp));
 			} else {
 				Toast.makeText(this, "未找到存储卡，无法存储照片！", Toast.LENGTH_LONG)
 						.show();
 			}
-			
+
 			break;
 		// 取得裁剪后的图片
 		case 3:
 			/**
-			 * 非空判断大家一定要验证，如果不验证的话，
-			 * 在剪裁之后如果发现不满意，要重新裁剪，丢弃
-			 * 当前功能时，会报NullException，小马只
-			 * 在这个地方加下，大家可以根据不同情况在合适的
-			 * 地方做判断处理类似情况
+			 * 非空判断大家一定要验证，如果不验证的话， 在剪裁之后如果发现不满意，要重新裁剪，丢弃
+			 * 当前功能时，会报NullException，小马只 在这个地方加下，大家可以根据不同情况在合适的 地方做判断处理类似情况
 			 * 
 			 */
-			if(data != null){
+			if (data != null) {
 				getImageToView(data);
 			}
 			break;

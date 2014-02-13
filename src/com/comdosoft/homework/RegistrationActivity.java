@@ -105,6 +105,8 @@ public class RegistrationActivity extends Activity implements Urlinterface {
 	public void reg_paizhaoshangchuan(View v) {
 
 		layout.setVisibility(View.GONE);
+try {
+	
 
 		Intent intentFromCapture = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
 		// 判断存储卡是否可以用，可用进行存储
@@ -131,7 +133,11 @@ public class RegistrationActivity extends Activity implements Urlinterface {
 		}
 
 		startActivityForResult(intentFromCapture, 2);
+} catch (Exception e) {
 
+	Toast.makeText(getApplicationContext(), HomeWorkParams.CAPTURE, 0)
+			.show();
+}
 	}
 
 	/**

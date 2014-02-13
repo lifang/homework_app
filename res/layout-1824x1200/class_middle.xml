@@ -84,6 +84,8 @@
             android:id="@+id/main_pull_refresh_view"
             android:layout_width="fill_parent"
             android:layout_height="fill_parent"
+            android:layout_marginLeft="24px"
+        android:layout_marginRight="24px"
             android:descendantFocusability="afterDescendants"
             android:orientation="vertical" >
 
@@ -99,8 +101,8 @@
                     android:id="@+id/layout"
                     android:layout_width="match_parent"
                     android:layout_height="fill_parent"
-                    android:paddingLeft="10dp"
-                    android:paddingRight="10dp"
+                    android:paddingLeft="10px"
+                    android:paddingRight="10px"
                     android:orientation="vertical" >
                 </LinearLayout>
             </ScrollView>
@@ -133,8 +135,8 @@
             <View
                 android:layout_marginLeft="10px"
                 android:id="@+id/main_class_view1"
-                android:layout_width="62dp"
-                android:layout_height="1dp"
+                android:layout_width="62px"
+                android:layout_height="1px"
                 android:background="#ffffff" />
 
             <TextView
@@ -147,8 +149,8 @@
             <View
                 android:id="@+id/main_class_view2"
                 android:layout_marginRight="10px"
-                android:layout_width="62dp"
-                android:layout_height="1dp"
+                android:layout_width="62px"
+                android:layout_height="1px"
                 android:background="#ffffff" />
         </LinearLayout>
 
@@ -165,7 +167,7 @@
                 android:layout_height="wrap_content" >
             </GridView>
         </LinearLayout>
-       
+        
     </LinearLayout>
- -->
+-->
 </LinearLayout>
