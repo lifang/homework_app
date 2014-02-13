@@ -29,6 +29,8 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.LinearLayout.LayoutParams;
 import android.widget.TextView;
+import android.widget.Toast;
+
 import com.comdosoft.homework.pojo.DictationPojo;
 import com.comdosoft.homework.pojo.QuestionPojo;
 import com.comdosoft.homework.tools.HomeWork;
@@ -38,7 +40,7 @@ import com.comdosoft.homework.tools.ListeningQuestionList;
 import com.comdosoft.homework.tools.Soundex_Levenshtein;
 import com.comdosoft.homework.tools.Urlinterface;
 
-// 拼写答题    马龙    2014年2月10日
+// 拼写答题    马龙    2014年2月12日
 public class DictationBeginActivity extends Activity implements
 		OnClickListener, HomeWorkParams, OnPreparedListener,
 		OnCompletionListener, Urlinterface {
@@ -137,14 +139,15 @@ public class DictationBeginActivity extends Activity implements
 		linearLayoutIndex = 0;
 		mesLinearLayoutIndex = 0;
 		etList.clear();
+		tvList.clear();
 		dictationList.clear();
 		linearLayoutList.clear();
 		mesLinearLayoutList.clear();
-		errorMap.clear();
 		editLinearLayout.removeAllViews();
 		mesText.setVisibility(LinearLayout.GONE);
 
 		playFlag = false;
+
 		handler.sendEmptyMessage(3);
 
 		// 获取已答过题目记录数
@@ -245,6 +248,7 @@ public class DictationBeginActivity extends Activity implements
 
 	// 检查算法
 	public void check() {
+		mesFlag = false;
 		// 检查
 		if (check.getText().toString().equals("检查")) {
 			for (int i = 0; i < etList.size(); i++) {
@@ -367,8 +371,8 @@ public class DictationBeginActivity extends Activity implements
 						.next();
 				sb.append(entry.getKey()).append("-!-");
 			}
-			if (answer.length() > 0) {
-				answer.delete(answer.length() - 3, answer.length());
+			if (sb.length() > 0) {
+				sb.delete(sb.length() - 3, sb.length());
 			}
 			Map<String, String> map = new HashMap<String, String>();
 			map.put("student_id", student_id + "");
@@ -383,9 +387,10 @@ public class DictationBeginActivity extends Activity implements
 
 			log = HomeWorkTool.doPost(RECORD_ANSWER_INFO, map);
 			Log.i("Ax", log);
-			Log.i("Ax", sb.toString());
+			Log.i("Ax", "error:" + sb.toString());
 			answer.delete(0, answer.length());
 			sb.delete(0, sb.length());
+			errorMap.clear();
 			handler.sendEmptyMessage(1);
 		}
 	}

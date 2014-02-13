@@ -5,9 +5,9 @@
     android:orientation="horizontal" >
 
     <LinearLayout
-        android:layout_width="390px"
+        android:layout_width="300px"
         android:layout_height="fill_parent"
-        android:layout_marginRight="3dp"
+        android:layout_marginRight="1dp"
         android:background="@color/qianhui"
         android:orientation="vertical" >
 
@@ -18,6 +18,7 @@
             android:cacheColorHint="#00000000"
             android:fadingEdge="none"
             android:listSelector="#00000000"
+            android:divider="@null"
             android:scrollbars="none" />
     </LinearLayout>
 
@@ -50,8 +51,9 @@
             android:id="@+id/working_content_list"
             android:layout_width="fill_parent"
             android:layout_height="fill_parent"
-            android:layout_alignLeft="@id/title"
+            android:layout_alignLeft="@id/work_content_img"
             android:layout_below="@id/title"
+            android:layout_marginLeft="3dp"
             android:layout_marginTop="50dp"
             android:cacheColorHint="#00000000"
             android:divider="@null"

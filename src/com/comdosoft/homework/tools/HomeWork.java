@@ -30,7 +30,7 @@ public class HomeWork extends Application {
 	private int newCount;
 	private boolean newsFlag;
 	private int lastcount;
-
+	private int hw_number;
 	public int getLastcount() {
 		return lastcount;
 	}
@@ -184,6 +184,14 @@ public class HomeWork extends Application {
 
 	public void setHistory_item(int history_item) {
 		this.history_item = history_item;
+	}
+
+	public int getHw_number() {
+		return hw_number;
+	}
+
+	public void setHw_number(int hw_number) {
+		this.hw_number = hw_number;
 	}
 
 	public void onCreate() {

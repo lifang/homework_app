@@ -3,9 +3,6 @@ package com.comdosoft.homework;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
 import com.comdosoft.homework.pojo.ListeningPojo;
 import com.comdosoft.homework.pojo.QuestionPojo;
 import com.comdosoft.homework.tools.ListeningQuestionList;
@@ -20,20 +17,17 @@ import android.media.MediaPlayer.OnPreparedListener;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
-import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
 
-// 拼写准备    马龙    2014年1月25日
+// 拼写准备    马龙    2014年2月12日
 public class DictationPrepareActivity extends Activity implements
 		OnClickListener, OnPreparedListener, OnCompletionListener, Urlinterface {
 
-	private String JSON = "	{\"status\":true,\"notice\":\"\",\"package\":{\"listening\":[{\"id\":\"1\",\"branch_questions\":[{\"id\":\"2\",\"content\":\"This is an apple.\",\"resource_url\":\"/question_packages_1/resource2.mp3\"},{\"id\":\"3\",\"content\":\"Why is Google undertaking such a venture?\",\"resource_url\":\"/question_packages_1/resource3.mp3\"}]},{\"id\":\"2\",\"branch_questions\":[{\"id\":\"4\",\"content\":\"The company likes to present itself as having lofty aspirations.\",\"resource_url\":\"/question_packages_2/resource4.mp3\"},{\"id\":\"5\",\"content\":\"At its centre, however, is one simple issue: that of copyright.\",\"resource_url\":\"/question_packages_2/resource5.mp3\"}]}],\"reading\":[{\"id\":\"3\",\"branch_questions\":[{\"id\":\"2\",\"content\":\"This is an apple.\",\"resource_url\":\"/question_packages_1/resource2.mp3\"},{\"id\":\"3\",\"content\":\"Why is Google undertaking such a venture?\",\"resource_url\":\"/question_packages_1/resource3.mp3\"}]},{\"id\":\"4\",\"branch_questions\":[{\"id\":\"4\",\"content\":\"The company likes to present itself as having lofty aspirations.\",\"resource_url\":\"/question_packages_2/resource4.mp3\"},{\"id\":\"5\",\"content\":\"At its centre, however, is one simple issue: that of copyright.\",\"resource_url\":\"/question_packages_2/resource5.mp3\"}]}]},\"user_answers\":{\"listening\":[{\"id\":\"1\",\"branch_questions\":[{\"id\":\"2\",\"answer\":\"This is;||;This is an ;||;This is an apple\"},{\"id\":\"3\",\"answer\":\"Why is Google;||;Why is Google __ venture;||;Why is Google undertaking such a venture?\"}]}],\"reading\":[{\"id\":\"1\",\"branch_questions\":[{\"id\":\"2\",\"answer\":\"/test.mp3;||;/test.mp3\"}]}]}}";
 	private int mp3Index = 0;
 	private List<String> mp3List = new ArrayList<String>();
 	private MediaPlayer mediaPlayer = new MediaPlayer();
@@ -73,7 +67,17 @@ public class DictationPrepareActivity extends Activity implements
 		mPd = new ProgressDialog(this);
 		mPd.setMessage("正在缓冲...");
 		setMp3Url();
-		// new MyThread().start();
+		if (ListeningQuestionList.Record_Count == ListeningQuestionList.listeningList
+				.size()) {
+			TextView t = (TextView) findViewById(R.id.question_prepare_mes);
+			t.setText("重听");
+		}
+	}
+
+	@Override
+	protected void onStart() {
+		super.onStart();
+		mHandler.sendEmptyMessage(2);
 	}
 
 	@Override
@@ -112,78 +116,17 @@ public class DictationPrepareActivity extends Activity implements
 		}
 	}
 
-	// 解析 听写 json
-	public void analyzeJson(String json) {
-		try {
-			// 解析听写记录
-			if (new JSONObject(json).getJSONObject("user_answers")
-					.getJSONArray("listening").length() > 0) {
-				JSONArray answer = new JSONObject(json).getJSONObject(
-						"user_answers").getJSONArray("listening");
-				for (int i = 0; i < answer.length(); i++) {
-					JSONObject jn = answer.getJSONObject(i);
-					JSONArray jArr = jn.getJSONArray("branch_questions");
-					List<String> smallList = new ArrayList<String>();
-					for (int j = 0; j < jArr.length(); j++) {
-						JSONObject jb = jArr.getJSONObject(j);
-						smallList.add(jb.getString("answer"));
-					}
-					ListeningQuestionList.addAnswer(smallList);
-				}
-			}
-
-			// 解析听写题目
-			JSONArray ja = new JSONObject(json).getJSONObject("package")
-					.getJSONArray("listening");
-			for (int i = 0; i < ja.length(); i++) {
-				JSONObject jn = ja.getJSONObject(i);
-				JSONArray jArr = jn.getJSONArray("branch_questions");
-				int id = jn.getInt("id");
-				List<QuestionPojo> question = new ArrayList<QuestionPojo>();
-				for (int j = 0; j < jArr.length(); j++) {
-					JSONObject jb = jArr.getJSONObject(j);
-					question.add(new QuestionPojo(jb.getInt("id"), jb
-							.getString("content"), jb.getString("resource_url")));
-				}
-				ListeningQuestionList.addListeningPojo(new ListeningPojo(id,
-						question));
-
-				// ListeningQuestionList.Record_Count = 0;
-				ListeningQuestionList.Record_Count = ListeningQuestionList
-						.getRecordCount();
-			}
-		} catch (JSONException e) {
-			e.printStackTrace();
-		}
-	}
-
-	// 获取听写题目json
-	class MyThread extends Thread {
-		@Override
-		public void run() {
-			super.run();
-			try {
-				analyzeJson(JSON);
-				setMp3Url();
-			} catch (Exception e) {
-				e.printStackTrace();
-			}
+	public void stop() {
+		if (mediaPlayer.isPlaying()) {
+			mediaPlayer.pause();
 		}
 	}
 
 	class MyMediaPlay extends Thread {
-
 		@Override
 		public void run() {
 			super.run();
 			playerAmr();
-		}
-
-	}
-
-	public void stop() {
-		if (mediaPlayer.isPlaying()) {
-			mediaPlayer.pause();
 		}
 	}
 
@@ -206,6 +149,7 @@ public class DictationPrepareActivity extends Activity implements
 			}
 			break;
 		case R.id.question_dictation_next:
+			finish();
 			Intent intent = new Intent();
 			if (ListeningQuestionList.Record_Count == ListeningQuestionList.listeningList
 					.size()) {

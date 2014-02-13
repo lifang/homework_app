@@ -41,6 +41,14 @@ public class HomeWorkTool implements Urlinterface {
 	private static int readTimeOut = 10000;
 	private static String requestEncoding = "UTF-8";
 
+	// 分割时间   带时分秒
+	public static String divisionTime(String timeStr) {
+		int temp1 = timeStr.indexOf("T");
+		int temp2 = timeStr.lastIndexOf("+");
+		return timeStr.substring(0, temp1) + " "
+				+ timeStr.substring(temp1 + 1, temp2);
+	}
+
 	// asses拷贝文件到sd卡
 	public static boolean copyApkFromAssets(Context context, String fileName,
 			String path) {
@@ -400,7 +408,6 @@ public class HomeWorkTool implements Urlinterface {
 			listItem.measure(0, 0); // 计算子项View 的宽高
 
 			totalHeight += listItem.getMeasuredHeight(); // 统计所有子项的总高度.
-															
 
 		}
 
