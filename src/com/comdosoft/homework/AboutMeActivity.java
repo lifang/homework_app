@@ -38,7 +38,7 @@ import android.widget.Toast;
 
 public class AboutMeActivity extends Activity {
 	private ListView listview;
-	List<AboutMePojo> listam;
+	List<AboutMePojo> listam ;
 	private String user_id;
 	private String school_class_id;
 
@@ -57,13 +57,17 @@ public class AboutMeActivity extends Activity {
 		getnews();
 	}
 	protected void onResume() {
+		
 		super.onResume();
 		getnews();
 	}
 	public void getnews() {
-		new Thread() {
-			public void run() {
-				while (true) {
+		new Thread()
+		{
+			public void run()
+			{
+				while(true)
+				{
 					try {
 						if (HomeWorkTool.isConnect(AboutMeActivity.this)) {
 							get_News();
@@ -82,7 +86,7 @@ public class AboutMeActivity extends Activity {
 		public void handleMessage(Message msg) {
 			switch (msg.what) {
 			case 0:
-				listview.setAdapter(new AboutMeAdapter(listam,
+				listview.setAdapter(new AboutMeAdapter(
 						getApplicationContext(), listview));
 				break;
 			case 1:
@@ -95,6 +99,7 @@ public class AboutMeActivity extends Activity {
 	public int getNewsJson(String json) {
 		try {
 			JSONObject jsonobject = new JSONObject(json);
+			listam= new ArrayList<AboutMePojo>();
 			String status = (String) jsonobject.get("status");
 			if (status.equals("success")) {
 				JSONArray jsonarray = jsonobject.getJSONArray("messages");
@@ -104,6 +109,7 @@ public class AboutMeActivity extends Activity {
 							.getString("content"));
 					String jsonstatus = liststr.get(0);
 					String content = liststr.get(1);
+
 					String created_at = divisionTime(jsonobject2
 							.getString("created_at"));
 					String id = jsonobject2.getString("id");
@@ -116,7 +122,7 @@ public class AboutMeActivity extends Activity {
 							sender_avatar_url, sender_name, jsonstatus,
 							content, created_at));
 				}
-				Log.i("suanfa",listam.size()+"");
+				Log.i("bbb", "size:"+listam.size());
 				return listam.size();
 			} else {
 				String notic = (String) jsonobject.get("notic");
@@ -130,15 +136,12 @@ public class AboutMeActivity extends Activity {
 
 	// 请求获取和我相关的消息
 	public void get_News() {
-		listam = new ArrayList<AboutMePojo>();
-
 		Thread thread = new Thread() {
 			public void run() {
-
 				if (!httpGetNews(user_id, school_class_id).equals(null)) {
 					getNewsJson(httpGetNews(user_id, school_class_id));
+					handler1.sendEmptyMessage(0);
 				}
-				handler1.sendEmptyMessage(0);
 			}
 
 		};
@@ -176,33 +179,39 @@ public class AboutMeActivity extends Activity {
 		int temp1 = timeStr.indexOf("T");
 		int temp2 = timeStr.lastIndexOf("+");
 		return timeStr.substring(0, temp1) + " "
-				+ timeStr.substring(temp1 + 1, temp2);
+		+ timeStr.substring(temp1 + 1, temp2);
 	}
+	public static class ViewHolder
+	{
+		public TextView tv1;
+		public TextView tv2;
+		public TextView tv3;
+		public TextView tv4;
+		public TextView tv5;
+		public ImageButton Ib;
 
+	}
 	// 适配器
 	public class AboutMeAdapter extends BaseAdapter {
-		private List<AboutMePojo> Amlist;
 		private Context context;
 		private ListView listview;
 		AsyncImageLoader asyncImageLoader = new AsyncImageLoader();
 		HomeWork hw = (HomeWork) getApplication();
-
 		public AboutMeAdapter() {
 		}
 
-		public AboutMeAdapter(List<AboutMePojo> amlist, Context context,
+		public AboutMeAdapter( Context context,
 				ListView listview) {
-			Amlist = amlist;
 			this.context = context;
 			this.listview = listview;
 		}
 
 		public int getCount() {
-			return Amlist.size();
+			return listam.size();
 		}
 
 		public Object getItem(int position) {
-			return Amlist.get(position);
+			return listam.get(position);
 		}
 
 		public long getItemId(int position) {
@@ -212,117 +221,30 @@ public class AboutMeActivity extends Activity {
 		public View getView(final int position, View convertView,
 				ViewGroup parent) {
 			LayoutInflater inflater = LayoutInflater.from(context);
+			ViewHolder  holder=null;
 			if (convertView == null) {
 				convertView = inflater.inflate(R.layout.aboutme_one, null);
+				holder=new ViewHolder();
 				convertView.setPadding(0, 15, 0, 15);
-				TextView tv1 = (TextView) convertView
+				holder.tv1 = (TextView) convertView
 						.findViewById(R.id.aboutme_oneTv);
-				TextView tv2 = (TextView) convertView
+				holder.tv2 = (TextView) convertView
 						.findViewById(R.id.aboutme_oneTv2);
-				TextView tv3 = (TextView) convertView
+				holder.tv3 = (TextView) convertView
 						.findViewById(R.id.aboutme_oneTv3);
-				TextView tv4 = (TextView) convertView
+				holder.tv4 = (TextView) convertView
 						.findViewById(R.id.aboutme_oneTv4);
-				TextView tv5 = (TextView) convertView
+				holder.tv5 = (TextView) convertView
 						.findViewById(R.id.aboutme_oneTv5);
-				ImageButton Ib = (ImageButton) convertView
+				holder.Ib = (ImageButton) convertView
 						.findViewById(R.id.aboutme_oneIb);
-				tv1.setText(Amlist.get(position).getSender_name());
-				tv2.setText(Amlist.get(position).getStatus());
-				tv3.setText(Amlist.get(position).getContent());
-				tv4.setText(Amlist.get(position).getCreated_at());
-				// 查看
-				tv5.setOnClickListener(new OnClickListener() {
-					public void onClick(View v) {
-						new Thread() {
-							public void run() {
-								try {
-									HashMap<String, String> mp = new HashMap<String, String>();
-									mp.put("user_id", Amlist.get(position)
-											.getUser_id());
-									mp.put("school_class_id",
-											String.valueOf(school_class_id));
-									mp.put("message_id", Amlist.get(position)
-											.getId());
-									Log.i("aaa",
-											Amlist.get(position).getUser_id()
-													+ "/"
-													+ String.valueOf(school_class_id)
-													+ "/"
-													+ Amlist.get(position)
-															.getId());
-									String json = HomeWorkTool.doPost(
-											Urlinterface.read_message, mp);
-									// Log.i("bbb",
-									// "message_id:"+Amlist.get(position).getId()+"json:"+json);
-									JSONObject jsonobject = new JSONObject(json);
-									String status = jsonobject
-											.getString("status");
-									Message msg = new Message();
-									if (status.equals("error")) {
-										msg.what = 3;
-										handler.sendMessage(msg);
-									} else if (status.equals("success")) {
-										hw.setNewsFlag(true);
-										hw.setLastcount(hw.getLastcount() - 1);
-										hw.setNoselect_message(json);
-										Amlist.remove(position);
-										msg.what = 2;
-										handler.sendMessage(msg);
-									}
-								} catch (JSONException e) {
-									e.printStackTrace();
-								}
-							}
-						}.start();
-
-					}
-				});
-
-				// 删除
-				Ib.setOnClickListener(new OnClickListener() {
-					public void onClick(View v) {
-						new Thread() {
-							@SuppressWarnings({ "rawtypes", "unchecked" })
-							public void run() {
-								try {
-									HashMap<String, String> mp = new HashMap();
-									mp.put("user_id", user_id);
-									mp.put("school_class_id", school_class_id);
-									mp.put("message_id", Amlist.get(position)
-											.getId());
-									String json = HomeWorkTool.doPost(
-											Urlinterface.delete_message, mp);
-									JSONObject jsonobject = new JSONObject(json);
-									String notice = jsonobject
-											.getString("notice");
-									String status = (String) jsonobject
-											.get("status");
-									Message msg = new Message();
-									msg.obj = notice;
-									if (status.equals("success")) {
-										msg.what = 0;
-										Amlist.remove(position);
-										hw.setLastcount(hw.getLastcount() - 1);
-										handler.sendMessage(msg);
-									} else {
-										msg.what = 1;
-										handler.sendMessage(msg);
-									}
-								} catch (JSONException e) {
-									e.printStackTrace();
-								}
-							}
-						}.start();
-					}
-				});
 				ImageView iv = (ImageView) convertView
 						.findViewById(R.id.aboutme_oneIv);
 				String strUrl = Urlinterface.IP
-						+ Amlist.get(position).getSender_avatar_url();
-				iv.setTag(strUrl + Amlist.get(position).getId());
+						+ listam.get(position).getSender_avatar_url();
+				iv.setTag(strUrl + listam.get(position).getId());
 				Bitmap bm = asyncImageLoader.asyncLoadImage(strUrl
-						+ Amlist.get(position).getId(), 0, callback);
+						+ listam.get(position).getId(), 0, callback);
 				iv.setImageBitmap(null);
 				if (bm == null) {
 					iv.setBackgroundResource(R.drawable.ic_launcher);
@@ -330,7 +252,102 @@ public class AboutMeActivity extends Activity {
 					iv.setImageBitmap(bm);
 				}
 				bm = null;
+				convertView.setTag(holder);
 			}
+			else
+			{
+				holder=(ViewHolder)convertView.getTag();
+			}
+			holder.tv1.setText(listam.get(position).getSender_name());
+			holder.tv2.setText(listam.get(position).getStatus());
+			Log.i("aa",position+"");
+			holder.tv3.setText(listam.get(position).getContent());
+			holder.tv4.setText(listam.get(position).getCreated_at());
+			// 查看
+			holder.tv5.setOnClickListener(new OnClickListener() {
+				public void onClick(View v) {
+					new Thread() {
+						public void run() {
+							try {
+								HashMap<String, String> mp = new HashMap<String, String>();
+								mp.put("user_id", listam.get(position)
+										.getUser_id());
+								mp.put("school_class_id",
+										String.valueOf(school_class_id));
+								mp.put("message_id", listam.get(position)
+										.getId());
+								Log.i("aaa",
+										listam.get(position).getUser_id()
+										+ "/"
+										+ String.valueOf(school_class_id)
+										+ "/"
+										+ listam.get(position)
+										.getId());
+								String json = HomeWorkTool.doPost(
+										Urlinterface.read_message, mp);
+								// Log.i("bbb",
+								// "message_id:"+listam.get(position).getId()+"json:"+json);
+								JSONObject jsonobject = new JSONObject(json);
+								String status = jsonobject
+										.getString("status");
+								Message msg = new Message();
+								if (status.equals("error")) {
+									msg.what = 3;
+									handler.sendMessage(msg);
+								} else if (status.equals("success")) {
+									hw.setNewsFlag(true);
+									hw.setLastcount(hw.getLastcount() - 1);
+									hw.setNoselect_message(json);
+									listam.remove(position);
+									msg.what = 2;
+									handler.sendMessage(msg);
+								}
+							} catch (JSONException e) {
+								e.printStackTrace();
+							}
+						}
+					}.start();
+
+				}
+			});
+
+			// 删除
+			holder.Ib.setOnClickListener(new OnClickListener() {
+				public void onClick(View v) {
+					new Thread() {
+						@SuppressWarnings({ "rawtypes", "unchecked" })
+						public void run() {
+							try {
+								HashMap<String, String> mp = new HashMap();
+								mp.put("user_id", user_id);
+								mp.put("school_class_id", school_class_id);
+								mp.put("message_id", listam.get(position)
+										.getId());
+								String json = HomeWorkTool.doPost(
+										Urlinterface.delete_message, mp);
+								JSONObject jsonobject = new JSONObject(json);
+								String notice = jsonobject
+										.getString("notice");
+								String status = (String) jsonobject
+										.get("status");
+								Message msg = new Message();
+								msg.obj = notice;
+								if (status.equals("success")) {
+									msg.what = 0;
+									listam.remove(position);
+									hw.setLastcount(hw.getLastcount() - 1);
+									handler.sendMessage(msg);
+								} else {
+									msg.what = 1;
+									handler.sendMessage(msg);
+								}
+							} catch (JSONException e) {
+								e.printStackTrace();
+							}
+						}
+					}.start();
+				}
+			});
 			return convertView;
 
 		}
@@ -341,16 +358,16 @@ public class AboutMeActivity extends Activity {
 				super.dispatchMessage(msg);
 				switch (msg.what) {
 				case 0:
-					listview.setAdapter(new AboutMeAdapter(listam,
+					listview.setAdapter(new AboutMeAdapter(
 							getApplicationContext(), listview));
 					Toast.makeText(AboutMeActivity.this, msg.obj.toString(), 0)
-							.show();
+					.show();
 					break;
 				case 1:
 					Toast.makeText(context, msg.obj.toString(), 0).show();
 					break;
 				case 2:
-					listview.setAdapter(new AboutMeAdapter(listam,
+					listview.setAdapter(new AboutMeAdapter(
 							getApplicationContext(), listview));
 					HomeWorkMainActivity.instance.tabhost.setCurrentTab(0);
 					// Intent intent = new

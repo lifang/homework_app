@@ -88,10 +88,17 @@ public class HomeWorkMainActivity extends TabActivity implements Urlinterface {
 		tabhost.setCurrentTab(homework.getMainItem());
 		updateTabStyle(tabhost);
 
+<<<<<<< HEAD
 		if (HomeWorkTool.isConnect(HomeWorkMainActivity.this)) {
 			thread.start();
 			thread_work.start();
 		} else {
+=======
+		if (HomeWorkTool.isConnect(HomeWorkMainActivity.this)) 
+		{
+			thread.start();
+		}else{
+>>>>>>> 9099185c94bd0c55fba6dd336e549ffc33e31daf
 			Builder builder = new Builder(HomeWorkMainActivity.this);
 			builder.setTitle("提示");
 			builder.setMessage(R.string.internet_error);
@@ -117,7 +124,7 @@ public class HomeWorkMainActivity extends TabActivity implements Urlinterface {
 			switch (msg.what) {
 			case 0:
 				TextView textview = (TextView) tabhost.getTabWidget()
-						.getChildAt(2).findViewById(android.R.id.title);
+				.getChildAt(2).findViewById(android.R.id.title);
 				textview.setPadding(27, 5, 5, 53);
 				textview.setTextSize(10);
 
