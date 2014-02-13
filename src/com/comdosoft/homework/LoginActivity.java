@@ -62,7 +62,6 @@ public class LoginActivity extends Activity implements Urlinterface {
 
 	};
 
-	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.login);
@@ -70,7 +69,7 @@ public class LoginActivity extends Activity implements Urlinterface {
 		mTencent = Tencent.createInstance(APP_ID, this.getApplicationContext());
 		mPd = new ProgressDialog(LoginActivity.this);
 		mPd.setMessage("正在登陆...");
-		sp = getPreferences(0);
+		sp = getSharedPreferences(SHARED, MODE_PRIVATE);
 		// sp.edit().putString("user_id", "1").commit();
 		// sp.edit().putString("school_class_id", "1").commit();
 		// homework.setUser_id(1);

@@ -1,4 +1,4 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
+<?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.comdosoft.homework"
     android:versionCode="1"
@@ -40,8 +40,7 @@
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
-x
-
+x
         </activity>
         <activity
             android:name=".HomeWorkIngActivity"

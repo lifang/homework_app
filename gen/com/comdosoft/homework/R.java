@@ -73,14 +73,15 @@ public final class R {
         public static final int th1_1=0x7f020024;
         public static final int th2=0x7f020025;
         public static final int th2_2=0x7f020026;
-        public static final int th3=0x7f020027;
-        public static final int th3_3=0x7f020028;
-        public static final int th4=0x7f020029;
-        public static final int th4_4=0x7f02002a;
-        public static final int tx=0x7f02002b;
-        public static final int tx2=0x7f02002c;
-        public static final int unmake=0x7f02002d;
-        public static final int xlistview_arrow=0x7f02002e;
+        public static final int th2_2_new=0x7f020027;
+        public static final int th3=0x7f020028;
+        public static final int th3_3=0x7f020029;
+        public static final int th4=0x7f02002a;
+        public static final int th4_4=0x7f02002b;
+        public static final int tx=0x7f02002c;
+        public static final int tx2=0x7f02002d;
+        public static final int unmake=0x7f02002e;
+        public static final int xlistview_arrow=0x7f02002f;
     }
     public static final class id {
         public static final int Button_huifu=0x7f09002d;
