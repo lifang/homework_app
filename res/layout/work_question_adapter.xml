@@ -4,6 +4,7 @@
     android:orientation="vertical" >
 
     <LinearLayout
+        android:id="@+id/zill"
         android:layout_width="fill_parent"
         android:layout_height="220dp"
         android:orientation="vertical" >

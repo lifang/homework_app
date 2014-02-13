@@ -87,7 +87,7 @@ public class HomeWorkMainActivity extends TabActivity implements Urlinterface {
 		updateTabStyle(tabhost);
 
 		if (HomeWorkTool.isConnect(HomeWorkMainActivity.this)) {
-			thread.start();
+//			thread.start();
 			thread_work.start();
 		} else {
 			Builder builder = new Builder(HomeWorkMainActivity.this);
@@ -100,7 +100,6 @@ public class HomeWorkMainActivity extends TabActivity implements Urlinterface {
 
 	Thread thread = new Thread() {
 		public void run() {
-			Log.i("bbb", "thread");
 			indexNews();
 		}
 	};
@@ -155,7 +154,7 @@ public class HomeWorkMainActivity extends TabActivity implements Urlinterface {
 				}
 				homework_view.setTextSize(10);
 				homework_view.setTextColor(Color.parseColor("#ffffff"));
-				if (flag_hw == true && hw_num != 0) {
+				if (flag_hw == true && homework.getHw_number() != 0 && homework.getMainItem()!=1) {
 					View mView = tabhost.getTabWidget().getChildAt(1);// 0是代表第一个Tab
 					ImageView imageView = (ImageView) mView
 							.findViewById(android.R.id.icon);// 获取控件imageView
@@ -165,9 +164,9 @@ public class HomeWorkMainActivity extends TabActivity implements Urlinterface {
 					} else {
 
 					}
-					homework_view.setText(hw_num + "");
+					homework_view.setText(homework.getHw_number() + "");
 				} else {
-					if (hw_num == 0) {
+					if (homework.getHw_number() == 0) {
 						homework_view.setText("");
 					} else {
 						homework_view.setText("");
@@ -184,7 +183,6 @@ public class HomeWorkMainActivity extends TabActivity implements Urlinterface {
 		String school_class_id = sp.getString("school_class_id", "null");
 		while (flag) {
 			if (HomeWorkTool.isConnect(HomeWorkMainActivity.this)) {
-				Log.i("bbb", "msg1");
 				try {
 					HashMap<String, String> mp = new HashMap<String, String>();
 					mp.put("user_id", user_id);
@@ -374,12 +372,13 @@ public class HomeWorkMainActivity extends TabActivity implements Urlinterface {
 						ImageView img = (ImageView) tabWidget.getChildAt(i)
 								.findViewById(android.R.id.icon);
 
-						if (mTabHost.getCurrentTab() == 1) {
-							flag_hw = false;
-							handler.sendEmptyMessage(1);
-						} else {
-							flag_hw = true;
-						}
+//						if (mTabHost.getCurrentTab() == 1) {
+//							Log.i("aaa", "----");
+//							flag_hw = false;
+//							handler.sendEmptyMessage(1);
+//						} else {
+//							flag_hw = true;
+//						}
 
 						if (mTabHost.getCurrentTab() == i) {
 							homework.setMainItem(i);
@@ -388,14 +387,21 @@ public class HomeWorkMainActivity extends TabActivity implements Urlinterface {
 							switch (i) {
 							case 0:
 								homework.setNewsFlag(true);
+								flag_hw = true;
 								img.setImageResource(R.drawable.th1);
 								break;
 							case 1:
+								Log.i("aaa", "------");
 								homework.setNewsFlag(true);
+								flag_hw = false;
+								hw_num = 0 ;
+								homework.setHw_number(0);
+								handler.sendEmptyMessage(1);
 								img.setImageResource(R.drawable.th2);
 								break;
 							case 2:
 								homework.setNewsFlag(false);
+								flag_hw = true;
 								homework.setLastcount(Size);
 								TextView textview = (TextView) tabhost
 										.getTabWidget().getChildAt(2)
@@ -407,6 +413,7 @@ public class HomeWorkMainActivity extends TabActivity implements Urlinterface {
 								break;
 							case 3:
 								homework.setNewsFlag(true);
+								flag_hw = true;
 								img.setImageResource(R.drawable.th4);
 								break;
 							}
@@ -418,7 +425,7 @@ public class HomeWorkMainActivity extends TabActivity implements Urlinterface {
 								img.setImageResource(R.drawable.th1_1);
 								break;
 							case 1:
-								if (flag_hw && hw_num > 0) {
+								if (flag_hw && homework.getHw_number() > 0) {
 									handler.sendEmptyMessage(1);
 								} else {
 									img.setImageResource(R.drawable.th2_2);
