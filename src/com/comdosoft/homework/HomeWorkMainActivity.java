@@ -87,7 +87,7 @@ public class HomeWorkMainActivity extends TabActivity implements Urlinterface {
 
 		if (HomeWorkTool.isConnect(HomeWorkMainActivity.this)) 
 		{
-		thread.start();
+			thread.start();
 		}else{
 			Builder builder = new Builder(HomeWorkMainActivity.this);
 			builder.setTitle("提示");
@@ -110,10 +110,10 @@ public class HomeWorkMainActivity extends TabActivity implements Urlinterface {
 			switch (msg.what) {
 			case 0:
 				TextView textview = (TextView) tabhost.getTabWidget()
-						.getChildAt(2).findViewById(android.R.id.title);
+				.getChildAt(2).findViewById(android.R.id.title);
 				textview.setPadding(27, 5, 5, 53);
 				textview.setTextSize(10);
-				
+
 				textview.setTextColor(Color.parseColor("#ffffff"));
 				if (homework.isNewsFlag() == true) {
 					num=msg.obj.toString();
@@ -125,7 +125,7 @@ public class HomeWorkMainActivity extends TabActivity implements Urlinterface {
 						imageView.setImageDrawable(getResources().getDrawable(
 								R.drawable.news)); // 改变我们需要的图标
 						textview.setText(msg.obj + "");
-						
+
 					}
 				} else {
 					if (msg.obj.toString().equals("0")) {
