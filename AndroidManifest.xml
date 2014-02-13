@@ -94,6 +94,9 @@
                 <data android:scheme="tencent101003848" />
             </intent-filter>
         </activity>
+     <activity android:name=".SettingPhoto" 
+            android:theme="@style/Transparent"
+            android:windowSoftInputMode="adjustUnspecified|stateHidden"/>
     </application>
 
 </manifest>

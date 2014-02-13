@@ -15,7 +15,7 @@
             android:id="@+id/user_face"
             android:layout_width="49.2dp"
             android:layout_height="49.2dp"
-            android:scaleType="fitXY"
+            android:scaleType="centerCrop"
             android:src="@drawable/moren" />
 
         <RelativeLayout
@@ -37,11 +37,11 @@
 
             <ImageButton
                 android:id="@+id/button1"
-                android:layout_width="21.6dp"
-                android:layout_height="20.4dp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
                 android:layout_alignParentRight="true"
                 android:layout_alignParentTop="true"
-                android:background="@drawable/delete"
+                android:background="@drawable/aboutme_delete"
                 android:onClick="delete_parents" />
 
             <TextView
