@@ -345,6 +345,9 @@ public class SettingActivity extends Activity implements Urlinterface {
 
 	@Override
 	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+		if (resultCode!=0) {
+			
+		
 		switch (requestCode) {
 		// 如果是直接从相册获取
 		case 1:
@@ -379,6 +382,7 @@ public class SettingActivity extends Activity implements Urlinterface {
 
 		}
 		super.onActivityResult(requestCode, resultCode, data);
+		}
 	}
 
 	/**
