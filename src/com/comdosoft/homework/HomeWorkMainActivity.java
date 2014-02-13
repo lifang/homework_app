@@ -96,9 +96,9 @@ public class HomeWorkMainActivity extends TabActivity implements Urlinterface {
 			builder.show();
 		}
 	}
-
 	Thread thread = new Thread() {
 		public void run() {
+			Log.i("bbb", "thread");
 			indexNews();
 			getHomeWork();
 		}
@@ -144,36 +144,40 @@ public class HomeWorkMainActivity extends TabActivity implements Urlinterface {
 		String user_id = sp.getString("user_id", "null");
 		String school_class_id = sp.getString("school_class_id", "null");
 		while (flag) {
-			try {
-				HashMap<String, String> mp = new HashMap<String, String>();
-				mp.put("user_id", user_id);
-				mp.put("school_class_id", school_class_id);
-				String json = HomeWorkTool.sendGETRequest(
-						Urlinterface.get_News, mp);
-				Message msg = new Message();
-				Size = getNewsJson(json);
-				if (homework.isNewsFlag()) {
-					if (homework.getLastcount() == getNewsJson(json)) {
-						count = lastCount;
+			if(HomeWorkTool.isConnect(HomeWorkMainActivity.this))
+			{
+				Log.i("bbb","msg1");
+				try {
+					HashMap<String, String> mp = new HashMap<String, String>();
+					mp.put("user_id", user_id);
+					mp.put("school_class_id", school_class_id);
+					String json = HomeWorkTool.sendGETRequest(
+							Urlinterface.get_News, mp);
+					Message msg = new Message();
+					Size = getNewsJson(json);
+					if (homework.isNewsFlag()) {
+						if (homework.getLastcount() == getNewsJson(json)) {
+							count = lastCount;
+						} else {
+							count = getNewsJson(json) - homework.getLastcount();
+						}
 					} else {
-						count = getNewsJson(json) - homework.getLastcount();
-					}
-				} else {
-					if (homework.getLastcount() == getNewsJson(json)) {
+						if (homework.getLastcount() == getNewsJson(json)) {
+							count = 0;
+						} else {
+							count = getNewsJson(json) - homework.getLastcount();
+						}
 						count = 0;
-					} else {
-						count = getNewsJson(json) - homework.getLastcount();
 					}
-					count = 0;
+					msg.what = 0;
+					msg.obj = count;
+					handler.sendMessage(msg);
+					Thread.sleep(60000);
+				} catch (InterruptedException e) {
+					e.printStackTrace();
+				} catch (Exception e) {
+					e.printStackTrace();
 				}
-				msg.what = 0;
-				msg.obj = count;
-				handler.sendMessage(msg);
-				Thread.sleep(60000);
-			} catch (InterruptedException e) {
-				e.printStackTrace();
-			} catch (Exception e) {
-				e.printStackTrace();
 			}
 		}
 	}
@@ -187,13 +191,13 @@ public class HomeWorkMainActivity extends TabActivity implements Urlinterface {
 		mp.put("school_class_id", school_class_id);
 		try {
 			String json = HomeWorkTool.sendGETRequest(Urlinterface.NEW_HOMEWORK, mp);
-			
+
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-		
+
 	}
-	
+
 	public int getNewsJson(String json) {
 		try {
 			JSONObject jsonobject = new JSONObject(json);

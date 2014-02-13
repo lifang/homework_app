@@ -11,13 +11,13 @@ import org.json.JSONObject;
 import com.comdosoft.homework.pojo.AboutMePojo;
 import com.comdosoft.homework.tools.AsyncImageLoader;
 import com.comdosoft.homework.tools.HomeWork;
+import com.comdosoft.homework.tools.HomeWorkParams;
 import com.comdosoft.homework.tools.HomeWorkTool;
 import com.comdosoft.homework.tools.Urlinterface;
 import com.comdosoft.homework.tools.AsyncImageLoader.LoadFinishCallBack;
 
 import android.app.Activity;
 import android.content.Context;
-import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.os.Bundle;
@@ -28,7 +28,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.View.OnClickListener;
-import android.view.Window;
 import android.widget.BaseAdapter;
 import android.widget.ImageButton;
 import android.widget.ImageView;
@@ -41,7 +40,7 @@ public class AboutMeActivity extends Activity {
 	List<AboutMePojo> listam ;
 	private String user_id;
 	private String school_class_id;
-
+	private boolean flag=true;
 	HomeWork hw = (HomeWork) getApplication();
 	HomeWorkMainActivity hwma = new HomeWorkMainActivity();
 
@@ -53,12 +52,12 @@ public class AboutMeActivity extends Activity {
 		SharedPreferences sp = getSharedPreferences(Urlinterface.SHARED, 0);
 		user_id = sp.getString("user_id", "null");
 		school_class_id = sp.getString("school_class_id", "null");
-
-		getnews();
 	}
 	protected void onResume() {
-		
 		super.onResume();
+		if (HomeWorkTool.isConnect(AboutMeActivity.this)) {
+			flag=true;
+		}
 		getnews();
 	}
 	public void getnews() {
@@ -66,11 +65,16 @@ public class AboutMeActivity extends Activity {
 		{
 			public void run()
 			{
-				while(true)
+				while(flag)
 				{
 					try {
 						if (HomeWorkTool.isConnect(AboutMeActivity.this)) {
+							Log.i("bbb", "msg");
 							get_News();
+						}
+						else{
+							handler1.sendEmptyMessage(1);
+							flag=false;
 						}
 						Thread.sleep(60000);
 					} catch (InterruptedException e) {
@@ -90,6 +94,8 @@ public class AboutMeActivity extends Activity {
 						getApplicationContext(), listview));
 				break;
 			case 1:
+				Toast.makeText(getApplicationContext(),
+						HomeWorkParams.INTERNET, Toast.LENGTH_SHORT).show();
 				break;
 			}
 		}
@@ -122,7 +128,6 @@ public class AboutMeActivity extends Activity {
 							sender_avatar_url, sender_name, jsonstatus,
 							content, created_at));
 				}
-				Log.i("bbb", "size:"+listam.size());
 				return listam.size();
 			} else {
 				String notic = (String) jsonobject.get("notic");
@@ -255,12 +260,11 @@ public class AboutMeActivity extends Activity {
 				convertView.setTag(holder);
 			}
 			else
-			{
+			{ 
 				holder=(ViewHolder)convertView.getTag();
 			}
 			holder.tv1.setText(listam.get(position).getSender_name());
 			holder.tv2.setText(listam.get(position).getStatus());
-			Log.i("aa",position+"");
 			holder.tv3.setText(listam.get(position).getContent());
 			holder.tv4.setText(listam.get(position).getCreated_at());
 			// 查看
@@ -268,42 +272,39 @@ public class AboutMeActivity extends Activity {
 				public void onClick(View v) {
 					new Thread() {
 						public void run() {
-							try {
-								HashMap<String, String> mp = new HashMap<String, String>();
-								mp.put("user_id", listam.get(position)
-										.getUser_id());
-								mp.put("school_class_id",
-										String.valueOf(school_class_id));
-								mp.put("message_id", listam.get(position)
-										.getId());
-								Log.i("aaa",
-										listam.get(position).getUser_id()
-										+ "/"
-										+ String.valueOf(school_class_id)
-										+ "/"
-										+ listam.get(position)
-										.getId());
-								String json = HomeWorkTool.doPost(
-										Urlinterface.read_message, mp);
-								// Log.i("bbb",
-								// "message_id:"+listam.get(position).getId()+"json:"+json);
-								JSONObject jsonobject = new JSONObject(json);
-								String status = jsonobject
-										.getString("status");
-								Message msg = new Message();
-								if (status.equals("error")) {
-									msg.what = 3;
-									handler.sendMessage(msg);
-								} else if (status.equals("success")) {
-									hw.setNewsFlag(true);
-									hw.setLastcount(hw.getLastcount() - 1);
-									hw.setNoselect_message(json);
-									listam.remove(position);
-									msg.what = 2;
-									handler.sendMessage(msg);
+							if (HomeWorkTool.isConnect(AboutMeActivity.this)) {
+								try {
+									HashMap<String, String> mp = new HashMap<String, String>();
+									mp.put("user_id", listam.get(position)
+											.getUser_id());
+									mp.put("school_class_id",
+											String.valueOf(school_class_id));
+									mp.put("message_id", listam.get(position)
+											.getId());
+									String json = HomeWorkTool.doPost(
+											Urlinterface.read_message, mp);
+									JSONObject jsonobject = new JSONObject(json);
+									String status = jsonobject
+											.getString("status");
+									Message msg = new Message();
+									if (status.equals("error")) {
+										msg.what = 3;
+										handler.sendMessage(msg);
+									} else if (status.equals("success")) {
+										hw.setNewsFlag(true);
+										hw.setLastcount(hw.getLastcount() - 1);
+										hw.setNoselect_message(json);
+										listam.remove(position);
+										msg.what = 2;
+										handler.sendMessage(msg);
+									}
+								} catch (JSONException e) {
+									e.printStackTrace();
 								}
-							} catch (JSONException e) {
-								e.printStackTrace();
+							}
+							else
+							{
+								handler.sendEmptyMessage(4);
 							}
 						}
 					}.start();
@@ -317,32 +318,38 @@ public class AboutMeActivity extends Activity {
 					new Thread() {
 						@SuppressWarnings({ "rawtypes", "unchecked" })
 						public void run() {
-							try {
-								HashMap<String, String> mp = new HashMap();
-								mp.put("user_id", user_id);
-								mp.put("school_class_id", school_class_id);
-								mp.put("message_id", listam.get(position)
-										.getId());
-								String json = HomeWorkTool.doPost(
-										Urlinterface.delete_message, mp);
-								JSONObject jsonobject = new JSONObject(json);
-								String notice = jsonobject
-										.getString("notice");
-								String status = (String) jsonobject
-										.get("status");
-								Message msg = new Message();
-								msg.obj = notice;
-								if (status.equals("success")) {
-									msg.what = 0;
-									listam.remove(position);
-									hw.setLastcount(hw.getLastcount() - 1);
-									handler.sendMessage(msg);
-								} else {
-									msg.what = 1;
-									handler.sendMessage(msg);
+							if (HomeWorkTool.isConnect(AboutMeActivity.this)) {
+								try {
+									HashMap<String, String> mp = new HashMap();
+									mp.put("user_id", user_id);
+									mp.put("school_class_id", school_class_id);
+									mp.put("message_id", listam.get(position)
+											.getId());
+									String json = HomeWorkTool.doPost(
+											Urlinterface.delete_message, mp);
+									JSONObject jsonobject = new JSONObject(json);
+									String notice = jsonobject
+											.getString("notice");
+									String status = (String) jsonobject
+											.get("status");
+									Message msg = new Message();
+									msg.obj = notice;
+									if (status.equals("success")) {
+										msg.what = 0;
+										listam.remove(position);
+										hw.setLastcount(hw.getLastcount() - 1);
+										handler.sendMessage(msg);
+									} else {
+										msg.what = 1;
+										handler.sendMessage(msg);
+									}
+								} catch (JSONException e) {
+									e.printStackTrace();
 								}
-							} catch (JSONException e) {
-								e.printStackTrace();
+							}
+							else
+							{
+								handler.sendEmptyMessage(4);
 							}
 						}
 					}.start();
@@ -370,14 +377,13 @@ public class AboutMeActivity extends Activity {
 					listview.setAdapter(new AboutMeAdapter(
 							getApplicationContext(), listview));
 					HomeWorkMainActivity.instance.tabhost.setCurrentTab(0);
-					// Intent intent = new
-					// Intent(AboutMeActivity.this,HomeWorkMainActivity.class);
-					// intent.putExtra("type", 1);
-					// HomeWorkMainActivity.instance.finish();
-					// startActivity(intent);
 					break;
 				case 3:
 					Toast.makeText(AboutMeActivity.this, "信息错误", 0).show();
+					break;
+				case 4:
+					Toast.makeText(getApplicationContext(),
+							HomeWorkParams.INTERNET, Toast.LENGTH_SHORT).show();
 					break;
 				default:
 					break;
