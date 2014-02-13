@@ -109,7 +109,7 @@ public class Classxinxiliu extends Activity implements OnHeaderRefreshListener,
 	private String user_Url;
 	private int width;
 	private int height;
-	private List<ClassStuPojo> stuList ;
+	private List<ClassStuPojo> stuList;
 	private ArrayList<Child_Micropost> child_list;
 	private Handler handler = new Handler() {
 		public void handleMessage(Message msg) {
@@ -737,9 +737,8 @@ public class Classxinxiliu extends Activity implements OnHeaderRefreshListener,
 	}
 
 	private void setJson(String json) {
-
 		try {
-			stuList= new ArrayList<ClassStuPojo>();
+			stuList = new ArrayList<ClassStuPojo>();
 			JSONObject obj = new JSONObject(json);
 			// 学生信息
 			JSONObject student = obj.getJSONObject("student"); // 获得学生的信息
@@ -754,7 +753,6 @@ public class Classxinxiliu extends Activity implements OnHeaderRefreshListener,
 			editor.commit();
 			user_name = student.getString("name");
 			nick_name = student.getString("nickname");
-
 			// 微博
 			JSONObject microposts = obj.getJSONObject("microposts");
 			page = Integer.parseInt(microposts.getString("page"));
@@ -763,30 +761,30 @@ public class Classxinxiliu extends Activity implements OnHeaderRefreshListener,
 					.getString("details_microposts");
 			// page":1,"pages_count":2,"details_microposts":
 			parseJson_details_microposts(details_microposts);
-
 			// 班级头像和名字
 			JSONObject class1 = obj.getJSONObject("class"); // 或得班级信息
 			String class_name = class1.getString("name"); // 获取class_name
 			classname = class1.getString("name");
-
 			school_class_id = class1.getString("id");
 			// 循环获取班级学生的信息classmates
 			JSONArray jsonArray = obj.getJSONArray("classmates");
-			for (int i = 0; i < jsonArray.length(); i++) {
-				JSONObject jsonObject2 = (JSONObject) jsonArray.get(i);
-				String stu_Url = (String) jsonObject2.get("avatar_url");
-				int id = jsonObject2.getInt("id");
-				String stuname = jsonObject2.getString("name");
-				String nickname = jsonObject2.getString("nickname");
-				if (Integer.valueOf(user_id) == id) {
+			if (jsonArray.length() != 0) {
+				for (int i = 0; i < jsonArray.length(); i++) {
+					JSONObject jsonObject2 = (JSONObject) jsonArray.get(i);
+					String stu_Url = jsonObject2.getString("avatar_url");
+					int id = jsonObject2.getInt("id");
+					String stuname = jsonObject2.getString("name");
+					String nickname = jsonObject2.getString("nickname");
+					if (Integer.valueOf(user_id) == id) {
 
-				} else {
-					stuList.add(new ClassStuPojo(id, stuname, stu_Url, nickname));
+					} else {
+						stuList.add(new ClassStuPojo(id, stuname, stu_Url,
+								nickname));
+					}
+
 				}
-
 			}
 			Log.i("linshi", stuList.size() + "");
-
 			// 微博id
 			care = new ArrayList<String>();
 			JSONArray follow_microposts_id = obj
@@ -1246,8 +1244,8 @@ public class Classxinxiliu extends Activity implements OnHeaderRefreshListener,
 
 									thread.start();
 								} else {
-									Toast.makeText(getApplicationContext(), HomeWorkParams.INTERNET, 0)
-											.show();
+									Toast.makeText(getApplicationContext(),
+											HomeWorkParams.INTERNET, 0).show();
 								}
 
 							} else {
@@ -1284,7 +1282,11 @@ public class Classxinxiliu extends Activity implements OnHeaderRefreshListener,
 						map.put("reciver_id", reciver_id);
 						map.put("reciver_types", reciver_types);
 						map.put("school_class_id", school_class_id);
-						Log.i("bbb","sender_id:"+user_id+"sender_types"+user_types +"micropost_id"+micropost_id+"reciver_id"+reciver_id+"reciver_types"+reciver_types+"school_class_id"+school_class_id);
+						Log.i("bbb", "sender_id:" + user_id + "sender_types"
+								+ user_types + "micropost_id" + micropost_id
+								+ "reciver_id" + reciver_id + "reciver_types"
+								+ reciver_types + "school_class_id"
+								+ school_class_id);
 						String js1 = HomeWorkTool.doPost(
 								Urlinterface.reply_message, map);
 						Message msg = new Message();// 创建Message 对象
@@ -1300,8 +1302,8 @@ public class Classxinxiliu extends Activity implements OnHeaderRefreshListener,
 
 				thread.start();
 			} else {
-				Toast.makeText(getApplicationContext(), HomeWorkParams.INTERNET, 0)
-						.show();
+				Toast.makeText(getApplicationContext(),
+						HomeWorkParams.INTERNET, 0).show();
 			}
 		}
 	}
@@ -1377,8 +1379,8 @@ public class Classxinxiliu extends Activity implements OnHeaderRefreshListener,
 
 				thread.start();
 			} else {
-				Toast.makeText(getApplicationContext(), HomeWorkParams.INTERNET, 0)
-						.show();
+				Toast.makeText(getApplicationContext(),
+						HomeWorkParams.INTERNET, 0).show();
 			}
 		}
 	}
@@ -1477,8 +1479,8 @@ public class Classxinxiliu extends Activity implements OnHeaderRefreshListener,
 
 					thread.start();
 				} else {
-					Toast.makeText(getApplicationContext(), HomeWorkParams.INTERNET, 0)
-							.show();
+					Toast.makeText(getApplicationContext(),
+							HomeWorkParams.INTERNET, 0).show();
 				}
 			} else {
 				if (child_list.size() > 0) {// 如果没有子消息，隐藏加载更多按钮
@@ -1539,8 +1541,8 @@ public class Classxinxiliu extends Activity implements OnHeaderRefreshListener,
 
 				thread.start();
 			} else {
-				Toast.makeText(getApplicationContext(), HomeWorkParams.INTERNET, 0)
-						.show();
+				Toast.makeText(getApplicationContext(),
+						HomeWorkParams.INTERNET, 0).show();
 			}
 		} else {
 			Toast.makeText(getApplicationContext(), "已是最后一页",

@@ -25,7 +25,7 @@ import com.tencent.tauth.IUiListener;
 import com.tencent.tauth.Tencent;
 import com.tencent.tauth.UiError;
 
-// 登录    马龙    2014年1月20日
+// 登录    马龙    2014年2月12日
 public class LoginActivity extends Activity implements Urlinterface {
 
 	private static final String SCOPE = "get_user_info";
@@ -58,36 +58,36 @@ public class LoginActivity extends Activity implements Urlinterface {
 				break;
 			}
 			startActivity(intent);
+			finish();
 		}
 
 	};
 
+	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.login);
 		homework = (HomeWork) getApplication();
 		mTencent = Tencent.createInstance(APP_ID, this.getApplicationContext());
 		mPd = new ProgressDialog(LoginActivity.this);
-		mPd.setMessage("正在登陆...");
+		mPd.setMessage("正在登录...");
 		sp = getSharedPreferences(SHARED, MODE_PRIVATE);
-		// sp.edit().putString("user_id", "1").commit();
-		// sp.edit().putString("school_class_id", "1").commit();
-		// homework.setUser_id(1);
-		// homework.setClass_id(1);
 		if (sp.getString("user_id", "").equals("")
 				&& sp.getString("school_class_id", "").equals("")) {
 			onClickLogin();
 		} else {
+			LoginActivity.this.finish();
 			Intent intent = new Intent(getApplicationContext(),
 					HomeWorkMainActivity.class);
 			startActivity(intent);
+			finish();
 		}
 	}
 
 	@Override
 	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
 		mTencent.onActivityResult(requestCode, resultCode, data);
-	}
+	}                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                
 
 	private void onClickLogin() {
 		if (!mTencent.isSessionValid()) {
@@ -113,18 +113,15 @@ public class LoginActivity extends Activity implements Urlinterface {
 				String avatar_url = student.getString("avatar_url"); // 获取本人头像昂所有在地址
 				String name = student.getString("name");
 				String nick_name = student.getString("nickname");
-				// service.save(id, user_id, nick_name, nick_name,
-				// avatar_url);
 				JSONObject class1 = jo.getJSONObject("class"); // 或得班级信息
-				// 获取class_name
 
 				String school_class_id = class1.getString("id");
-				Log.i(tag, user_id + "----------------" + school_class_id);
+				Log.i("Ax", user_id + "----------------" + school_class_id);
 				SharedPreferences preferences = getSharedPreferences(SHARED,
 						Context.MODE_PRIVATE);
 				Editor editor = preferences.edit();
 				editor.putString("name", name);
-				editor.putString("user_id", user_id);
+				editor.putString("user_id", id);
 				editor.putString("id", id);
 				editor.putString("avatar_url", avatar_url);
 				editor.putString("nickname", nick_name);

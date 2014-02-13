@@ -28,6 +28,7 @@ import android.os.Handler;
 import android.os.Message;
 import android.provider.MediaStore;
 import android.util.Log;
+import android.view.KeyEvent;
 import android.view.View;
 import android.view.Window;
 import android.widget.EditText;
@@ -66,13 +67,13 @@ public class RegistrationActivity extends Activity implements Urlinterface {
 
 		setContentView(R.layout.activity_registration);
 		hw = (HomeWork) getApplication();
-		File file = new File(Environment.getExternalStorageDirectory()
-				+ "/1" + IMAGE_FILE_NAME);
+		File file = new File(Environment.getExternalStorageDirectory() + "/1"
+				+ IMAGE_FILE_NAME);
 
-			if (file.exists()) {
-				file.delete();
+		if (file.exists()) {
+			file.delete();
 
-			}
+		}
 		// Date d = new Date();
 		// open_id = d.toString();
 		// 上面两句代码 用来获得不一样的 qq_uid，，，测试 用，，后期删除
@@ -141,18 +142,17 @@ public class RegistrationActivity extends Activity implements Urlinterface {
 		layout.setVisibility(View.GONE);
 
 		Intent intentFromGallery = new Intent(Intent.ACTION_PICK, null);
-				
-				/**
-				 * 下面这句话，与其它方式写是一样的效果，如果：
-				 * intent.setData(MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
-				 * intent.setType(""image/*");设置数据类型
-				 * 如果朋友们要限制上传到服务器的图片类型时可以直接写如："image/jpeg 、 image/png等的类型"
-				 * 这个地方小马有个疑问，希望高手解答下：就是这个数据URI与类型为什么要分两种形式来写呀？有什么区别？
-				 */
-				intentFromGallery.setDataAndType(
-						MediaStore.Images.Media.EXTERNAL_CONTENT_URI,
-						"image/*");
-				startActivityForResult(intentFromGallery, 1);
+
+		/**
+		 * 下面这句话，与其它方式写是一样的效果，如果：
+		 * intent.setData(MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+		 * intent.setType(""image/*");设置数据类型
+		 * 如果朋友们要限制上传到服务器的图片类型时可以直接写如："image/jpeg 、 image/png等的类型"
+		 * 这个地方小马有个疑问，希望高手解答下：就是这个数据URI与类型为什么要分两种形式来写呀？有什么区别？
+		 */
+		intentFromGallery.setDataAndType(
+				MediaStore.Images.Media.EXTERNAL_CONTENT_URI, "image/*");
+		startActivityForResult(intentFromGallery, 1);
 
 	}
 
@@ -165,30 +165,25 @@ public class RegistrationActivity extends Activity implements Urlinterface {
 			break;
 		// 如果是调用相机拍照时
 		case 2:
-			
-			
+
 			if (HomeWorkTool.isHasSdcard()) {
 				File temp = new File(Environment.getExternalStorageDirectory()
-						+ "/"
-						+ IMAGE_FILE_NAME);
+						+ "/" + IMAGE_FILE_NAME);
 				startPhotoZoom(Uri.fromFile(temp));
 			} else {
 				Toast.makeText(this, "未找到存储卡，无法存储照片！", Toast.LENGTH_LONG)
 						.show();
 			}
-			
+
 			break;
 		// 取得裁剪后的图片
 		case 3:
 			/**
-			 * 非空判断大家一定要验证，如果不验证的话，
-			 * 在剪裁之后如果发现不满意，要重新裁剪，丢弃
-			 * 当前功能时，会报NullException，小马只
-			 * 在这个地方加下，大家可以根据不同情况在合适的
-			 * 地方做判断处理类似情况
+			 * 非空判断大家一定要验证，如果不验证的话， 在剪裁之后如果发现不满意，要重新裁剪，丢弃
+			 * 当前功能时，会报NullException，小马只 在这个地方加下，大家可以根据不同情况在合适的 地方做判断处理类似情况
 			 * 
 			 */
-			if(data != null){
+			if (data != null) {
 				getImageToView(data);
 			}
 			break;
@@ -409,14 +404,13 @@ public class RegistrationActivity extends Activity implements Urlinterface {
 					}
 				}
 			};
-			
+
 			if (HomeWorkTool.isConnect(RegistrationActivity.this)) {
 				thread.start();
+			} else {
+				Toast.makeText(getApplicationContext(),
+						HomeWorkParams.INTERNET, 0).show();
 			}
-			else {
-				Toast.makeText(getApplicationContext(), HomeWorkParams.INTERNET, 0).show();
-			}
-			
 
 		}
 		return null;
@@ -439,4 +433,11 @@ public class RegistrationActivity extends Activity implements Urlinterface {
 		return null;
 	}
 
+	public boolean onKeyDown(int keyCode, KeyEvent event) {
+		if (keyCode == KeyEvent.KEYCODE_BACK) {
+			System.exit(0);
+			return true;
+		}
+		return super.onKeyDown(keyCode, event);
+	}
 }

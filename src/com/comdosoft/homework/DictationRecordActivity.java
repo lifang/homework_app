@@ -5,11 +5,15 @@ import java.util.ArrayList;
 import java.util.List;
 import android.app.Activity;
 import android.app.Dialog;
+import android.app.ProgressDialog;
 import android.content.Intent;
 import android.graphics.Color;
 import android.media.MediaPlayer;
+import android.media.MediaPlayer.OnCompletionListener;
 import android.media.MediaPlayer.OnPreparedListener;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Message;
 import android.view.Gravity;
 import android.view.KeyEvent;
 import android.view.View;
@@ -19,18 +23,17 @@ import android.widget.LinearLayout.LayoutParams;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
-
 import com.comdosoft.homework.tools.HomeWork;
 import com.comdosoft.homework.tools.ListeningQuestionList;
 import com.comdosoft.homework.tools.Urlinterface;
 
-// 拼写记录    马龙    2014年1月20日
+// 拼写记录    马龙    2014年2月12日
 public class DictationRecordActivity extends Activity implements
-		OnClickListener, OnPreparedListener,Urlinterface {
+		OnClickListener, OnPreparedListener, OnCompletionListener, Urlinterface {
 
 	private int bigIndex = 0;
 	private int smallIndex = 0;
+	private boolean playFlag = false;
 	private String mp3URL;
 	private LinearLayout linearLayout;
 	private TextView topic;
@@ -40,6 +43,27 @@ public class DictationRecordActivity extends Activity implements
 	private List<String> errorList = new ArrayList<String>();
 	private MediaPlayer mediaPlayer = new MediaPlayer();
 	private HomeWork homeWork;
+	private ProgressDialog mPd;
+	private ImageView mPlayImg;
+	private Handler handler = new Handler() {
+		public void handleMessage(Message msg) {
+			super.handleMessage(msg);
+			switch (msg.what) {
+			case 1:
+				mPd.dismiss();
+				break;
+			case 2:
+				mPlayImg.setImageResource(R.drawable.dictation_laba4);
+				break;
+			case 3:
+				mPlayImg.setImageResource(R.drawable.dictation_laba3);
+				break;
+			case 4:
+				mPd.show();
+				break;
+			}
+		}
+	};
 
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -48,10 +72,13 @@ public class DictationRecordActivity extends Activity implements
 		homeWork.setNewsFlag(true);
 		findViewById(R.id.question_dictation_exit).setOnClickListener(this);
 		findViewById(R.id.question_dictation_check).setOnClickListener(this);
-		findViewById(R.id.question_dictation_play).setOnClickListener(this);
+		mPlayImg = (ImageView) findViewById(R.id.question_dictation_play);
+		mPlayImg.setOnClickListener(this);
 		topic = (TextView) findViewById(R.id.question_dictation_topic);
 		page = (TextView) findViewById(R.id.question_dictation_page);
 		linearLayout = (LinearLayout) findViewById(R.id.question_dictation_record_linearLayout);
+		mPd = new ProgressDialog(this);
+		mPd.setMessage("正在缓冲...");
 
 		initData();
 	}
@@ -59,6 +86,8 @@ public class DictationRecordActivity extends Activity implements
 	public void initData() {
 		errorList.clear();
 		linearLayout.removeAllViews();
+		playFlag = false;
+		handler.sendEmptyMessage(3);
 
 		if (smallIndex == smallList.size() && bigIndex < bigList.size() - 1) {
 			bigIndex++;
@@ -83,7 +112,7 @@ public class DictationRecordActivity extends Activity implements
 		}
 
 		if (errorList.size() >= 2) {
-			linearLayout.setVisibility(linearLayout.VISIBLE);
+			linearLayout.setVisibility(View.VISIBLE);
 			for (int i = 0; i < errorList.size(); i++) {
 				initView(i);
 			}
@@ -93,7 +122,6 @@ public class DictationRecordActivity extends Activity implements
 
 		mp3URL = ListeningQuestionList.getListeningPojo(bigIndex)
 				.getQuesttionList().get(smallIndex - 1).getUrl();
-		Toast.makeText(getApplicationContext(), mp3URL + "", 0).show();
 		topic.setText(ListeningQuestionList.getListeningPojo(bigIndex)
 				.getQuesttionList().get(smallIndex - 1).getContent());
 		page.setText(smallIndex + "/" + smallList.size());
@@ -122,12 +150,21 @@ public class DictationRecordActivity extends Activity implements
 			mediaPlayer.setDataSource(IP + mp3URL);
 			mediaPlayer.prepare();
 			mediaPlayer.setOnPreparedListener(this);
+			mediaPlayer.setOnCompletionListener(this);
 		} catch (IllegalArgumentException e) {
 			e.printStackTrace();
 		} catch (IllegalStateException e) {
 			e.printStackTrace();
 		} catch (IOException e) {
 			e.printStackTrace();
+		}
+	}
+
+	class MyMediaPlay extends Thread {
+		@Override
+		public void run() {
+			super.run();
+			playerAmr();
 		}
 	}
 
@@ -146,13 +183,30 @@ public class DictationRecordActivity extends Activity implements
 			}
 			break;
 		case R.id.question_dictation_play:
-			playerAmr();
+			if (!playFlag) {
+				new MyMediaPlay().start();
+				playFlag = true;
+				handler.sendEmptyMessage(4);
+			} else if (mediaPlayer.isPlaying()) {
+				handler.sendEmptyMessage(3);
+				mediaPlayer.pause();
+			} else {
+				handler.sendEmptyMessage(2);
+				mediaPlayer.start();
+			}
 			break;
 		}
 	}
 
 	public void onPrepared(MediaPlayer mp) {
+		handler.sendEmptyMessage(1);
+		handler.sendEmptyMessage(2);
 		mp.start();
+	}
+
+	@Override
+	public void onCompletion(MediaPlayer mp) {
+		handler.sendEmptyMessage(3);
 	}
 
 	public void onDestroy() {
@@ -208,4 +262,5 @@ public class DictationRecordActivity extends Activity implements
 		}
 		return super.onKeyDown(keyCode, event);
 	}
+
 }
