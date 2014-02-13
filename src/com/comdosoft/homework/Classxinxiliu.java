@@ -116,14 +116,14 @@ public class Classxinxiliu extends Activity implements OnHeaderRefreshListener,
 			switch (msg.what) {
 			case 0:
 				init();
-				main_class_oneTv1.setText(user_name); // 设置本名
-				main_class_oneTv2.setText(nick_name); // 设置外号
-				main_class_classesTv.setText(classname);
-				imageLoader.displayImage(IP + avatar_url, main_class_oneIV,
-						options, animateFirstListener);
-				main_class_classGv.setAdapter(new MainClssStuAdapter(
-						main_class_classGv, getApplicationContext(), stuList,
-						width, height));
+//				main_class_oneTv1.setText(user_name); // 设置本名
+//				main_class_oneTv2.setText(nick_name); // 设置外号
+//				main_class_classesTv.setText(classname);
+//				imageLoader.displayImage(IP + avatar_url, main_class_oneIV,
+//						options, animateFirstListener);
+//				main_class_classGv.setAdapter(new MainClssStuAdapter(
+//						main_class_classGv, getApplicationContext(), stuList,
+//						width, height));
 				break;
 
 			case 2:
@@ -795,6 +795,7 @@ public class Classxinxiliu extends Activity implements OnHeaderRefreshListener,
 				String fmi = follow_microposts_id.getInt(i) + "";
 				care.add(fmi);
 			}
+
 		} catch (JSONException e) {
 			e.printStackTrace();
 		}
@@ -1051,7 +1052,6 @@ public class Classxinxiliu extends Activity implements OnHeaderRefreshListener,
 						String status = jsonobject.getString("status");
 						String notic = jsonobject.getString("notice");
 						if (status.equals("success")) {
-
 							care.remove(mess.getId().toString());
 							guanzhu_list.get(i).setText("关注");
 						}
@@ -1658,6 +1658,8 @@ public class Classxinxiliu extends Activity implements OnHeaderRefreshListener,
 					json = HomeWorkTool.sendGETRequest(
 							Urlinterface.get_class_info, map);
 					setJson(json);
+					
+					
 					handler.sendEmptyMessage(0);
 				}
 
