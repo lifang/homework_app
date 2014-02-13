@@ -71,12 +71,13 @@ public class AboutMeActivity extends Activity {
 						if (HomeWorkTool.isConnect(AboutMeActivity.this)) {
 							Log.i("bbb", "msg");
 							get_News();
+							Thread.sleep(60000);
 						}
 						else{
 							handler1.sendEmptyMessage(1);
 							flag=false;
 						}
-						Thread.sleep(60000);
+						
 					} catch (InterruptedException e) {
 						// TODO Auto-generated catch block
 						e.printStackTrace();

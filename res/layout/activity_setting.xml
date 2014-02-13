@@ -92,40 +92,7 @@
             android:textColor="#FFFFFF"
             android:textSize="20px" />
     </LinearLayout>
-    <!-- 下面的内容一开始是隐藏起来的 -->
-
-    <LinearLayout
-        android:id="@+id/set_photolayout"
-        android:layout_width="fill_parent"
-        android:layout_height="fill_parent"
-        android:background="#e0000000"
-        android:gravity="center_horizontal"
-        android:orientation="vertical"
-        android:visibility="gone" >
-
-        <Button
-            android:id="@+id/paizhaoshangchuan"
-            android:layout_width="288px"
-            android:layout_height="31px"
-            android:layout_marginTop="531px"
-            android:background="#f08629"
-            android:onClick="set_paizhaoshangchuan"
-            android:text="@string/takephoto"
-            android:textColor="#FFFFFF"
-            android:textSize="20px" />
-
-        <Button
-            android:id="@+id/congxiangce"
-            android:layout_width="288px"
-            android:layout_height="31px"
-            android:layout_marginTop="17px"
-            android:background="#f08629"
-            android:onClick="set_congxiangce"
-            android:text="@string/fromphotostore"
-            android:textColor="#FFFFFF"
-            android:textSize="20px" />
-    </LinearLayout>
-    <!-- 上面的内容一开始是隐藏起来的 -->
+   
 
 
     <!-- 下面的内容一开始是隐藏起来的 -->
