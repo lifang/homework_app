@@ -35,6 +35,7 @@ public class SpeakPrepareActivity extends Activity implements Urlinterface,
 	private String content = "";
 	private TextView question_speak_title;
 	private TextView question_speak_content;
+	private TextView img_title;
 	private MediaPlayer player;
 	private String message;
 	private ProgressDialog prodialog;
@@ -104,6 +105,7 @@ public class SpeakPrepareActivity extends Activity implements Urlinterface,
 			for (int i = 0; i < questionlist.size(); i++) {
 				content += questionlist.get(i).getContent() + "\n";
 			}
+			img_title.setText("重听");
 		} else {
 			Log.i("linshi", history.size() + "-->" + list.size());
 			if (homework.getHistory_item() == 0) {
@@ -133,6 +135,7 @@ public class SpeakPrepareActivity extends Activity implements Urlinterface,
 			for (int i = 0; i < questionlist.size(); i++) {
 				content += questionlist.get(i).getContent() + "\n";
 			}
+			img_title.setText("预听");
 		}
 		question_speak_content.setText(content);
 	}
@@ -142,6 +145,7 @@ public class SpeakPrepareActivity extends Activity implements Urlinterface,
 		question_speak_title = (TextView) findViewById(R.id.question_speak_title);
 		question_speak_content = (TextView) findViewById(R.id.question_speak_content);
 		question_speak_img = (ImageView) findViewById(R.id.question_speak_img);
+		img_title = (TextView) findViewById(R.id.tou);
 		player = new MediaPlayer();
 
 	}

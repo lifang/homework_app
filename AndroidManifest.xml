@@ -1,4 +1,4 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
+<?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.comdosoft.homework"
     android:versionCode="1"
@@ -39,7 +39,7 @@
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>x
+            </intent-filter>
         </activity>
         <activity
             android:name=".HomeWorkIngActivity"
@@ -71,7 +71,6 @@
         <activity
             android:name=".Classxinxiliu"
             android:windowSoftInputMode="adjustUnspecified|stateHidden" >
-           
         </activity>
         <activity
             android:name="com.comdosoft.homework.SwitchClassActivity"

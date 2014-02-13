@@ -42,8 +42,10 @@ import com.comdosoft.homework.tools.ListeningQuestionList;
 import com.comdosoft.homework.tools.Urlinterface;
 
 public class HomeWorkIngActivity extends Activity implements Urlinterface {
-	private String json = "{\"status\":\"success\",\"notice\":\"\u767b\u9646\u6210\u529f\uff01\",\"student\":{\"id\":111,\"name\":\"nameeeeee\",\"user_id\":15,\"nickname\":\"11111nickname\",\"avatar_url\":\"/homework_system/avatars/students/2014-01-/student_111.png\"},\"class\":{\"id\":1,\"name\":\"eeeee\",\"tearcher_name\":\"tea\",\"tearcher_id\":1},\"classmates\":[{\"avatar_url\":\"/homework_system/avatars/students/2014-01/student_1.png\",\"id\":1,\"name\":\"tea\",\"nickname\":\"\u4e0a\u5584\u82e5\u6c34\"}],\"task_messages\":[],\"microposts\":{\"page\":1,\"pages_count\":11,\"details_microposts\":[{\"avatar_url\":\"/homework_system/avatars/students/2014-01/student_1.png\",\"content\":\"KKK\",\"created_at\":\"2014-01-16T15:50:47+08:00\",\"micropost_id\":22,\"name\":\"tea\",\"reply_microposts_count\":null,\"user_id\":1,\"user_types\":1},{\"avatar_url\":\"/homework_system/avatars/students/2014-01/student_1.png\",\"content\":\"65469855655\",\"created_at\":\"2014-01-16T15:19:26+08:00\",\"micropost_id\":21,\"name\":\"tea\",\"reply_microposts_count\":null,\"user_id\":1,\"user_types\":1}]},\"daily_tasks\":[{\"id\":1,\"name\":\"package1\",\"start_time\":\"2014-01-14T18:35:46+08:00\",\"end_time\":\"2014-01-30T02:35:46+08:00\",\"question_packages_url\":\"31312312313123\",\"listening_schedule\":\"0/4\",\"reading_schedule\":\"0/5\"},{\"id\":2,\"name\":\"package2\",\"start_time\":\"2014-01-14T18:35:46+08:00\",\"end_time\":\"2014-01-10T02:35:46+08:00\",\"question_packages_url\":\"1111\",\"listening_schedule\":\"0/6\",\"reading_schedule\":\"7/7\"}],\"follow_microposts_id\":[]}";
-	private String qsjson = "{\"status\":true,\"notice\":\"\",\"package\":{\"listening\":[{\"id\":\"1\",\"branch_questions\":[{\"id\":\"2\",\"content\":\"This is an apple.\",\"resource_url\":\"/question_packages_1/resource2.mp3\"},{\"id\":\"3\",\"content\":\"Why is Google undertaking such a venture?\",\"resource_url\":\"/question_packages_1/resource3.mp3\"}]},{\"id\":\"2\",\"branch_questions\":[{\"id\":\"4\",\"content\":\"The company likes to present itself as having lofty aspirations.\",\"resource_url\":\"/question_packages_2/resource4.mp3\"},{\"id\":\"5\",\"content\":\"At its centre, however, is one simple issue: that of copyright.\",\"resource_url\":\"/question_packages_2/resource5.mp3\"}]}],\"reading\":[{\"id\":\"3\",\"branch_questions\":[{\"id\":\"2\",\"content\":\"This is an apple.\",\"resource_url\":\"/question_packages_1/resource2.mp3\"},{\"id\":\"3\",\"content\":\"Why is Google undertaking such a venture?\",\"resource_url\":\"/question_packages_1/resource3.mp3\"}]},{\"id\":\"4\",\"branch_questions\":[{\"id\":\"4\",\"content\":\"The company likes to present itself as having lofty aspirations.\",\"resource_url\":\"/question_packages_2/resource4.mp3\"},{\"id\":\"5\",\"content\":\"At its centre, however, is one simple issue: that of copyright.\",\"resource_url\":\"/question_packages_2/resource5.mp3\"}]}]},\"user_answers\":{\"listening\":[{\"id\":\"1\",\"branch_questions\":[{\"id\":\"2\",\"answer\":\"This is-->This is an -->This is an apple\"},{\"id\":\"3\",\"answer\":\"Why is Google-->Why is Google __ venture-->Why is Google undertaking such a venture?\"}]}],\"reading\":[{\"id\":\"1\",\"branch_questions\":[{\"id\":\"2\",\"answer\":\"/test.mp3-->/test.mp3\"}]}]}}";
+	// private String json =
+	// "{\"status\":\"success\",\"notice\":\"\u767b\u9646\u6210\u529f\uff01\",\"student\":{\"id\":111,\"name\":\"nameeeeee\",\"user_id\":15,\"nickname\":\"11111nickname\",\"avatar_url\":\"/homework_system/avatars/students/2014-01-/student_111.png\"},\"class\":{\"id\":1,\"name\":\"eeeee\",\"tearcher_name\":\"tea\",\"tearcher_id\":1},\"classmates\":[{\"avatar_url\":\"/homework_system/avatars/students/2014-01/student_1.png\",\"id\":1,\"name\":\"tea\",\"nickname\":\"\u4e0a\u5584\u82e5\u6c34\"}],\"task_messages\":[],\"microposts\":{\"page\":1,\"pages_count\":11,\"details_microposts\":[{\"avatar_url\":\"/homework_system/avatars/students/2014-01/student_1.png\",\"content\":\"KKK\",\"created_at\":\"2014-01-16T15:50:47+08:00\",\"micropost_id\":22,\"name\":\"tea\",\"reply_microposts_count\":null,\"user_id\":1,\"user_types\":1},{\"avatar_url\":\"/homework_system/avatars/students/2014-01/student_1.png\",\"content\":\"65469855655\",\"created_at\":\"2014-01-16T15:19:26+08:00\",\"micropost_id\":21,\"name\":\"tea\",\"reply_microposts_count\":null,\"user_id\":1,\"user_types\":1}]},\"daily_tasks\":[{\"id\":1,\"name\":\"package1\",\"start_time\":\"2014-01-14T18:35:46+08:00\",\"end_time\":\"2014-01-30T02:35:46+08:00\",\"question_packages_url\":\"31312312313123\",\"listening_schedule\":\"0/4\",\"reading_schedule\":\"0/5\"},{\"id\":2,\"name\":\"package2\",\"start_time\":\"2014-01-14T18:35:46+08:00\",\"end_time\":\"2014-01-10T02:35:46+08:00\",\"question_packages_url\":\"1111\",\"listening_schedule\":\"0/6\",\"reading_schedule\":\"7/7\"}],\"follow_microposts_id\":[]}";
+	// private String qsjson =
+	// "{\"status\":true,\"notice\":\"\",\"package\":{\"listening\":[{\"id\":\"1\",\"branch_questions\":[{\"id\":\"2\",\"content\":\"This is an apple.\",\"resource_url\":\"/question_packages_1/resource2.mp3\"},{\"id\":\"3\",\"content\":\"Why is Google undertaking such a venture?\",\"resource_url\":\"/question_packages_1/resource3.mp3\"}]},{\"id\":\"2\",\"branch_questions\":[{\"id\":\"4\",\"content\":\"The company likes to present itself as having lofty aspirations.\",\"resource_url\":\"/question_packages_2/resource4.mp3\"},{\"id\":\"5\",\"content\":\"At its centre, however, is one simple issue: that of copyright.\",\"resource_url\":\"/question_packages_2/resource5.mp3\"}]}],\"reading\":[{\"id\":\"3\",\"branch_questions\":[{\"id\":\"2\",\"content\":\"This is an apple.\",\"resource_url\":\"/question_packages_1/resource2.mp3\"},{\"id\":\"3\",\"content\":\"Why is Google undertaking such a venture?\",\"resource_url\":\"/question_packages_1/resource3.mp3\"}]},{\"id\":\"4\",\"branch_questions\":[{\"id\":\"4\",\"content\":\"The company likes to present itself as having lofty aspirations.\",\"resource_url\":\"/question_packages_2/resource4.mp3\"},{\"id\":\"5\",\"content\":\"At its centre, however, is one simple issue: that of copyright.\",\"resource_url\":\"/question_packages_2/resource5.mp3\"}]}]},\"user_answers\":{\"listening\":[{\"id\":\"1\",\"branch_questions\":[{\"id\":\"2\",\"answer\":\"This is-->This is an -->This is an apple\"},{\"id\":\"3\",\"answer\":\"Why is Google-->Why is Google __ venture-->Why is Google undertaking such a venture?\"}]}],\"reading\":[{\"id\":\"1\",\"branch_questions\":[{\"id\":\"2\",\"answer\":\"/test.mp3-->/test.mp3\"}]}]}}";
 	public String school_class_id;
 	public String student_id;
 	private ListView working_date_list;
@@ -127,16 +129,6 @@ public class HomeWorkIngActivity extends Activity implements Urlinterface {
 			prodialog = new ProgressDialog(HomeWorkIngActivity.this);
 			prodialog.setMessage(HomeWorkParams.PD_CLASS_INFO);
 			prodialog.show();
-			// Thread thread = new Thread(new getClassInfo());
-			// thread.start();
-
-			// work_list = new ArrayList<WorkDatePojo>();
-			// question_list = new ArrayList<QuestionCasePojo>();
-			// for (int i = 0; i < 5; i++) {
-			// WorkDatePojo work = new WorkDatePojo(1, "2014年1月3日", 1);
-			// work_list.add(work);
-			// }
-
 			Thread thread = new Thread(new getClassInfo());
 			thread.start();
 		}
@@ -232,28 +224,32 @@ public class HomeWorkIngActivity extends Activity implements Urlinterface {
 				convertView = mInflater.inflate(R.layout.work_date_adapter,
 						null);
 			}
-			TextView newwork_img = (TextView) convertView
-					.findViewById(R.id.newwork_text);
-			ImageView sign_img = (ImageView) convertView
-					.findViewById(R.id.sign_img);
-			TextView work_start_date = (TextView) convertView
-					.findViewById(R.id.work_start_date);
+			if (list.size() != 0) {
 
-			if (position == 0) {// 设置新作业标识
-				newwork_img.setVisibility(View.VISIBLE);
-			} else {
-				newwork_img.setVisibility(View.INVISIBLE);
+				TextView newwork_img = (TextView) convertView
+						.findViewById(R.id.newwork_text);
+				ImageView sign_img = (ImageView) convertView
+						.findViewById(R.id.sign_img);
+				TextView work_start_date = (TextView) convertView
+						.findViewById(R.id.work_start_date);
+
+				if (position < homework.getHw_number()) {// 设置新作业标识
+					Log.i("aaa", position + "///" + homework.getHw_number());
+					newwork_img.setVisibility(View.VISIBLE);
+				} else {
+					newwork_img.setVisibility(View.INVISIBLE);
+				}
+				if (position == index) {// 设置选中项图片
+					sign_img.setBackgroundResource(R.drawable.jt);
+					work_start_date.setTextColor(getResources().getColor(
+							R.color.lvse));
+				} else {
+					sign_img.setBackgroundResource(R.drawable.jt2);
+					work_start_date.setTextColor(getResources().getColor(
+							R.color.shenhui));
+				}
+				work_start_date.setText(list.get(position).getStart_time());
 			}
-			if (position == index) {// 设置选中项图片
-				sign_img.setBackgroundResource(R.drawable.jt);
-				work_start_date.setTextColor(getResources().getColor(
-						R.color.lvse));
-			} else {
-				sign_img.setBackgroundResource(R.drawable.jt2);
-				work_start_date.setTextColor(getResources().getColor(
-						R.color.shenhui));
-			}
-			work_start_date.setText(list.get(position).getStart_time());
 			return convertView;
 		}
 	}
@@ -328,9 +324,6 @@ public class HomeWorkIngActivity extends Activity implements Urlinterface {
 						+ list.get(index).getReading_schedule());
 				break;
 			}
-			if (list.get(index).getListening_schedule().equals("0/0")) {
-				// convertView.setVisibility(View.GONE);
-			}
 			return convertView;
 		}
 	}
@@ -393,29 +386,39 @@ public class HomeWorkIngActivity extends Activity implements Urlinterface {
 		try {
 			list = new ArrayList<WorkPojo>();
 			JSONArray ja = new JSONObject(json).getJSONArray("daily_tasks");
-			for (int i = 0; i < ja.length(); i++) {
-				boolean type;
-				JSONObject item = ja.getJSONObject(i);
-				String date = item.getString("end_time");
-				String day = date.split("T")[0];
-				day = day.replaceAll("-", "");
-
-				if (Integer.valueOf(day) > Integer.valueOf(Window_day)) {
-					type = true;
-					Log.i(tag, "day:" + type);
-				} else {
-					type = false;
-					Log.i(tag, "day:" + type);
+			if (ja.length() != 0) {
+				for (int i = 0; i < ja.length(); i++) {
+					boolean type;
+					JSONObject item = ja.getJSONObject(i);
+					String date = item.getString("end_time");
+					String day = date.split("T")[0];
+					day = day.replaceAll("-", "");
+					if (Integer.valueOf(day) > Integer.valueOf(Window_day)) {
+						type = true;
+						Log.i(tag, "day:" + type);
+					} else {
+						type = false;
+						Log.i(tag, "day:" + type);
+					}
+					Log.i(tag, day + "/" + Window_day);
+					// String start_time =
+					// returnDATE(item.getString("start_time"));
+					// String end_time = returnDATE(item.getString("end_time"));
+					String start_time = returnDATE(item.getString("start_time"));
+					String end_day = returnDATE(item.getString("end_time"));
+					String end_time = HomeWorkTool.divisionTime(item
+							.getString("end_time"));
+					end_time = end_time.split(" ")[1];
+					// if
+					// (list.get(index).getListening_schedule().equals("0/0")) {
+					// // convertView.setVisibility(View.GONE);
+					// }
+					list.add(new WorkPojo(item.getInt("id"), start_time,
+							end_day + " " + end_time, item.getString("name"),
+							item.getString("question_packages_url"), item
+									.getString("listening_schedule"), item
+									.getString("reading_schedule"), type));
 				}
-				Log.i(tag, day + "/" + Window_day);
-				String start_time = returnDATE(item.getString("start_time"));
-				String end_time = returnDATE(item.getString("end_time"));
-
-				list.add(new WorkPojo(item.getInt("id"), start_time, end_time,
-						item.getString("name"), item
-								.getString("question_packages_url"), item
-								.getString("listening_schedule"), item
-								.getString("reading_schedule"), type));
 			}
 			if (list.size() > 0) {
 				p_q_package_id = list.get(0).getId();

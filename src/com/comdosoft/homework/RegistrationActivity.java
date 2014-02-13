@@ -28,6 +28,7 @@ import android.os.Handler;
 import android.os.Message;
 import android.provider.MediaStore;
 import android.util.Log;
+import android.view.KeyEvent;
 import android.view.View;
 import android.view.Window;
 import android.widget.EditText;
@@ -152,7 +153,11 @@ public class RegistrationActivity extends Activity implements Urlinterface {
 		 * intent.setData(MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
 		 * intent.setType(""image/*");设置数据类型
 		 * 如果朋友们要限制上传到服务器的图片类型时可以直接写如："image/jpeg 、 image/png等的类型"
+<<<<<<< HEAD
 		 *
+=======
+		 * 这个地方小马有个疑问，希望高手解答下：就是这个数据URI与类型为什么要分两种形式来写呀？有什么区别？
+>>>>>>> 303e9adc8c516a765375954badc3bcf63f9adc95
 		 */
 		intentFromGallery.setDataAndType(
 				MediaStore.Images.Media.EXTERNAL_CONTENT_URI, "image/*");
@@ -162,6 +167,7 @@ public class RegistrationActivity extends Activity implements Urlinterface {
 
 	@Override
 	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+
 		if (resultCode != 0) {
 			switch (requestCode) {
 			// 如果是直接从相册获取
@@ -195,6 +201,7 @@ public class RegistrationActivity extends Activity implements Urlinterface {
 				break;
 			default:
 				break;
+
 
 			}
 			super.onActivityResult(requestCode, resultCode, data);
@@ -440,4 +447,11 @@ public class RegistrationActivity extends Activity implements Urlinterface {
 		return null;
 	}
 
+	public boolean onKeyDown(int keyCode, KeyEvent event) {
+		if (keyCode == KeyEvent.KEYCODE_BACK) {
+			System.exit(0);
+			return true;
+		}
+		return super.onKeyDown(keyCode, event);
+	}
 }
