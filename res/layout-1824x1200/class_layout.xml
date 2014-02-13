@@ -75,13 +75,14 @@
                 android:background="@drawable/child_bj2"
                 android:focusable="true"
                 android:focusableInTouchMode="true"
+                android:padding="12px"
                 android:visibility="gone" >
 
                 <EditText
                     android:id="@+id/reply_edit"
                     android:layout_width="fill_parent"
                     android:layout_height="127px"
-                    android:layout_marginTop="40px"
+                    android:layout_marginTop="28px"
                     android:focusable="true"
                     android:focusableInTouchMode="true"
                     android:gravity="top"

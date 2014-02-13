@@ -9,12 +9,12 @@
         android:layout_height="wrap_content"
         android:background="#f6f2f3"
         android:orientation="vertical"
-        android:paddingTop="22.2dp" >
+        android:paddingTop="22.2px" >
 
         <ImageView
             android:id="@+id/user_face"
-            android:layout_width="49.2dp"
-            android:layout_height="49.2dp"
+            android:layout_width="49.2px"
+            android:layout_height="49.2px"
             android:scaleType="centerCrop"
             android:src="@drawable/moren" />
 
@@ -24,7 +24,7 @@
             android:layout_height="wrap_content"
             android:layout_alignRight="@+id/message_content"
             android:layout_alignTop="@+id/user_face"
-            android:layout_marginLeft="11.4dp"
+            android:layout_marginLeft="11.4px"
             android:layout_toRightOf="@+id/user_face" >
 
             <TextView
@@ -33,7 +33,7 @@
                 android:layout_height="wrap_content"
                 android:layout_alignRight="@+id/message_content"
                 android:textColor="#92b81b"
-                android:textSize="14.4dp" />
+                android:textSize="14.4px" />
 
             <ImageButton
                 android:id="@+id/button1"
@@ -50,9 +50,9 @@
                 android:layout_height="wrap_content"
                 android:layout_alignParentLeft="true"
                 android:layout_below="@+id/message_senderName"
-                android:paddingRight="6dp"
+                android:paddingRight="6px"
                 android:textColor="#626060"
-                android:textSize="14.4dp" />
+                android:textSize="14.4px" />
 
             <Button
                 android:id="@+id/micropost_huifu"
@@ -63,7 +63,7 @@
                 android:background="#00000000"
                 android:text="@string/huifu"
                 android:textColor="#92b81b"
-                android:textSize="14.4dp" />
+                android:textSize="14.4px" />
 
             <!-- 下面的内容一开始是隐藏起来的 android:visibility="gone" -->
 
@@ -74,42 +74,43 @@
                 android:layout_below="@+id/micropost_huifu"
                 android:background="@drawable/child_bj2"
                 android:focusable="true"
+                android:padding="7.2px"
                 android:focusableInTouchMode="true"
                 android:visibility="gone" >
 
                 <EditText
                     android:id="@+id/reply_edit"
                     android:layout_width="fill_parent"
-                    android:layout_height="76.2dp"
-                    android:layout_marginTop="14.4dp"
+                    android:layout_height="76.2px"
+                    android:layout_marginTop="14.8px"
                     android:focusable="true"
                     android:focusableInTouchMode="true"
                     android:gravity="top"
-                    android:textSize="14.4dp" />
+                    android:textSize="14.4px" />
 
                 <Button
                     android:id="@+id/Button_huifu"
-                    android:layout_width="44.34dp"
-                    android:layout_height="19.5dp"
+                    android:layout_width="44.34px"
+                    android:layout_height="19.5px"
                     android:layout_alignParentRight="true"
                     android:layout_below="@+id/reply_edit"
                     android:background="#92b81b"
                     android:text="@string/huifu"
                     android:textColor="#FFFFFF"
-                    android:textSize="14.4dp" />
+                    android:textSize="14.4px" />
 
                 <ListView
                     android:id="@+id/aa"
                     android:layout_width="fill_parent"
-                    android:layout_height="12dp"
+                    android:layout_height="12px"
                     android:layout_below="@+id/Button_huifu"
                     android:background="#ede9ea"
                     android:cacheColorHint="#00000000"
                     android:divider="@null"
                     android:fadingEdge="none"
                     android:listSelector="#00000000"
-                    android:paddingLeft="3dp"
-                    android:paddingRight="3dp"
+                    android:paddingLeft="3px"
+                    android:paddingRight="3px"
                     android:visibility="gone" />
 
                 <Button
@@ -118,9 +119,9 @@
                     android:layout_height="wrap_content"
                     android:layout_below="@+id/aa"
                     android:background="#ede9ea"
-                    android:padding="12dp"
+                    android:padding="12px"
                     android:text="@string/lookmore"
-                    android:textSize="14.4dp"
+                    android:textSize="14.4px"
                     android:visibility="gone" />
             </RelativeLayout>
 
@@ -131,12 +132,12 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_below="@+id/micropost_content"
-                android:layout_marginRight="15.6dp"
+                android:layout_marginRight="15.6px"
                 android:layout_toLeftOf="@+id/micropost_huifu"
                 android:background="#00000000"
                 android:text="@string/guanzhu"
                 android:textColor="#92b81b"
-                android:textSize="14.4dp" />
+                android:textSize="14.4px" />
 
             <TextView
                 android:id="@+id/micropost_date"
@@ -147,15 +148,15 @@
                 android:layout_alignParentLeft="true"
                 android:text="2013/12/06 15:33"
                 android:textColor="#c5c2c2"
-                android:textSize="14.4dp" />
+                android:textSize="14.4px" />
         </RelativeLayout>
 
         <EditText
             android:layout_width="fill_parent"
-            android:layout_height="3dp"
+            android:layout_height="3px"
             android:layout_alignParentLeft="true"
             android:layout_below="@+id/relativeLayout1"
-            android:layout_marginTop="13.2dp"
+            android:layout_marginTop="13.2px"
             android:focusable="false" />
     </RelativeLayout>
 
