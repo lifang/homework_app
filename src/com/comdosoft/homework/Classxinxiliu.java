@@ -40,7 +40,6 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.comdosoft.homework.adapter.MainClssStuAdapter;
 import com.comdosoft.homework.pojo.Child_Micropost;
 import com.comdosoft.homework.pojo.ClassStuPojo;
 import com.comdosoft.homework.pojo.Micropost;
@@ -115,15 +114,16 @@ public class Classxinxiliu extends Activity implements OnHeaderRefreshListener,
 		public void handleMessage(Message msg) {
 			switch (msg.what) {
 			case 0:
+				prodialog.dismiss();
 				init();
-				main_class_oneTv1.setText(user_name); // 设置本名
-				main_class_oneTv2.setText(nick_name); // 设置外号
-				main_class_classesTv.setText(classname);
-				imageLoader.displayImage(IP + avatar_url, main_class_oneIV,
-						options, animateFirstListener);
-				main_class_classGv.setAdapter(new MainClssStuAdapter(
-						main_class_classGv, getApplicationContext(), stuList,
-						width, height));
+//				main_class_oneTv1.setText(user_name); // 设置本名
+//				main_class_oneTv2.setText(nick_name); // 设置外号
+//				main_class_classesTv.setText(classname);
+//				imageLoader.displayImage(IP + avatar_url, main_class_oneIV,
+//						options, animateFirstListener);
+//				main_class_classGv.setAdapter(new MainClssStuAdapter(
+//						main_class_classGv, getApplicationContext(), stuList,
+//						width, height));
 				break;
 
 			case 2:
@@ -251,6 +251,13 @@ public class Classxinxiliu extends Activity implements OnHeaderRefreshListener,
 					setlayout(i);
 				}
 				break;
+			case 7:
+//				final String sd = (String) msg.obj;
+//				Toast.makeText(getApplicationContext(), sd, Toast.LENGTH_SHORT)
+//				.show();
+				Toast.makeText(getApplicationContext(), "111", Toast.LENGTH_SHORT)
+				.show();
+				break;
 			}
 		}
 	};
@@ -260,18 +267,18 @@ public class Classxinxiliu extends Activity implements OnHeaderRefreshListener,
 		setContentView(R.layout.class_middle);
 		hw = (HomeWork) getApplication();
 
-		main_class_classGv = (GridView) findViewById(R.id.main_class_classGv);
-		main_class_classesTv = (TextView) findViewById(R.id.main_class_classesTv);
-		main_class_oneIV = (ImageView) findViewById(
-				R.id.main_class_classes_include).findViewById(
-				R.id.main_class_oneIV);
-		main_class_oneTv1 = (TextView) findViewById(
-				R.id.main_class_classes_include).findViewById(
-				R.id.main_class_oneTv1);
-		main_class_oneTv2 = (TextView) findViewById(
-				R.id.main_class_classes_include).findViewById(
-				R.id.main_class_oneTv2);
-		main_class_classGv.setNumColumns(3);
+//		main_class_classGv = (GridView) findViewById(R.id.main_class_classGv);
+//		main_class_classesTv = (TextView) findViewById(R.id.main_class_classesTv);
+//		main_class_oneIV = (ImageView) findViewById(
+//				R.id.main_class_classes_include).findViewById(
+//				R.id.main_class_oneIV);
+//		main_class_oneTv1 = (TextView) findViewById(
+//				R.id.main_class_classes_include).findViewById(
+//				R.id.main_class_oneTv1);
+//		main_class_oneTv2 = (TextView) findViewById(
+//				R.id.main_class_classes_include).findViewById(
+//				R.id.main_class_oneTv2);
+//		main_class_classGv.setNumColumns(3);
 
 		SharedPreferences preferences = getSharedPreferences(SHARED,
 				Context.MODE_PRIVATE);
@@ -300,8 +307,12 @@ public class Classxinxiliu extends Activity implements OnHeaderRefreshListener,
 		lass_count = 1;
 		lass_count2 = 2;
 		if (HomeWorkTool.isConnect(Classxinxiliu.this)) {
+			prodialog = new ProgressDialog(Classxinxiliu.this);
+			prodialog.setMessage(HomeWorkParams.PD_CLASS_INFO);
+			prodialog.show();
 			Thread thread = new Thread(new get_class_info());
 			thread.start();
+			
 		} else {
 			Toast.makeText(getApplicationContext(), HomeWorkParams.INTERNET, 0)
 					.show();
@@ -397,6 +408,7 @@ public class Classxinxiliu extends Activity implements OnHeaderRefreshListener,
 		if (mess.getAvatar_url().equals("")
 				|| mess.getAvatar_url().equals("null")) {
 		} else {
+//			face.setScaleType(ImageView.ScaleType.FIT_XY);
 			imageLoader.displayImage(IP + mess.getAvatar_url(), face, options,
 					animateFirstListener);
 		}
@@ -588,6 +600,7 @@ public class Classxinxiliu extends Activity implements OnHeaderRefreshListener,
 					.findViewById(R.id.child_micropost_huifu); // 回复
 			final Child_Micropost child_Micropost = child_list.get(position2);
 			if (child_Micropost.getSender_avatar_url() != null) { // 设置头像
+//				face.setScaleType(ImageView.ScaleType.FIT_XY);
 				imageLoader.displayImage(IP
 						+ child_list.get(position2).getSender_avatar_url(),
 						face, options, animateFirstListener);
@@ -766,6 +779,7 @@ public class Classxinxiliu extends Activity implements OnHeaderRefreshListener,
 			String class_name = class1.getString("name"); // 获取class_name
 			classname = class1.getString("name");
 			school_class_id = class1.getString("id");
+			
 			// 循环获取班级学生的信息classmates
 			JSONArray jsonArray = obj.getJSONArray("classmates");
 			if (jsonArray.length() != 0) {
@@ -793,6 +807,7 @@ public class Classxinxiliu extends Activity implements OnHeaderRefreshListener,
 				String fmi = follow_microposts_id.getInt(i) + "";
 				care.add(fmi);
 			}
+
 		} catch (JSONException e) {
 			e.printStackTrace();
 		}
@@ -1021,7 +1036,13 @@ public class Classxinxiliu extends Activity implements OnHeaderRefreshListener,
 	// 添加关注
 	public void add_concern(final int i, final Micropost mess) {
 		prodialog = new ProgressDialog(Classxinxiliu.this);
-		prodialog.setMessage("正在添加关注");
+		if (guanzhu_list.get(i).getText().toString().equals("关注")) {
+			prodialog.setMessage("正在添加关注");
+		} else if (guanzhu_list.get(i).getText().toString()
+				.equals("已关注")) {
+			prodialog.setMessage("正在取消关注");
+		}
+		
 		prodialog.show();
 		final Handler gzHandler = new Handler() {
 			public void handleMessage(android.os.Message msg) {
@@ -1049,7 +1070,6 @@ public class Classxinxiliu extends Activity implements OnHeaderRefreshListener,
 						String status = jsonobject.getString("status");
 						String notic = jsonobject.getString("notice");
 						if (status.equals("success")) {
-
 							care.remove(mess.getId().toString());
 							guanzhu_list.get(i).setText("关注");
 						}
@@ -1437,7 +1457,7 @@ public class Classxinxiliu extends Activity implements OnHeaderRefreshListener,
 			int si = Integer.parseInt(list.get(focus)
 					.getReply_microposts_count().toString());
 
-			if (si > 0 || !lookStr.equals("")) {
+//			if (si > 0 || !lookStr.equals("")) {
 				prodialog = new ProgressDialog(Classxinxiliu.this);
 				prodialog.setMessage("正在加载中");
 				prodialog.show();
@@ -1482,15 +1502,16 @@ public class Classxinxiliu extends Activity implements OnHeaderRefreshListener,
 					Toast.makeText(getApplicationContext(),
 							HomeWorkParams.INTERNET, 0).show();
 				}
-			} else {
-				if (child_list.size() > 0) {// 如果没有子消息，隐藏加载更多按钮
-					lookMore.setVisibility(View.VISIBLE);
-				} else {
-					lookMore.setVisibility(View.GONE);
-				}
-				listView2.setAdapter(ziAdapter_list.get(focus));
-				HomeWorkTool.setListViewHeightBasedOnChildren(listView2);
-			}
+//			}
+//			else {
+//				if (child_list.size() > 0) {// 如果没有子消息，隐藏加载更多按钮
+//					lookMore.setVisibility(View.VISIBLE);
+//				} else {
+//					lookMore.setVisibility(View.GONE);
+//				}
+//				listView2.setAdapter(ziAdapter_list.get(focus));
+//				HomeWorkTool.setListViewHeightBasedOnChildren(listView2);
+//			}
 
 		} else {
 			gk_list.set(i, true);
@@ -1653,6 +1674,7 @@ public class Classxinxiliu extends Activity implements OnHeaderRefreshListener,
 					setSkipJson();
 
 				} else {
+					
 					Map<String, String> map = new HashMap<String, String>();
 					map.put("student_id", id);
 					map.put("school_class_id", school_class_id);
@@ -1660,6 +1682,8 @@ public class Classxinxiliu extends Activity implements OnHeaderRefreshListener,
 					json = HomeWorkTool.sendGETRequest(
 							Urlinterface.get_class_info, map);
 					setJson(json);
+					
+					
 					handler.sendEmptyMessage(0);
 				}
 
@@ -1670,6 +1694,7 @@ public class Classxinxiliu extends Activity implements OnHeaderRefreshListener,
 	}
 
 	public void shuaxin() {
+		click_list();
 		Thread thread = new Thread() {
 			public void run() {// 获得第一页信息
 
@@ -1721,7 +1746,7 @@ public class Classxinxiliu extends Activity implements OnHeaderRefreshListener,
 	public void click_list() {
 		Linear_layout.removeAllViews();
 		Reply_edit_list.clear();
-		// guanzhu_list.clear();
+		 guanzhu_list.clear();
 		gk_list.clear();
 		btlist.clear();
 		ziAdapter_list.clear();

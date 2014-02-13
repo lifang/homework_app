@@ -6,10 +6,10 @@
     android:orientation="horizontal" >
 
     <LinearLayout
-        android:layout_width="432px"
+        android:layout_width="fill_parent"
         android:layout_height="fill_parent"
-        android:layout_marginLeft="2px"
-        android:layout_marginRight="2px"
+        android:layout_marginLeft="2dp"
+        android:layout_marginRight="2dp"
         android:orientation="vertical" >
 
         <RelativeLayout
@@ -19,38 +19,38 @@
             android:background="#f6f2f3"
             android:focusable="true"
             android:focusableInTouchMode="true"
-            android:padding="14.4px" >
+            android:padding="14.4dp" >
 
             <EditText
                 android:id="@+id/class_fabiao_content"
                 android:layout_width="fill_parent"
-                android:layout_height="92.4px"
+                android:layout_height="92.4dp"
                 android:focusable="true"
                 android:focusableInTouchMode="true"
                 android:gravity="top"
                 android:hint="@string/class_fabiao_tishi"
-                android:textSize="14.4px" />
+                android:textSize="14.4dp" />
 
             <Button
                 android:id="@+id/button_fabiao"
-                android:layout_width="44.4px"
-                android:layout_height="19.5px"
+                android:layout_width="44.4dp"
+                android:layout_height="19.5dp"
                 android:layout_alignRight="@+id/class_fabiao_content"
                 android:layout_below="@+id/class_fabiao_content"
-                android:layout_marginTop="11px"
+                android:layout_marginTop="11dp"
                 android:background="#92b81b"
                 android:onClick="class_fabiao"
                 android:text="@string/class_fabiao"
                 android:textColor="#FFFFFF"
-                android:textSize="14.4px" />
+                android:textSize="14.4dp" />
 
             <EditText
                 android:id="@+id/class_ed1"
                 android:layout_width="fill_parent"
-                android:layout_height="3px"
+                android:layout_height="3dp"
                 android:layout_below="@+id/button_fabiao"
                 android:layout_centerHorizontal="true"
-                android:layout_marginTop="18px"
+                android:layout_marginTop="15dp"
                 android:focusable="false" />
 
             <Button
@@ -58,37 +58,39 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_below="@+id/class_fabiao_content"
-                android:layout_marginTop="35.12px"
+                android:layout_marginTop="35.12dp"
                 android:background="@drawable/an"
                 android:onClick="class_button_all"
                 android:text="@string/class_button_all"
                 android:textColor="#FFFFFF"
-                android:textSize="14.4px" />
+                android:textSize="14.4dp" />
 
             <Button
                 android:id="@+id/class_button_myself"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_alignBottom="@+id/class_button_all"
-                android:layout_marginLeft="6px"
+                android:layout_marginLeft="6dp"
                 android:layout_toRightOf="@+id/class_button_all"
                 android:background="@drawable/an2"
                 android:onClick="class_button_myself"
                 android:text="@string/class_button_myself"
                 android:textColor="#FFFFFF"
-                android:textSize="14.4px" />
+                android:textSize="14.4dp" />
         </RelativeLayout>
 
         <com.comdosoft.homework.tools.PullToRefreshView
             xmlns:android="http://schemas.android.com/apk/res/android"
             android:id="@+id/main_pull_refresh_view"
-            android:layout_width="432px"
+            android:layout_width="fill_parent"
             android:layout_height="fill_parent"
+            android:layout_marginLeft="14.4dp"
+        android:layout_marginRight="14.4dp"
             android:descendantFocusability="afterDescendants"
             android:orientation="vertical" >
 
             <ScrollView
-                android:layout_width="match_parent"
+                android:layout_width="fill_parent"
                 android:layout_height="fill_parent"
                 android:cacheColorHint="#00000000"
                 android:fadingEdge="none"
@@ -97,16 +99,16 @@
 
                 <LinearLayout
                     android:id="@+id/layout"
-                    android:layout_width="match_parent"
+                    android:layout_width="fill_parent"
                     android:layout_height="fill_parent"
-                    android:paddingLeft="10dp"
-                    android:paddingRight="10dp"
+                    android:paddingLeft="6dp"
+                    android:paddingRight="6dp"
                     android:orientation="vertical" >
                 </LinearLayout>
             </ScrollView>
         </com.comdosoft.homework.tools.PullToRefreshView>
     </LinearLayout>
-
+<!-- 
     <LinearLayout
         android:layout_width="fill_parent"
         android:layout_height="fill_parent"
@@ -116,14 +118,14 @@
 
         <include
             android:id="@+id/main_class_classes_include"
-            android:layout_width="395px"
-            android:layout_height="250px"
-            android:layout_marginTop="20px"
+            android:layout_width="395dp"
+            android:layout_height="250dp"
+            android:layout_marginTop="20dp"
             layout="@layout/main_class_one" />
 
         <LinearLayout
             android:id="@+id/main_class_classesll"
-            android:layout_width="394px"
+            android:layout_width="394dp"
             android:layout_height="wrap_content"
             android:background="#636362"
             android:gravity="center"
@@ -141,7 +143,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/main_class_classesTv"
-                android:textSize="14.4px" />
+                android:textSize="14.4dp" />
 
             <View
                 android:id="@+id/main_class_view2"
@@ -153,17 +155,18 @@
 
         <LinearLayout
             android:id="@+id/main_class_classesll2"
-            android:layout_width="394px"
+            android:layout_width="394dp"
             android:layout_height="wrap_content"
             android:background="#636362"
             android:orientation="horizontal" >
 
             <GridView
                 android:id="@+id/main_class_classGv"
-                android:layout_width="394px"
+                android:layout_width="394dp"
                 android:layout_height="wrap_content" >
             </GridView>
         </LinearLayout>
-    </LinearLayout>
 
+    </LinearLayout>
+         -->
 </LinearLayout>
