@@ -6,15 +6,15 @@
 
     <ImageView
         android:id="@+id/aboutme_oneIv"
-        android:layout_width="53px"
-        android:layout_marginLeft="17px"
-        android:layout_height="53px"
+        android:layout_width="65px"
+        android:layout_height="65px"
+        android:layout_marginLeft="20px"
         android:contentDescription="@null" />
 
     <LinearLayout
-        android:layout_width="607px"
-        android:layout_height="108px"
-        android:layout_marginLeft="11px"
+        android:layout_width="592.15px"
+        android:layout_height="126px"
+        android:layout_marginLeft="11.4px"
         android:background="@drawable/aboutme_one"
         android:orientation="vertical" >
 
@@ -26,10 +26,10 @@
                 android:id="@+id/aboutme_oneTv"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginLeft="22px"
+                android:layout_marginLeft="22.2px"
                 android:layout_marginTop="6px"
                 android:textColor="#92b81b"
-                android:textSize="14px" />
+                android:textSize="20px" />
 
             <TextView
                 android:id="@+id/aboutme_oneTv2"
@@ -39,17 +39,17 @@
                 android:layout_marginTop="6px"
                 android:layout_toRightOf="@id/aboutme_oneTv"
                 android:textColor="#9da2ad"
-                android:textSize="14px" />
+                android:textSize="20px" />
 
             <ImageButton
                 android:id="@+id/aboutme_oneIb"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_alignParentRight="true"
-                android:layout_marginRight="10px"
-                android:layout_marginTop="7px"
-                android:contentDescription="@null"
-                android:background="@drawable/aboutme_delete" />
+                android:layout_marginRight="10.8px"
+                android:layout_marginTop="7.2px"
+                android:background="@drawable/aboutme_delete"
+                android:contentDescription="@null" />
         </RelativeLayout>
 
         <LinearLayout
@@ -59,38 +59,39 @@
 
             <TextView
                 android:id="@+id/aboutme_oneTv3"
-                android:layout_width="240px"
+                android:layout_width="360px"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="27px"
-                android:layout_marginTop="6px"
+                android:layout_marginTop="10px"
                 android:maxLines="2"
                 android:textColor="#626060"
-                android:textSize="14px" />
+                android:textSize="20px" />
 
             <RelativeLayout
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_marginTop="10px"
                 android:orientation="horizontal" >
 
                 <TextView
                     android:id="@+id/aboutme_oneTv4"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginLeft="22px"
+                    android:layout_marginLeft="22.2px"
                     android:layout_marginTop="12px"
                     android:textColor="#c1bebf"
-                    android:textSize="14px" />
+                    android:textSize="20px" />
 
                 <TextView
                     android:id="@+id/aboutme_oneTv5"
-                    android:layout_width="30px"
-                    android:layout_height="30px"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
                     android:layout_alignParentRight="true"
+                    android:layout_marginRight="10.8px"
                     android:layout_marginTop="6px"
-                    android:layout_marginRight="10px"
                     android:text="查看"
                     android:textColor="@color/lvse"
-                    android:textSize="14px" />
+                    android:textSize="20px" />
             </RelativeLayout>
         </LinearLayout>
     </LinearLayout>
