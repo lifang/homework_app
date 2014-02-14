@@ -13,8 +13,8 @@
 
         <ImageView
             android:id="@+id/set_touxiang"
-            android:layout_width="106px"
-            android:layout_height="112px"
+            android:layout_width="122px"
+            android:layout_height="128px"
             android:layout_marginTop="55px"
             android:background="@drawable/moren" />
 
@@ -23,7 +23,7 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="18px"
             android:text="@string/setting_tishi"
-            android:textSize="11.2px" />
+            android:textSize="16px" />
 
         <TextView
             android:layout_width="wrap_content"
@@ -35,7 +35,7 @@
 
         <EditText
             android:id="@+id/set_nickname"
-            android:layout_width="288px"
+            android:layout_width="320px"
             android:layout_height="50px"
             android:layout_marginTop="12px"
             android:gravity="center"
@@ -52,7 +52,7 @@
 
         <EditText
             android:id="@+id/set_name"
-                android:layout_width="288px"
+                android:layout_width="320px"
             android:layout_height="50px"
             android:layout_marginTop="12px"
             android:gravity="center"
@@ -60,7 +60,7 @@
             android:textSize="20px" />
 
         <Button
-              android:layout_width="288px"
+              android:layout_width="320px"
             android:layout_height="42px"
             android:layout_marginTop="49px"
             android:background="#92b81b"
@@ -71,7 +71,7 @@
             android:textSize="20px" />
 
         <Button
-              android:layout_width="288px"
+              android:layout_width="320px"
             android:layout_height="42px"
             android:layout_marginTop="51px"
             android:background="#92b81b"
@@ -82,7 +82,7 @@
             android:textSize="20px" />
 
         <Button
-                android:layout_width="288px"
+                android:layout_width="320px"
             android:layout_height="42px"
             android:layout_marginTop="22px"
             android:background="#f08629"
