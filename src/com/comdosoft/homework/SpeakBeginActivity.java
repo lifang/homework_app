@@ -339,8 +339,8 @@ public class SpeakBeginActivity extends Activity implements Urlinterface,
 			String speak = results.get(0);// 用户语音返回的字符串
 			Log.i("suanfa", "语音返回--->" + speak);
 			str_list = new ArrayList<String>();
+			content = content.replaceAll("'s","s");
 			content = content.replaceAll("(?i)[^a-zA-Z0-9\u4E00-\u9FA5]", " ");// 去除标点符号
-			content = content.replaceAll(" s", "s");// 去除标点符号
 			content = content.replaceAll("  ", " ");
 			String[] ok_arr = content.split(" ");
 			Log.i("suanfa", "正确答案->" + content);

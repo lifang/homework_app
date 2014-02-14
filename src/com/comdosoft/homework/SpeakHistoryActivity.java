@@ -14,6 +14,7 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.util.Log;
+import android.view.Display;
 import android.view.Gravity;
 import android.view.KeyEvent;
 import android.view.View;
@@ -49,6 +50,7 @@ public class SpeakHistoryActivity extends Activity implements Urlinterface,
 	public String error_str = "";// 记录错误的词
 	private ProgressDialog prodialog;
 	private boolean playFlag = false;
+	private int width;
 	private Handler handler = new Handler() {
 		public void handleMessage(Message msg) {
 			switch (msg.what) {
@@ -90,6 +92,9 @@ public class SpeakHistoryActivity extends Activity implements Urlinterface,
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.question_speak_history);
 		homework = (HomeWork) getApplication();
+		Display display = this.getWindowManager().getDefaultDisplay();
+		width = display.getWidth();
+		
 		homework.setNewsFlag(true);
 		initialize();
 
@@ -189,7 +194,12 @@ public class SpeakHistoryActivity extends Activity implements Urlinterface,
 
 	public void initView(String str, int i) {
 		TextView tv = new TextView(getApplicationContext());
-		LayoutParams lp = new LayoutParams(LayoutParams.FILL_PARENT, 80);
+		LayoutParams lp;
+		if (width<=800) {
+			lp = new LayoutParams(LayoutParams.FILL_PARENT, 60);
+		}else{
+			lp = new LayoutParams(LayoutParams.FILL_PARENT, 80);
+		}
 		tv.setLayoutParams(lp);
 		tv.setText("  " + str);
 		tv.setTextColor(Color.rgb(157, 156, 156));

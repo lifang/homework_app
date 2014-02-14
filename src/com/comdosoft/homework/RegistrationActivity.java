@@ -330,6 +330,10 @@ public class RegistrationActivity extends Activity implements Urlinterface {
 					}
 				}
 				break;
+			case 7:
+				Toast.makeText(getApplicationContext(), HomeWorkParams.INTERNET,
+						Toast.LENGTH_SHORT).show();
+				break;
 			default:
 				break;
 
@@ -411,8 +415,7 @@ public class RegistrationActivity extends Activity implements Urlinterface {
 						mHandler.sendMessage(msg);
 
 					} catch (Exception e) {
-						// TODO Auto-generated catch block
-						e.printStackTrace();
+						mHandler.sendEmptyMessage(7);
 					}
 				}
 			};

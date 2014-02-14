@@ -17,6 +17,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import android.app.Activity;
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -54,7 +55,7 @@ public class SettingActivity extends Activity implements Urlinterface {
 	private static final String IMAGE_FILE_NAME = "faceImage.jpg";
 
 	/* 请求码 */
-
+	private ProgressDialog prodialog;
 	private Bitmap bm = null;
 	private String nameS = ""; //
 	private String nicknameS = ""; //
@@ -147,6 +148,7 @@ public class SettingActivity extends Activity implements Urlinterface {
 		public void handleMessage(android.os.Message msg) {
 			switch (msg.what) {
 			case 0:
+				prodialog.dismiss();
 				final String res = (String) msg.obj;
 				if (res.length() != 0) {
 					JSONObject array;
@@ -182,6 +184,11 @@ public class SettingActivity extends Activity implements Urlinterface {
 					}
 
 				}
+				break;
+			case 7:
+				prodialog.dismiss();
+				Toast.makeText(getApplicationContext(), HomeWorkParams.INTERNET,
+						Toast.LENGTH_SHORT).show();
 				break;
 			default:
 				break;
@@ -223,8 +230,7 @@ public class SettingActivity extends Activity implements Urlinterface {
 					mHandler.sendMessage(msg);
 
 				} catch (Exception e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
+					mHandler.sendEmptyMessage(7);
 				}
 			}
 		};
@@ -235,6 +241,9 @@ public class SettingActivity extends Activity implements Urlinterface {
 		} else {
 
 			if (HomeWorkTool.isConnect(SettingActivity.this)) {
+				prodialog = new ProgressDialog(SettingActivity.this);
+				prodialog.setMessage("正在提交数据...");
+				prodialog.show();
 				thread.start();
 			} else {
 				Toast.makeText(getApplicationContext(),
