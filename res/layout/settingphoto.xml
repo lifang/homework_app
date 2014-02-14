@@ -16,7 +16,7 @@
             android:onClick="set_paizhaoshangchuan"
             android:text="@string/takephoto"
             android:textColor="#FFFFFF"
-            android:layout_marginLeft="280px"
+            android:layout_marginLeft="285px"
             android:textSize="20px" />
 
         <Button
@@ -28,6 +28,6 @@
             android:onClick="set_congxiangce"
             android:text="@string/fromphotostore"
             android:textColor="#FFFFFF"
-            android:layout_marginLeft="280px"
+            android:layout_marginLeft="285px"
             android:textSize="20px" />
     </LinearLayout>
