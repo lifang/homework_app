@@ -200,6 +200,8 @@ public class DictationPrepareActivity extends Activity implements
 				mp.prepare();
 				mp.setOnPreparedListener(this);
 				mp.setOnCompletionListener(this);
+			} else {
+				mHandler.sendEmptyMessage(2);
 			}
 		} catch (IllegalArgumentException e) {
 			e.printStackTrace();

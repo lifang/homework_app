@@ -118,12 +118,6 @@ public class HomeWorkIngActivity extends Activity implements Urlinterface {
 		homework.setClass_id(Integer.valueOf(school_class_id));
 		homework.setUser_id(Integer.valueOf(student_id));
 
-		Display display = this.getWindowManager().getDefaultDisplay();
-		int width = display.getWidth();
-		int height = display.getHeight();
-		Toast.makeText(getApplicationContext(), width + "/" + height,
-				Toast.LENGTH_SHORT).show();
-
 		working_date_list
 				.setOnItemClickListener(new AdapterView.OnItemClickListener() {
 					public void onItemClick(AdapterView<?> parent, View view,

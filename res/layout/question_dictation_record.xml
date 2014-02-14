@@ -112,7 +112,7 @@
             android:gravity="center_vertical"
             android:text="@string/question_history_tishi"
             android:textColor="#9D9C9C"
-            android:textSize="24dp" />
+            android:textSize="21dp" />
     </LinearLayout>
 
 </LinearLayout>

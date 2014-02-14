@@ -50,10 +50,10 @@ public class Soundex_Levenshtein {
 			int[] arr = new int[2];
 			int temp = 0;
 			for (int j = 0; j < tl.size(); j++) {
-				if (tl.get(j).matches("[\\u4E00-\\u9FA5]+")) {//
+				if (tl.get(j).matches("[\\u4E00-\\u9FA5]+")) {//过滤中文
 					temp = 0;
 				}
-				if (ml.get(i).matches("[0-9]+")) {
+				if (ml.get(i).matches("[0-9]+")) {//正文题目有数字直接算对
 					temp = 10;
 					break;
 				} else {
