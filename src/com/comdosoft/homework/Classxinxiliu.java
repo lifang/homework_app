@@ -76,6 +76,7 @@ public class Classxinxiliu extends Activity implements OnHeaderRefreshListener,
 	private TextView main_class_oneTv1;
 	private TextView main_class_oneTv2;
 	private EditText fabiao_content; // 发表框;
+	
 	private ProgressDialog prodialog;
 	private String lookStr = "";
 	// -------------------------------------------------------------------
@@ -98,6 +99,7 @@ public class Classxinxiliu extends Activity implements OnHeaderRefreshListener,
 	private int user_types = 1;
 	public List<Boolean> gk_list;// 回复开关集合
 	public List<RelativeLayout> item_huifu;// 回复开关集合
+	public List<Button> button_list;// 隐藏内容中的  回复 集合
 	private int micropost_type;// 微博类型 0表是全部 1表示我的
 	private List<Micropost> list;
 	private List<String> care;
@@ -115,6 +117,7 @@ public class Classxinxiliu extends Activity implements OnHeaderRefreshListener,
 	private String user_Url;
 	private int width;
 	private int height;
+	private Button button_fabiao;
 	private List<ClassStuPojo> stuList;
 	private ArrayList<Child_Micropost> child_list;
 	private Handler handler = new Handler() {
@@ -287,6 +290,7 @@ public class Classxinxiliu extends Activity implements OnHeaderRefreshListener,
 		// R.id.main_class_oneTv2);
 		// main_class_classGv.setNumColumns(3);
 		fabiao_content = (EditText) findViewById(R.id.class_fabiao_content);
+		button_fabiao = (Button) findViewById(R.id.button_fabiao);
 		SharedPreferences preferences = getSharedPreferences(SHARED,
 				Context.MODE_PRIVATE);
 
@@ -297,6 +301,7 @@ public class Classxinxiliu extends Activity implements OnHeaderRefreshListener,
 		micropost_type = 0;// 默认现实全部
 		item_huifu = new ArrayList<RelativeLayout>();
 		guanzhu_list = new ArrayList<Button>();
+		button_list = new ArrayList<Button>();
 		ziAdapter_list = new ArrayList<ZiAdapter>();
 		btlist = new ArrayList<Button>();
 		Reply_edit_list = new ArrayList<EditText>();
@@ -401,10 +406,13 @@ public class Classxinxiliu extends Activity implements OnHeaderRefreshListener,
 
 		Button Button_huifu = (Button) convertView
 				.findViewById(R.id.Button_huifu); // 隐藏内容中的回复按钮
-
+		button_list.add(Button_huifu);
 		Button_huifu.setOnClickListener(new View.OnClickListener() {
 			public void onClick(View v) {
+		
+				
 				setButton_huifu(listView2, mess, Reply_edit);
+			
 			}
 		});
 
@@ -1210,6 +1218,7 @@ public class Classxinxiliu extends Activity implements OnHeaderRefreshListener,
 			public void handleMessage(android.os.Message msg) {
 				switch (msg.what) {
 				case 0:
+					button_list.get(focus).setEnabled(true);
 					final String json2 = (String) msg.obj;
 					if (json2.length() == 0) {
 
@@ -1230,6 +1239,7 @@ public class Classxinxiliu extends Activity implements OnHeaderRefreshListener,
 											android.os.Message msg) {
 										switch (msg.what) {
 										case 0:
+											prodialog.dismiss();
 											final String json7 = (String) msg.obj;
 											child_list = new ArrayList<Child_Micropost>();
 											parseJson_childMicropost(json7);
@@ -1276,7 +1286,9 @@ public class Classxinxiliu extends Activity implements OnHeaderRefreshListener,
 									}
 								};
 								if (HomeWorkTool.isConnect(Classxinxiliu.this)) {
-
+									prodialog = new ProgressDialog(Classxinxiliu.this);
+									prodialog.setMessage("正在回复...");
+									prodialog.show();
 									thread.start();
 								} else {
 									Toast.makeText(getApplicationContext(),
@@ -1304,6 +1316,7 @@ public class Classxinxiliu extends Activity implements OnHeaderRefreshListener,
 			Toast.makeText(getApplicationContext(), "内容不能为空",
 					Toast.LENGTH_SHORT).show();
 		} else {
+			button_list.get(focus).setEnabled(false);
 			Thread thread = new Thread() {
 				public void run() {
 					try {
@@ -1345,6 +1358,7 @@ public class Classxinxiliu extends Activity implements OnHeaderRefreshListener,
 
 	// 发表
 	public void class_fabiao(View v) {
+
 		final Handler class_fabiaoHandler = new Handler() {
 			public void handleMessage(android.os.Message msg) {
 				prodialog.dismiss();
@@ -1364,6 +1378,7 @@ public class Classxinxiliu extends Activity implements OnHeaderRefreshListener,
 								list.clear();
 								click_list();
 								fabiao_content.setText("");
+								button_fabiao.setEnabled(true);
 								shuaxin();
 							} else {
 								Toast.makeText(getApplicationContext(), notice,
@@ -1413,8 +1428,9 @@ public class Classxinxiliu extends Activity implements OnHeaderRefreshListener,
 				prodialog = new ProgressDialog(Classxinxiliu.this);
 				prodialog.setMessage("正在发表...");
 				prodialog.show();
-
+				button_fabiao.setEnabled(false);
 				thread.start();
+				
 			} else {
 				Toast.makeText(getApplicationContext(),
 						HomeWorkParams.INTERNET, 0).show();
@@ -1486,12 +1502,12 @@ public class Classxinxiliu extends Activity implements OnHeaderRefreshListener,
 					case 0:
 						if (child_list.size() > 0) {// 如果没有子消息，隐藏加载更多按钮
 							lookMore.setVisibility(View.VISIBLE);
-							listView2.setAdapter(ziAdapter_list.get(focus));
+							listView2.setVisibility(View.VISIBLE);
 							
 						} else {
-							listView2.setVisibility(View.GONE);
 							lookMore.setVisibility(View.GONE);
 						}
+						listView2.setAdapter(ziAdapter_list.get(focus));
 						HomeWorkTool
 						.setListViewHeightBasedOnChildren(listView2);
 						break;
@@ -1765,6 +1781,7 @@ public class Classxinxiliu extends Activity implements OnHeaderRefreshListener,
 		Linear_layout.removeAllViews();
 		Reply_edit_list.clear();
 		guanzhu_list.clear();
+		button_list.clear();
 		gk_list.clear();
 		btlist.clear();
 		ziAdapter_list.clear();
