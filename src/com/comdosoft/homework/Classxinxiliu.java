@@ -76,7 +76,7 @@ public class Classxinxiliu extends Activity implements OnHeaderRefreshListener,
 	private TextView main_class_oneTv1;
 	private TextView main_class_oneTv2;
 	private EditText fabiao_content; // 发表框;
-	
+
 	private ProgressDialog prodialog;
 	private String lookStr = "";
 	// -------------------------------------------------------------------
@@ -99,7 +99,7 @@ public class Classxinxiliu extends Activity implements OnHeaderRefreshListener,
 	private int user_types = 1;
 	public List<Boolean> gk_list;// 回复开关集合
 	public List<RelativeLayout> item_huifu;// 回复开关集合
-	public List<Button> button_list;// 隐藏内容中的  回复 集合
+	public List<Button> button_list;// 隐藏内容中的 回复 集合
 	private int micropost_type;// 微博类型 0表是全部 1表示我的
 	private List<Micropost> list;
 	private List<String> care;
@@ -179,11 +179,8 @@ public class Classxinxiliu extends Activity implements OnHeaderRefreshListener,
 				focus = -1;
 				list.clear();
 				click_list();
-				//
 				final String json_all21 = (String) msg.obj;
-
 				parseJson_Myself(json_all21);
-
 				lookStr = hw.getNoselect_message();
 				Log.i("linshi", "1");
 				Micropost lookStr_micropost = new Micropost();
@@ -197,7 +194,6 @@ public class Classxinxiliu extends Activity implements OnHeaderRefreshListener,
 					child_list = new ArrayList<Child_Micropost>();
 
 					handler.sendEmptyMessage(5);
-
 					JSONObject js;
 					try {
 						Log.i("linshi", lookStr);
@@ -229,9 +225,7 @@ public class Classxinxiliu extends Activity implements OnHeaderRefreshListener,
 					} catch (JSONException e) {
 						e.printStackTrace();
 					}
-
 					Log.i("linshi", lookStr_micropost.toString());
-
 					int a = 0;
 					if (list.size() != 0) {
 
@@ -254,7 +248,6 @@ public class Classxinxiliu extends Activity implements OnHeaderRefreshListener,
 						}
 
 					}
-					// focus = 0;
 					Log.i("linshi", list.size() + "");
 				}
 				for (int i = 0; i < list.size(); i++) {
@@ -392,7 +385,7 @@ public class Classxinxiliu extends Activity implements OnHeaderRefreshListener,
 		Reply_edit_list.add(Reply_edit);
 		guanzhu_list.add(guanzhu);
 		gk_list.add(true);
-		// item_huifu.add(convertView);
+
 		final Button lookMore = (Button) convertView
 				.findViewById(R.id.lookMore); // 查看更多
 		lookMore.setOnClickListener(new View.OnClickListener() {
@@ -403,13 +396,12 @@ public class Classxinxiliu extends Activity implements OnHeaderRefreshListener,
 
 		Button huifu = (Button) convertView.findViewById(R.id.micropost_huifu);// 回复,用于显示隐藏的内容
 		btlist.add(huifu);
-
 		Button Button_huifu = (Button) convertView
 				.findViewById(R.id.Button_huifu); // 隐藏内容中的回复按钮
 		button_list.add(Button_huifu);
 		Button_huifu.setOnClickListener(new View.OnClickListener() {
-			public void onClick(View v) {				
-				setButton_huifu(listView2, mess, Reply_edit);		
+			public void onClick(View v) {
+				setButton_huifu(listView2, mess, Reply_edit);
 			}
 		});
 
@@ -421,7 +413,6 @@ public class Classxinxiliu extends Activity implements OnHeaderRefreshListener,
 			// face.setScaleType(ImageView.ScaleType.FIT_XY);
 			imageLoader.displayImage(IP + mess.getAvatar_url(), face, options,
 					animateFirstListener);
-
 		}
 
 		Micropost_senderName.setText(mess.getName()); // 发消息的人
@@ -478,9 +469,7 @@ public class Classxinxiliu extends Activity implements OnHeaderRefreshListener,
 										dialog.dismiss();
 									}
 								}).create();
-
 				dialog.show();
-
 			}
 		});
 		final RelativeLayout layout1 = (RelativeLayout) convertView
@@ -557,12 +546,6 @@ public class Classxinxiliu extends Activity implements OnHeaderRefreshListener,
 						HomeWorkParams.INTERNET, 0).show();
 			}
 
-			// if (page_own == 0) {
-			// focus = -1;
-			// micropostAdapter.notifyDataSetChanged();
-			// onLoad();
-			// }
-
 		} else {
 			Toast.makeText(getApplicationContext(), "已经是最后一页了..",
 					Toast.LENGTH_SHORT).show();
@@ -610,8 +593,8 @@ public class Classxinxiliu extends Activity implements OnHeaderRefreshListener,
 			Button reply = (Button) child_view
 					.findViewById(R.id.child_micropost_huifu); // 回复
 			EditText child_bottom = (EditText) child_view
-			.findViewById(R.id.child_bottom);
-			if (child_list.size()==1) {
+					.findViewById(R.id.child_bottom);
+			if (child_list.size() == 1) {
 				child_bottom.setVisibility(View.GONE);
 			}
 			final Child_Micropost child_Micropost = child_list.get(position2);
@@ -704,10 +687,8 @@ public class Classxinxiliu extends Activity implements OnHeaderRefreshListener,
 										public void onClick(
 												DialogInterface dialog,
 												int which) {
-
 											if (HomeWorkTool
 													.isConnect(Classxinxiliu.this)) {
-
 												thread.start();
 											} else {
 												Toast.makeText(
@@ -715,23 +696,18 @@ public class Classxinxiliu extends Activity implements OnHeaderRefreshListener,
 														HomeWorkParams.INTERNET,
 														0).show();
 											}
-
 										}
 									})
 							.setNegativeButton("取消",
 									new DialogInterface.OnClickListener() {
-
 										@Override
 										public void onClick(
 												DialogInterface dialog,
 												int which) {
-
 											dialog.dismiss();
 										}
 									}).create();
-
 					dialog.show();
-
 				}
 			});
 
@@ -748,7 +724,9 @@ public class Classxinxiliu extends Activity implements OnHeaderRefreshListener,
 		}
 	}
 
-	// 头像
+	/*
+	 * 加载 头像
+	 */
 	private static class AnimateFirstDisplayListener extends
 			SimpleImageLoadingListener {
 
@@ -768,6 +746,9 @@ public class Classxinxiliu extends Activity implements OnHeaderRefreshListener,
 		}
 	}
 
+	/*
+	 * 解析 get_class_info 方法返回的 json字符串
+	 */
 	private void setJson(String json) {
 		try {
 			stuList = new ArrayList<ClassStuPojo>();
@@ -777,7 +758,6 @@ public class Classxinxiliu extends Activity implements OnHeaderRefreshListener,
 			// id = student.getString("id");
 			// user_id = student.getString("user_id");
 			avatar_url = student.getString("avatar_url"); // 获取本人头像昂所有在地址
-
 			SharedPreferences preferences = getSharedPreferences(SHARED,
 					Context.MODE_PRIVATE);
 			Editor editor = preferences.edit();
@@ -785,7 +765,6 @@ public class Classxinxiliu extends Activity implements OnHeaderRefreshListener,
 			editor.commit();
 			user_name = student.getString("name");
 			nick_name = student.getString("nickname");
-			// 微博
 			JSONObject microposts = obj.getJSONObject("microposts");
 			page = Integer.parseInt(microposts.getString("page"));
 			pages_count = Integer.parseInt(microposts.getString("pages_count"));
@@ -814,11 +793,9 @@ public class Classxinxiliu extends Activity implements OnHeaderRefreshListener,
 						stuList.add(new ClassStuPojo(id, stuname, stu_Url,
 								nickname));
 					}
-
 				}
 			}
 			Log.i("linshi", stuList.size() + "");
-			// 微博id
 			care = new ArrayList<String>();
 			JSONArray follow_microposts_id = obj
 					.getJSONArray("follow_microposts_id");
@@ -832,15 +809,14 @@ public class Classxinxiliu extends Activity implements OnHeaderRefreshListener,
 		}
 	}
 
+	/*
+	 * 查看 跳到本界面的 处理操作
+	 */
 	private void setSkipJson() {
-		// 查看 跳到本界面的 处理操作
 
 		care.clear();
-		// page_own = 1;
-		// focus = -1;
 		micropost_type = 1;
 		page = 1;
-		// list = new ArrayList<Micropost>();
 		json = "";
 		Button b = (Button) findViewById(R.id.class_button_all);
 		b.setBackgroundDrawable(getResources().getDrawable(R.drawable.an2));
@@ -1106,7 +1082,6 @@ public class Classxinxiliu extends Activity implements OnHeaderRefreshListener,
 			@SuppressWarnings({ "rawtypes", "unchecked" })
 			public void run() {
 				try {
-
 					HashMap<String, String> mp = new HashMap();
 					mp.put("user_id", String.valueOf(user_id));
 					mp.put("micropost_id", String.valueOf(mess.getId()));
@@ -1131,16 +1106,16 @@ public class Classxinxiliu extends Activity implements OnHeaderRefreshListener,
 			}
 		};
 		if (HomeWorkTool.isConnect(Classxinxiliu.this)) {
-
 			gzthread.start();
 		} else {
 			Toast.makeText(getApplicationContext(), HomeWorkParams.INTERNET, 0)
 					.show();
 		}
-
 	}
 
-	// 删除
+	/*
+	 * 删除 主消息
+	 */
 	public void del_micropost(final int i, final Micropost mess) {
 		prodialog = new ProgressDialog(Classxinxiliu.this);
 		prodialog.setMessage("正在删除消息");
@@ -1152,14 +1127,12 @@ public class Classxinxiliu extends Activity implements OnHeaderRefreshListener,
 					final String json5 = (String) msg.obj;
 					prodialog.dismiss();
 					if (json5.equals("error")) {
-
 					} else {
 						JSONObject array;
 						try {
 							array = new JSONObject(json5);//
 							String status = array.getString("status");
 							String notice = array.getString("notice");
-
 							if ("success".equals(status)) {
 								// 删除成功的话,刷新界面
 								focus = -1;
@@ -1185,7 +1158,6 @@ public class Classxinxiliu extends Activity implements OnHeaderRefreshListener,
 		Thread thread = new Thread() {
 			public void run() {
 				try {
-
 					Map<String, String> map = new HashMap<String, String>();
 					map.put("micropost_id", mess.getId() + "");
 					json = HomeWorkTool.sendGETRequest(
@@ -1218,19 +1190,16 @@ public class Classxinxiliu extends Activity implements OnHeaderRefreshListener,
 					button_list.get(focus).setEnabled(true);
 					final String json2 = (String) msg.obj;
 					if (json2.length() == 0) {
-
 					} else {
 						JSONObject array2;
 						try {
 							array2 = new JSONObject(json2);//
 							String status = array2.getString("status");
 							String notice = array2.getString("notice");
-
 							if ("success".equals(status)) {
 								Reply_edit.setText("");
 								Toast.makeText(getApplicationContext(), notice,
 										Toast.LENGTH_SHORT).show();
-
 								final Handler mHandler = new Handler() {
 									public void handleMessage(
 											android.os.Message msg) {
@@ -1273,7 +1242,7 @@ public class Classxinxiliu extends Activity implements OnHeaderRefreshListener,
 															Urlinterface.get_reply_microposts,
 															map);
 											Message msg = new Message();// 创建Message
-																		// 对象
+											// 对象
 											msg.what = 0;
 											msg.obj = js2;
 											mHandler.sendMessage(msg);
@@ -1283,7 +1252,8 @@ public class Classxinxiliu extends Activity implements OnHeaderRefreshListener,
 									}
 								};
 								if (HomeWorkTool.isConnect(Classxinxiliu.this)) {
-									prodialog = new ProgressDialog(Classxinxiliu.this);
+									prodialog = new ProgressDialog(
+											Classxinxiliu.this);
 									prodialog.setMessage("正在回复...");
 									prodialog.show();
 									thread.start();
@@ -1291,7 +1261,6 @@ public class Classxinxiliu extends Activity implements OnHeaderRefreshListener,
 									Toast.makeText(getApplicationContext(),
 											HomeWorkParams.INTERNET, 0).show();
 								}
-
 							} else {
 								Toast.makeText(getApplicationContext(), notice,
 										Toast.LENGTH_SHORT).show();
@@ -1317,7 +1286,6 @@ public class Classxinxiliu extends Activity implements OnHeaderRefreshListener,
 			Thread thread = new Thread() {
 				public void run() {
 					try {
-
 						String reply_edit = Reply_edit.getText().toString();
 						Map<String, String> map = new HashMap<String, String>();
 						map.put("content", reply_edit);
@@ -1344,7 +1312,6 @@ public class Classxinxiliu extends Activity implements OnHeaderRefreshListener,
 				}
 			};
 			if (HomeWorkTool.isConnect(Classxinxiliu.this)) {
-
 				thread.start();
 			} else {
 				Toast.makeText(getApplicationContext(),
@@ -1353,7 +1320,9 @@ public class Classxinxiliu extends Activity implements OnHeaderRefreshListener,
 		}
 	}
 
-	// 发表
+	/*
+	 * 发表 点击 发表按钮 触 发该方法
+	 */
 	public void class_fabiao(View v) {
 
 		final Handler class_fabiaoHandler = new Handler() {
@@ -1368,7 +1337,6 @@ public class Classxinxiliu extends Activity implements OnHeaderRefreshListener,
 							array1 = new JSONObject(json1);//
 							String status = array1.getString("status");
 							String notice = array1.getString("notice");
-
 							if ("success".equals(status)) {
 								Toast.makeText(getApplicationContext(), notice,
 										Toast.LENGTH_SHORT).show();
@@ -1384,7 +1352,6 @@ public class Classxinxiliu extends Activity implements OnHeaderRefreshListener,
 						} catch (JSONException e) {
 							e.printStackTrace();
 						}
-
 					}
 					break;
 				default:
@@ -1402,13 +1369,13 @@ public class Classxinxiliu extends Activity implements OnHeaderRefreshListener,
 			Thread thread = new Thread() {
 				public void run() {
 					try {
-
 						Map<String, String> map = new HashMap<String, String>();
 						map.put("content", fabiaoContents);
 						map.put("user_id", user_id);
 						map.put("user_types", user_types + "");
 						map.put("school_class_id", school_class_id);
-						Log.i("bbb", fabiaoContents+":"+user_id+":"+user_types+":"+school_class_id);
+						Log.i("bbb", fabiaoContents + ":" + user_id + ":"
+								+ user_types + ":" + school_class_id);
 						String senderjson = HomeWorkTool.doPost(
 								Urlinterface.NEWS_RELEASE, map);
 						Message msg = new Message();// 创建Message 对象
@@ -1421,13 +1388,11 @@ public class Classxinxiliu extends Activity implements OnHeaderRefreshListener,
 				}
 			};
 			if (HomeWorkTool.isConnect(Classxinxiliu.this)) {
-
 				prodialog = new ProgressDialog(Classxinxiliu.this);
 				prodialog.setMessage("正在发表...");
 				prodialog.show();
 				button_fabiao.setEnabled(false);
 				thread.start();
-				
 			} else {
 				Toast.makeText(getApplicationContext(),
 						HomeWorkParams.INTERNET, 0).show();
@@ -1447,7 +1412,6 @@ public class Classxinxiliu extends Activity implements OnHeaderRefreshListener,
 					for (int j = 0; j < item_huifu.size(); j++) {
 						if (j != Integer.parseInt(i)) {
 							item_huifu.get(j).setVisibility(View.GONE);
-
 						}
 					}
 					break;
@@ -1461,29 +1425,20 @@ public class Classxinxiliu extends Activity implements OnHeaderRefreshListener,
 		if (gk_list.get(i) == true) {
 
 			gk_list.set(i, false);
-			// Message msg = new Message();// 创建Message
-			// // 对象
-			// msg.what = 0;
-			// msg.obj = i;
-			// mHandler2.sendMessage(msg);
 
 			for (int j = 0; j < item_huifu.size(); j++) {
 				if (j != i) {
 					item_huifu.get(j).setVisibility(View.GONE);
-
 				}
 			}
-
 			focus = i;
 			micropost_id = mess.getId();// 点击 回复 默认 给主消息回复 记录 主消息 id
 			reciver_id = mess.getUser_id();
 			reciver_types = mess.getUser_types();
 			layout1.setVisibility(View.VISIBLE);
-
 			Reply_edit.setHint(user_name + " " + HomeWorkParams.REPLY + " "
 					+ mess.getName() + ":");
 			listView2.setVisibility(View.VISIBLE);
-
 			int si = Integer.parseInt(list.get(focus)
 					.getReply_microposts_count().toString());
 
@@ -1500,13 +1455,13 @@ public class Classxinxiliu extends Activity implements OnHeaderRefreshListener,
 						if (child_list.size() > 0) {// 如果没有子消息，隐藏加载更多按钮
 							lookMore.setVisibility(View.VISIBLE);
 							listView2.setVisibility(View.VISIBLE);
-							
+
 						} else {
 							lookMore.setVisibility(View.GONE);
 						}
 						listView2.setAdapter(ziAdapter_list.get(focus));
 						HomeWorkTool
-						.setListViewHeightBasedOnChildren(listView2);
+								.setListViewHeightBasedOnChildren(listView2);
 						break;
 					default:
 						break;
@@ -1695,6 +1650,9 @@ public class Classxinxiliu extends Activity implements OnHeaderRefreshListener,
 		}
 	}
 
+	/*
+	 * 获得当前班级的所有信息
+	 */
 	class get_class_info implements Runnable {
 		public void run() {
 			try {
@@ -1724,6 +1682,9 @@ public class Classxinxiliu extends Activity implements OnHeaderRefreshListener,
 		}
 	}
 
+	/*
+	 * 重新加载当前页面中的数据
+	 */
 	public void shuaxin() {
 
 		Thread thread = new Thread() {
@@ -1774,6 +1735,9 @@ public class Classxinxiliu extends Activity implements OnHeaderRefreshListener,
 		}
 	}
 
+	/*
+	 * 清空 各个集合中的数据
+	 */
 	public void click_list() {
 		Linear_layout.removeAllViews();
 		Reply_edit_list.clear();
