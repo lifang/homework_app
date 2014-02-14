@@ -224,7 +224,8 @@ public class HomeWorkTool implements Urlinterface {
 		Log.i("homework", url.toString());
 		HttpURLConnection conn = (HttpURLConnection) new URL(url.toString())
 				.openConnection();
-		conn.setConnectTimeout(5000);
+		conn.setConnectTimeout(8000);
+		conn.setReadTimeout(8000);
 		conn.setRequestMethod("GET");
 		if (conn.getResponseCode() == HttpURLConnection.HTTP_OK) {
 			InputStream is = conn.getInputStream();
@@ -317,10 +318,8 @@ public class HomeWorkTool implements Urlinterface {
 			Log.i("linshi", url.toString());
 			url_con = (HttpURLConnection) url.openConnection();
 			url_con.setRequestMethod("POST");
-			System.setProperty("sun.net.client.defaultConnectTimeout",
-					String.valueOf(HomeWorkTool.connectTimeOut));
-			System.setProperty("sun.net.client.defaultReadTimeout",
-					String.valueOf(HomeWorkTool.readTimeOut));
+			url_con.setConnectTimeout(connectTimeOut);
+			url_con.setReadTimeout(readTimeOut);
 			url_con.setDoOutput(true);
 			byte[] b = params.toString().getBytes();
 			url_con.getOutputStream().write(b, 0, b.length);
@@ -334,7 +333,7 @@ public class HomeWorkTool implements Urlinterface {
 			rd.close();
 			in.close();
 		} catch (IOException e) {
-			e.printStackTrace();
+			
 		}
 		Log.i("linshi", tempLine);
 		return tempLine;

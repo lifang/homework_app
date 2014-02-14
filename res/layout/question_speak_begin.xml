@@ -73,8 +73,7 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="50dp"
         android:orientation="horizontal"
-        android:paddingLeft="30dp"
-        android:paddingRight="30dp" >
+        android:paddingLeft="30dp" >
 
         <ImageView
             android:id="@+id/question_speak_img"
@@ -89,8 +88,8 @@
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             android:layout_marginLeft="10dp"
-            android:layout_marginTop="20dp" >
-        </com.comdosoft.homework.tools.PredicateLayout>
+            android:layout_marginTop="20dp">
+       </com.comdosoft.homework.tools.PredicateLayout>
     </LinearLayout>
 
     <ImageView
@@ -102,15 +101,16 @@
         android:onClick="onclicks"
         android:src="@drawable/unmake" />
 
-    <TextView 
+    <TextView
         android:id="@+id/question_speak_tishi"
         android:layout_width="400dp"
         android:layout_height="wrap_content"
         android:layout_marginTop="40dp"
-        android:padding="15dp"
         android:background="@drawable/textview_border"
         android:gravity="center"
-        android:textSize="18sp"
+        android:lineSpacingExtra="15dp"
+        android:padding="15dp"
         android:textColor="#6E6B6B"
-        android:lineSpacingExtra="15dp"/>
+        android:textSize="18sp" />
+
 </LinearLayout>

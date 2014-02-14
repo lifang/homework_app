@@ -37,10 +37,10 @@ import android.widget.Toast;
 
 public class AboutMeActivity extends Activity {
 	private ListView listview;
-	List<AboutMePojo> listam ;
+	List<AboutMePojo> listam;
 	private String user_id;
 	private String school_class_id;
-	private boolean flag=true;
+	private boolean flag = true;
 	HomeWork hw = (HomeWork) getApplication();
 	HomeWorkMainActivity hwma = new HomeWorkMainActivity();
 
@@ -53,31 +53,29 @@ public class AboutMeActivity extends Activity {
 		user_id = sp.getString("user_id", "null");
 		school_class_id = sp.getString("school_class_id", "null");
 	}
+
 	protected void onResume() {
 		super.onResume();
 		if (HomeWorkTool.isConnect(AboutMeActivity.this)) {
-			flag=true;
+			flag = true;
 		}
 		getnews();
 	}
+
 	public void getnews() {
-		new Thread()
-		{
-			public void run()
-			{
-				while(flag)
-				{
+		new Thread() {
+			public void run() {
+				while (flag) {
 					try {
 						if (HomeWorkTool.isConnect(AboutMeActivity.this)) {
 							Log.i("bbb", "msg");
 							get_News();
 							Thread.sleep(60000);
-						}
-						else{
+						} else {
 							handler1.sendEmptyMessage(1);
-							flag=false;
+							flag = false;
 						}
-						
+
 					} catch (InterruptedException e) {
 						// TODO Auto-generated catch block
 						e.printStackTrace();
@@ -91,8 +89,8 @@ public class AboutMeActivity extends Activity {
 		public void handleMessage(Message msg) {
 			switch (msg.what) {
 			case 0:
-				listview.setAdapter(new AboutMeAdapter(
-						getApplicationContext(), listview));
+				listview.setAdapter(new AboutMeAdapter(getApplicationContext(),
+						listview));
 				break;
 			case 1:
 				Toast.makeText(getApplicationContext(),
@@ -106,7 +104,7 @@ public class AboutMeActivity extends Activity {
 	public int getNewsJson(String json) {
 		try {
 			JSONObject jsonobject = new JSONObject(json);
-			listam= new ArrayList<AboutMePojo>();
+			listam = new ArrayList<AboutMePojo>();
 			String status = (String) jsonobject.get("status");
 			if (status.equals("success")) {
 				JSONArray jsonarray = jsonobject.getJSONArray("messages");
@@ -144,9 +142,17 @@ public class AboutMeActivity extends Activity {
 	public void get_News() {
 		Thread thread = new Thread() {
 			public void run() {
-				if (!httpGetNews(user_id, school_class_id).equals(null)) {
-					getNewsJson(httpGetNews(user_id, school_class_id));
-					handler1.sendEmptyMessage(0);
+				Log.i("suanfa", user_id + ":" + school_class_id);
+				if (HomeWorkTool.isConnect(AboutMeActivity.this)) {
+					try {
+						if (!httpGetNews(user_id, school_class_id).equals(null)) {
+							getNewsJson(httpGetNews(user_id, school_class_id));
+							handler1.sendEmptyMessage(0);
+						}
+					} catch (Exception e) {
+						handler1.sendEmptyMessage(1);
+					}
+
 				}
 			}
 
@@ -164,8 +170,7 @@ public class AboutMeActivity extends Activity {
 					.sendGETRequest(Urlinterface.get_News, mp);
 			return json;
 		} catch (Exception e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			handler1.sendEmptyMessage(1);
 		}
 		return null;
 	}
@@ -185,10 +190,10 @@ public class AboutMeActivity extends Activity {
 		int temp1 = timeStr.indexOf("T");
 		int temp2 = timeStr.lastIndexOf("+");
 		return timeStr.substring(0, temp1) + " "
-		+ timeStr.substring(temp1 + 1, temp2);
+				+ timeStr.substring(temp1 + 1, temp2);
 	}
-	public static class ViewHolder
-	{
+
+	public static class ViewHolder {
 		public TextView tv1;
 		public TextView tv2;
 		public TextView tv3;
@@ -197,17 +202,18 @@ public class AboutMeActivity extends Activity {
 		public ImageButton Ib;
 
 	}
+
 	// 适配器
 	public class AboutMeAdapter extends BaseAdapter {
 		private Context context;
 		private ListView listview;
 		AsyncImageLoader asyncImageLoader = new AsyncImageLoader();
 		HomeWork hw = (HomeWork) getApplication();
+
 		public AboutMeAdapter() {
 		}
 
-		public AboutMeAdapter( Context context,
-				ListView listview) {
+		public AboutMeAdapter(Context context, ListView listview) {
 			this.context = context;
 			this.listview = listview;
 		}
@@ -227,10 +233,10 @@ public class AboutMeActivity extends Activity {
 		public View getView(final int position, View convertView,
 				ViewGroup parent) {
 			LayoutInflater inflater = LayoutInflater.from(context);
-			ViewHolder  holder=null;
+			ViewHolder holder = null;
 			if (convertView == null) {
 				convertView = inflater.inflate(R.layout.aboutme_one, null);
-				holder=new ViewHolder();
+				holder = new ViewHolder();
 				convertView.setPadding(0, 15, 0, 15);
 				holder.tv1 = (TextView) convertView
 						.findViewById(R.id.aboutme_oneTv);
@@ -259,10 +265,8 @@ public class AboutMeActivity extends Activity {
 				}
 				bm = null;
 				convertView.setTag(holder);
-			}
-			else
-			{ 
-				holder=(ViewHolder)convertView.getTag();
+			} else {
+				holder = (ViewHolder) convertView.getTag();
 			}
 			holder.tv1.setText(listam.get(position).getSender_name());
 			holder.tv2.setText(listam.get(position).getStatus());
@@ -302,9 +306,7 @@ public class AboutMeActivity extends Activity {
 								} catch (JSONException e) {
 									e.printStackTrace();
 								}
-							}
-							else
-							{
+							} else {
 								handler.sendEmptyMessage(4);
 							}
 						}
@@ -347,9 +349,7 @@ public class AboutMeActivity extends Activity {
 								} catch (JSONException e) {
 									e.printStackTrace();
 								}
-							}
-							else
-							{
+							} else {
 								handler.sendEmptyMessage(4);
 							}
 						}
@@ -369,7 +369,7 @@ public class AboutMeActivity extends Activity {
 					listview.setAdapter(new AboutMeAdapter(
 							getApplicationContext(), listview));
 					Toast.makeText(AboutMeActivity.this, msg.obj.toString(), 0)
-					.show();
+							.show();
 					break;
 				case 1:
 					Toast.makeText(context, msg.obj.toString(), 0).show();

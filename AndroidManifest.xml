@@ -81,6 +81,7 @@ x
         <activity android:name="com.comdosoft.homework.AboutMeActivity" >
         </activity>
         <activity android:name=".DictationRecordActivity" />
+        <activity android:name=".SettingPhoto" />
         <activity
             android:name="com.tencent.tauth.AuthActivity"
             android:launchMode="singleTask"

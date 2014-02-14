@@ -289,7 +289,7 @@ public class Classxinxiliu extends Activity implements OnHeaderRefreshListener,
 		// R.id.main_class_classes_include).findViewById(
 		// R.id.main_class_oneTv2);
 		// main_class_classGv.setNumColumns(3);
-
+		fabiao_content = (EditText) findViewById(R.id.class_fabiao_content);
 		SharedPreferences preferences = getSharedPreferences(SHARED,
 				Context.MODE_PRIVATE);
 
@@ -333,7 +333,7 @@ public class Classxinxiliu extends Activity implements OnHeaderRefreshListener,
 	@Override
 	protected void onResume() {
 		super.onResume();
-focus=-1;
+		focus = -1;
 		if (HomeWorkTool.isConnect(Classxinxiliu.this)) {
 			lass_count = lass_count + 1;
 			Thread thread = new Thread(new get_class_info());
@@ -363,7 +363,7 @@ focus=-1;
 			Toast.makeText(getApplicationContext(), "暂无记录", Toast.LENGTH_SHORT)
 					.show();
 		}
-		fabiao_content = (EditText) findViewById(R.id.class_fabiao_content);
+		
 
 	}
 
@@ -421,7 +421,6 @@ focus=-1;
 			// face.setScaleType(ImageView.ScaleType.FIT_XY);
 			imageLoader.displayImage(IP + mess.getAvatar_url(), face, options,
 					animateFirstListener);
-	
 
 		}
 
@@ -612,7 +611,7 @@ focus=-1;
 					.findViewById(R.id.child_micropost_huifu); // 回复
 			final Child_Micropost child_Micropost = child_list.get(position2);
 			if (child_Micropost.getSender_avatar_url() != null) { // 设置头像
-			// face.setScaleType(ImageView.ScaleType.FIT_XY);
+				// face.setScaleType(ImageView.ScaleType.FIT_XY);
 				imageLoader.displayImage(IP
 						+ child_list.get(position2).getSender_avatar_url(),
 						face, options, animateFirstListener);
@@ -1403,11 +1402,10 @@ focus=-1;
 					}
 				}
 			};
-			prodialog = new ProgressDialog(Classxinxiliu.this);
-			prodialog.setMessage("正在发表...");
-			prodialog.show();
 			if (HomeWorkTool.isConnect(Classxinxiliu.this)) {
-
+				prodialog = new ProgressDialog(Classxinxiliu.this);
+				prodialog.setMessage("正在发表...");
+				prodialog.show();
 				thread.start();
 			} else {
 				Toast.makeText(getApplicationContext(),
@@ -1631,46 +1629,49 @@ focus=-1;
 	 * 点击 "我的" 时,触发该方法
 	 */
 	public void class_button_myself(View v) {
-		prodialog = new ProgressDialog(Classxinxiliu.this);
-		prodialog.setMessage(HomeWorkParams.PD_CLASS_INFO);
-		prodialog.show();
-		care.clear();
-		// page_own = 1;
-		// focus = -1;
-		micropost_type = 1;
-		page = 1;
-		list = new ArrayList<Micropost>();
-		json = "";
-		Button b = (Button) findViewById(R.id.class_button_all);
-		b.setBackgroundDrawable(getResources().getDrawable(R.drawable.an2));
-		Button b2 = (Button) findViewById(R.id.class_button_myself);
-		b2.setBackgroundDrawable(getResources().getDrawable(R.drawable.an));
+		if (care != null) {
+			prodialog = new ProgressDialog(Classxinxiliu.this);
+			prodialog.setMessage(HomeWorkParams.PD_CLASS_INFO);
+			prodialog.show();
+			care.clear();
+			// page_own = 1;
+			// focus = -1;
+			micropost_type = 1;
+			page = 1;
+			list = new ArrayList<Micropost>();
+			json = "";
+			Button b = (Button) findViewById(R.id.class_button_all);
+			b.setBackgroundDrawable(getResources().getDrawable(R.drawable.an2));
+			Button b2 = (Button) findViewById(R.id.class_button_myself);
+			b2.setBackgroundDrawable(getResources().getDrawable(R.drawable.an));
 
-		Thread thread = new Thread() {
-			public void run() {
-				try {
-					Map<String, String> map = new HashMap<String, String>();
-					map.put("user_id", user_id);
-					map.put("school_class_id", school_class_id);
-					map.put("page", page + "");
-					json = HomeWorkTool.sendGETRequest(
-							Urlinterface.MY_MICROPOSTS, map);
-					Message msg = new Message();// 创建Message 对象
-					msg.what = 2;
-					msg.obj = json;
-					handler.sendMessage(msg);
-					handler.sendEmptyMessage(4);// 关闭prodialog
-				} catch (Exception e) {
-					e.printStackTrace();
+			Thread thread = new Thread() {
+				public void run() {
+					try {
+						Map<String, String> map = new HashMap<String, String>();
+						map.put("user_id", user_id);
+						map.put("school_class_id", school_class_id);
+						map.put("page", page + "");
+						json = HomeWorkTool.sendGETRequest(
+								Urlinterface.MY_MICROPOSTS, map);
+						Message msg = new Message();// 创建Message 对象
+						msg.what = 2;
+						msg.obj = json;
+						handler.sendMessage(msg);
+						handler.sendEmptyMessage(4);// 关闭prodialog
+					} catch (Exception e) {
+						e.printStackTrace();
+					}
 				}
-			}
-		};
-		if (HomeWorkTool.isConnect(Classxinxiliu.this)) {
+			};
 
-			thread.start();
-		} else {
-			Toast.makeText(getApplicationContext(), HomeWorkParams.INTERNET, 0)
-					.show();
+			if (HomeWorkTool.isConnect(Classxinxiliu.this)) {
+
+				thread.start();
+			} else {
+				Toast.makeText(getApplicationContext(),
+						HomeWorkParams.INTERNET, 0).show();
+			}
 		}
 	}
 

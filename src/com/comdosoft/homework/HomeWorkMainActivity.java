@@ -33,6 +33,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.comdosoft.homework.tools.HomeWork;
+import com.comdosoft.homework.tools.HomeWorkParams;
 import com.comdosoft.homework.tools.HomeWorkTool;
 import com.comdosoft.homework.tools.Urlinterface;
 
@@ -87,7 +88,7 @@ public class HomeWorkMainActivity extends TabActivity implements Urlinterface {
 		updateTabStyle(tabhost);
 
 		if (HomeWorkTool.isConnect(HomeWorkMainActivity.this)) {
-			// thread.start();
+			thread.start();
 			thread_work.start();
 		} else {
 			Builder builder = new Builder(HomeWorkMainActivity.this);
@@ -174,6 +175,9 @@ public class HomeWorkMainActivity extends TabActivity implements Urlinterface {
 					}
 				}
 				break;
+			case 2:
+				Toast.makeText(getApplicationContext(), HomeWorkParams.INTERNET, Toast.LENGTH_SHORT).show();
+				break;
 			}
 		}
 	};
@@ -209,11 +213,10 @@ public class HomeWorkMainActivity extends TabActivity implements Urlinterface {
 					msg.what = 0;
 					msg.obj = count;
 					handler.sendMessage(msg);
-					Thread.sleep(60000);
-				} catch (InterruptedException e) {
-					e.printStackTrace();
+					thread.sleep(60000);
 				} catch (Exception e) {
-					e.printStackTrace();
+					handler.sendEmptyMessage(2);
+					
 				}
 			}
 		}
@@ -235,9 +238,9 @@ public class HomeWorkMainActivity extends TabActivity implements Urlinterface {
 					hw_num = obj.getInt("num");
 					homework.setHw_number(hw_num);
 					handler.sendEmptyMessage(1);
-					Thread.sleep(60000);
+					thread_work.sleep(60000);
 				} catch (Exception e) {
-					e.printStackTrace();
+					handler.sendEmptyMessage(2);
 				}
 			}
 		}
