@@ -67,8 +67,8 @@ import com.nostra13.universalimageloader.core.display.RoundedBitmapDisplayer;
 public class Classxinxiliu extends Activity implements OnHeaderRefreshListener,
 		OnFooterRefreshListener, Urlinterface {
 	private HomeWork hw;
-	private String user_id = "66"; // 学生 id 上面 会传过来的 学生student_id，
-	private String id = "66";
+	private String user_id = ""; // 学生 id 上面 会传过来的 学生student_id，
+	private String id = "";
 	private String school_class_id = "1";
 	private GridView main_class_classGv;
 	private ImageView main_class_oneIV;
@@ -293,7 +293,6 @@ public class Classxinxiliu extends Activity implements OnHeaderRefreshListener,
 		user_id = preferences.getString("user_id", null);
 		id = preferences.getString("id", null);
 		school_class_id = preferences.getString("school_class_id", null);
-		user_id = preferences.getString("user_id", null);
 
 		micropost_type = 0;// 默认现实全部
 		item_huifu = new ArrayList<RelativeLayout>();
@@ -639,20 +638,22 @@ focus=-1;
 										String notice = array
 												.getString("notice");
 										if ("success".equals(status)) {
+											
+											int a = Integer.parseInt(list.get(focus).getReply_microposts_count())-1;
+											list.get(focus)
+													.setReply_microposts_count(
+															a
+																	+ "");
+											btlist.get(focus).setText(
+													HomeWorkParams.REPLY + "("
+															+ a
+															+ ")");
 											child_list.remove(item);
 											ziAdapter_list.get(focus)
 													.notifyDataSetChanged();
 											HomeWorkTool
 													.setListViewHeightBasedOnChildren(list_list
 															.get(focus));
-											list.get(focus)
-													.setReply_microposts_count(
-															child_list.size()
-																	+ "");
-											btlist.get(focus).setText(
-													HomeWorkParams.REPLY + "("
-															+ child_list.size()
-															+ ")");
 										}
 										Toast.makeText(getApplicationContext(),
 												notice, Toast.LENGTH_SHORT)
@@ -1228,13 +1229,15 @@ focus=-1;
 											final String json7 = (String) msg.obj;
 											child_list = new ArrayList<Child_Micropost>();
 											parseJson_childMicropost(json7);
+											int a = Integer.parseInt(mess.getReply_microposts_count())+1;
+											
 											list.get(focus)
 													.setReply_microposts_count(
-															child_list.size()
+															a
 																	+ "");
 											btlist.get(focus).setText(
 													HomeWorkParams.REPLY + "("
-															+ child_list.size()
+															+ a
 															+ ")");
 
 											listv.setAdapter(ziAdapter_list
@@ -1701,7 +1704,7 @@ focus=-1;
 	}
 
 	public void shuaxin() {
-		click_list();
+		
 		Thread thread = new Thread() {
 			public void run() {// 获得第一页信息
 
