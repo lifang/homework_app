@@ -190,7 +190,9 @@ public class SwitchClassActivity extends Activity {
 					public void onClick(View v) {
 						new Thread() {
 							public void run() {
+								
 								HomeWork hw = (HomeWork) getApplication();
+								hw.setWork_date_item(0);
 								hw.setMainItem(0);
 								Intent intent = new Intent(
 										SwitchClassActivity.this,

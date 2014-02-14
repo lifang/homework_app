@@ -57,7 +57,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginRight="10dp"
-                android:text="@string/question_dictation_next"
+                android:text="@string/question_speak_next"
                 android:textColor="@color/white"
                 android:textSize="18sp" />
 
