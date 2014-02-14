@@ -408,11 +408,8 @@ public class Classxinxiliu extends Activity implements OnHeaderRefreshListener,
 				.findViewById(R.id.Button_huifu); // 隐藏内容中的回复按钮
 		button_list.add(Button_huifu);
 		Button_huifu.setOnClickListener(new View.OnClickListener() {
-			public void onClick(View v) {
-		
-				
-				setButton_huifu(listView2, mess, Reply_edit);
-			
+			public void onClick(View v) {				
+				setButton_huifu(listView2, mess, Reply_edit);		
 			}
 		});
 
