@@ -12,8 +12,8 @@
 
         <ImageView
             android:id="@+id/child_user_face"
-            android:layout_width="49.2px"
-            android:layout_height="49.2px"
+            android:layout_width="80px"
+            android:layout_height="80px"
             android:scaleType="fitXY"
             android:background="@drawable/moren" />
 
