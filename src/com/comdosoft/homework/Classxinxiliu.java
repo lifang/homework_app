@@ -333,7 +333,7 @@ public class Classxinxiliu extends Activity implements OnHeaderRefreshListener,
 	@Override
 	protected void onResume() {
 		super.onResume();
-
+focus=-1;
 		if (HomeWorkTool.isConnect(Classxinxiliu.this)) {
 			lass_count = lass_count + 1;
 			Thread thread = new Thread(new get_class_info());

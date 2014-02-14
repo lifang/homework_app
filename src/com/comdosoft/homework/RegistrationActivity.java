@@ -5,6 +5,7 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.nio.charset.Charset;
 import java.util.Date;
 
 import org.apache.http.entity.mime.MultipartEntity;
@@ -153,11 +154,6 @@ public class RegistrationActivity extends Activity implements Urlinterface {
 		 * intent.setData(MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
 		 * intent.setType(""image/*");设置数据类型
 		 * 如果朋友们要限制上传到服务器的图片类型时可以直接写如："image/jpeg 、 image/png等的类型"
-<<<<<<< HEAD
-		 *
-=======
-		 * 这个地方小马有个疑问，希望高手解答下：就是这个数据URI与类型为什么要分两种形式来写呀？有什么区别？
->>>>>>> 303e9adc8c516a765375954badc3bcf63f9adc95
 		 */
 		intentFromGallery.setDataAndType(
 				MediaStore.Images.Media.EXTERNAL_CONTENT_URI, "image/*");
@@ -400,8 +396,10 @@ public class RegistrationActivity extends Activity implements Urlinterface {
 
 						}
 
-						entity.addPart("nickname", new StringBody(nickname));
-						entity.addPart("name", new StringBody(name));
+						entity.addPart("nickname", new StringBody(nickname,
+								Charset.forName("UTF-8")));
+						entity.addPart("name", new StringBody(name,
+								Charset.forName("UTF-8")));
 						entity.addPart("verification_code", new StringBody(
 								verification_code));
 

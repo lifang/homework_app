@@ -3,31 +3,31 @@
         android:layout_width="fill_parent"
         android:layout_height="fill_parent"
         android:background="#e0000000"
-        android:gravity="center"
+        
         android:orientation="vertical"
         >
 
         <Button
             android:id="@+id/paizhaoshangchuan"
             android:layout_width="480px"
-            android:layout_height="51px"
+            android:layout_height="71px"
             android:layout_marginTop="885px"
             android:background="#f08629"
             android:onClick="set_paizhaoshangchuan"
             android:text="@string/takephoto"
             android:textColor="#FFFFFF"
-            android:layout_marginLeft="317px"
+            android:layout_marginLeft="392px"
             android:textSize="24px" />
 
         <Button
             android:id="@+id/congxiangce"
             android:layout_width="480px"
-            android:layout_height="51px"
+            android:layout_height="71px"
             android:layout_marginTop="28px"
             android:background="#f08629"
             android:onClick="set_congxiangce"
             android:text="@string/fromphotostore"
             android:textColor="#FFFFFF"
-            android:layout_marginLeft="317px"
+            android:layout_marginLeft="392px"
             android:textSize="24px" />
     </LinearLayout>
