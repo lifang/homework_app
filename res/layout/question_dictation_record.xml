@@ -92,7 +92,7 @@
             android:paddingBottom="20dp"
             android:paddingTop="20dp"
             android:textColor="@color/question_title_bg1"
-            android:textSize="24dp" />
+            android:textSize="25dp" />
     </LinearLayout>
 
     <LinearLayout
