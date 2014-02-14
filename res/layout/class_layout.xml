@@ -13,8 +13,8 @@
 
         <ImageView
             android:id="@+id/user_face"
-            android:layout_width="80px"
-            android:layout_height="80px"
+            android:layout_width="65px"
+            android:layout_height="65px"
             android:scaleType="centerCrop"
             android:src="@drawable/moren" />
 
@@ -33,7 +33,7 @@
                 android:layout_height="wrap_content"
                 android:layout_alignRight="@+id/message_content"
                 android:textColor="#92b81b"
-                android:textSize="24px" />
+                android:textSize="20px" />
 
             <ImageButton
                 android:id="@+id/button1"
@@ -52,7 +52,7 @@
                 android:layout_below="@+id/message_senderName"
                 android:paddingRight="6px"
                 android:textColor="#626060"
-                android:textSize="24px" />
+                android:textSize="20px" />
 
             <Button
                 android:id="@+id/micropost_huifu"
@@ -63,7 +63,7 @@
                 android:background="#00000000"
                 android:text="@string/huifu"
                 android:textColor="#92b81b"
-                android:textSize="24px" />
+                android:textSize="20px" />
 
             <!-- 下面的内容一开始是隐藏起来的 android:visibility="gone" -->
 
@@ -86,7 +86,7 @@
                     android:focusable="true"
                     android:focusableInTouchMode="true"
                     android:gravity="top"
-                    android:textSize="24px" />
+                    android:textSize="20px" />
 
                 <Button
                     android:id="@+id/Button_huifu"
@@ -97,12 +97,12 @@
                     android:background="#92b81b"
                     android:text="@string/huifu"
                     android:textColor="#FFFFFF"
-                    android:textSize="24px" />
+                    android:textSize="20px" />
 
                 <ListView
                     android:id="@+id/aa"
                     android:layout_width="fill_parent"
-                    android:layout_height="12px"
+                    android:layout_height="1px"
                     android:layout_below="@+id/Button_huifu"
                     android:background="#ede9ea"
                     android:cacheColorHint="#00000000"
@@ -121,7 +121,7 @@
                     android:background="#ede9ea"
                     android:padding="12px"
                     android:text="@string/lookmore"
-                    android:textSize="24px"
+                    android:textSize="20px"
                     android:visibility="gone" />
             </RelativeLayout>
 
@@ -137,7 +137,7 @@
                 android:background="#00000000"
                 android:text="@string/guanzhu"
                 android:textColor="#92b81b"
-                android:textSize="24px" />
+                android:textSize="20px" />
 
             <TextView
                 android:id="@+id/micropost_date"
@@ -148,7 +148,7 @@
                 android:layout_alignParentLeft="true"
                 android:text="2013/12/06 15:33"
                 android:textColor="#c5c2c2"
-                android:textSize="24px" />
+                android:textSize="20px" />
         </RelativeLayout>
 
         <EditText

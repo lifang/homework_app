@@ -276,10 +276,14 @@ public class SettingActivity extends Activity implements Urlinterface {
 		editor.putString("school_class_id", "");
 		editor.putString("id", "");
 		editor.commit();
-		Intent intent = new Intent();
-		intent.setClass(this, LoginActivity.class);//
-		startActivity(intent);
-		HomeWorkMainActivity.instance.finish();
+		if (HomeWorkTool.isConnect(getApplicationContext())) {
+			Intent intent = new Intent();
+			intent.setClass(this, LoginActivity.class);//
+			startActivity(intent);
+			HomeWorkMainActivity.instance.finish();
+		}else{
+			System.exit(0);
+		}
 
 	}
 

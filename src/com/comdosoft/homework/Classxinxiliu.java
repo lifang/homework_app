@@ -606,6 +606,11 @@ focus=-1;
 					.findViewById(R.id.child_micropost_delete); // 删除
 			Button reply = (Button) child_view
 					.findViewById(R.id.child_micropost_huifu); // 回复
+			EditText child_bottom = (EditText) child_view
+			.findViewById(R.id.child_bottom);
+			if (child_list.size()==1) {
+				child_bottom.setVisibility(View.GONE);
+			}
 			final Child_Micropost child_Micropost = child_list.get(position2);
 			if (child_Micropost.getSender_avatar_url() != null) { // 设置头像
 			// face.setScaleType(ImageView.ScaleType.FIT_XY);
@@ -1482,12 +1487,14 @@ focus=-1;
 					case 0:
 						if (child_list.size() > 0) {// 如果没有子消息，隐藏加载更多按钮
 							lookMore.setVisibility(View.VISIBLE);
+							listView2.setAdapter(ziAdapter_list.get(focus));
+							
 						} else {
+							listView2.setVisibility(View.GONE);
 							lookMore.setVisibility(View.GONE);
 						}
-						listView2.setAdapter(ziAdapter_list.get(focus));
 						HomeWorkTool
-								.setListViewHeightBasedOnChildren(listView2);
+						.setListViewHeightBasedOnChildren(listView2);
 						break;
 					default:
 						break;
