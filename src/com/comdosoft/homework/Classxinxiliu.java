@@ -259,11 +259,8 @@ public class Classxinxiliu extends Activity implements OnHeaderRefreshListener,
 				}
 				break;
 			case 7:
-				// final String sd = (String) msg.obj;
-				// Toast.makeText(getApplicationContext(), sd,
-				// Toast.LENGTH_SHORT)
-				// .show();
-				Toast.makeText(getApplicationContext(), "111",
+
+				Toast.makeText(getApplicationContext(), HomeWorkParams.INTERNET,
 						Toast.LENGTH_SHORT).show();
 				break;
 			}
@@ -522,7 +519,7 @@ focus=-1;
 							result = HomeWorkTool.sendGETRequest(
 									Urlinterface.GET_MICROPOSTS, map);
 						} catch (Exception e1) {
-							e1.printStackTrace();
+							handler.sendEmptyMessage(7);
 						}
 						Message msg = new Message();// 创建Message 对象
 						msg.what = 3;
@@ -540,7 +537,7 @@ focus=-1;
 							result = HomeWorkTool.sendGETRequest(
 									Urlinterface.MY_MICROPOSTS, map);
 						} catch (Exception e1) {
-							e1.printStackTrace();
+							handler.sendEmptyMessage(7);
 						}
 						Message msg = new Message();// 创建Message 对象
 						msg.what = 3;
@@ -683,7 +680,7 @@ focus=-1;
 								msg.obj = child_delete_json;
 								mHandler.sendMessage(msg);
 							} catch (Exception e) {
-								e.printStackTrace();
+								handler.sendEmptyMessage(7);
 							}
 						}
 					};
@@ -855,7 +852,7 @@ focus=-1;
 					handler.sendMessage(msg);
 					// handler.sendEmptyMessage(4);// 关闭prodialog
 				} catch (Exception e) {
-					e.printStackTrace();
+					handler.sendEmptyMessage(7);
 				}
 			}
 		};
@@ -1119,7 +1116,7 @@ focus=-1;
 					}
 					gzHandler.sendMessage(msg);
 				} catch (Exception e) {
-					e.printStackTrace();
+					handler.sendEmptyMessage(7);
 				}
 			}
 		};
@@ -1188,7 +1185,7 @@ focus=-1;
 					msg.obj = json;
 					mHandler.sendMessage(msg);
 				} catch (Exception e) {
-					e.printStackTrace();
+					handler.sendEmptyMessage(7);
 				}
 			}
 		};
@@ -1267,7 +1264,7 @@ focus=-1;
 											msg.obj = js2;
 											mHandler.sendMessage(msg);
 										} catch (Exception e) {
-											e.printStackTrace();
+											handler.sendEmptyMessage(7);
 										}
 									}
 								};
@@ -1325,7 +1322,7 @@ focus=-1;
 						msg.obj = js1;
 						mHandler.sendMessage(msg);
 					} catch (Exception e) {
-						e.printStackTrace();
+						handler.sendEmptyMessage(7);
 					}
 				}
 			};
@@ -1399,7 +1396,7 @@ focus=-1;
 						msg.obj = senderjson;
 						class_fabiaoHandler.sendMessage(msg);
 					} catch (Exception e) {
-						e.printStackTrace();
+						handler.sendEmptyMessage(7);
 					}
 				}
 			};
@@ -1502,7 +1499,7 @@ focus=-1;
 						parseJson_childMicropost(reply);
 						mHandler.sendEmptyMessage(0);
 					} catch (Exception e) {
-						e.printStackTrace();
+						handler.sendEmptyMessage(7);
 					}
 				}
 			};
@@ -1565,7 +1562,7 @@ focus=-1;
 						msg.obj = js;
 						mHandler.sendMessage(msg);
 					} catch (Exception e) {
-						e.printStackTrace();
+						handler.sendEmptyMessage(7);
 					}
 				}
 			};
@@ -1614,7 +1611,7 @@ focus=-1;
 					handler.sendMessage(msg);
 					handler.sendEmptyMessage(4);// 关闭prodialog
 				} catch (Exception e) {
-					e.printStackTrace();
+					handler.sendEmptyMessage(7);
 				}
 			}
 		};
@@ -1661,7 +1658,7 @@ focus=-1;
 					handler.sendMessage(msg);
 					handler.sendEmptyMessage(4);// 关闭prodialog
 				} catch (Exception e) {
-					e.printStackTrace();
+					handler.sendEmptyMessage(7);
 				}
 			}
 		};
@@ -1698,7 +1695,7 @@ focus=-1;
 				}
 
 			} catch (Exception e) {
-				e.printStackTrace();
+				handler.sendEmptyMessage(7);
 			}
 		}
 	}
@@ -1722,7 +1719,7 @@ focus=-1;
 						msg.obj = result;
 						handler.sendMessage(msg);
 					} catch (Exception e1) {
-						e1.printStackTrace();
+						handler.sendEmptyMessage(7);
 					}
 				}
 				if (micropost_type == 1) { // 有关我的
@@ -1739,7 +1736,7 @@ focus=-1;
 						msg.obj = result;
 						handler.sendMessage(msg);
 					} catch (Exception e1) {
-						e1.printStackTrace();
+						handler.sendEmptyMessage(7);
 					}
 				}
 			}
