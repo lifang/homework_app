@@ -28,6 +28,7 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.BaseAdapter;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -46,6 +47,7 @@ public class HomeWorkIngActivity extends Activity implements Urlinterface {
 	// "{\"status\":\"success\",\"notice\":\"\u767b\u9646\u6210\u529f\uff01\",\"student\":{\"id\":111,\"name\":\"nameeeeee\",\"user_id\":15,\"nickname\":\"11111nickname\",\"avatar_url\":\"/homework_system/avatars/students/2014-01-/student_111.png\"},\"class\":{\"id\":1,\"name\":\"eeeee\",\"tearcher_name\":\"tea\",\"tearcher_id\":1},\"classmates\":[{\"avatar_url\":\"/homework_system/avatars/students/2014-01/student_1.png\",\"id\":1,\"name\":\"tea\",\"nickname\":\"\u4e0a\u5584\u82e5\u6c34\"}],\"task_messages\":[],\"microposts\":{\"page\":1,\"pages_count\":11,\"details_microposts\":[{\"avatar_url\":\"/homework_system/avatars/students/2014-01/student_1.png\",\"content\":\"KKK\",\"created_at\":\"2014-01-16T15:50:47+08:00\",\"micropost_id\":22,\"name\":\"tea\",\"reply_microposts_count\":null,\"user_id\":1,\"user_types\":1},{\"avatar_url\":\"/homework_system/avatars/students/2014-01/student_1.png\",\"content\":\"65469855655\",\"created_at\":\"2014-01-16T15:19:26+08:00\",\"micropost_id\":21,\"name\":\"tea\",\"reply_microposts_count\":null,\"user_id\":1,\"user_types\":1}]},\"daily_tasks\":[{\"id\":1,\"name\":\"package1\",\"start_time\":\"2014-01-14T18:35:46+08:00\",\"end_time\":\"2014-01-30T02:35:46+08:00\",\"question_packages_url\":\"31312312313123\",\"listening_schedule\":\"0/4\",\"reading_schedule\":\"0/5\"},{\"id\":2,\"name\":\"package2\",\"start_time\":\"2014-01-14T18:35:46+08:00\",\"end_time\":\"2014-01-10T02:35:46+08:00\",\"question_packages_url\":\"1111\",\"listening_schedule\":\"0/6\",\"reading_schedule\":\"7/7\"}],\"follow_microposts_id\":[]}";
 	// private String qsjson =
 	// "{\"status\":true,\"notice\":\"\",\"package\":{\"listening\":[{\"id\":\"1\",\"branch_questions\":[{\"id\":\"2\",\"content\":\"This is an apple.\",\"resource_url\":\"/question_packages_1/resource2.mp3\"},{\"id\":\"3\",\"content\":\"Why is Google undertaking such a venture?\",\"resource_url\":\"/question_packages_1/resource3.mp3\"}]},{\"id\":\"2\",\"branch_questions\":[{\"id\":\"4\",\"content\":\"The company likes to present itself as having lofty aspirations.\",\"resource_url\":\"/question_packages_2/resource4.mp3\"},{\"id\":\"5\",\"content\":\"At its centre, however, is one simple issue: that of copyright.\",\"resource_url\":\"/question_packages_2/resource5.mp3\"}]}],\"reading\":[{\"id\":\"3\",\"branch_questions\":[{\"id\":\"2\",\"content\":\"This is an apple.\",\"resource_url\":\"/question_packages_1/resource2.mp3\"},{\"id\":\"3\",\"content\":\"Why is Google undertaking such a venture?\",\"resource_url\":\"/question_packages_1/resource3.mp3\"}]},{\"id\":\"4\",\"branch_questions\":[{\"id\":\"4\",\"content\":\"The company likes to present itself as having lofty aspirations.\",\"resource_url\":\"/question_packages_2/resource4.mp3\"},{\"id\":\"5\",\"content\":\"At its centre, however, is one simple issue: that of copyright.\",\"resource_url\":\"/question_packages_2/resource5.mp3\"}]}]},\"user_answers\":{\"listening\":[{\"id\":\"1\",\"branch_questions\":[{\"id\":\"2\",\"answer\":\"This is-->This is an -->This is an apple\"},{\"id\":\"3\",\"answer\":\"Why is Google-->Why is Google __ venture-->Why is Google undertaking such a venture?\"}]}],\"reading\":[{\"id\":\"1\",\"branch_questions\":[{\"id\":\"2\",\"answer\":\"/test.mp3-->/test.mp3\"}]}]}}";
+	public boolean jiazai = false;
 	public String school_class_id;
 	public String student_id;
 	private ListView working_date_list;
@@ -121,24 +123,15 @@ public class HomeWorkIngActivity extends Activity implements Urlinterface {
 		Display display = this.getWindowManager().getDefaultDisplay();
 		int width = display.getWidth();
 		int height = display.getHeight();
-
 		Toast.makeText(getApplicationContext(), width + "/" + height,
 				Toast.LENGTH_SHORT).show();
 
-		if (HomeWorkTool.isConnect(HomeWorkIngActivity.this)) {
-			prodialog = new ProgressDialog(HomeWorkIngActivity.this);
-			prodialog.setMessage(HomeWorkParams.PD_CLASS_INFO);
-			prodialog.show();
-			Thread thread = new Thread(new getClassInfo());
-			thread.start();
-		}
 		working_date_list
 				.setOnItemClickListener(new AdapterView.OnItemClickListener() {
 					public void onItemClick(AdapterView<?> parent, View view,
 							int position, long id) {
 						index = position;
 						p_q_package_id = list.get(position).getId();
-						Log.i(tag, p_q_package_id + "");
 						homework.setP_q_package_id(p_q_package_id);
 						working_date_list.setAdapter(date_adapter);
 						working_content_list.setAdapter(question_adapter);
@@ -281,6 +274,8 @@ public class HomeWorkIngActivity extends Activity implements Urlinterface {
 				convertView = mInflater.inflate(R.layout.work_question_adapter,
 						null);
 			}
+			LinearLayout zill = (LinearLayout) convertView
+					.findViewById(R.id.zill);
 			ImageView work_question_img = (ImageView) convertView
 					.findViewById(R.id.work_question_img);
 			TextView work_question_case = (TextView) convertView
@@ -305,6 +300,9 @@ public class HomeWorkIngActivity extends Activity implements Urlinterface {
 				}
 				work_question_case.setText("完成：   "
 						+ list.get(index).getListening_schedule());
+				if (list.get(index).getListening_schedule().equals("0/0")) {
+					zill.setVisibility(View.GONE);
+				}
 				break;
 			case 1:// 1表示朗读
 				String[] Reading_schedule = list.get(index)
@@ -322,6 +320,10 @@ public class HomeWorkIngActivity extends Activity implements Urlinterface {
 				}
 				work_question_case.setText("完成：   "
 						+ list.get(index).getReading_schedule());
+
+				if (list.get(index).getReading_schedule().equals("0/0")) {
+					zill.setVisibility(View.GONE);
+				}
 				break;
 			}
 			return convertView;
@@ -395,12 +397,9 @@ public class HomeWorkIngActivity extends Activity implements Urlinterface {
 					day = day.replaceAll("-", "");
 					if (Integer.valueOf(day) > Integer.valueOf(Window_day)) {
 						type = true;
-						Log.i(tag, "day:" + type);
 					} else {
 						type = false;
-						Log.i(tag, "day:" + type);
 					}
-					Log.i(tag, day + "/" + Window_day);
 					// String start_time =
 					// returnDATE(item.getString("start_time"));
 					// String end_time = returnDATE(item.getString("end_time"));
@@ -409,10 +408,6 @@ public class HomeWorkIngActivity extends Activity implements Urlinterface {
 					String end_time = HomeWorkTool.divisionTime(item
 							.getString("end_time"));
 					end_time = end_time.split(" ")[1];
-					// if
-					// (list.get(index).getListening_schedule().equals("0/0")) {
-					// // convertView.setVisibility(View.GONE);
-					// }
 					list.add(new WorkPojo(item.getInt("id"), start_time,
 							end_day + " " + end_time, item.getString("name"),
 							item.getString("question_packages_url"), item
@@ -516,17 +511,9 @@ public class HomeWorkIngActivity extends Activity implements Urlinterface {
 					} else {
 						ListeningQuestionList.Record_Count = i;
 					}
-					Log.i("linshi",
-							"size----"
-									+ ListeningQuestionList.getListeningPojo(i)
-											.getQuesttionList().size() + "--"
-									+ jArr.length());
 					ListeningQuestionList.addAnswer(smallList);
 				}
 			}
-			Log.i("linshi", ListeningQuestionList.Small_Index
-					+ "-----cccccccccccc");
-			Log.i("linshi", "setHistory_item:" + questionhistory.size());
 			homework.setQuestion_history(questionhistory);
 			homework.setHistory_item(questionhistory.size());
 
@@ -534,6 +521,17 @@ public class HomeWorkIngActivity extends Activity implements Urlinterface {
 		} catch (JSONException e) {
 			e.printStackTrace();
 		}
+	}
+
+	protected void onResume() {
+			if (HomeWorkTool.isConnect(HomeWorkIngActivity.this)) {
+				prodialog = new ProgressDialog(HomeWorkIngActivity.this);
+				prodialog.setMessage(HomeWorkParams.PD_CLASS_INFO);
+				prodialog.show();
+				Thread thread = new Thread(new getClassInfo());
+				thread.start();
+			}
+		super.onResume();
 	}
 
 	public String returnDATE(String str) {

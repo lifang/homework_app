@@ -95,7 +95,7 @@ public final class R {
         public static final int aboutme_oneTv3=0x7f090005;
         public static final int aboutme_oneTv4=0x7f090006;
         public static final int aboutme_oneTv5=0x7f090007;
-        public static final int action_settings=0x7f090073;
+        public static final int action_settings=0x7f090074;
         public static final int button1=0x7f090009;
         public static final int button2=0x7f09000a;
         public static final int button3=0x7f09000b;
@@ -136,7 +136,7 @@ public final class R {
         public static final int micropost_date=0x7f09002f;
         public static final int micropost_guanzhu=0x7f09002e;
         public static final int micropost_huifu=0x7f090028;
-        public static final int newwork_img=0x7f090072;
+        public static final int newwork_img=0x7f090073;
         public static final int newwork_text=0x7f09006c;
         public static final int paizhaoshangchuan=0x7f090012;
         public static final int pull_to_load_image=0x7f090060;
@@ -194,12 +194,13 @@ public final class R {
         public static final int tou=0x7f09005d;
         public static final int user_face=0x7f090024;
         public static final int work_content_img=0x7f09001b;
-        public static final int work_question_case=0x7f090070;
-        public static final int work_question_end=0x7f090071;
-        public static final int work_question_img=0x7f09006f;
+        public static final int work_question_case=0x7f090071;
+        public static final int work_question_end=0x7f090072;
+        public static final int work_question_img=0x7f090070;
         public static final int work_start_date=0x7f09006d;
         public static final int working_content_list=0x7f09001d;
         public static final int working_date_list=0x7f09001a;
+        public static final int zill=0x7f09006f;
     }
     public static final class layout {
         public static final int aboutme=0x7f030000;
