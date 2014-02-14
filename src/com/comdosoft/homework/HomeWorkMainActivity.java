@@ -23,8 +23,10 @@ import android.view.Gravity;
 import android.view.KeyEvent;
 import android.view.View;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TabHost;
+import android.widget.LinearLayout.LayoutParams;
 import android.widget.TabHost.OnTabChangeListener;
 import android.widget.TabWidget;
 import android.widget.TextView;
@@ -56,8 +58,6 @@ public class HomeWorkMainActivity extends TabActivity implements Urlinterface {
 		setContentView(R.layout.homewrok_main);
 		homework = (HomeWork) getApplication();
 		instance = this;
-		Display display = getWindowManager().getDefaultDisplay();
-		width = display.getWidth();
 		tabhost = getTabHost();
 		res = getResources();
 		Intent intent1 = new Intent(this, Classxinxiliu.class);
@@ -87,7 +87,7 @@ public class HomeWorkMainActivity extends TabActivity implements Urlinterface {
 		updateTabStyle(tabhost);
 
 		if (HomeWorkTool.isConnect(HomeWorkMainActivity.this)) {
-//			thread.start();
+			// thread.start();
 			thread_work.start();
 		} else {
 			Builder builder = new Builder(HomeWorkMainActivity.this);
@@ -119,7 +119,7 @@ public class HomeWorkMainActivity extends TabActivity implements Urlinterface {
 				if (width >= 1200) {
 					textview.setPadding(27, 5, 5, 53);
 				} else {
-					textview.setPadding(20, 5, 5, 70);
+					textview.setPadding(20, 5, 5, 40);
 				}
 				textview.setTextSize(10);
 
@@ -150,11 +150,12 @@ public class HomeWorkMainActivity extends TabActivity implements Urlinterface {
 				if (width >= 1200) {
 					homework_view.setPadding(27, 5, 5, 53);
 				} else {
-					homework_view.setPadding(20, 5, 5, 70);
+					homework_view.setPadding(20, 5, 5, 40);
 				}
 				homework_view.setTextSize(10);
 				homework_view.setTextColor(Color.parseColor("#ffffff"));
-				if (flag_hw == true && homework.getHw_number() != 0 && homework.getMainItem()!=1) {
+				if (flag_hw == true && homework.getHw_number() != 0
+						&& homework.getMainItem() != 1) {
 					View mView = tabhost.getTabWidget().getChildAt(1);// 0是代表第一个Tab
 					ImageView imageView = (ImageView) mView
 							.findViewById(android.R.id.icon);// 获取控件imageView
@@ -267,6 +268,10 @@ public class HomeWorkMainActivity extends TabActivity implements Urlinterface {
 		for (int i = 0; i < tabWidget.getChildCount(); i++) {
 			RelativeLayout tabView = (RelativeLayout) mTabHost.getTabWidget()
 					.getChildAt(i);
+			if (width != 1200) {
+				LayoutParams lp = new LayoutParams(50, 90);
+				tabView.setLayoutParams(lp);
+			}
 			ImageView img = (ImageView) tabWidget.getChildAt(i).findViewById(
 					android.R.id.icon);
 
@@ -372,13 +377,13 @@ public class HomeWorkMainActivity extends TabActivity implements Urlinterface {
 						ImageView img = (ImageView) tabWidget.getChildAt(i)
 								.findViewById(android.R.id.icon);
 
-//						if (mTabHost.getCurrentTab() == 1) {
-//							Log.i("aaa", "----");
-//							flag_hw = false;
-//							handler.sendEmptyMessage(1);
-//						} else {
-//							flag_hw = true;
-//						}
+						// if (mTabHost.getCurrentTab() == 1) {
+						// Log.i("aaa", "----");
+						// flag_hw = false;
+						// handler.sendEmptyMessage(1);
+						// } else {
+						// flag_hw = true;
+						// }
 
 						if (mTabHost.getCurrentTab() == i) {
 							homework.setMainItem(i);
@@ -394,7 +399,7 @@ public class HomeWorkMainActivity extends TabActivity implements Urlinterface {
 								Log.i("aaa", "------");
 								homework.setNewsFlag(true);
 								flag_hw = false;
-								hw_num = 0 ;
+								hw_num = 0;
 								homework.setHw_number(0);
 								handler.sendEmptyMessage(1);
 								img.setImageResource(R.drawable.th2);
