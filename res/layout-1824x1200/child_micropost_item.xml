@@ -12,8 +12,8 @@
 
         <ImageView
             android:id="@+id/child_user_face"
-            android:layout_width="82px"
-            android:layout_height="82px"
+            android:layout_width="133.25px"
+            android:layout_height="133.25px"
             android:background="@drawable/moren" />
 
         <RelativeLayout
@@ -30,7 +30,7 @@
                 android:layout_height="wrap_content"
                 android:text="张三  回复  李四"
                 android:textColor="#92b81b"
-                android:textSize="24px" />
+                android:textSize="39px" />
 
             <TextView
                 android:id="@+id/child_micropost_content"
@@ -41,7 +41,7 @@
                 android:paddingRight="10px"
                 android:text="啊啊啊啊啊啊啊啊啊啊速度等等等等等等等等等等等等等等等等等等等等等等等等等等等等等等等等等等等等(2013/12/06 15:33)"
                 android:textColor="#626060"
-                android:textSize="24px" />
+                android:textSize="39px" />
 
             <Button
                 android:id="@+id/child_micropost_huifu"
@@ -52,7 +52,7 @@
                 android:background="#00000000"
                 android:text="@string/huifu"
                 android:textColor="#92b81b"
-                android:textSize="24px" />
+                android:textSize="39px" />
 
             <Button
                 android:id="@+id/child_micropost_delete"
@@ -64,7 +64,7 @@
                 android:background="#00000000"
                 android:text="@string/delete"
                 android:textColor="#92b81b"
-                android:textSize="24px"
+                android:textSize="39px"
                 android:visibility="gone" />
         </RelativeLayout>
 
