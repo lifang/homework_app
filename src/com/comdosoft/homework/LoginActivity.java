@@ -16,6 +16,7 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.util.Log;
+import android.view.Display;
 import android.widget.Toast;
 
 import com.comdosoft.homework.tools.HomeWork;
@@ -121,7 +122,7 @@ public class LoginActivity extends Activity implements Urlinterface {
 						Context.MODE_PRIVATE);
 				Editor editor = preferences.edit();
 				editor.putString("name", name);
-				editor.putString("user_id", id);
+				editor.putString("user_id", user_id);
 				editor.putString("id", id);
 				editor.putString("avatar_url", avatar_url);
 				editor.putString("nickname", nick_name);

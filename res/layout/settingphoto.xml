@@ -1,0 +1,33 @@
+
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/set_photolayout"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#e0000000"
+    
+    android:orientation="vertical" >
+
+        <Button
+            android:id="@+id/paizhaoshangchuan"
+            android:layout_width="288px"
+            android:layout_height="42px"
+            android:layout_marginTop="531px"
+            android:background="#f08629"
+            android:onClick="set_paizhaoshangchuan"
+            android:text="@string/takephoto"
+            android:textColor="#FFFFFF"
+            android:layout_marginLeft="285px"
+            android:textSize="20px" />
+
+        <Button
+            android:id="@+id/congxiangce"
+            android:layout_width="288px"
+            android:layout_height="42px"
+            android:layout_marginTop="17px"
+            android:background="#f08629"
+            android:onClick="set_congxiangce"
+            android:text="@string/fromphotostore"
+            android:textColor="#FFFFFF"
+            android:layout_marginLeft="285px"
+            android:textSize="20px" />
+    </LinearLayout>

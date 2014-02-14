@@ -31,6 +31,7 @@ public class HomeWork extends Application {
 	private boolean newsFlag;
 	private int lastcount;
 	private int hw_number;
+	
 	public int getLastcount() {
 		return lastcount;
 	}

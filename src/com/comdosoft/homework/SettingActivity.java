@@ -17,6 +17,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import android.app.Activity;
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -54,7 +55,7 @@ public class SettingActivity extends Activity implements Urlinterface {
 	private static final String IMAGE_FILE_NAME = "faceImage.jpg";
 
 	/* 请求码 */
-
+	private ProgressDialog prodialog;
 	private Bitmap bm = null;
 	private String nameS = ""; //
 	private String nicknameS = ""; //
@@ -86,8 +87,10 @@ public class SettingActivity extends Activity implements Urlinterface {
 
 		}
 
-		layout = this.findViewById(R.id.set_photolayout); // 隐藏内容
+	
 		faceImage = (ImageView) findViewById(R.id.set_touxiang);
+		faceImage.setOnClickListener(listener);
+
 		nickname = (EditText) findViewById(R.id.set_nickname);
 		name = (EditText) findViewById(R.id.set_name);
 		name.setText(nameS);
@@ -99,8 +102,7 @@ public class SettingActivity extends Activity implements Urlinterface {
 				GetCSDNLogoTask task = new GetCSDNLogoTask();
 				task.execute(Urlinterface.IP + avatar_url);//
 
-				faceImage.setOnClickListener(listener);
-
+				
 			}
 		} else {
 			Toast.makeText(getApplicationContext(), HomeWorkParams.INTERNET, 0)
@@ -146,6 +148,7 @@ public class SettingActivity extends Activity implements Urlinterface {
 		public void handleMessage(android.os.Message msg) {
 			switch (msg.what) {
 			case 0:
+				prodialog.dismiss();
 				final String res = (String) msg.obj;
 				if (res.length() != 0) {
 					JSONObject array;
@@ -181,6 +184,11 @@ public class SettingActivity extends Activity implements Urlinterface {
 					}
 
 				}
+				break;
+			case 7:
+				prodialog.dismiss();
+				Toast.makeText(getApplicationContext(), HomeWorkParams.INTERNET,
+						Toast.LENGTH_SHORT).show();
 				break;
 			default:
 				break;
@@ -222,8 +230,7 @@ public class SettingActivity extends Activity implements Urlinterface {
 					mHandler.sendMessage(msg);
 
 				} catch (Exception e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
+					mHandler.sendEmptyMessage(7);
 				}
 			}
 		};
@@ -234,6 +241,9 @@ public class SettingActivity extends Activity implements Urlinterface {
 		} else {
 
 			if (HomeWorkTool.isConnect(SettingActivity.this)) {
+				prodialog = new ProgressDialog(SettingActivity.this);
+				prodialog.setMessage("正在提交数据...");
+				prodialog.show();
 				thread.start();
 			} else {
 				Toast.makeText(getApplicationContext(),
@@ -277,169 +287,41 @@ public class SettingActivity extends Activity implements Urlinterface {
 
 		@Override
 		public void onClick(View v) {
-			layout.setVisibility(View.VISIBLE);
+			Intent intentp = new Intent();
+			intentp.setClass(SettingActivity.this, SettingPhoto.class);//
+			startActivityForResult(intentp, 0);  
 		}
 	};
 
-	/**
-	 * 拍照上传
-	 */
-	public void set_paizhaoshangchuan(View v) {
-
-		layout.setVisibility(View.GONE);
-		try {
-
-			Intent intentFromCapture = new Intent(
-					MediaStore.ACTION_IMAGE_CAPTURE);
-			// 判断存储卡是否可以用，可用进行存储
-			if (HomeWorkTool.isHasSdcard()) {
-
-				File file = new File(Environment.getExternalStorageDirectory()
-						+ "/" + IMAGE_FILE_NAME);
-
-				if (file.exists()) {
-					file.delete();
-
-				}
-				file = new File(Environment.getExternalStorageDirectory() + "/"
-						+ IMAGE_FILE_NAME);
-				if (!file.exists()) {
-					intentFromCapture.putExtra(MediaStore.EXTRA_OUTPUT, Uri
-							.fromFile(new File(Environment
-									.getExternalStorageDirectory(),
-									IMAGE_FILE_NAME)));
-
-				}
-
-			}
-
-			startActivityForResult(intentFromCapture, 2);
-		} catch (Exception e) {
-
-			Toast.makeText(getApplicationContext(), HomeWorkParams.CAPTURE, 0)
-					.show();
-		}
-
-	}
-
-	/**
-	 * 从相册选择
-	 */
-	public void set_congxiangce(View v) {
-		layout.setVisibility(View.GONE);
-
-		Intent intentFromGallery = new Intent(Intent.ACTION_PICK, null);
-
-		/**
-		 * 下面这句话，与其它方式写是一样的效果，如果：
-		 * intent.setData(MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
-		 * intent.setType(""image/*");设置数据类型
-		 * 如果朋友们要限制上传到服务器的图片类型时可以直接写如："image/jpeg 、 image/png等的类型"
-		 * 这个地方小马有个疑问，希望高手解答下：就是这个数据URI与类型为什么要分两种形式来写呀？有什么区别？
-		 */
-		intentFromGallery.setDataAndType(
-				MediaStore.Images.Media.EXTERNAL_CONTENT_URI, "image/*");
-		startActivityForResult(intentFromGallery, 1);
-
-	}
 
 	@Override
 	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-		if (resultCode!=0) {
+		
 			
 		
-		switch (requestCode) {
+		switch (resultCode) {
 		// 如果是直接从相册获取
-		case 1:
-			startPhotoZoom(data.getData());
-			break;
-		// 如果是调用相机拍照时
-		case 2:
-
-			if (HomeWorkTool.isHasSdcard()) {
-				File temp = new File(Environment.getExternalStorageDirectory()
-						+ "/" + IMAGE_FILE_NAME);
-				startPhotoZoom(Uri.fromFile(temp));
-			} else {
-				Toast.makeText(this, "未找到存储卡，无法存储照片！", Toast.LENGTH_LONG)
-						.show();
-			}
-
-			break;
-		// 取得裁剪后的图片
-		case 3:
-			/**
-			 * 非空判断大家一定要验证，如果不验证的话， 在剪裁之后如果发现不满意，要重新裁剪，丢弃
-			 * 当前功能时，会报NullException，小马只 在这个地方加下，大家可以根据不同情况在合适的 地方做判断处理类似情况
-			 * 
-			 */
-			if (data != null) {
-				getImageToView(data);
-			}
-			break;
+		 case RESULT_OK:  
+			 
+	            Bundle bundle = data.getExtras();  
+	            String info = bundle.getString("info"); 
+	            BitmapFactory.Options options = new BitmapFactory.Options();
+				options.inSampleSize = 7;//7就代表容量变为以前容量的1/7
+	            Bitmap bm = BitmapFactory.decodeFile(Environment.getExternalStorageDirectory()
+						+ "/1" + IMAGE_FILE_NAME, options);
+				
+				faceImage.setBackgroundDrawable(new BitmapDrawable(bm)); 
+	            
+	            
+	            break;  
 		default:
 			break;
 
 		}
 		super.onActivityResult(requestCode, resultCode, data);
-		}
+		
 	}
 
-	/**
-	 * 裁剪图片方法实现
-	 * 
-	 * @param uri
-	 */
-	public void startPhotoZoom(Uri uri) {
-
-		Intent intent = new Intent("com.android.camera.action.CROP");
-		intent.setDataAndType(uri, "image/*");
-		// 设置裁剪
-		intent.putExtra("crop", "true");
-		// aspectX aspectY 是宽高的比例
-		intent.putExtra("aspectX", 1);
-		intent.putExtra("aspectY", 1);
-		// outputX outputY 是裁剪图片宽高
-		intent.putExtra("outputX", 176);
-		intent.putExtra("outputY", 186);
-		intent.putExtra("return-data", true);
-		startActivityForResult(intent, 3);
-	}
-
-	/**
-	 * 保存裁剪之后的图片数据
-	 * 
-	 * @param picdata
-	 */
-	private void getImageToView(Intent data) {
-		Bundle extras = data.getExtras();
-		if (extras != null) {
-			Bitmap photo = extras.getParcelable("data");
-			Drawable drawable = new BitmapDrawable(photo);
-			faceImage.setBackgroundDrawable(drawable);
-			File file = new File(Environment.getExternalStorageDirectory()
-					+ "/1" + IMAGE_FILE_NAME);
-
-			try {
-
-				if (file.exists()) {
-					file.delete();
-
-				}
-
-				file.createNewFile();
-				FileOutputStream stream = new FileOutputStream(file);
-				ByteArrayOutputStream stream1 = new ByteArrayOutputStream();
-				photo.compress(Bitmap.CompressFormat.JPEG, 60, stream);
-				byte[] buf = stream1.toByteArray(); // 将图片流以字符串形式存储下来
-				// byte[] buf = s.getBytes();
-				stream.write(buf);
-				stream.close();
-			} catch (IOException e) {
-
-				e.printStackTrace();
-			}
-
-		}
-	}
+	
+	
 }

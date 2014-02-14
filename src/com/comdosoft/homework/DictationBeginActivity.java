@@ -184,7 +184,7 @@ public class DictationBeginActivity extends Activity implements
 	public void initView(int i) {
 		EditText et = new EditText(getApplicationContext());
 		String value = dictationList.get(i).getValue();
-		et.setText(value);
+//		et.setText(value);
 		et.setWidth(value.length() * 20 + 80);
 		et.setHeight(40);
 		et.setGravity(Gravity.CENTER);
