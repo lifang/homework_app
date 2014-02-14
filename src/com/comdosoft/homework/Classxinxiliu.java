@@ -1392,6 +1392,7 @@ focus=-1;
 						map.put("user_id", user_id);
 						map.put("user_types", user_types + "");
 						map.put("school_class_id", school_class_id);
+						Log.i("bbb", fabiaoContents+":"+user_id+":"+user_types+":"+school_class_id);
 						String senderjson = HomeWorkTool.doPost(
 								Urlinterface.NEWS_RELEASE, map);
 						Message msg = new Message();// 创建Message 对象
