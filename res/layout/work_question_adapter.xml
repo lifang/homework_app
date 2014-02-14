@@ -26,14 +26,14 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:textColor="@color/shenhui"
-                android:textSize="17sp" />
+                android:textSize="20px" />
         </LinearLayout>
 
         <TextView
             android:id="@+id/work_question_end"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:textSize="17sp" />
+            android:textSize="20px" />
     </LinearLayout>
 
 </LinearLayout>

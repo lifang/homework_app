@@ -14,6 +14,7 @@ import android.media.MediaPlayer.OnPreparedListener;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
+import android.view.Display;
 import android.view.Gravity;
 import android.view.KeyEvent;
 import android.view.View;
@@ -45,6 +46,7 @@ public class DictationRecordActivity extends Activity implements
 	private HomeWork homeWork;
 	private ProgressDialog mPd;
 	private ImageView mPlayImg;
+	private int width;
 	private Handler handler = new Handler() {
 		public void handleMessage(Message msg) {
 			super.handleMessage(msg);
@@ -70,6 +72,8 @@ public class DictationRecordActivity extends Activity implements
 		setContentView(R.layout.question_dictation_record);
 		homeWork = (HomeWork) getApplication();
 		homeWork.setNewsFlag(true);
+		Display display = this.getWindowManager().getDefaultDisplay();
+		width = display.getWidth();
 		findViewById(R.id.question_dictation_exit).setOnClickListener(this);
 		findViewById(R.id.question_dictation_check).setOnClickListener(this);
 		mPlayImg = (ImageView) findViewById(R.id.question_dictation_play);
@@ -129,7 +133,12 @@ public class DictationRecordActivity extends Activity implements
 
 	public void initView(int i) {
 		TextView tv = new TextView(getApplicationContext());
-		LayoutParams lp = new LayoutParams(LayoutParams.FILL_PARENT, 80);
+		LayoutParams lp;
+		if (width <= 800) {
+			lp = new LayoutParams(LayoutParams.FILL_PARENT, 60);
+		} else {
+			lp = new LayoutParams(LayoutParams.FILL_PARENT, 80);
+		}
 		tv.setLayoutParams(lp);
 		tv.setGravity(Gravity.CENTER_VERTICAL);
 		tv.setText("  " + errorList.get(i));

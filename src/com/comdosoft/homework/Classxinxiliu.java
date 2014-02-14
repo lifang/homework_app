@@ -260,8 +260,8 @@ public class Classxinxiliu extends Activity implements OnHeaderRefreshListener,
 				break;
 			case 7:
 
-				Toast.makeText(getApplicationContext(), HomeWorkParams.INTERNET,
-						Toast.LENGTH_SHORT).show();
+				Toast.makeText(getApplicationContext(),
+						HomeWorkParams.INTERNET, Toast.LENGTH_SHORT).show();
 				break;
 			}
 		}
@@ -286,7 +286,7 @@ public class Classxinxiliu extends Activity implements OnHeaderRefreshListener,
 		// R.id.main_class_classes_include).findViewById(
 		// R.id.main_class_oneTv2);
 		// main_class_classGv.setNumColumns(3);
-
+		fabiao_content = (EditText) findViewById(R.id.class_fabiao_content);
 		SharedPreferences preferences = getSharedPreferences(SHARED,
 				Context.MODE_PRIVATE);
 
@@ -329,7 +329,7 @@ public class Classxinxiliu extends Activity implements OnHeaderRefreshListener,
 	@Override
 	protected void onResume() {
 		super.onResume();
-focus=-1;
+		focus = -1;
 		if (HomeWorkTool.isConnect(Classxinxiliu.this)) {
 			lass_count = lass_count + 1;
 			Thread thread = new Thread(new get_class_info());
@@ -359,7 +359,6 @@ focus=-1;
 			Toast.makeText(getApplicationContext(), "暂无记录", Toast.LENGTH_SHORT)
 					.show();
 		}
-		fabiao_content = (EditText) findViewById(R.id.class_fabiao_content);
 
 	}
 
@@ -417,7 +416,6 @@ focus=-1;
 			// face.setScaleType(ImageView.ScaleType.FIT_XY);
 			imageLoader.displayImage(IP + mess.getAvatar_url(), face, options,
 					animateFirstListener);
-	
 
 		}
 
@@ -613,7 +611,7 @@ focus=-1;
 			}
 			final Child_Micropost child_Micropost = child_list.get(position2);
 			if (child_Micropost.getSender_avatar_url() != null) { // 设置头像
-			// face.setScaleType(ImageView.ScaleType.FIT_XY);
+				// face.setScaleType(ImageView.ScaleType.FIT_XY);
 				imageLoader.displayImage(IP
 						+ child_list.get(position2).getSender_avatar_url(),
 						face, options, animateFirstListener);
@@ -643,16 +641,17 @@ focus=-1;
 										String notice = array
 												.getString("notice");
 										if ("success".equals(status)) {
-											
-											int a = Integer.parseInt(list.get(focus).getReply_microposts_count())-1;
+
+											int a = Integer
+													.parseInt(list
+															.get(focus)
+															.getReply_microposts_count()) - 1;
 											list.get(focus)
 													.setReply_microposts_count(
-															a
-																	+ "");
+															a + "");
 											btlist.get(focus).setText(
 													HomeWorkParams.REPLY + "("
-															+ a
-															+ ")");
+															+ a + ")");
 											child_list.remove(item);
 											ziAdapter_list.get(focus)
 													.notifyDataSetChanged();
@@ -1234,16 +1233,16 @@ focus=-1;
 											final String json7 = (String) msg.obj;
 											child_list = new ArrayList<Child_Micropost>();
 											parseJson_childMicropost(json7);
-											int a = Integer.parseInt(mess.getReply_microposts_count())+1;
-											
+											int a = Integer
+													.parseInt(mess
+															.getReply_microposts_count()) + 1;
+
 											list.get(focus)
 													.setReply_microposts_count(
-															a
-																	+ "");
+															a + "");
 											btlist.get(focus).setText(
 													HomeWorkParams.REPLY + "("
-															+ a
-															+ ")");
+															+ a + ")");
 
 											listv.setAdapter(ziAdapter_list
 													.get(focus));
@@ -1409,12 +1408,12 @@ focus=-1;
 					}
 				}
 			};
-			prodialog = new ProgressDialog(Classxinxiliu.this);
-			prodialog.setMessage("正在发表...");
-			prodialog.show();
 			if (HomeWorkTool.isConnect(Classxinxiliu.this)) {
-//				Toast.makeText(getApplicationContext(), "id："+id+"-----user_id："+user_id,
-//						Toast.LENGTH_SHORT).show();
+
+				prodialog = new ProgressDialog(Classxinxiliu.this);
+				prodialog.setMessage("正在发表...");
+				prodialog.show();
+
 				thread.start();
 			} else {
 				Toast.makeText(getApplicationContext(),
@@ -1643,7 +1642,6 @@ focus=-1;
 		prodialog = new ProgressDialog(Classxinxiliu.this);
 		prodialog.setMessage(HomeWorkParams.PD_CLASS_INFO);
 		prodialog.show();
-		care.clear();
 		// page_own = 1;
 		// focus = -1;
 		micropost_type = 1;
@@ -1674,6 +1672,7 @@ focus=-1;
 				}
 			}
 		};
+
 		if (HomeWorkTool.isConnect(Classxinxiliu.this)) {
 
 			thread.start();
@@ -1713,7 +1712,7 @@ focus=-1;
 	}
 
 	public void shuaxin() {
-		
+
 		Thread thread = new Thread() {
 			public void run() {// 获得第一页信息
 

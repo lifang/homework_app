@@ -23,7 +23,6 @@ import android.view.Gravity;
 import android.view.KeyEvent;
 import android.view.View;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TabHost;
 import android.widget.LinearLayout.LayoutParams;
@@ -33,6 +32,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.comdosoft.homework.tools.HomeWork;
+import com.comdosoft.homework.tools.HomeWorkParams;
 import com.comdosoft.homework.tools.HomeWorkTool;
 import com.comdosoft.homework.tools.Urlinterface;
 
@@ -60,6 +60,10 @@ public class HomeWorkMainActivity extends TabActivity implements Urlinterface {
 		instance = this;
 		tabhost = getTabHost();
 		res = getResources();
+		
+		Display display = this.getWindowManager().getDefaultDisplay();
+		width = display.getWidth();
+		
 		Intent intent1 = new Intent(this, Classxinxiliu.class);
 		spec1 = tabhost.newTabSpec("spec1")
 				.setIndicator("", res.getDrawable(R.drawable.th1_1))
@@ -87,7 +91,7 @@ public class HomeWorkMainActivity extends TabActivity implements Urlinterface {
 		updateTabStyle(tabhost);
 
 		if (HomeWorkTool.isConnect(HomeWorkMainActivity.this)) {
-			// thread.start();
+			thread.start();
 			thread_work.start();
 		} else {
 			Builder builder = new Builder(HomeWorkMainActivity.this);
@@ -154,7 +158,7 @@ public class HomeWorkMainActivity extends TabActivity implements Urlinterface {
 				}
 				homework_view.setTextSize(10);
 				homework_view.setTextColor(Color.parseColor("#ffffff"));
-				if (flag_hw == true && homework.getHw_number() != 0
+				if (flag_hw == true && hw_num != 0
 						&& homework.getMainItem() != 1) {
 					View mView = tabhost.getTabWidget().getChildAt(1);// 0是代表第一个Tab
 					ImageView imageView = (ImageView) mView
@@ -165,14 +169,17 @@ public class HomeWorkMainActivity extends TabActivity implements Urlinterface {
 					} else {
 
 					}
-					homework_view.setText(homework.getHw_number() + "");
+					homework_view.setText(hw_num + "");
 				} else {
-					if (homework.getHw_number() == 0) {
+					if (hw_num == 0) {
 						homework_view.setText("");
 					} else {
 						homework_view.setText("");
 					}
 				}
+				break;
+			case 2:
+				Toast.makeText(getApplicationContext(), HomeWorkParams.INTERNET, Toast.LENGTH_SHORT).show();
 				break;
 			}
 		}
@@ -209,11 +216,10 @@ public class HomeWorkMainActivity extends TabActivity implements Urlinterface {
 					msg.what = 0;
 					msg.obj = count;
 					handler.sendMessage(msg);
-					Thread.sleep(60000);
-				} catch (InterruptedException e) {
-					e.printStackTrace();
+					thread.sleep(60000);
 				} catch (Exception e) {
-					e.printStackTrace();
+					handler.sendEmptyMessage(2);
+					
 				}
 			}
 		}
@@ -235,9 +241,9 @@ public class HomeWorkMainActivity extends TabActivity implements Urlinterface {
 					hw_num = obj.getInt("num");
 					homework.setHw_number(hw_num);
 					handler.sendEmptyMessage(1);
-					Thread.sleep(60000);
+					thread_work.sleep(60000);
 				} catch (Exception e) {
-					e.printStackTrace();
+					handler.sendEmptyMessage(2);
 				}
 			}
 		}
@@ -268,7 +274,7 @@ public class HomeWorkMainActivity extends TabActivity implements Urlinterface {
 		for (int i = 0; i < tabWidget.getChildCount(); i++) {
 			RelativeLayout tabView = (RelativeLayout) mTabHost.getTabWidget()
 					.getChildAt(i);
-			if (width != 1200) {
+			if (width == 800) {
 				LayoutParams lp = new LayoutParams(50, 90);
 				tabView.setLayoutParams(lp);
 			}
@@ -400,7 +406,6 @@ public class HomeWorkMainActivity extends TabActivity implements Urlinterface {
 								homework.setNewsFlag(true);
 								flag_hw = false;
 								hw_num = 0;
-								homework.setHw_number(0);
 								handler.sendEmptyMessage(1);
 								img.setImageResource(R.drawable.th2);
 								break;
@@ -430,7 +435,7 @@ public class HomeWorkMainActivity extends TabActivity implements Urlinterface {
 								img.setImageResource(R.drawable.th1_1);
 								break;
 							case 1:
-								if (flag_hw && homework.getHw_number() > 0) {
+								if (flag_hw && hw_num > 0) {
 									handler.sendEmptyMessage(1);
 								} else {
 									img.setImageResource(R.drawable.th2_2);

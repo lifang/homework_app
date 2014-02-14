@@ -50,12 +50,19 @@ public class Soundex_Levenshtein {
 			int[] arr = new int[2];
 			int temp = 0;
 			for (int j = 0; j < tl.size(); j++) {
-				if (tl.get(j).matches("[\\u4E00-\\u9FA5]+")) {
+				if (tl.get(j).matches("[\\u4E00-\\u9FA5]+")) {//
 					temp = 0;
+				}
+				if (ml.get(i).matches("[0-9]+")) {
+					temp = 10;
+					break;
 				} else {
-					int value = dragonEngine(ml.get(i), tl.get(j));
-					if (value >= temp) {
-						temp = value;
+					if (!tl.get(j).matches("[0-9]+")
+							&& !tl.get(j).matches("[\\u4E00-\\u9FA5]+")) {
+						int value = dragonEngine(ml.get(i), tl.get(j));
+						if (value >= temp) {
+							temp = value;
+						}
 					}
 				}
 			}
