@@ -44,6 +44,7 @@ import com.comdosoft.homework.tools.Urlinterface;
 public class DictationBeginActivity extends Activity implements
 		OnClickListener, HomeWorkParams, OnPreparedListener,
 		OnCompletionListener, Urlinterface {
+	private String REG = "(?i)[^a-zA-Z0-9\u4E00-\u9FA5]";
 	private int linearLayoutIndex = 0;
 	private int mesLinearLayoutIndex = 0;
 	private int smallIndex;
@@ -163,7 +164,8 @@ public class DictationBeginActivity extends Activity implements
 		String content = qpList.get(smallIndex).getContent();
 		String[] sArr = content.substring(0, content.length() - 1).split(" ");
 		for (int i = 0; i < sArr.length; i++) {
-			dictationList.add(new DictationPojo(sArr[i], 0));
+			dictationList
+					.add(new DictationPojo(sArr[i].replaceAll(REG, ""), 0));
 		}
 
 		// 获取标点
@@ -185,7 +187,8 @@ public class DictationBeginActivity extends Activity implements
 		EditText et = new EditText(getApplicationContext());
 		String value = dictationList.get(i).getValue();
 //		et.setText(value);
-		et.setWidth(value.length() * 20 + 80);
+		int width = value.length() * 20 + 80;
+		et.setWidth(width > 200 ? 200 : width);
 		et.setHeight(40);
 		et.setGravity(Gravity.CENTER);
 		et.setLayoutParams(etlp);
@@ -206,17 +209,17 @@ public class DictationBeginActivity extends Activity implements
 		linearLayoutList.get(linearLayoutIndex).addView(et);
 
 		// 最后的标点符号
-		if (i == dictationList.size() - 1) {
-			TextView tv = new TextView(getApplicationContext());
-			tv.setText(symbol);
-			tv.setTextSize(24);
-			LayoutParams lp = new LayoutParams(LayoutParams.WRAP_CONTENT,
-					LayoutParams.WRAP_CONTENT);
-			lp.topMargin = 10;
-			lp.leftMargin = 10;
-			tv.setLayoutParams(lp);
-			linearLayoutList.get(linearLayoutIndex).addView(tv);
-		}
+//		if (i == dictationList.size() - 1) {
+//			TextView tv = new TextView(getApplicationContext());
+//			tv.setText(symbol);
+//			tv.setTextSize(24);
+//			LayoutParams lp = new LayoutParams(LayoutParams.WRAP_CONTENT,
+//					LayoutParams.WRAP_CONTENT);
+//			lp.topMargin = 10;
+//			lp.leftMargin = 10;
+//			tv.setLayoutParams(lp);
+//			linearLayoutList.get(linearLayoutIndex).addView(tv);
+//		}
 
 		initMesView(i);
 	}
@@ -254,6 +257,15 @@ public class DictationBeginActivity extends Activity implements
 			for (int i = 0; i < etList.size(); i++) {
 				String s = etList.get(i).getText().toString();
 				if (s != null && !s.equals("")) {
+					if (HomeWorkTool.isChinese(s)) {
+						errorMap.put(dictationList.get(i).getValue(), 1);
+						dictationList.get(i).setFlag(0);
+						answer.append(s).append("-!-");
+						tvList.get(i).setVisibility(View.INVISIBLE);
+						etList.get(i).setTextColor(Color.rgb(255, 0, 0));
+						return;
+					}
+					s = s.replaceAll(REG, "");
 					int value = Soundex_Levenshtein.dragonEngine(s,
 							dictationList.get(i).getValue());
 					if (dictationList.get(i).getValue().equals(s)) {

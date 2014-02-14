@@ -10,7 +10,7 @@
     <color name="juhuang">#F08629</color>
     <color name="question_title_bg1">#6E6B6B</color>
     <color name="question_speak_bg">#F4F4F4</color>
-    <color name="transparent">#50000000</color>
+    <color name="transparent">#e0000000</color>
     <color name="dialog_text">#FCE3CE</color>
 
 </resources>

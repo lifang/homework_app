@@ -25,6 +25,7 @@ import android.os.Looper;
 import android.os.Message;
 import android.speech.RecognizerIntent;
 import android.util.Log;
+import android.view.Display;
 import android.view.KeyEvent;
 import android.view.View;
 import android.widget.Button;
@@ -71,6 +72,7 @@ public class SpeakBeginActivity extends Activity implements Urlinterface,
 	private ImageView question_speak_img;
 	private String path;
 	private boolean playFlag = false;
+	private int width;
 	private Handler handler = new Handler() {
 		public void handleMessage(Message msg) {
 			Intent intent = new Intent();
@@ -138,6 +140,7 @@ public class SpeakBeginActivity extends Activity implements Urlinterface,
 			super.handleMessage(msg);
 		}
 	};
+	
 
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -145,6 +148,8 @@ public class SpeakBeginActivity extends Activity implements Urlinterface,
 		homework = (HomeWork) getApplication();
 		initialize();
 		SetTextView();
+		Display display = this.getWindowManager().getDefaultDisplay();
+		width = display.getWidth();
 		publish_question_package_id = homework.getP_q_package_id();
 		Log.i(tag, publish_question_package_id + "===");
 		student_id = homework.getUser_id();

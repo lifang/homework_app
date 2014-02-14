@@ -78,9 +78,7 @@ public class PredicateLayout extends LinearLayout {
 		return new LayoutParams(1, 1); // default of 1px spacing
 	}
 
-	@Override
 	protected void onLayout(boolean changed, int l, int t, int r, int b) {
-		// TODO Auto-generated method stub
 
 		int count = getChildCount();
 		for (int i = 0; i < count; i++) {
