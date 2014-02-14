@@ -31,7 +31,7 @@ public class HomeWork extends Application {
 	private boolean newsFlag;
 	private int lastcount;
 	private int hw_number;
-	
+	private int work_date_item;
 	public int getLastcount() {
 		return lastcount;
 	}
@@ -57,6 +57,7 @@ public class HomeWork extends Application {
 		this.setHistory_item(0);
 		this.setMainItem(0);
 		this.setMessage_id(-1);
+		this.setWork_date_item(0);
 	}
 
 	public int getNewCount() {
@@ -193,6 +194,14 @@ public class HomeWork extends Application {
 
 	public void setHw_number(int hw_number) {
 		this.hw_number = hw_number;
+	}
+
+	public int getWork_date_item() {
+		return work_date_item;
+	}
+
+	public void setWork_date_item(int work_date_item) {
+		this.work_date_item = work_date_item;
 	}
 
 	public void onCreate() {

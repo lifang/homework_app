@@ -51,7 +51,6 @@ public class HomeWorkIngActivity extends Activity implements Urlinterface {
 	public String school_class_id;
 	public String student_id;
 	private ListView working_date_list;
-	private int index;
 	private ListView working_content_list;
 	private ProgressDialog prodialog;
 	private ArrayList<WorkPojo> list;
@@ -71,7 +70,7 @@ public class HomeWorkIngActivity extends Activity implements Urlinterface {
 				if (list.size() != 0) {
 					working_date_list.setAdapter(date_adapter);
 					working_content_list.setAdapter(question_adapter);
-					p_q_package_id = list.get(0).getId();
+					p_q_package_id = list.get(homework.getWork_date_item()).getId();
 					prodialog = new ProgressDialog(HomeWorkIngActivity.this);
 					prodialog.setMessage(HomeWorkParams.PD_QUESTION_INFO);
 					prodialog.show();
@@ -111,7 +110,6 @@ public class HomeWorkIngActivity extends Activity implements Urlinterface {
 		setContentView(R.layout.activity_working);
 		homework = (HomeWork) getApplication();// 初始化
 		initialize();// 初始化
-		index = 0;
 
 		SharedPreferences sp = getSharedPreferences(SHARED, 0);
 		student_id = sp.getString("id", "null");
@@ -130,7 +128,7 @@ public class HomeWorkIngActivity extends Activity implements Urlinterface {
 				.setOnItemClickListener(new AdapterView.OnItemClickListener() {
 					public void onItemClick(AdapterView<?> parent, View view,
 							int position, long id) {
-						index = position;
+						homework.setWork_date_item(position);
 						p_q_package_id = list.get(position).getId();
 						homework.setP_q_package_id(p_q_package_id);
 						working_date_list.setAdapter(date_adapter);
@@ -147,7 +145,7 @@ public class HomeWorkIngActivity extends Activity implements Urlinterface {
 				.setOnItemClickListener(new AdapterView.OnItemClickListener() {
 					public void onItemClick(AdapterView<?> parent, View view,
 							int position, long id) {
-						if (list.get(index).isType()) {
+						if (list.get(homework.getWork_date_item()).isType()) {
 							homework.setWork_history(false);
 						} else {
 							homework.setWork_history(true);
@@ -232,7 +230,7 @@ public class HomeWorkIngActivity extends Activity implements Urlinterface {
 				} else {
 					newwork_img.setVisibility(View.INVISIBLE);
 				}
-				if (position == index) {// 设置选中项图片
+				if (position == homework.getWork_date_item()) {// 设置选中项图片
 					sign_img.setBackgroundResource(R.drawable.jt);
 					work_start_date.setTextColor(getResources().getColor(
 							R.color.lvse));
@@ -285,7 +283,7 @@ public class HomeWorkIngActivity extends Activity implements Urlinterface {
 
 			switch (position) {
 			case 0:// 0表示听写
-				String[] Listening_schedule = list.get(index)
+				String[] Listening_schedule = list.get(homework.getWork_date_item())
 						.getListening_schedule().split("/");
 				if (Listening_schedule[0].equals(Listening_schedule[1])) {// 表示已完成
 					work_question_img.setBackgroundResource(R.drawable.tx2);
@@ -295,17 +293,17 @@ public class HomeWorkIngActivity extends Activity implements Urlinterface {
 				} else {
 					work_question_img.setBackgroundResource(R.drawable.tx);
 					work_question_end.setText("截至时间："
-							+ list.get(index).getEnd_time());
+							+ list.get(homework.getWork_date_item()).getEnd_time());
 					work_question_end.setTextColor(Color.RED);
 				}
 				work_question_case.setText("完成：   "
-						+ list.get(index).getListening_schedule());
-				if (list.get(index).getListening_schedule().equals("0/0")) {
+						+ list.get(homework.getWork_date_item()).getListening_schedule());
+				if (list.get(homework.getWork_date_item()).getListening_schedule().equals("0/0")) {
 					zill.setVisibility(View.GONE);
 				}
 				break;
 			case 1:// 1表示朗读
-				String[] Reading_schedule = list.get(index)
+				String[] Reading_schedule = list.get(homework.getWork_date_item())
 						.getReading_schedule().split("/");
 				if (Reading_schedule[0].equals(Reading_schedule[1])) {// 表示已完成
 					work_question_img.setBackgroundResource(R.drawable.ld);
@@ -315,13 +313,13 @@ public class HomeWorkIngActivity extends Activity implements Urlinterface {
 				} else {
 					work_question_img.setBackgroundResource(R.drawable.ld2);
 					work_question_end.setText("截至时间："
-							+ list.get(index).getEnd_time());
+							+ list.get(homework.getWork_date_item()).getEnd_time());
 					work_question_end.setTextColor(Color.RED);
 				}
 				work_question_case.setText("完成：   "
-						+ list.get(index).getReading_schedule());
+						+ list.get(homework.getWork_date_item()).getReading_schedule());
 
-				if (list.get(index).getReading_schedule().equals("0/0")) {
+				if (list.get(homework.getWork_date_item()).getReading_schedule().equals("0/0")) {
 					zill.setVisibility(View.GONE);
 				}
 				break;
