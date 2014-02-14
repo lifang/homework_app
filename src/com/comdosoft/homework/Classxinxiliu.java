@@ -1407,7 +1407,8 @@ focus=-1;
 			prodialog.setMessage("正在发表...");
 			prodialog.show();
 			if (HomeWorkTool.isConnect(Classxinxiliu.this)) {
-
+//				Toast.makeText(getApplicationContext(), "id："+id+"-----user_id："+user_id,
+//						Toast.LENGTH_SHORT).show();
 				thread.start();
 			} else {
 				Toast.makeText(getApplicationContext(),
