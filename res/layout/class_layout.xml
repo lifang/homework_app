@@ -157,6 +157,7 @@
             android:layout_alignParentLeft="true"
             android:layout_below="@+id/relativeLayout1"
             android:layout_marginTop="13.2px"
+            android:background="#DDDDDD"
             android:focusable="false" />
     </RelativeLayout>
 
