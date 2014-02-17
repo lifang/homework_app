@@ -29,12 +29,12 @@
                 android:focusableInTouchMode="true"
                 android:gravity="top"
                 android:hint="@string/class_fabiao_tishi"
-                android:textSize="39px" />
+                android:textSize="30px" />
 
             <Button
                 android:id="@+id/button_fabiao"
-                android:layout_width="120px"
-                android:layout_height="52.8px"
+                android:layout_width="100px"
+                android:layout_height="45px"
                 android:layout_alignRight="@+id/class_fabiao_content"
                 android:layout_below="@+id/class_fabiao_content"
                 android:layout_marginTop="18.53px"
@@ -42,7 +42,7 @@
                 android:onClick="class_fabiao"
                 android:text="@string/class_fabiao"
                 android:textColor="#FFFFFF"
-                android:textSize="39px" />
+                android:textSize="30px" />
 
             <EditText
                 android:id="@+id/class_ed1"
@@ -55,7 +55,7 @@
 
             <Button
                 android:id="@+id/class_button_all"
-                android:layout_width="133.25px"
+                android:layout_width="123.25px"
                 android:layout_height="wrap_content"
                 android:layout_below="@+id/class_fabiao_content"
                 android:layout_marginTop="75px"
@@ -63,11 +63,11 @@
                 android:onClick="class_button_all"
                 android:text="@string/class_button_all"
                 android:textColor="#FFFFFF"
-                android:textSize="39px" />
+                android:textSize="30px" />
 
             <Button
                 android:id="@+id/class_button_myself"
-                android:layout_width="133.25px"
+                android:layout_width="123.25px"
                 android:layout_height="wrap_content"
                 android:layout_alignBottom="@+id/class_button_all"
                 android:layout_marginLeft="10px"
@@ -76,7 +76,7 @@
                 android:onClick="class_button_myself"
                 android:text="@string/class_button_myself"
                 android:textColor="#FFFFFF"
-                android:textSize="39px" />
+                android:textSize="30px" />
         </RelativeLayout>
 
         <com.comdosoft.homework.tools.PullToRefreshView
@@ -145,7 +145,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/main_class_classesTv"
-                android:textSize="39px" />
+                android:textSize="30px" />
 
             <View
                 android:id="@+id/main_class_view2"

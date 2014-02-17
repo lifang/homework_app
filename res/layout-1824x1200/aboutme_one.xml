@@ -29,7 +29,7 @@
                 android:layout_marginLeft="37px"
                 android:layout_marginTop="10px"
                 android:textColor="#92b81b"
-                android:textSize="24px" />
+                android:textSize="30px" />
 
             <TextView
                 android:id="@+id/aboutme_oneTv2"
@@ -39,7 +39,7 @@
                 android:layout_marginTop="10px"
                 android:layout_toRightOf="@id/aboutme_oneTv"
                 android:textColor="#9da2ad"
-                android:textSize="24px" />
+                android:textSize="30px" />
 
             <ImageButton
                 android:id="@+id/aboutme_oneIb"
@@ -65,7 +65,7 @@
                 android:layout_marginTop="10px"
                 android:maxLines="2"
                 android:textColor="#626060"
-                android:textSize="24px" />
+                android:textSize="30px" />
 
             <RelativeLayout
                 android:layout_marginLeft="20px"
@@ -80,7 +80,7 @@
                     android:layout_marginLeft="37px"
                     android:layout_marginTop="20px"
                     android:textColor="#c1bebf"
-                    android:textSize="24px" />
+                    android:textSize="30px" />
 
                 <TextView
                     android:id="@+id/aboutme_oneTv5"
@@ -91,7 +91,7 @@
                     android:layout_marginRight="18px"
                     android:text="查看"
                     android:textColor="@color/lvse"
-                    android:textSize="24px" />
+                    android:textSize="30px" />
             </RelativeLayout>
         </LinearLayout>
     </LinearLayout>

@@ -592,9 +592,10 @@ public class Classxinxiliu extends Activity implements OnHeaderRefreshListener,
 					.findViewById(R.id.child_micropost_delete); // 删除
 			Button reply = (Button) child_view
 					.findViewById(R.id.child_micropost_huifu); // 回复
-			EditText child_bottom = (EditText) child_view
-					.findViewById(R.id.child_bottom);
+
 			if (child_list.size() == 1) {
+				EditText child_bottom = (EditText) child_view
+						.findViewById(R.id.child_bottom);
 				child_bottom.setVisibility(View.GONE);
 			}
 			final Child_Micropost child_Micropost = child_list.get(position2);
@@ -641,8 +642,9 @@ public class Classxinxiliu extends Activity implements OnHeaderRefreshListener,
 													HomeWorkParams.REPLY + "("
 															+ a + ")");
 											child_list.remove(item);
-											ziAdapter_list.get(focus)
-													.notifyDataSetChanged();
+
+											// ziAdapter_list.get(focus)
+											// .notifyDataSetChanged();
 											HomeWorkTool
 													.setListViewHeightBasedOnChildren(list_list
 															.get(focus));
@@ -1483,22 +1485,17 @@ public class Classxinxiliu extends Activity implements OnHeaderRefreshListener,
 				}
 			};
 			if (HomeWorkTool.isConnect(Classxinxiliu.this)) {
+				if (Integer.parseInt(mess.getReply_microposts_count())>0) {
+					thread.start();
+				}else {
+					mHandler.sendEmptyMessage(0);
+				}
 
-				thread.start();
 			} else {
 				Toast.makeText(getApplicationContext(),
 						HomeWorkParams.INTERNET, 0).show();
 			}
-			// }
-			// else {
-			// if (child_list.size() > 0) {// 如果没有子消息，隐藏加载更多按钮
-			// lookMore.setVisibility(View.VISIBLE);
-			// } else {
-			// lookMore.setVisibility(View.GONE);
-			// }
-			// listView2.setAdapter(ziAdapter_list.get(focus));
-			// HomeWorkTool.setListViewHeightBasedOnChildren(listView2);
-			// }
+
 
 		} else {
 			gk_list.set(i, true);
