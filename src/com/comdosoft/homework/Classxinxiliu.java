@@ -1406,33 +1406,61 @@ public class Classxinxiliu extends Activity implements OnHeaderRefreshListener,
 	public void setHuiFu(int i, final Micropost mess, RelativeLayout layout1,
 			EditText Reply_edit, final ListView listView2, final Button lookMore) {
 
-		final Handler mHandler2 = new Handler() {
+		final Handler mHandler = new Handler() {
 			public void handleMessage(android.os.Message msg) {
+				
 				switch (msg.what) {
 				case 0:
-					final String i = (String) msg.obj;
-					for (int j = 0; j < item_huifu.size(); j++) {
-						if (j != Integer.parseInt(i)) {
-							item_huifu.get(j).setVisibility(View.GONE);
-						}
+					prodialog.dismiss();
+					if (child_list.size() > 0) {// 如果没有子消息，隐藏加载更多按钮
+						lookMore.setVisibility(View.VISIBLE);
+						listView2.setVisibility(View.VISIBLE);
+
+					} else {
+						lookMore.setVisibility(View.GONE);
 					}
+					listView2.setAdapter(ziAdapter_list.get(focus));
+					HomeWorkTool
+							.setListViewHeightBasedOnChildren(listView2);
 					break;
 				default:
 					break;
 				}
 			}
 		};
+		Thread thread = new Thread() {
+			public void run() {
+				try {
+					Map<String, String> map = new HashMap<String, String>();
+					map.put("micropost_id", mess.getId());
+					String reply = HomeWorkTool.sendGETRequest(
+							Urlinterface.get_reply_microposts, map);
+					parseJson_childMicropost(reply);
+					mHandler.sendEmptyMessage(0);
+				} catch (Exception e) {
+					handler.sendEmptyMessage(7);
+				}
+			}
+		};
+		
+		for (int j = 0; j < item_huifu.size(); j++) {
+			if (j != i) {
+				item_huifu.get(j).setVisibility(View.GONE);
+			}else {
+				item_huifu.get(j).setVisibility(View.VISIBLE);
+			}
+		}
 
 		child_list = new ArrayList<Child_Micropost>();
 		if (gk_list.get(i) == true) {
 
-			gk_list.set(i, false);
-
 			for (int j = 0; j < item_huifu.size(); j++) {
-				if (j != i) {
-					item_huifu.get(j).setVisibility(View.GONE);
+				if (j == i) {
+					gk_list.set(i, false);
+				}else {
+					gk_list.set(i, true);
 				}
-			}
+			}		
 			focus = i;
 			micropost_id = mess.getId();// 点击 回复 默认 给主消息回复 记录 主消息 id
 			reciver_id = mess.getUser_id();
@@ -1441,49 +1469,10 @@ public class Classxinxiliu extends Activity implements OnHeaderRefreshListener,
 			Reply_edit.setHint(user_name + " " + HomeWorkParams.REPLY + " "
 					+ mess.getName() + ":");
 			listView2.setVisibility(View.VISIBLE);
-			int si = Integer.parseInt(list.get(focus)
-					.getReply_microposts_count().toString());
-
-			// if (si > 0 || !lookStr.equals("")) {
 			prodialog = new ProgressDialog(Classxinxiliu.this);
 			prodialog.setMessage("正在加载中");
 			prodialog.show();
 
-			final Handler mHandler = new Handler() {
-				public void handleMessage(android.os.Message msg) {
-					prodialog.dismiss();
-					switch (msg.what) {
-					case 0:
-						if (child_list.size() > 0) {// 如果没有子消息，隐藏加载更多按钮
-							lookMore.setVisibility(View.VISIBLE);
-							listView2.setVisibility(View.VISIBLE);
-
-						} else {
-							lookMore.setVisibility(View.GONE);
-						}
-						listView2.setAdapter(ziAdapter_list.get(focus));
-						HomeWorkTool
-								.setListViewHeightBasedOnChildren(listView2);
-						break;
-					default:
-						break;
-					}
-				}
-			};
-			Thread thread = new Thread() {
-				public void run() {
-					try {
-						Map<String, String> map = new HashMap<String, String>();
-						map.put("micropost_id", mess.getId());
-						String reply = HomeWorkTool.sendGETRequest(
-								Urlinterface.get_reply_microposts, map);
-						parseJson_childMicropost(reply);
-						mHandler.sendEmptyMessage(0);
-					} catch (Exception e) {
-						handler.sendEmptyMessage(7);
-					}
-				}
-			};
 			if (HomeWorkTool.isConnect(Classxinxiliu.this)) {
 				if (Integer.parseInt(mess.getReply_microposts_count())>0) {
 					thread.start();
