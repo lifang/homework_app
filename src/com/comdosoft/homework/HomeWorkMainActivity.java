@@ -133,7 +133,7 @@ public class HomeWorkMainActivity extends TabActivity implements Urlinterface {
 				textview.setTextColor(Color.parseColor("#ffffff"));
 				if (homework.isNewsFlag() == true) {
 					num = msg.obj.toString();
-					if (msg.obj.toString().equals("0")) {
+					if (Integer.valueOf(msg.obj.toString())<=0) {
 					} else {
 						View mView = tabhost.getTabWidget().getChildAt(2);// 0是代表第一个Tab
 						ImageView imageView = (ImageView) mView
@@ -141,6 +141,7 @@ public class HomeWorkMainActivity extends TabActivity implements Urlinterface {
 						imageView.setImageDrawable(getResources().getDrawable(
 								R.drawable.news)); // 改变我们需要的图标
 						textview.setText(msg.obj + "");
+						Log.i("MyReceiver", msg.obj+"<<<");
 						
 					}
 				} else {
@@ -216,11 +217,13 @@ public class HomeWorkMainActivity extends TabActivity implements Urlinterface {
 						}
 						count = 0;
 					}
+					homework.setHw_number(hw_num);
+					homework.setNew_id_list(new_idlist);
 					msg.what = 0;
 					msg.obj = count;
 					Log.i("aaa", count+"");
 					handler.sendMessage(msg);
-					thread.sleep(60000);
+					thread.sleep(6000);
 				} catch (Exception e) {
 //					handler.sendEmptyMessage(2);
 					
@@ -234,6 +237,8 @@ public class HomeWorkMainActivity extends TabActivity implements Urlinterface {
 		SharedPreferences sp = getSharedPreferences(Urlinterface.SHARED, 0);
 		String id = sp.getString("id", "null");
 		String school_class_id = sp.getString("school_class_id", "null");
+		homework.setHw_number(0);
+		homework.setNew_id_list(new_idlist);
 		while (flag_hw) {
 			if (HomeWorkTool.isConnect(getApplicationContext())) {
 				HashMap<String, String> mp = new HashMap<String, String>();

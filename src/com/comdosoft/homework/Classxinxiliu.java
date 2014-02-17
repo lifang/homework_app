@@ -1469,7 +1469,7 @@ public class Classxinxiliu extends Activity implements OnHeaderRefreshListener,
 
 			for (int j = 0; j < item_huifu.size(); j++) {
 				if (j != i) {
-//			gk_list.set(j, true);
+//					gk_list.set(j, true);
 					item_huifu.get(j).setVisibility(View.GONE);
 				}
 			}

@@ -298,6 +298,7 @@ public class AboutMeActivity extends Activity {
 									} else if (status.equals("success")) {
 										hw.setNewsFlag(true);
 										hw.setLastcount(hw.getLastcount() - 1);
+										Log.i("MyReceiver", hw.getLastcount()+"");
 										hw.setNoselect_message(json);
 										listam.remove(position);
 										msg.what = 2;
