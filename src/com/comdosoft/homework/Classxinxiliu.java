@@ -184,12 +184,12 @@ public class Classxinxiliu extends Activity implements OnHeaderRefreshListener,
 				lookStr = hw.getNoselect_message();
 				Log.i("linshi", "1");
 				Micropost lookStr_micropost = new Micropost();
-				if (lookStr != null && !lookStr.equals("")) {
+				
 					Log.i("linshi", "2");
 					// care.clear();
 					page = 1;
 					micropost_type = 1;
-					hw.setNoselect_message(""); // 将 公共变量Noselect_message
+					 // 将 公共变量Noselect_message
 												// 设置为 ""
 					child_list = new ArrayList<Child_Micropost>();
 
@@ -249,7 +249,7 @@ public class Classxinxiliu extends Activity implements OnHeaderRefreshListener,
 
 					}
 					Log.i("linshi", list.size() + "");
-				}
+				
 				for (int i = 0; i < list.size(); i++) {
 					setlayout(i);
 				}
@@ -327,14 +327,16 @@ public class Classxinxiliu extends Activity implements OnHeaderRefreshListener,
 	@Override
 	protected void onResume() {
 		super.onResume();
-		focus = -1;
+
 		if (HomeWorkTool.isConnect(Classxinxiliu.this)) {
-			lass_count = lass_count + 1;
+//			lass_count = lass_count + 1;
 			Thread thread = new Thread(new get_class_info());
-			if (lass_count != 2) {
+//			if (lass_count != 2) {
 
 				thread.start();
-			}
+//			}
+			
+			
 		} else {
 			Toast.makeText(getApplicationContext(), HomeWorkParams.INTERNET, 0)
 					.show();
@@ -482,7 +484,8 @@ public class Classxinxiliu extends Activity implements OnHeaderRefreshListener,
 				setHuiFu(i, mess, layout1, Reply_edit, listView2, lookMore);
 			}
 		});
-		if (lookStr != "" && i == focus) {
+		if ( hw.getNoselect_message().length()>10&&i == focus) {
+			hw.setNoselect_message("");
 			setHuiFu(i, mess, layout1, Reply_edit, listView2, lookMore);
 		}
 		if (mess.getReply_microposts_count() != null) {
@@ -1435,6 +1438,7 @@ public class Classxinxiliu extends Activity implements OnHeaderRefreshListener,
 					map.put("micropost_id", mess.getId());
 					String reply = HomeWorkTool.sendGETRequest(
 							Urlinterface.get_reply_microposts, map);
+					
 					parseJson_childMicropost(reply);
 					mHandler.sendEmptyMessage(0);
 				} catch (Exception e) {
@@ -1442,25 +1446,27 @@ public class Classxinxiliu extends Activity implements OnHeaderRefreshListener,
 				}
 			}
 		};
-		
-		for (int j = 0; j < item_huifu.size(); j++) {
-			if (j != i) {
-				item_huifu.get(j).setVisibility(View.GONE);
-			}else {
-				item_huifu.get(j).setVisibility(View.VISIBLE);
-			}
-		}
-
-		child_list = new ArrayList<Child_Micropost>();
+	
 		if (gk_list.get(i) == true) {
+			
+//			for (int j = 0; j < gk_list.size(); j++) {
+//				if (j == i) {
+//					item_huifu.get(i).setVisibility(View.VISIBLE);
+//					gk_list.set(i, false);
+//					
+//				}else {
+//					gk_list.set(j, true);
+//					item_huifu.get(j).setVisibility(View.GONE);
+//				}
+//			}
+			gk_list.set(i, false);
 
 			for (int j = 0; j < item_huifu.size(); j++) {
-				if (j == i) {
-					gk_list.set(i, false);
-				}else {
-					gk_list.set(i, true);
+				if (j != i) {
+//			gk_list.set(j, true);
+					item_huifu.get(j).setVisibility(View.GONE);
 				}
-			}		
+			}
 			focus = i;
 			micropost_id = mess.getId();// 点击 回复 默认 给主消息回复 记录 主消息 id
 			reciver_id = mess.getUser_id();
@@ -1475,8 +1481,10 @@ public class Classxinxiliu extends Activity implements OnHeaderRefreshListener,
 
 			if (HomeWorkTool.isConnect(Classxinxiliu.this)) {
 				if (Integer.parseInt(mess.getReply_microposts_count())>0) {
+					child_list = new ArrayList<Child_Micropost>();
 					thread.start();
 				}else {
+					child_list = new ArrayList<Child_Micropost>();
 					mHandler.sendEmptyMessage(0);
 				}
 
@@ -1658,10 +1666,10 @@ public class Classxinxiliu extends Activity implements OnHeaderRefreshListener,
 					json = HomeWorkTool.sendGETRequest(
 							Urlinterface.get_class_info, map);
 					setJson(json);
-
 					handler.sendEmptyMessage(0);
+					
 				}
-
+				
 			} catch (Exception e) {
 				handler.sendEmptyMessage(7);
 			}
@@ -1732,6 +1740,7 @@ public class Classxinxiliu extends Activity implements OnHeaderRefreshListener,
 		gk_list.clear();
 		btlist.clear();
 		ziAdapter_list.clear();
+		list_list.clear();
 	}
 
 }

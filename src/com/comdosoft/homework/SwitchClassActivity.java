@@ -39,7 +39,7 @@ public class SwitchClassActivity extends Activity {
 	private ListView switchclassLv;
 	private ImageButton switchClassIB;
 	private HomeWork hw;
-	private String user_id;
+	private String id;
 	private String school_class_id;
 	private List<ClassPojo> classList = new ArrayList<ClassPojo>();
 
@@ -53,13 +53,13 @@ public class SwitchClassActivity extends Activity {
 		switchclassLv = (ListView) findViewById(R.id.switchclassLv);
 		switchClassIB = (ImageButton) findViewById(R.id.switchClassIB);
 		SharedPreferences sp = getSharedPreferences(Urlinterface.SHARED, 0);
-		user_id = sp.getString("user_id", "null");
+		id = sp.getString("id", "null");
 		school_class_id = sp.getString("school_class_id", "null");
 		Thread thread1 = new Thread() {
 			public void run() {
 				try {
 					HashMap<String, String> mp = new HashMap<String, String>();
-					mp.put("student_id", String.valueOf(user_id));
+					mp.put("student_id", String.valueOf(id));
 					String json = HomeWorkTool.sendGETRequest(
 							Urlinterface.get_class, mp);
 					JSONObject jsonobject = new JSONObject(json);
@@ -85,7 +85,7 @@ public class SwitchClassActivity extends Activity {
 							HashMap<String, String> mp = new HashMap<String, String>();
 							mp.put("verification_code", SwitchClass_Et
 									.getText().toString());
-							mp.put("student_id", user_id);
+							mp.put("student_id", id);
 							String json = HomeWorkTool.doPost(
 									Urlinterface.Validation_into_class, mp);
 							JSONObject jsonobject = new JSONObject(json);
