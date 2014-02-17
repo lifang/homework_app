@@ -233,7 +233,9 @@ public class SettingPhoto extends Activity implements Urlinterface {
 				stream.write(buf);
 				stream.close();
 				Intent intent2 = new Intent();  
-	            intent2.putExtra("info", "hahahaha");  
+				
+	            intent2.putExtra("uri", Environment.getExternalStorageDirectory()
+						+ "/1" + IMAGE_FILE_NAME);  
 	            // 通过调用setResult方法返回结果给前一个activity。  
 	            SettingPhoto.this.setResult(RESULT_OK, intent2);  
 	            //关闭当前activity  
