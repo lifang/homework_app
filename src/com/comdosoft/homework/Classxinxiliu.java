@@ -313,6 +313,7 @@ public class Classxinxiliu extends Activity implements OnHeaderRefreshListener,
 		if (HomeWorkTool.isConnect(Classxinxiliu.this)) {
 			prodialog = new ProgressDialog(Classxinxiliu.this);
 			prodialog.setMessage(HomeWorkParams.PD_CLASS_INFO);
+			prodialog.setCanceledOnTouchOutside(false);
 			prodialog.show();
 			Thread thread = new Thread(new get_class_info());
 			thread.start();
@@ -1043,7 +1044,7 @@ public class Classxinxiliu extends Activity implements OnHeaderRefreshListener,
 		} else if (guanzhu_list.get(i).getText().toString().equals("已关注")) {
 			prodialog.setMessage("正在取消关注");
 		}
-
+		prodialog.setCanceledOnTouchOutside(false);
 		prodialog.show();
 		final Handler gzHandler = new Handler() {
 			public void handleMessage(android.os.Message msg) {
@@ -1126,6 +1127,7 @@ public class Classxinxiliu extends Activity implements OnHeaderRefreshListener,
 	public void del_micropost(final int i, final Micropost mess) {
 		prodialog = new ProgressDialog(Classxinxiliu.this);
 		prodialog.setMessage("正在删除消息");
+		prodialog.setCanceledOnTouchOutside(false);
 		prodialog.show();
 		final Handler mHandler = new Handler() {
 			public void handleMessage(android.os.Message msg) {
@@ -1262,6 +1264,7 @@ public class Classxinxiliu extends Activity implements OnHeaderRefreshListener,
 									prodialog = new ProgressDialog(
 											Classxinxiliu.this);
 									prodialog.setMessage("正在回复...");
+									prodialog.setCanceledOnTouchOutside(false);
 									prodialog.show();
 									thread.start();
 								} else {
@@ -1397,6 +1400,7 @@ public class Classxinxiliu extends Activity implements OnHeaderRefreshListener,
 			if (HomeWorkTool.isConnect(Classxinxiliu.this)) {
 				prodialog = new ProgressDialog(Classxinxiliu.this);
 				prodialog.setMessage("正在发表...");
+				prodialog.setCanceledOnTouchOutside(false);
 				prodialog.show();
 				button_fabiao.setEnabled(false);
 				thread.start();
@@ -1479,6 +1483,7 @@ public class Classxinxiliu extends Activity implements OnHeaderRefreshListener,
 			listView2.setVisibility(View.VISIBLE);
 			prodialog = new ProgressDialog(Classxinxiliu.this);
 			prodialog.setMessage("正在加载中");
+			prodialog.setCanceledOnTouchOutside(false);
 			prodialog.show();
 
 			if (HomeWorkTool.isConnect(Classxinxiliu.this)) {
@@ -1560,6 +1565,7 @@ public class Classxinxiliu extends Activity implements OnHeaderRefreshListener,
 	public void class_button_all(View v) {
 		prodialog = new ProgressDialog(Classxinxiliu.this);
 		prodialog.setMessage(HomeWorkParams.PD_CLASS_INFO);
+		prodialog.setCanceledOnTouchOutside(false);
 		prodialog.show();
 		list = new ArrayList<Micropost>();
 		// page_own = 1;
@@ -1605,6 +1611,7 @@ public class Classxinxiliu extends Activity implements OnHeaderRefreshListener,
 	public void class_button_myself(View v) {
 		prodialog = new ProgressDialog(Classxinxiliu.this);
 		prodialog.setMessage(HomeWorkParams.PD_CLASS_INFO);
+		prodialog.setCanceledOnTouchOutside(false);
 		prodialog.show();
 		// page_own = 1;
 		// focus = -1;
