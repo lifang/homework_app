@@ -306,13 +306,12 @@ public class SettingActivity extends Activity implements Urlinterface {
 		switch (resultCode) {
 		// 如果是直接从相册获取
 		 case RESULT_OK:  
-			 
+
 	            Bundle bundle = data.getExtras();  
-	            String info = bundle.getString("info"); 
+	            String uri = bundle.getString("uri"); 
 	            BitmapFactory.Options options = new BitmapFactory.Options();
 				options.inSampleSize = 7;//7就代表容量变为以前容量的1/7
-	            Bitmap bm = BitmapFactory.decodeFile(Environment.getExternalStorageDirectory()
-						+ "/1" + IMAGE_FILE_NAME, options);
+	            Bitmap bm = BitmapFactory.decodeFile(uri, options);
 				
 				faceImage.setBackgroundDrawable(new BitmapDrawable(bm)); 
 	            
