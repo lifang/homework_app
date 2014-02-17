@@ -73,6 +73,7 @@ public class HomeWorkIngActivity extends Activity implements Urlinterface {
 							.getId();
 					prodialog = new ProgressDialog(HomeWorkIngActivity.this);
 					prodialog.setMessage(HomeWorkParams.PD_QUESTION_INFO);
+					prodialog.setCanceledOnTouchOutside(false);
 					prodialog.show();
 					Thread thread = new Thread(new getQuestion());
 					thread.start();
@@ -129,6 +130,7 @@ public class HomeWorkIngActivity extends Activity implements Urlinterface {
 						working_content_list.setAdapter(question_adapter);
 						prodialog = new ProgressDialog(HomeWorkIngActivity.this);
 						prodialog.setMessage(HomeWorkParams.PD_QUESTION_INFO);
+						prodialog.setCanceledOnTouchOutside(false);
 						prodialog.show();
 						Thread thread = new Thread(new getQuestion());
 						thread.start();
@@ -537,6 +539,7 @@ public class HomeWorkIngActivity extends Activity implements Urlinterface {
 		if (HomeWorkTool.isConnect(HomeWorkIngActivity.this)) {
 			prodialog = new ProgressDialog(HomeWorkIngActivity.this);
 			prodialog.setMessage(HomeWorkParams.PD_CLASS_INFO);
+			prodialog.setCanceledOnTouchOutside(false);
 			prodialog.show();
 			Thread thread = new Thread(new getClassInfo());
 			thread.start();

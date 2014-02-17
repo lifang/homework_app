@@ -243,6 +243,7 @@ public class SettingActivity extends Activity implements Urlinterface {
 			if (HomeWorkTool.isConnect(SettingActivity.this)) {
 				prodialog = new ProgressDialog(SettingActivity.this);
 				prodialog.setMessage("正在提交数据...");
+				prodialog.setCanceledOnTouchOutside(false);
 				prodialog.show();
 				thread.start();
 			} else {

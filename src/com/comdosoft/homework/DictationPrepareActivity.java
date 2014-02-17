@@ -65,6 +65,7 @@ public class DictationPrepareActivity extends Activity implements
 		dictationImg = (ImageView) findViewById(R.id.question_dictation_img);
 		dictationImg.setOnClickListener(this);
 		mPd = new ProgressDialog(this);
+		mPd.setCanceledOnTouchOutside(false);
 		mPd.setMessage("正在缓冲...");
 		setMp3Url();
 		if (ListeningQuestionList.Record_Count == ListeningQuestionList.listeningList

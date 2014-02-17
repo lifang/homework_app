@@ -214,6 +214,7 @@ public class SpeakBeginActivity extends Activity implements Urlinterface,
 					if ((ye + 1) < homework.getQuestion_allNumber()) {
 						prodialog = new ProgressDialog(SpeakBeginActivity.this);
 						prodialog.setMessage(HomeWorkParams.PD_FINISH_QUESTION);
+						prodialog.setCanceledOnTouchOutside(false);
 						prodialog.show();
 						branch_question_id = branch_questions.get(index)
 								.getId();
@@ -226,6 +227,7 @@ public class SpeakBeginActivity extends Activity implements Urlinterface,
 						thread.start();
 					} else {
 						prodialog = new ProgressDialog(SpeakBeginActivity.this);
+						prodialog.setCanceledOnTouchOutside(false);
 						prodialog.setMessage(HomeWorkParams.PD_FINISH_QUESTION);
 						prodialog.show();
 						branch_question_id = branch_questions.get(index)
@@ -261,6 +263,7 @@ public class SpeakBeginActivity extends Activity implements Urlinterface,
 					} else {
 						playFlag = true;
 						prodialog = new ProgressDialog(SpeakBeginActivity.this);
+						prodialog.setCanceledOnTouchOutside(false);
 						prodialog.setMessage("正在缓冲...");
 						prodialog.show();
 						new Thread(new setPlay()).start();

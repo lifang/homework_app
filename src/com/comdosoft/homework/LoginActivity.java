@@ -88,7 +88,7 @@ public class LoginActivity extends Activity implements Urlinterface {
 	@Override
 	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
 		mTencent.onActivityResult(requestCode, resultCode, data);
-	}                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                
+	}
 
 	private void onClickLogin() {
 		if (!mTencent.isSessionValid()) {
@@ -144,6 +144,7 @@ public class LoginActivity extends Activity implements Urlinterface {
 			Map<String, String> map = new HashMap<String, String>();
 			map.put("open_id", openid);
 			json = HomeWorkTool.doPost(QQ_LOGIN, map);
+			Log.i("linshi", "login--" + json);
 			analyzeJson(json);
 		}
 	}
