@@ -137,7 +137,7 @@
         <Button
             android:id="@+id/reg_error"
             android:layout_width="320px"
-            android:layout_height="31px"
+            android:layout_height="50px"
             android:layout_marginTop="30px"
             android:background="#FF8C00"
             android:onClick="reg_fanhui"
