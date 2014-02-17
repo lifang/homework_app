@@ -7,6 +7,8 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Random;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import android.app.Activity;
 import android.app.Dialog;
@@ -29,7 +31,6 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.LinearLayout.LayoutParams;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.comdosoft.homework.pojo.DictationPojo;
 import com.comdosoft.homework.pojo.QuestionPojo;
@@ -186,7 +187,7 @@ public class DictationBeginActivity extends Activity implements
 	public void initView(int i) {
 		EditText et = new EditText(getApplicationContext());
 		String value = dictationList.get(i).getValue();
-//		et.setText(value);
+		// et.setText(value);
 		int width = value.length() * 20 + 80;
 		et.setWidth(width > 200 ? 200 : width);
 		et.setHeight(40);
@@ -209,17 +210,17 @@ public class DictationBeginActivity extends Activity implements
 		linearLayoutList.get(linearLayoutIndex).addView(et);
 
 		// 最后的标点符号
-//		if (i == dictationList.size() - 1) {
-//			TextView tv = new TextView(getApplicationContext());
-//			tv.setText(symbol);
-//			tv.setTextSize(24);
-//			LayoutParams lp = new LayoutParams(LayoutParams.WRAP_CONTENT,
-//					LayoutParams.WRAP_CONTENT);
-//			lp.topMargin = 10;
-//			lp.leftMargin = 10;
-//			tv.setLayoutParams(lp);
-//			linearLayoutList.get(linearLayoutIndex).addView(tv);
-//		}
+		// if (i == dictationList.size() - 1) {
+		// TextView tv = new TextView(getApplicationContext());
+		// tv.setText(symbol);
+		// tv.setTextSize(24);
+		// LayoutParams lp = new LayoutParams(LayoutParams.WRAP_CONTENT,
+		// LayoutParams.WRAP_CONTENT);
+		// lp.topMargin = 10;
+		// lp.leftMargin = 10;
+		// tv.setLayoutParams(lp);
+		// linearLayoutList.get(linearLayoutIndex).addView(tv);
+		// }
 
 		initMesView(i);
 	}
@@ -263,9 +264,12 @@ public class DictationBeginActivity extends Activity implements
 						answer.append(s).append("-!-");
 						tvList.get(i).setVisibility(View.INVISIBLE);
 						etList.get(i).setTextColor(Color.rgb(255, 0, 0));
-						return;
 					}
 					s = s.replaceAll(REG, "");
+					String regEx = "[`~!@#$%^&*()+=|{}':;',\\[\\].<>/?~！@#￥%……&*（）——+|{}【】‘；：”“’。，、？]";
+					Pattern p = Pattern.compile(regEx);
+					Matcher m = p.matcher(s);
+					s = m.replaceAll("").trim();
 					int value = Soundex_Levenshtein.dragonEngine(s,
 							dictationList.get(i).getValue());
 					if (dictationList.get(i).getValue().equals(s)) {
