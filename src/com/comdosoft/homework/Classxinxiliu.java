@@ -484,7 +484,9 @@ public class Classxinxiliu extends Activity implements OnHeaderRefreshListener,
 				setHuiFu(i, mess, layout1, Reply_edit, listView2, lookMore);
 			}
 		});
-		if ( hw.getNoselect_message().length()>10&&i == focus) {
+		lookStr = hw.getNoselect_message();	
+		if (lookStr != null && !lookStr.equals("")&&i == focus)
+		{
 			hw.setNoselect_message("");
 			setHuiFu(i, mess, layout1, Reply_edit, listView2, lookMore);
 		}
