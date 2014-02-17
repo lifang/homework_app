@@ -111,6 +111,7 @@ public class DictationBeginActivity extends Activity implements
 		mPlayImg.setOnClickListener(this);
 
 		mPd = new ProgressDialog(this);
+		mPd.setCanceledOnTouchOutside(false);
 		mPd.setMessage(HomeWorkParams.PD_FINISH_QUESTION);
 		homeWork = (HomeWork) getApplication();
 		homeWork.setNewsFlag(true);

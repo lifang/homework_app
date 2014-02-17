@@ -82,6 +82,7 @@ public class DictationRecordActivity extends Activity implements
 		page = (TextView) findViewById(R.id.question_dictation_page);
 		linearLayout = (LinearLayout) findViewById(R.id.question_dictation_record_linearLayout);
 		mPd = new ProgressDialog(this);
+		mPd.setCanceledOnTouchOutside(false);
 		mPd.setMessage("正在缓冲...");
 
 		initData();

@@ -167,6 +167,7 @@ public class SpeakHistoryActivity extends Activity implements Urlinterface,
 						playFlag = true;
 						prodialog = new ProgressDialog(
 								SpeakHistoryActivity.this);
+						prodialog.setCanceledOnTouchOutside(false);
 						prodialog.setMessage("正在缓冲...");
 						prodialog.show();
 						new Thread(new setPlay()).start();
