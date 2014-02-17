@@ -1666,7 +1666,7 @@ public class Classxinxiliu extends Activity implements OnHeaderRefreshListener,
 			try {
 
 				lookStr = hw.getNoselect_message();
-				list.clear();
+				list = new ArrayList<Micropost>();
 				if (lookStr != null && !lookStr.equals("")) {
 
 					setSkipJson();
