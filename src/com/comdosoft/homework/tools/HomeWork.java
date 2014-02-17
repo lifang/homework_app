@@ -32,6 +32,7 @@ public class HomeWork extends Application {
 	private int lastcount;
 	private int hw_number;
 	private int work_date_item;
+	private List<Integer> new_id_list;
 	public int getLastcount() {
 		return lastcount;
 	}
@@ -202,6 +203,14 @@ public class HomeWork extends Application {
 
 	public void setWork_date_item(int work_date_item) {
 		this.work_date_item = work_date_item;
+	}
+
+	public List<Integer> getNew_id_list() {
+		return new_id_list;
+	}
+
+	public void setNew_id_list(List<Integer> new_id_list) {
+		this.new_id_list = new_id_list;
 	}
 
 	public void onCreate() {

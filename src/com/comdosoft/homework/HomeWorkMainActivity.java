@@ -1,7 +1,9 @@
 package com.comdosoft.homework;
 
 import java.lang.reflect.Field;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -51,6 +53,7 @@ public class HomeWorkMainActivity extends TabActivity implements Urlinterface {
 	private String num = "0";
 	private int hw_num = 0;
 	private int width;
+	private List<Integer> new_idlist;
 	public static HomeWorkMainActivity instance = null;
 
 	public void onCreate(Bundle savedInstanceState) {
@@ -126,7 +129,7 @@ public class HomeWorkMainActivity extends TabActivity implements Urlinterface {
 					textview.setPadding(20, 5, 5, 40);
 				}
 				textview.setTextSize(10);
-
+				
 				textview.setTextColor(Color.parseColor("#ffffff"));
 				if (homework.isNewsFlag() == true) {
 					num = msg.obj.toString();
@@ -138,7 +141,7 @@ public class HomeWorkMainActivity extends TabActivity implements Urlinterface {
 						imageView.setImageDrawable(getResources().getDrawable(
 								R.drawable.news)); // 改变我们需要的图标
 						textview.setText(msg.obj + "");
-
+						
 					}
 				} else {
 					if (msg.obj.toString().equals("0")) {
@@ -215,10 +218,11 @@ public class HomeWorkMainActivity extends TabActivity implements Urlinterface {
 					}
 					msg.what = 0;
 					msg.obj = count;
+					Log.i("aaa", count+"");
 					handler.sendMessage(msg);
 					thread.sleep(60000);
 				} catch (Exception e) {
-					handler.sendEmptyMessage(2);
+//					handler.sendEmptyMessage(2);
 					
 				}
 			}
@@ -226,6 +230,7 @@ public class HomeWorkMainActivity extends TabActivity implements Urlinterface {
 	}
 
 	public void getHomeWork() {
+		new_idlist = new ArrayList<Integer>();
 		SharedPreferences sp = getSharedPreferences(Urlinterface.SHARED, 0);
 		String id = sp.getString("id", "null");
 		String school_class_id = sp.getString("school_class_id", "null");
@@ -238,12 +243,18 @@ public class HomeWorkMainActivity extends TabActivity implements Urlinterface {
 					String json = HomeWorkTool.sendGETRequest(
 							Urlinterface.NEW_HOMEWORK, mp);
 					JSONObject obj = new JSONObject(json);
-					hw_num = obj.getInt("num");
+					JSONArray arr = obj.getJSONArray("new_id");
+					hw_num = arr.length();
+					for (int i = 0; i < arr.length(); i++) {
+						new_idlist.add(arr.getInt(i));
+					}
+					Log.i("suanfa", hw_num+"");
 					homework.setHw_number(hw_num);
+					homework.setNew_id_list(new_idlist);
 					handler.sendEmptyMessage(1);
-					thread_work.sleep(60000);
+					thread_work.sleep(6000);
 				} catch (Exception e) {
-					handler.sendEmptyMessage(2);
+//					handler.sendEmptyMessage(2);
 				}
 			}
 		}
@@ -413,6 +424,7 @@ public class HomeWorkMainActivity extends TabActivity implements Urlinterface {
 								homework.setNewsFlag(false);
 								flag_hw = true;
 								homework.setLastcount(Size);
+								Log.i("aaa", homework.getLastcount()+"<---");
 								TextView textview = (TextView) tabhost
 										.getTabWidget().getChildAt(2)
 										.findViewById(android.R.id.title);

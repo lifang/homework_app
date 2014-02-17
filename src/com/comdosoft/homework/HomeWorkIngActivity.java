@@ -21,7 +21,6 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
 import android.util.Log;
-import android.view.Display;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -70,7 +69,8 @@ public class HomeWorkIngActivity extends Activity implements Urlinterface {
 				if (list.size() != 0) {
 					working_date_list.setAdapter(date_adapter);
 					working_content_list.setAdapter(question_adapter);
-					p_q_package_id = list.get(homework.getWork_date_item()).getId();
+					p_q_package_id = list.get(homework.getWork_date_item())
+							.getId();
 					prodialog = new ProgressDialog(HomeWorkIngActivity.this);
 					prodialog.setMessage(HomeWorkParams.PD_QUESTION_INFO);
 					prodialog.show();
@@ -217,12 +217,22 @@ public class HomeWorkIngActivity extends Activity implements Urlinterface {
 						.findViewById(R.id.sign_img);
 				TextView work_start_date = (TextView) convertView
 						.findViewById(R.id.work_start_date);
-
-				if (position < homework.getHw_number()) {// 设置新作业标识
-					Log.i("aaa", position + "///" + homework.getHw_number());
-					newwork_img.setVisibility(View.VISIBLE);
-				} else {
+				List<Integer> new_id_list = homework.getNew_id_list();
+				if (new_id_list.size() == 0) {
 					newwork_img.setVisibility(View.INVISIBLE);
+				} else {
+					boolean new_static = false;
+					for (int i = 0; i < new_id_list.size(); i++) {
+						if (list.get(position).getId() == new_id_list.get(i)) {
+							new_static = true;
+						}
+					}
+					if (new_static) {// 设置新作业标识
+						Log.i("aaa", position + "///" + homework.getHw_number());
+						newwork_img.setVisibility(View.VISIBLE);
+					} else {
+						newwork_img.setVisibility(View.INVISIBLE);
+					}
 				}
 				if (position == homework.getWork_date_item()) {// 设置选中项图片
 					sign_img.setBackgroundResource(R.drawable.jt);
@@ -277,7 +287,8 @@ public class HomeWorkIngActivity extends Activity implements Urlinterface {
 
 			switch (position) {
 			case 0:// 0表示听写
-				String[] Listening_schedule = list.get(homework.getWork_date_item())
+				String[] Listening_schedule = list
+						.get(homework.getWork_date_item())
 						.getListening_schedule().split("/");
 				if (Listening_schedule[0].equals(Listening_schedule[1])) {// 表示已完成
 					work_question_img.setBackgroundResource(R.drawable.tx2);
@@ -287,17 +298,21 @@ public class HomeWorkIngActivity extends Activity implements Urlinterface {
 				} else {
 					work_question_img.setBackgroundResource(R.drawable.tx);
 					work_question_end.setText("截至时间："
-							+ list.get(homework.getWork_date_item()).getEnd_time());
+							+ list.get(homework.getWork_date_item())
+									.getEnd_time());
 					work_question_end.setTextColor(Color.RED);
 				}
 				work_question_case.setText("完成：   "
-						+ list.get(homework.getWork_date_item()).getListening_schedule());
-				if (list.get(homework.getWork_date_item()).getListening_schedule().equals("0/0")) {
+						+ list.get(homework.getWork_date_item())
+								.getListening_schedule());
+				if (list.get(homework.getWork_date_item())
+						.getListening_schedule().equals("0/0")) {
 					zill.setVisibility(View.GONE);
 				}
 				break;
 			case 1:// 1表示朗读
-				String[] Reading_schedule = list.get(homework.getWork_date_item())
+				String[] Reading_schedule = list
+						.get(homework.getWork_date_item())
 						.getReading_schedule().split("/");
 				if (Reading_schedule[0].equals(Reading_schedule[1])) {// 表示已完成
 					work_question_img.setBackgroundResource(R.drawable.ld);
@@ -307,13 +322,16 @@ public class HomeWorkIngActivity extends Activity implements Urlinterface {
 				} else {
 					work_question_img.setBackgroundResource(R.drawable.ld2);
 					work_question_end.setText("截至时间："
-							+ list.get(homework.getWork_date_item()).getEnd_time());
+							+ list.get(homework.getWork_date_item())
+									.getEnd_time());
 					work_question_end.setTextColor(Color.RED);
 				}
 				work_question_case.setText("完成：   "
-						+ list.get(homework.getWork_date_item()).getReading_schedule());
+						+ list.get(homework.getWork_date_item())
+								.getReading_schedule());
 
-				if (list.get(homework.getWork_date_item()).getReading_schedule().equals("0/0")) {
+				if (list.get(homework.getWork_date_item())
+						.getReading_schedule().equals("0/0")) {
 					zill.setVisibility(View.GONE);
 				}
 				break;
@@ -516,13 +534,13 @@ public class HomeWorkIngActivity extends Activity implements Urlinterface {
 	}
 
 	protected void onResume() {
-			if (HomeWorkTool.isConnect(HomeWorkIngActivity.this)) {
-				prodialog = new ProgressDialog(HomeWorkIngActivity.this);
-				prodialog.setMessage(HomeWorkParams.PD_CLASS_INFO);
-				prodialog.show();
-				Thread thread = new Thread(new getClassInfo());
-				thread.start();
-			}
+		if (HomeWorkTool.isConnect(HomeWorkIngActivity.this)) {
+			prodialog = new ProgressDialog(HomeWorkIngActivity.this);
+			prodialog.setMessage(HomeWorkParams.PD_CLASS_INFO);
+			prodialog.show();
+			Thread thread = new Thread(new getClassInfo());
+			thread.start();
+		}
 		super.onResume();
 	}
 
