@@ -220,7 +220,7 @@ public class HomeWorkMainActivity extends TabActivity implements Urlinterface {
 					msg.obj = count;
 					Log.i("aaa", count+"");
 					handler.sendMessage(msg);
-					thread.sleep(6000);
+					thread.sleep(60000);
 				} catch (Exception e) {
 //					handler.sendEmptyMessage(2);
 					
