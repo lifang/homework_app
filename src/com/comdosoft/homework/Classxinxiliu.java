@@ -1469,10 +1469,15 @@ public class Classxinxiliu extends Activity implements OnHeaderRefreshListener,
 
 			for (int j = 0; j < item_huifu.size(); j++) {
 				if (j != i) {
-//			gk_list.set(j, true);
 					item_huifu.get(j).setVisibility(View.GONE);
 				}
 			}
+			for (int j = 0; j < gk_list.size(); j++) {
+				if (j != i) {
+			gk_list.set(j, true);
+				}
+			}
+			
 			focus = i;
 			micropost_id = mess.getId();// 点击 回复 默认 给主消息回复 记录 主消息 id
 			reciver_id = mess.getUser_id();
