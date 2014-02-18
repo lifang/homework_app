@@ -376,6 +376,7 @@ public class HomeWorkIngActivity extends Activity implements Urlinterface {
 			String qsjson;
 			try {
 				qsjson = HomeWorkTool.sendGETRequest(INTO_DAILY_TASKS, maps);
+				Log.i("linshi", qsjson);
 				JSONObject obj = new JSONObject(qsjson);
 				if (obj.getBoolean("status")) {
 					QuestionJson(qsjson);
@@ -463,10 +464,10 @@ public class HomeWorkIngActivity extends Activity implements Urlinterface {
 					questionlist.add(new ListeningPojo(id, question));
 				}
 			}
+			Log.i("suanfa", questionlist.size()+"=");
 			homework.setQuestion_list(questionlist);
 			homework.getQuestion_allNumber();
 			homework.setQuestion_allNumber(questionlist.size());
-
 			// 解析听写题目
 			JSONArray jarray = new JSONObject(json).getJSONObject("package")
 					.getJSONArray("listening");
@@ -507,23 +508,25 @@ public class HomeWorkIngActivity extends Activity implements Urlinterface {
 				// 解析听写记录
 				JSONArray answer = new JSONObject(json).getJSONObject(
 						"user_answers").getJSONArray("listening");
-				for (int i = 0; i < answer.length(); i++) {
-					JSONObject jn = answer.getJSONObject(i);
-					JSONArray jArr = jn.getJSONArray("branch_questions");
-					List<String> smallList = new ArrayList<String>();
-					for (int j = 0; j < jArr.length(); j++) {
-						JSONObject jb = jArr.getJSONObject(j);
-						smallList.add(jb.getString("answer"));
-						ListeningQuestionList.Small_Index = j + 1;
+				if (answer.length() != 0) {
+					for (int i = 0; i < answer.length(); i++) {
+						JSONObject jn = answer.getJSONObject(i);
+						JSONArray jArr = jn.getJSONArray("branch_questions");
+						List<String> smallList = new ArrayList<String>();
+						for (int j = 0; j < jArr.length(); j++) {
+							JSONObject jb = jArr.getJSONObject(j);
+							smallList.add(jb.getString("answer"));
+							ListeningQuestionList.Small_Index = j + 1;
+						}
+						if (ListeningQuestionList.getListeningPojo(i)
+								.getQuesttionList().size() == jArr.length()) {
+							ListeningQuestionList.Small_Index = 0;
+							ListeningQuestionList.Record_Count = i + 1;
+						} else {
+							ListeningQuestionList.Record_Count = i;
+						}
+						ListeningQuestionList.addAnswer(smallList);
 					}
-					if (ListeningQuestionList.getListeningPojo(i)
-							.getQuesttionList().size() == jArr.length()) {
-						ListeningQuestionList.Small_Index = 0;
-						ListeningQuestionList.Record_Count = i + 1;
-					} else {
-						ListeningQuestionList.Record_Count = i;
-					}
-					ListeningQuestionList.addAnswer(smallList);
 				}
 			}
 			homework.setQuestion_history(questionhistory);

@@ -96,6 +96,7 @@ public class SpeakBeginActivity extends Activity implements Urlinterface,
 			case 2:
 				prodialog.dismiss();
 				homework.setQuestion_index(homework.getQuestion_index() + 1);
+				homework.setHistory_item(homework.getHistory_item()+1);
 				SpeakBeginActivity.this.finish();
 				intent.setClass(SpeakBeginActivity.this,
 						SpeakPrepareActivity.class);

@@ -32,12 +32,12 @@ public class HomeWork extends Application {
 	private int lastcount;
 	private int hw_number;
 	private int work_date_item;
+	private int history_item;
 	private List<Integer> new_id_list;
 	public int getLastcount() {
 		return lastcount;
 	}
 
-	private int history_item;
 
 	public void setLastcount(int lastcount) {
 		this.lastcount = lastcount;
