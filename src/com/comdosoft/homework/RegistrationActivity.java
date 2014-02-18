@@ -6,7 +6,6 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.nio.charset.Charset;
-import java.util.Date;
 
 import org.apache.http.entity.mime.MultipartEntity;
 import org.apache.http.entity.mime.content.FileBody;
@@ -15,11 +14,13 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import android.app.Activity;
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.SharedPreferences.Editor;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.net.Uri;
@@ -33,25 +34,20 @@ import android.view.KeyEvent;
 import android.view.View;
 import android.view.Window;
 import android.widget.EditText;
-import android.widget.ImageButton;
 import android.widget.ImageView;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import com.comdosoft.homework.tools.HomeWork;
 import com.comdosoft.homework.tools.HomeWorkParams;
 import com.comdosoft.homework.tools.HomeWorkTool;
 import com.comdosoft.homework.tools.Urlinterface;
-import com.comdosoft.homework.Classxinxiliu;
 
 public class RegistrationActivity extends Activity implements Urlinterface {
 	private ImageView faceImage;
 	private EditText reg_nicheng;//
 	private EditText reg_xingming; //
 	private EditText reg_banjiyanzhengma;
-	private View layout;// 选择头像界面
-	private View layout2;// 班级验证码错误 返回界面
-	private String tp; // 头像资源
+	private ProgressDialog prodialog;
 	private HomeWork hw;
 	private String open_id = "asfds"; // QQ 的 open id
 	/* 头像名称 */
@@ -82,8 +78,6 @@ public class RegistrationActivity extends Activity implements Urlinterface {
 		Intent intent = getIntent();//
 		open_id = intent.getStringExtra("open_id"); // 获得上个页面传过来的 QQ openid
 
-		layout = this.findViewById(R.id.reg_photolayout); // 隐藏内容
-		layout2 = this.findViewById(R.id.reg_photolayout2); // 隐藏内容
 		faceImage = (ImageView) findViewById(R.id.reg_touxiang);
 		reg_nicheng = (EditText) findViewById(R.id.reg_nicheng);
 		reg_xingming = (EditText) findViewById(R.id.reg_xingming);
@@ -97,176 +91,46 @@ public class RegistrationActivity extends Activity implements Urlinterface {
 
 		@Override
 		public void onClick(View v) {
-			layout.setVisibility(View.VISIBLE);
+			Intent intentp = new Intent();
+			intentp.setClass(RegistrationActivity.this, SettingPhoto.class);//
+			startActivityForResult(intentp, 0);  
 		}
 	};
 
-	/**
-	 * 拍照上传
-	 */
-	public void reg_paizhaoshangchuan(View v) {
-
-		layout.setVisibility(View.GONE);
-		try {
-
-			Intent intentFromCapture = new Intent(
-					MediaStore.ACTION_IMAGE_CAPTURE);
-			// 判断存储卡是否可以用，可用进行存储
-			if (HomeWorkTool.isHasSdcard()) {
-
-				File file = new File(Environment.getExternalStorageDirectory()
-						+ "/" + IMAGE_FILE_NAME);
-
-				if (file.exists()) {
-					file.delete();
-
-				}
-				file = new File(Environment.getExternalStorageDirectory() + "/"
-						+ IMAGE_FILE_NAME);
-				if (!file.exists()) {
-					intentFromCapture.putExtra(MediaStore.EXTRA_OUTPUT, Uri
-							.fromFile(new File(Environment
-									.getExternalStorageDirectory(),
-									IMAGE_FILE_NAME)));
-
-				}
-
-			}
-
-			startActivityForResult(intentFromCapture, 2);
-		} catch (Exception e) {
-
-			Toast.makeText(getApplicationContext(), HomeWorkParams.CAPTURE, 0)
-					.show();
-		}
-	}
-
-	/**
-	 * 从相册选择
-	 */
-	public void reg_congxiangce(View v) {
-		layout.setVisibility(View.GONE);
-
-		Intent intentFromGallery = new Intent(Intent.ACTION_PICK, null);
-
-		/**
-		 * 下面这句话，与其它方式写是一样的效果，如果：
-		 * intent.setData(MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
-		 * intent.setType(""image/*");设置数据类型
-		 * 如果朋友们要限制上传到服务器的图片类型时可以直接写如："image/jpeg 、 image/png等的类型"
-		 */
-		intentFromGallery.setDataAndType(
-				MediaStore.Images.Media.EXTERNAL_CONTENT_URI, "image/*");
-		startActivityForResult(intentFromGallery, 1);
-
-	}
 
 	@Override
 	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+		
+			
+		
+		switch (resultCode) {
+		// 如果是直接从相册获取
+		 case RESULT_OK:  
 
-		if (resultCode != 0) {
-			switch (requestCode) {
-			// 如果是直接从相册获取
-			case 1:
-				startPhotoZoom(data.getData());
-				break;
-			// 如果是调用相机拍照时
-			case 2:
-
-				if (HomeWorkTool.isHasSdcard()) {
-					File temp = new File(
-							Environment.getExternalStorageDirectory() + "/"
-									+ IMAGE_FILE_NAME);
-					startPhotoZoom(Uri.fromFile(temp));
-				} else {
-					Toast.makeText(this, "未找到存储卡，无法存储照片！", Toast.LENGTH_LONG)
-							.show();
-				}
-
-				break;
-			// 取得裁剪后的图片
-			case 3:
-				/**
-				 * 非空判断大家一定要验证，如果不验证的话， 在剪裁之后如果发现不满意，要重新裁剪，丢弃
-				 * 当前功能时，会报NullException，大家可以根据不同情况在合适的 地方做判断处理类似情况
-				 * 
-				 */
-				if (data != null) {
-					getImageToView(data);
-				}
-				break;
-			default:
-				break;
-
-
-			}
-			super.onActivityResult(requestCode, resultCode, data);
-		}
-	}
-
-	/**
-	 * 裁剪图片方法实现
-	 * 
-	 * @param uri
-	 */
-	public void startPhotoZoom(Uri uri) {
-
-		Intent intent = new Intent("com.android.camera.action.CROP");
-		intent.setDataAndType(uri, "image/*");
-		// 设置裁剪
-		intent.putExtra("crop", "true");
-		// aspectX aspectY 是宽高的比例
-		intent.putExtra("aspectX", 1);
-		intent.putExtra("aspectY", 1);
-		// outputX outputY 是裁剪图片宽高
-		intent.putExtra("outputX", 176);
-		intent.putExtra("outputY", 186);
-		intent.putExtra("return-data", true);
-		startActivityForResult(intent, 3);
-	}
-
-	/**
-	 * 保存裁剪之后的图片数据
-	 * 
-	 * @param picdata
-	 */
-	private void getImageToView(Intent data) {
-		Bundle extras = data.getExtras();
-		if (extras != null) {
-			Bitmap photo = extras.getParcelable("data");
-			Drawable drawable = new BitmapDrawable(photo);
-
-			File file = new File(Environment.getExternalStorageDirectory()
-					+ "/1" + IMAGE_FILE_NAME);
-
-			try {
-
-				if (file.exists()) {
-					file.delete();
-
-				}
-
-				file.createNewFile();
-				FileOutputStream stream = new FileOutputStream(file);
-				ByteArrayOutputStream stream1 = new ByteArrayOutputStream();
-				photo.compress(Bitmap.CompressFormat.JPEG, 60, stream);
-				byte[] buf = stream1.toByteArray(); // 将图片流以字符串形式存储下来
-				// byte[] buf = s.getBytes();
-				stream.write(buf);
-				stream.close();
-				faceImage.setBackgroundDrawable(drawable);
-			} catch (IOException e) {
-
-				e.printStackTrace();
-			}
+	            Bundle bundle = data.getExtras();  
+	            String uri = bundle.getString("uri"); 
+	            BitmapFactory.Options options = new BitmapFactory.Options();
+				options.inSampleSize = 7;//7就代表容量变为以前容量的1/7
+	            Bitmap bm = BitmapFactory.decodeFile(uri, options);
+				
+				faceImage.setBackgroundDrawable(new BitmapDrawable(bm)); 
+	            
+	            
+	            break;  
+		default:
+			break;
 
 		}
+		super.onActivityResult(requestCode, resultCode, data);
+		
 	}
 
 	Handler mHandler = new Handler() {
+
 		public void handleMessage(android.os.Message msg) {
 			switch (msg.what) {
 			case 0:
+				prodialog.dismiss();
 				final String res = (String) msg.obj;
 				if (json.length() != 0) {
 					JSONObject array;
@@ -316,12 +180,10 @@ public class RegistrationActivity extends Activity implements Urlinterface {
 
 						} else {
 
-							layout2.setVisibility(View.VISIBLE);
-							TextView reg_error = (TextView) layout2
-									.findViewById(R.id.regerror);
-							reg_error.setText(notice);
-							// Toast.makeText(getApplicationContext(), notice,
-							// 0).show();
+							Intent it = new Intent(RegistrationActivity.this,
+									ErrorDisplay.class);
+							it.putExtra("notice", notice);
+							startActivity(it);
 
 						}
 					} catch (JSONException e) {
@@ -331,8 +193,8 @@ public class RegistrationActivity extends Activity implements Urlinterface {
 				}
 				break;
 			case 7:
-				Toast.makeText(getApplicationContext(), HomeWorkParams.INTERNET,
-						Toast.LENGTH_SHORT).show();
+				Toast.makeText(getApplicationContext(),
+						HomeWorkParams.INTERNET, Toast.LENGTH_SHORT).show();
 				break;
 			default:
 				break;
@@ -347,11 +209,17 @@ public class RegistrationActivity extends Activity implements Urlinterface {
 		String nickname = reg_nicheng.getText().toString();
 		String name = reg_xingming.getText().toString();
 		String verification_code = reg_banjiyanzhengma.getText().toString();
+		String nicknames = nickname.replaceAll(" ", "");
+		String names = name.replaceAll(" ", "");
+		String verification_codes = verification_code.replaceAll(" ", "");
+		
 		if (nickname.length() == 0 || name.length() == 0
-				|| verification_code.length() == 0) {
-			layout2.setVisibility(View.VISIBLE);
-			TextView reg_error = (TextView) layout2.findViewById(R.id.regerror);
-			reg_error.setText(R.string.edit_null);
+				|| verification_code.length() == 0|| nicknames.equals("")|| names.equals("")|| verification_codes.equals("")) {
+			Intent it = new Intent(RegistrationActivity.this,
+					ErrorDisplay.class);
+			it.putExtra("notice", "编辑框不能为空");
+			startActivity(it);
+
 		} else {
 
 			Thread thread = new Thread() {
@@ -402,8 +270,8 @@ public class RegistrationActivity extends Activity implements Urlinterface {
 
 						entity.addPart("nickname", new StringBody(nickname,
 								Charset.forName("UTF-8")));
-						entity.addPart("name", new StringBody(name,
-								Charset.forName("UTF-8")));
+						entity.addPart("name",
+								new StringBody(name, Charset.forName("UTF-8")));
 						entity.addPart("verification_code", new StringBody(
 								verification_code));
 
@@ -421,6 +289,10 @@ public class RegistrationActivity extends Activity implements Urlinterface {
 			};
 
 			if (HomeWorkTool.isConnect(RegistrationActivity.this)) {
+				prodialog = new ProgressDialog(RegistrationActivity.this);
+				prodialog.setMessage(HomeWorkParams.PD_REG);
+				prodialog.setCanceledOnTouchOutside(false);
+				prodialog.show();
 				thread.start();
 			} else {
 				Toast.makeText(getApplicationContext(),
@@ -439,13 +311,6 @@ public class RegistrationActivity extends Activity implements Urlinterface {
 			baos.write(buf, 0, len);
 		}
 		return new String(baos.toByteArray());
-	}
-
-	// 班级验证码错误 时触发的方法
-	public String reg_fanhui(View v) throws Exception {
-
-		layout2.setVisibility(View.GONE);
-		return null;
 	}
 
 	public boolean onKeyDown(int keyCode, KeyEvent event) {
