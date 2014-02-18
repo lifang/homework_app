@@ -97,6 +97,7 @@
      <activity android:name=".SettingPhoto" 
             android:theme="@style/Transparent"
             android:windowSoftInputMode="adjustUnspecified|stateHidden"/>
+      <activity android:name=".ErrorDisplay" />
     </application>
 
 </manifest>

@@ -1289,7 +1289,7 @@ public class Classxinxiliu extends Activity implements OnHeaderRefreshListener,
 		String reply_edit = Reply_edit.getText().toString();
 		String kongge = reply_edit.replaceAll(" ", "");
 		if (reply_edit.length() == 0 || kongge.equals("")) {
-			Toast.makeText(getApplicationContext(), "内容不能为空",
+			Toast.makeText(getApplicationContext(), R.string.edit_null,
 					Toast.LENGTH_SHORT).show();
 		} else {
 			button_list.get(focus).setEnabled(false);
@@ -1373,7 +1373,7 @@ public class Classxinxiliu extends Activity implements OnHeaderRefreshListener,
 		final String fabiaoContents = fabiao_content.getText().toString();
 		String kongge = fabiaoContents.replaceAll(" ", "");
 		if (fabiaoContents.length() == 0 || kongge.equals("")) {
-			Toast.makeText(getApplicationContext(), "内容不能为空",
+			Toast.makeText(getApplicationContext(), R.string.edit_null,
 					Toast.LENGTH_SHORT).show();
 		} else {
 			Thread thread = new Thread() {
