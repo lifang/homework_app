@@ -78,40 +78,7 @@
             android:text="@string/queren"
             android:textSize="24px" />
     </LinearLayout>
-    <!-- 下面的内容一开始是隐藏起来的 -->
 
-    <LinearLayout
-        android:id="@+id/reg_photolayout"
-        android:layout_width="fill_parent"
-        android:layout_height="fill_parent"
-        android:background="#e0000000"
-        android:gravity="center_horizontal"
-        android:orientation="vertical"
-        android:visibility="gone" >
-
-        <Button
-            android:id="@+id/paizhaoshangchuan"
-            android:layout_width="320px"
-            android:layout_height="50px"
-            android:layout_marginTop="531px"
-            android:background="#FF8C00"
-            android:onClick="reg_paizhaoshangchuan"
-            android:text="@string/takephoto"
-            android:textColor="#FFFFFF"
-            android:textSize="24px" />
-
-        <Button
-            android:id="@+id/congxiangce"
-            android:layout_width="320px"
-            android:layout_height="50px"
-            android:layout_marginTop="17px"
-            android:background="#FF8C00"
-            android:onClick="reg_congxiangce"
-            android:text="@string/fromphotostore"
-            android:textColor="#FFFFFF"
-            android:textSize="24px" />
-    </LinearLayout>
-    <!-- 上面的内容一开始是隐藏起来的 -->
 
 
 

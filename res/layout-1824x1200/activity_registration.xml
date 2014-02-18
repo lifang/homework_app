@@ -90,38 +90,5 @@ android:focusableInTouchMode="true"
     
     
 </LinearLayout>
-   <!-- 下面的内容一开始是隐藏起来的 -->
-
-            <LinearLayout
-                android:id="@+id/reg_photolayout"
-                android:layout_width="fill_parent"
-                android:layout_height="fill_parent"
-                 android:gravity="center_horizontal"
-                android:background="#e0000000"
-                android:orientation="vertical"
-                 android:visibility="gone" 
-                 >
-<Button
-            android:id="@+id/paizhaoshangchuan"
-            android:layout_width="480px"
-            android:layout_height="71px"
-        android:layout_marginTop="885px"
-        android:background="#FF8C00"
-            android:onClick="reg_paizhaoshangchuan"
-            android:textColor="#FFFFFF"
-            android:textSize="30px"
-            android:text="@string/takephoto" />
-<Button
-            android:id="@+id/congxiangce"
-           android:layout_width="480px"
-            android:layout_height="71px"
-         android:background="#FF8C00"
-             android:onClick="reg_congxiangce"
-             android:layout_marginTop="28px"
-            android:textColor="#FFFFFF"
-            android:textSize="30px"
-            android:text="@string/fromphotostore" />
-            </LinearLayout>
-            <!-- 上面的内容一开始是隐藏起来的 -->
 
 </RelativeLayout>

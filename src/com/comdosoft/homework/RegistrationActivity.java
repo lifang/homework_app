@@ -14,6 +14,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import android.app.Activity;
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -46,9 +47,7 @@ public class RegistrationActivity extends Activity implements Urlinterface {
 	private EditText reg_nicheng;//
 	private EditText reg_xingming; //
 	private EditText reg_banjiyanzhengma;
-	private View layout;// 选择头像界面
-
-	private String tp; // 头像资源
+	private ProgressDialog prodialog;
 	private HomeWork hw;
 	private String open_id = "asfds"; // QQ 的 open id
 	/* 头像名称 */
@@ -79,7 +78,6 @@ public class RegistrationActivity extends Activity implements Urlinterface {
 		Intent intent = getIntent();//
 		open_id = intent.getStringExtra("open_id"); // 获得上个页面传过来的 QQ openid
 
-		layout = this.findViewById(R.id.reg_photolayout); // 隐藏内容
 		faceImage = (ImageView) findViewById(R.id.reg_touxiang);
 		reg_nicheng = (EditText) findViewById(R.id.reg_nicheng);
 		reg_xingming = (EditText) findViewById(R.id.reg_xingming);
@@ -128,9 +126,11 @@ public class RegistrationActivity extends Activity implements Urlinterface {
 	}
 
 	Handler mHandler = new Handler() {
+
 		public void handleMessage(android.os.Message msg) {
 			switch (msg.what) {
 			case 0:
+				prodialog.dismiss();
 				final String res = (String) msg.obj;
 				if (json.length() != 0) {
 					JSONObject array;
@@ -289,6 +289,10 @@ public class RegistrationActivity extends Activity implements Urlinterface {
 			};
 
 			if (HomeWorkTool.isConnect(RegistrationActivity.this)) {
+				prodialog = new ProgressDialog(RegistrationActivity.this);
+				prodialog.setMessage(HomeWorkParams.PD_REG);
+				prodialog.setCanceledOnTouchOutside(false);
+				prodialog.show();
 				thread.start();
 			} else {
 				Toast.makeText(getApplicationContext(),
