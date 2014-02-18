@@ -295,7 +295,7 @@ public class RegistrationActivity extends Activity implements Urlinterface {
 									SHARED, Context.MODE_PRIVATE);
 							Editor editor = preferences.edit();
 							editor.putString("name", name);
-							editor.putString("user_id", id);
+							editor.putString("user_id", user_id);
 							editor.putString("id", id);
 							editor.putString("avatar_url", avatar_url);
 							editor.putString("nickname", nick_name);

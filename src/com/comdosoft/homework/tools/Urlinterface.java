@@ -5,9 +5,9 @@ public interface Urlinterface {
 	static final String SHARED = "HW";
 
 	// static final String IP = "http://116.255.202.123:3011";
-	static final String IP = "http://192.168.0.250:3004";
+//	static final String IP = "http://192.168.0.250:3004";
 
-//	 static final String IP = "http://116.255.202.123:3011";
+	 static final String IP = "http://116.255.202.123:301 1";
 	// static final String IP = "http://192.168.0.101:3004";
 	// static final String IP = "http://192.168.0.127:3000";
 

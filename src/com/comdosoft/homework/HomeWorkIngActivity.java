@@ -123,6 +123,12 @@ public class HomeWorkIngActivity extends Activity implements Urlinterface {
 				.setOnItemClickListener(new AdapterView.OnItemClickListener() {
 					public void onItemClick(AdapterView<?> parent, View view,
 							int position, long id) {
+						if (list.get(homework.getWork_date_item()).isType()) {
+							homework.setWork_history(false);
+						} else {
+							homework.setWork_history(true);
+						}
+						Log.i("suanfa", homework.isWork_history()+"");
 						homework.setWork_date_item(position);
 						p_q_package_id = list.get(position).getId();
 						homework.setP_q_package_id(p_q_package_id);
@@ -141,11 +147,6 @@ public class HomeWorkIngActivity extends Activity implements Urlinterface {
 				.setOnItemClickListener(new AdapterView.OnItemClickListener() {
 					public void onItemClick(AdapterView<?> parent, View view,
 							int position, long id) {
-						if (list.get(homework.getWork_date_item()).isType()) {
-							homework.setWork_history(false);
-						} else {
-							homework.setWork_history(true);
-						}
 						Intent intent = new Intent();
 						switch (position) {
 						case 0:
@@ -393,11 +394,8 @@ public class HomeWorkIngActivity extends Activity implements Urlinterface {
 
 	// 解析json
 	public void analyzeJson(String json) {
-		Calendar c = Calendar.getInstance();
-		int mYear = c.get(Calendar.YEAR); // 获取当前年份
-		int mMonth = c.get(Calendar.MONTH) + 1;// 获取当前月份
-		int mDay = c.get(Calendar.DAY_OF_MONTH);// 获取当前月份的日期号码
-		String Window_day = mYear + "" + mMonth + "" + mDay;
+		Calendar Window_day = Calendar.getInstance();
+		Calendar wrok_day = Calendar.getInstance();
 		try {
 			list = new ArrayList<WorkPojo>();
 			JSONArray ja = new JSONObject(json).getJSONArray("daily_tasks");
@@ -406,16 +404,27 @@ public class HomeWorkIngActivity extends Activity implements Urlinterface {
 					boolean type;
 					JSONObject item = ja.getJSONObject(i);
 					String date = item.getString("end_time");
-					String day = date.split("T")[0];
-					day = day.replaceAll("-", "");
-					if (Integer.valueOf(day) > Integer.valueOf(Window_day)) {
-						type = true;
-					} else {
+					date = HomeWorkTool.divisionTime(date);
+					String day = date.split(" ")[0];
+					String[] dayarr = day.split("-");
+					String t = date.split(" ")[1];
+					String[] timearr = t.split(":");
+					wrok_day.set(Integer.valueOf(dayarr[0]),
+							Integer.valueOf(dayarr[1])-1,
+							Integer.valueOf(dayarr[2]),
+							Integer.valueOf(timearr[0]),
+							Integer.valueOf(timearr[1]),
+							Integer.valueOf(timearr[2]));
+					// a比c小,返回-1,
+					// a与c相同,返回0
+					// a比c大,返回1
+					int zhi = Window_day.compareTo(wrok_day);
+					if (zhi == -1) {
 						type = false;
+					} else {
+						type = true;
 					}
-					// String start_time =
-					// returnDATE(item.getString("start_time"));
-					// String end_time = returnDATE(item.getString("end_time"));
+					Log.i("suanfa","任务状态:"+type);
 					String start_time = returnDATE(item.getString("start_time"));
 					String end_day = returnDATE(item.getString("end_time"));
 					String end_time = HomeWorkTool.divisionTime(item
@@ -464,7 +473,7 @@ public class HomeWorkIngActivity extends Activity implements Urlinterface {
 					questionlist.add(new ListeningPojo(id, question));
 				}
 			}
-			Log.i("suanfa", questionlist.size()+"=");
+			Log.i("suanfa", questionlist.size() + "=");
 			homework.setQuestion_list(questionlist);
 			homework.getQuestion_allNumber();
 			homework.setQuestion_allNumber(questionlist.size());
@@ -531,7 +540,6 @@ public class HomeWorkIngActivity extends Activity implements Urlinterface {
 			}
 			homework.setQuestion_history(questionhistory);
 			homework.setHistory_item(questionhistory.size());
-
 			handler.sendEmptyMessage(3);
 		} catch (JSONException e) {
 			e.printStackTrace();

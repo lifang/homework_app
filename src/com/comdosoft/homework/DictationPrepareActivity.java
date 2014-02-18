@@ -194,22 +194,26 @@ public class DictationPrepareActivity extends Activity implements
 	// 音频播放结束后继续播放下一个音频,直到所有音频播放完毕
 	@Override
 	public void onCompletion(MediaPlayer mp) {
-		try {
-			if (++mp3Index < mp3List.size()) {
-				mp.reset();
-				mp.setDataSource(mp3List.get(mp3Index));
-				mp.prepare();
-				mp.setOnPreparedListener(this);
-				mp.setOnCompletionListener(this);
-			} else {
-				mHandler.sendEmptyMessage(2);
+		if (mp3List.size() > 1) {
+			try {
+				if (++mp3Index < mp3List.size()) {
+					mp.reset();
+					mp.setDataSource(mp3List.get(mp3Index));
+					mp.prepare();
+					mp.setOnPreparedListener(this);
+					mp.setOnCompletionListener(this);
+				} else {
+					mHandler.sendEmptyMessage(2);
+				}
+			} catch (IllegalArgumentException e) {
+				e.printStackTrace();
+			} catch (IllegalStateException e) {
+				e.printStackTrace();
+			} catch (IOException e) {
+				e.printStackTrace();
 			}
-		} catch (IllegalArgumentException e) {
-			e.printStackTrace();
-		} catch (IllegalStateException e) {
-			e.printStackTrace();
-		} catch (IOException e) {
-			e.printStackTrace();
+		}else{
+			mHandler.sendEmptyMessage(2);
 		}
 	}
 

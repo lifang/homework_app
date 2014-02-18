@@ -90,7 +90,6 @@ public class SpeakBeginActivity extends Activity implements Urlinterface,
 				break;
 			case 1:
 				prodialog.dismiss();
-				homework.setHistory_item(homework.getHistory_item() + 1);
 				MyDialog("你已经答完本题确认继续下一题吗?", "确认", "取消", 1);
 				break;
 			case 2:

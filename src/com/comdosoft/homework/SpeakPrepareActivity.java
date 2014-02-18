@@ -53,12 +53,6 @@ public class SpeakPrepareActivity extends Activity implements Urlinterface,
 			builder.setTitle("提示");
 			switch (msg.what) {
 			case 1:
-				// questionlist =
-				// list.get(homework.getQuestion_index()).getQuesttionList();
-				// for (int i = 0; i < questionlist.size(); i++) {
-				// content += questionlist.get(i).getContent() + "\n";
-				// }
-				// question_speak_content.setText(content);
 				break;
 			case 2:
 				builder.setMessage(message);
@@ -94,10 +88,11 @@ public class SpeakPrepareActivity extends Activity implements Urlinterface,
 		initialize();
 		question_speak_title.setText("朗读题");
 		homework.setNewsFlag(true);
+		Log.i("suanfa", homework.isWork_history()+"=======");
 		list = homework.getQuestion_list();
 		History_item = homework.getHistory_item();
 		Log.i("linshi", homework.getHistory_item() + "-=" + list.size());
-		if (History_item >= list.size()) {// 表示查看历史记录
+		if (History_item >= list.size()||homework.isWork_history()) {// 表示查看历史记录
 			questionlist = list.get(homework.getQuestion_index())
 					.getQuesttionList();
 			homework.setQ_package_id(list.get(homework.getQuestion_index())
@@ -116,7 +111,7 @@ public class SpeakPrepareActivity extends Activity implements Urlinterface,
 						.size();// 题目实际题数
 				int size;
 				if (homework.getQuestion_history().size() == 0) {
-					size = 0;
+					size = number;
 				} else {
 					size = homework.getQuestion_history()
 							.get(homework.getHistory_item() - 1).size();// 题目实际题数
@@ -161,7 +156,7 @@ public class SpeakPrepareActivity extends Activity implements Urlinterface,
 			break;
 		case R.id.question_speak_next:
 			stop();
-			if (homework.getHistory_item() >= list.size()) {// 进入答题历史页面
+			if (homework.getHistory_item() >= list.size()||homework.isWork_history()) {// 进入答题历史页面
 				homework.setBranch_questions(list.get(
 						homework.getQuestion_index()).getQuesttionList());
 				intent.setClass(SpeakPrepareActivity.this,
@@ -176,7 +171,7 @@ public class SpeakPrepareActivity extends Activity implements Urlinterface,
 							.getQuesttionList().size();// 题目实际题数
 					int size;
 					if (homework.getQuestion_history().size() == 0) {
-						size = 0;
+						size = number;
 					} else {
 						size = homework.getQuestion_history()
 								.get(homework.getHistory_item() - 1).size();// 已做题数
@@ -203,10 +198,6 @@ public class SpeakPrepareActivity extends Activity implements Urlinterface,
 								homework.getHistory_item()).getId());
 					}
 				}
-				// homework.setBranch_questions(list.get(
-				// homework.getHistory_item()).getQuesttionList());
-				// homework.setQuestion_id(list.get(homework.getHistory_item())
-				// .getId());
 				SpeakPrepareActivity.this.finish();
 				intent.setClass(SpeakPrepareActivity.this,
 						SpeakBeginActivity.class);
@@ -278,7 +269,6 @@ public class SpeakPrepareActivity extends Activity implements Urlinterface,
 	 * 
 	 * @param playPosition
 	 */
-
 	class setPlay implements Runnable {
 		public void run() {
 			play(mp3List.get(mp3Index));
@@ -299,9 +289,7 @@ public class SpeakPrepareActivity extends Activity implements Urlinterface,
 			player.setDataSource(path);
 			player.prepare();// 进行缓冲
 			player.setOnPreparedListener(this);
-			if (mp3List.size() > 1) {
-				player.setOnCompletionListener(this);
-			}
+			player.setOnCompletionListener(this);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -348,20 +336,22 @@ public class SpeakPrepareActivity extends Activity implements Urlinterface,
 	public void onCompletion(MediaPlayer mp) {
 		Log.i("linshi", mp3List.get(mp3Index));
 		handler.sendEmptyMessage(5);
-		try {
-			if (++mp3Index < mp3List.size()) {
-				mp.reset();
-				mp.setDataSource(mp3List.get(mp3Index));
-				mp.prepare();
-				mp.setOnPreparedListener(this);
-				mp.setOnCompletionListener(this);
+		if (mp3List.size() > 1) {
+			try {
+				if (++mp3Index < mp3List.size()) {
+					mp.reset();
+					mp.setDataSource(mp3List.get(mp3Index));
+					mp.prepare();
+					mp.setOnPreparedListener(this);
+					mp.setOnCompletionListener(this);
+				}
+			} catch (IllegalArgumentException e) {
+				e.printStackTrace();
+			} catch (IllegalStateException e) {
+				e.printStackTrace();
+			} catch (IOException e) {
+				e.printStackTrace();
 			}
-		} catch (IllegalArgumentException e) {
-			e.printStackTrace();
-		} catch (IllegalStateException e) {
-			e.printStackTrace();
-		} catch (IOException e) {
-			e.printStackTrace();
 		}
 	}
 
