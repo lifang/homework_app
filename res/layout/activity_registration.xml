@@ -13,8 +13,8 @@
 
         <ImageView
             android:id="@+id/reg_touxiang"
-            android:layout_width="106px"
-            android:layout_height="112px"
+            android:layout_width="122px"
+            android:layout_height="128px"
             android:layout_marginTop="296px"
             android:background="@drawable/moren" />
 
@@ -28,8 +28,8 @@
 
         <EditText
             android:id="@+id/reg_nicheng"
-            android:layout_width="288px"
-            android:layout_height="42px"
+            android:layout_width="320px"
+            android:layout_height="50px"
             android:layout_marginTop="13px"
             android:gravity="center"
             android:maxLength="8"
@@ -45,8 +45,8 @@
 
         <EditText
             android:id="@+id/reg_xingming"
-            android:layout_width="288px"
-            android:layout_height="42px"
+            android:layout_width="320px"
+            android:layout_height="50px"
             android:layout_marginTop="13px"
             android:gravity="center"
             android:maxLength="8"
@@ -62,15 +62,15 @@
 
         <EditText
             android:id="@+id/reg_banjiyanzhengma"
-            android:layout_width="288px"
-            android:layout_height="42px"
+            android:layout_width="320px"
+            android:layout_height="50px"
             android:layout_marginTop="13px"
             android:gravity="center"
             android:textSize="24px" />
 
         <Button
-            android:layout_width="288px"
-            android:layout_height="42px"
+            android:layout_width="320px"
+            android:layout_height="50px"
             android:layout_marginTop="42px"
             android:background="#FFFF00"
             android:gravity="center"
@@ -91,8 +91,8 @@
 
         <Button
             android:id="@+id/paizhaoshangchuan"
-            android:layout_width="288px"
-            android:layout_height="42px"
+            android:layout_width="320px"
+            android:layout_height="50px"
             android:layout_marginTop="531px"
             android:background="#FF8C00"
             android:onClick="reg_paizhaoshangchuan"
@@ -102,8 +102,8 @@
 
         <Button
             android:id="@+id/congxiangce"
-            android:layout_width="288px"
-            android:layout_height="42px"
+            android:layout_width="320px"
+            android:layout_height="50px"
             android:layout_marginTop="17px"
             android:background="#FF8C00"
             android:onClick="reg_congxiangce"
@@ -136,8 +136,8 @@
 
         <Button
             android:id="@+id/reg_error"
-            android:layout_width="288px"
-            android:layout_height="31px"
+            android:layout_width="320px"
+            android:layout_height="50px"
             android:layout_marginTop="30px"
             android:background="#FF8C00"
             android:onClick="reg_fanhui"

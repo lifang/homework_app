@@ -166,8 +166,15 @@ public class DictationBeginActivity extends Activity implements
 		String content = qpList.get(smallIndex).getContent();
 		String[] sArr = content.substring(0, content.length() - 1).split(" ");
 		for (int i = 0; i < sArr.length; i++) {
-			dictationList
-					.add(new DictationPojo(sArr[i].replaceAll(REG, ""), 0));
+			String s = sArr[i];
+			s = s.replaceAll(REG, "");
+			String regEx = "[`~!@#$%^&*()+=|{}':;',\\[\\].<>/?~！@#￥%……&*（）——+|{}【】‘；：”“’。，、？]";
+			Pattern p = Pattern.compile(regEx);
+			Matcher m = p.matcher(s);
+			s = m.replaceAll("").trim();
+			if (s != null && !s.equals("")) {
+				dictationList.add(new DictationPojo(s, 0));
+			}
 		}
 
 		// 获取标点

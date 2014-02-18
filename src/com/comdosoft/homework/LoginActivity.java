@@ -16,7 +16,9 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.util.Log;
-import android.view.Display;
+import android.view.View;
+import android.view.View.OnClickListener;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.comdosoft.homework.tools.HomeWork;
@@ -27,7 +29,8 @@ import com.tencent.tauth.Tencent;
 import com.tencent.tauth.UiError;
 
 // 登录    马龙    2014年2月12日
-public class LoginActivity extends Activity implements Urlinterface {
+public class LoginActivity extends Activity implements OnClickListener,
+		Urlinterface {
 
 	private static final String SCOPE = "get_user_info";
 	private static final String APP_ID = "101003848";
@@ -58,8 +61,8 @@ public class LoginActivity extends Activity implements Urlinterface {
 						HomeWorkMainActivity.class);
 				break;
 			}
+			LoginActivity.this.finish();
 			startActivity(intent);
-			finish();
 		}
 
 	};
@@ -68,20 +71,19 @@ public class LoginActivity extends Activity implements Urlinterface {
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.login);
+		findViewById(R.id.qq_login).setOnClickListener(this);
 		homework = (HomeWork) getApplication();
 		mTencent = Tencent.createInstance(APP_ID, this.getApplicationContext());
 		mPd = new ProgressDialog(LoginActivity.this);
 		mPd.setMessage("正在登录...");
 		sp = getSharedPreferences(SHARED, MODE_PRIVATE);
-		if (sp.getString("user_id", "").equals("")
-				&& sp.getString("school_class_id", "").equals("")) {
-			onClickLogin();
-		} else {
+		if (!sp.getString("user_id", "").equals("")
+				&& !sp.getString("school_class_id", "").equals("")) {
 			LoginActivity.this.finish();
 			Intent intent = new Intent(getApplicationContext(),
 					HomeWorkMainActivity.class);
 			startActivity(intent);
-			finish();
+			// onClickLogin();
 		}
 	}
 
@@ -122,7 +124,7 @@ public class LoginActivity extends Activity implements Urlinterface {
 						Context.MODE_PRIVATE);
 				Editor editor = preferences.edit();
 				editor.putString("name", name);
-				editor.putString("user_id", user_id);
+				editor.putString("user_id", id);
 				editor.putString("id", id);
 				editor.putString("avatar_url", avatar_url);
 				editor.putString("nickname", nick_name);
@@ -141,10 +143,11 @@ public class LoginActivity extends Activity implements Urlinterface {
 		@Override
 		public void run() {
 			super.run();
+			Log.i("Ax", "aaaaaa");
 			Map<String, String> map = new HashMap<String, String>();
 			map.put("open_id", openid);
 			json = HomeWorkTool.doPost(QQ_LOGIN, map);
-			Log.i("linshi", "login--" + json);
+			Log.i("Ax", "json---" + json);
 			analyzeJson(json);
 		}
 	}
@@ -157,6 +160,7 @@ public class LoginActivity extends Activity implements Urlinterface {
 
 		protected void doComplete(JSONObject values) {
 			try {
+				Log.i("Ax", "bbbbb");
 				mPd.show();
 				openid = values.getString("openid");
 				new MyThread().start();
@@ -173,6 +177,11 @@ public class LoginActivity extends Activity implements Urlinterface {
 		public void onCancel() {
 		}
 
+	}
+
+	@Override
+	public void onClick(View v) {
+		onClickLogin();
 	}
 
 }

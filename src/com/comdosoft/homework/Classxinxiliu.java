@@ -184,72 +184,70 @@ public class Classxinxiliu extends Activity implements OnHeaderRefreshListener,
 				lookStr = hw.getNoselect_message();
 				Log.i("linshi", "1");
 				Micropost lookStr_micropost = new Micropost();
-				
-					Log.i("linshi", "2");
-					// care.clear();
-					page = 1;
-					micropost_type = 1;
-					 // 将 公共变量Noselect_message
-												// 设置为 ""
-					child_list = new ArrayList<Child_Micropost>();
 
-					handler.sendEmptyMessage(5);
-					JSONObject js;
+				Log.i("linshi", "2");
+				// care.clear();
+				page = 1;
+				micropost_type = 1;
+				// 将 公共变量Noselect_message
+				// 设置为 ""
+				child_list = new ArrayList<Child_Micropost>();
+
+				handler.sendEmptyMessage(5);
+				JSONObject js;
+				try {
+					Log.i("linshi", lookStr);
+					js = new JSONObject(lookStr);
+					String micropost = js.getString("micropost");
+					JSONArray jsonArray2;
 					try {
-						Log.i("linshi", lookStr);
-						js = new JSONObject(lookStr);
-						String micropost = js.getString("micropost");
-						JSONArray jsonArray2;
-						try {
-							jsonArray2 = new JSONArray(micropost);
-							for (int i = 0; i < jsonArray2.length(); ++i) {
-								JSONObject o = (JSONObject) jsonArray2.get(i);
-								lookStr_micropost_id = o
-										.getString("micropost_id");
-								String user_id = o.getString("user_id");
-								String user_types = o.getString("user_types");
-								String name = o.getString("name");
-								String content = o.getString("content");
-								String avatar_url = o.getString("avatar_url");
-								String created_at = o.getString("created_at");
-								String reply_microposts_count = o
-										.getString("reply_microposts_count");
-								lookStr_micropost = new Micropost(
-										lookStr_micropost_id, user_id,
-										user_types, name, content, avatar_url,
-										created_at, reply_microposts_count);
-							}
-						} catch (JSONException e) {
-							e.printStackTrace();
+						jsonArray2 = new JSONArray(micropost);
+						for (int i = 0; i < jsonArray2.length(); ++i) {
+							JSONObject o = (JSONObject) jsonArray2.get(i);
+							lookStr_micropost_id = o.getString("micropost_id");
+							String user_id = o.getString("user_id");
+							String user_types = o.getString("user_types");
+							String name = o.getString("name");
+							String content = o.getString("content");
+							String avatar_url = o.getString("avatar_url");
+							String created_at = o.getString("created_at");
+							String reply_microposts_count = o
+									.getString("reply_microposts_count");
+							lookStr_micropost = new Micropost(
+									lookStr_micropost_id, user_id, user_types,
+									name, content, avatar_url, created_at,
+									reply_microposts_count);
 						}
 					} catch (JSONException e) {
 						e.printStackTrace();
 					}
-					Log.i("linshi", lookStr_micropost.toString());
-					int a = 0;
-					if (list.size() != 0) {
+				} catch (JSONException e) {
+					e.printStackTrace();
+				}
+				Log.i("linshi", lookStr_micropost.toString());
+				int a = 0;
+				if (list.size() != 0) {
 
-						for (int i = 0; i < list.size(); i++) {
-							if (list.get(i).getId()
-									.equals(lookStr_micropost_id)) {
-								focus = i; // 要展开的 主消息 的 位置
-								break;
-							} else {
-								a = i + 1;
-							}
+					for (int i = 0; i < list.size(); i++) {
+						if (list.get(i).getId().equals(lookStr_micropost_id)) {
+							focus = i; // 要展开的 主消息 的 位置
+							break;
+						} else {
+							a = i + 1;
 						}
-						//
-						// Log.i("linshi", a + "/" + focus);
-						if (a == list.size()) {// 若第一页主消息中没有 提示信息所在，则
-							pages_count = 1; // 0 标记 用于表示从别的页面跳到本页面，在上拉加载时会用到
-							list.clear();
-							focus = 0; // 要展开的 主消息 的 位置
-							list.add(lookStr_micropost);
-						}
-
 					}
-					Log.i("linshi", list.size() + "");
-				
+					//
+					// Log.i("linshi", a + "/" + focus);
+					if (a == list.size()) {// 若第一页主消息中没有 提示信息所在，则
+						pages_count = 1; // 0 标记 用于表示从别的页面跳到本页面，在上拉加载时会用到
+						list.clear();
+						focus = 0; // 要展开的 主消息 的 位置
+						list.add(lookStr_micropost);
+					}
+
+				}
+				Log.i("linshi", list.size() + "");
+
 				for (int i = 0; i < list.size(); i++) {
 					setlayout(i);
 				}
@@ -330,14 +328,13 @@ public class Classxinxiliu extends Activity implements OnHeaderRefreshListener,
 		super.onResume();
 
 		if (HomeWorkTool.isConnect(Classxinxiliu.this)) {
-//			lass_count = lass_count + 1;
+			// lass_count = lass_count + 1;
 			Thread thread = new Thread(new get_class_info());
-//			if (lass_count != 2) {
+			// if (lass_count != 2) {
 
-				thread.start();
-//			}
-			
-			
+			thread.start();
+			// }
+
 		} else {
 			Toast.makeText(getApplicationContext(), HomeWorkParams.INTERNET, 0)
 					.show();
@@ -485,9 +482,8 @@ public class Classxinxiliu extends Activity implements OnHeaderRefreshListener,
 				setHuiFu(i, mess, layout1, Reply_edit, listView2, lookMore);
 			}
 		});
-		lookStr = hw.getNoselect_message();	
-		if (lookStr != null && !lookStr.equals("")&&i == focus)
-		{
+		lookStr = hw.getNoselect_message();
+		if (lookStr != null && !lookStr.equals("") && i == focus) {
 			hw.setNoselect_message("");
 			setHuiFu(i, mess, layout1, Reply_edit, listView2, lookMore);
 		}
@@ -1417,7 +1413,7 @@ public class Classxinxiliu extends Activity implements OnHeaderRefreshListener,
 
 		final Handler mHandler = new Handler() {
 			public void handleMessage(android.os.Message msg) {
-				
+
 				switch (msg.what) {
 				case 0:
 					prodialog.dismiss();
@@ -1429,8 +1425,7 @@ public class Classxinxiliu extends Activity implements OnHeaderRefreshListener,
 						lookMore.setVisibility(View.GONE);
 					}
 					listView2.setAdapter(ziAdapter_list.get(focus));
-					HomeWorkTool
-							.setListViewHeightBasedOnChildren(listView2);
+					HomeWorkTool.setListViewHeightBasedOnChildren(listView2);
 					break;
 				default:
 					break;
@@ -1444,7 +1439,7 @@ public class Classxinxiliu extends Activity implements OnHeaderRefreshListener,
 					map.put("micropost_id", mess.getId());
 					String reply = HomeWorkTool.sendGETRequest(
 							Urlinterface.get_reply_microposts, map);
-					
+
 					parseJson_childMicropost(reply);
 					mHandler.sendEmptyMessage(0);
 				} catch (Exception e) {
@@ -1452,27 +1447,32 @@ public class Classxinxiliu extends Activity implements OnHeaderRefreshListener,
 				}
 			}
 		};
-	
+
 		if (gk_list.get(i) == true) {
-			
-//			for (int j = 0; j < gk_list.size(); j++) {
-//				if (j == i) {
-//					item_huifu.get(i).setVisibility(View.VISIBLE);
-//					gk_list.set(i, false);
-//					
-//				}else {
-//					gk_list.set(j, true);
-//					item_huifu.get(j).setVisibility(View.GONE);
-//				}
-//			}
+
+			// for (int j = 0; j < gk_list.size(); j++) {
+			// if (j == i) {
+			// item_huifu.get(i).setVisibility(View.VISIBLE);
+			// gk_list.set(i, false);
+			//
+			// }else {
+			// gk_list.set(j, true);
+			// item_huifu.get(j).setVisibility(View.GONE);
+			// }
+			// }
 			gk_list.set(i, false);
 
 			for (int j = 0; j < item_huifu.size(); j++) {
 				if (j != i) {
-//					gk_list.set(j, true);
 					item_huifu.get(j).setVisibility(View.GONE);
 				}
 			}
+			for (int j = 0; j < gk_list.size(); j++) {
+				if (j != i) {
+					gk_list.set(j, true);
+				}
+			}
+
 			focus = i;
 			micropost_id = mess.getId();// 点击 回复 默认 给主消息回复 记录 主消息 id
 			reciver_id = mess.getUser_id();
@@ -1487,10 +1487,10 @@ public class Classxinxiliu extends Activity implements OnHeaderRefreshListener,
 			prodialog.show();
 
 			if (HomeWorkTool.isConnect(Classxinxiliu.this)) {
-				if (Integer.parseInt(mess.getReply_microposts_count())>0) {
+				if (Integer.parseInt(mess.getReply_microposts_count()) > 0) {
 					child_list = new ArrayList<Child_Micropost>();
 					thread.start();
-				}else {
+				} else {
 					child_list = new ArrayList<Child_Micropost>();
 					mHandler.sendEmptyMessage(0);
 				}
@@ -1499,7 +1499,6 @@ public class Classxinxiliu extends Activity implements OnHeaderRefreshListener,
 				Toast.makeText(getApplicationContext(),
 						HomeWorkParams.INTERNET, 0).show();
 			}
-
 
 		} else {
 			gk_list.set(i, true);
@@ -1661,7 +1660,7 @@ public class Classxinxiliu extends Activity implements OnHeaderRefreshListener,
 			try {
 
 				lookStr = hw.getNoselect_message();
-				list.clear();
+				list = new ArrayList<Micropost>();
 				if (lookStr != null && !lookStr.equals("")) {
 
 					setSkipJson();
@@ -1676,9 +1675,9 @@ public class Classxinxiliu extends Activity implements OnHeaderRefreshListener,
 							Urlinterface.get_class_info, map);
 					setJson(json);
 					handler.sendEmptyMessage(0);
-					
+
 				}
-				
+
 			} catch (Exception e) {
 				handler.sendEmptyMessage(7);
 			}

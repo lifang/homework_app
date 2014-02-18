@@ -42,7 +42,7 @@ public class SpeakPrepareActivity extends Activity implements Urlinterface,
 	private List<ListeningPojo> list;
 	private HomeWork homework;
 	private List<QuestionPojo> questionlist;
-	private List<List<String>> history;
+	private int History_item;
 	private List<String> mp3List;
 	private ImageView question_speak_img;
 	private boolean playFlag = false;
@@ -95,9 +95,9 @@ public class SpeakPrepareActivity extends Activity implements Urlinterface,
 		question_speak_title.setText("朗读题");
 		homework.setNewsFlag(true);
 		list = homework.getQuestion_list();
-		history = homework.getQuestion_history();
+		History_item = homework.getHistory_item();
 		Log.i("linshi", homework.getHistory_item() + "-=" + list.size());
-		if (homework.getHistory_item() >= list.size()) {// 表示查看历史记录
+		if (History_item >= list.size()) {// 表示查看历史记录
 			questionlist = list.get(homework.getQuestion_index())
 					.getQuesttionList();
 			homework.setQ_package_id(list.get(homework.getQuestion_index())
@@ -107,17 +107,20 @@ public class SpeakPrepareActivity extends Activity implements Urlinterface,
 			}
 			img_title.setText("重听");
 		} else {
-			Log.i("linshi", history.size() + "-->" + list.size());
-			if (homework.getHistory_item() == 0) {
-				questionlist = list.get(homework.getHistory_item())
-						.getQuesttionList();
-				homework.setQ_package_id(list.get(homework.getHistory_item())
-						.getId());
+			Log.i("linshi", History_item + "-->" + list.size());
+			if (History_item == 0) {
+				questionlist = list.get(0).getQuesttionList();
+				homework.setQ_package_id(list.get(0).getId());
 			} else {
-				int number = list.get(homework.getHistory_item() - 1)
-						.getQuesttionList().size();// 题目实际题数
-				int size = homework.getQuestion_history()
-						.get(homework.getHistory_item() - 1).size();// 题目实际题数
+				int number = list.get(History_item - 1).getQuesttionList()
+						.size();// 题目实际题数
+				int size;
+				if (homework.getQuestion_history().size() == 0) {
+					size = 0;
+				} else {
+					size = homework.getQuestion_history()
+							.get(homework.getHistory_item() - 1).size();// 题目实际题数
+				}
 				Log.i("linshi", homework.getHistory_item() - 1 + "--->>"
 						+ number + ";;;;;;;;" + size);
 				if (number > size) {
@@ -158,7 +161,6 @@ public class SpeakPrepareActivity extends Activity implements Urlinterface,
 			break;
 		case R.id.question_speak_next:
 			stop();
-			SpeakPrepareActivity.this.finish();
 			if (homework.getHistory_item() >= list.size()) {// 进入答题历史页面
 				homework.setBranch_questions(list.get(
 						homework.getQuestion_index()).getQuesttionList());
@@ -166,18 +168,19 @@ public class SpeakPrepareActivity extends Activity implements Urlinterface,
 						SpeakHistoryActivity.class);
 				startActivity(intent);
 			} else {
-				// int history_item = 0;
-				// if (history.size() != 0) {
-				// history_item = history.size() - 1;
-				// }
 				if (homework.getHistory_item() == 0) {
 					homework.setBranch_questions(list.get(0).getQuesttionList());
 					homework.setQuestion_id(list.get(0).getId());
 				} else {
 					int number = list.get(homework.getHistory_item() - 1)
 							.getQuesttionList().size();// 题目实际题数
-					int size = homework.getQuestion_history()
-							.get(homework.getHistory_item() - 1).size();// 已做题数
+					int size;
+					if (homework.getQuestion_history().size() == 0) {
+						size = 0;
+					} else {
+						size = homework.getQuestion_history()
+								.get(homework.getHistory_item() - 1).size();// 已做题数
+					}
 					Log.i("suanfa", size + "-");
 					if (number > size) {
 						List<QuestionPojo> qlist = list.get(
@@ -204,6 +207,7 @@ public class SpeakPrepareActivity extends Activity implements Urlinterface,
 				// homework.getHistory_item()).getQuesttionList());
 				// homework.setQuestion_id(list.get(homework.getHistory_item())
 				// .getId());
+				SpeakPrepareActivity.this.finish();
 				intent.setClass(SpeakPrepareActivity.this,
 						SpeakBeginActivity.class);
 				startActivity(intent);
@@ -295,7 +299,9 @@ public class SpeakPrepareActivity extends Activity implements Urlinterface,
 			player.setDataSource(path);
 			player.prepare();// 进行缓冲
 			player.setOnPreparedListener(this);
-			player.setOnCompletionListener(this);
+			if (mp3List.size() > 1) {
+				player.setOnCompletionListener(this);
+			}
 		} catch (Exception e) {
 			e.printStackTrace();
 		}

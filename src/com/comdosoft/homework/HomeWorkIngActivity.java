@@ -464,6 +464,7 @@ public class HomeWorkIngActivity extends Activity implements Urlinterface {
 					questionlist.add(new ListeningPojo(id, question));
 				}
 			}
+			Log.i("suanfa", questionlist.size()+"=");
 			homework.setQuestion_list(questionlist);
 			homework.getQuestion_allNumber();
 			homework.setQuestion_allNumber(questionlist.size());
