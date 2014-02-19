@@ -33,6 +33,7 @@ import android.os.Environment;
 import android.os.Handler;
 import android.os.Message;
 import android.provider.MediaStore;
+import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageView;
@@ -166,7 +167,7 @@ public class SettingActivity extends Activity implements Urlinterface {
 									SHARED, Context.MODE_PRIVATE);
 							Editor editor = preferences.edit();
 							editor.putString("name", nameS);
-							editor.putString("user_id", id);
+							editor.putString("user_id", user_id);
 							editor.putString("id", id);
 							editor.putString("nickname", nicknameS);
 
@@ -207,23 +208,25 @@ public class SettingActivity extends Activity implements Urlinterface {
 					nicknameS = nickname.getText().toString();
 					nameS = name.getText().toString();
 					MultipartEntity entity = new MultipartEntity();
-
+					Log.i("suanfa",id+"-uid");
 					entity.addPart("student_id", new StringBody(id));
 					File f = new File(Environment.getExternalStorageDirectory()
 							+ "/1" + IMAGE_FILE_NAME);
+					
+					Log.i("suanfa", f.getPath()+"");
 					if (f.exists()) {
 						entity.addPart("avatar", new FileBody(new File(
 								Environment.getExternalStorageDirectory()
 										+ "/1" + IMAGE_FILE_NAME)));
 					}
-
+					
 					entity.addPart("nickname", new StringBody(nicknameS,
 							Charset.forName("UTF-8")));
 					entity.addPart("name",
 							new StringBody(nameS, Charset.forName("UTF-8")));
-
 					json = HomeWorkTool.sendPhostimg(
 							Urlinterface.MODIFY_PERSON_INFO, entity);
+					Log.i("suanfa", json);
 					Message msg = new Message();// 创建Message 对象
 					msg.what = 0;
 					msg.obj = json;

@@ -71,6 +71,11 @@ public class HomeWorkIngActivity extends Activity implements Urlinterface {
 					working_content_list.setAdapter(question_adapter);
 					p_q_package_id = list.get(homework.getWork_date_item())
 							.getId();
+					if (list.get(homework.getWork_date_item()).isType()) {
+						homework.setWork_history(false);
+					} else {
+						homework.setWork_history(true);
+					}
 					prodialog = new ProgressDialog(HomeWorkIngActivity.this);
 					prodialog.setMessage(HomeWorkParams.PD_QUESTION_INFO);
 					prodialog.setCanceledOnTouchOutside(false);

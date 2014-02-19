@@ -124,6 +124,7 @@ public class LoginActivity extends Activity implements OnClickListener,
 						Context.MODE_PRIVATE);
 				Editor editor = preferences.edit();
 				editor.putString("name", name);
+				Log.i("aaa", user_id + "----------------" + name);
 				editor.putString("user_id", user_id);
 				editor.putString("id", id);
 				editor.putString("avatar_url", avatar_url);

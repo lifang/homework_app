@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import java.util.List;
 import com.comdosoft.homework.pojo.ListeningPojo;
 import com.comdosoft.homework.pojo.QuestionPojo;
+import com.comdosoft.homework.tools.HomeWork;
 import com.comdosoft.homework.tools.ListeningQuestionList;
 import com.comdosoft.homework.tools.Urlinterface;
 import android.app.Activity;
@@ -34,6 +35,7 @@ public class DictationPrepareActivity extends Activity implements
 	private ImageView dictationImg;
 	private boolean playFlag = false;
 	private ProgressDialog mPd;
+	private HomeWork hw;
 	private Handler mHandler = new Handler() {
 		@Override
 		public void handleMessage(Message msg) {
@@ -60,6 +62,7 @@ public class DictationPrepareActivity extends Activity implements
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.question_dictation_prepare);
+		hw = (HomeWork) getApplication();
 		findViewById(R.id.question_dictation_next).setOnClickListener(this);
 		findViewById(R.id.question_dictation_exit).setOnClickListener(this);
 		dictationImg = (ImageView) findViewById(R.id.question_dictation_img);
@@ -152,12 +155,14 @@ public class DictationPrepareActivity extends Activity implements
 		case R.id.question_dictation_next:
 			finish();
 			Intent intent = new Intent();
-			if (ListeningQuestionList.Record_Count == ListeningQuestionList.listeningList
-					.size()) {
-				intent.setClass(this, DictationRecordActivity.class);
-			} else {
-				intent.setClass(this, DictationBeginActivity.class);
-			}
+			intent.setClass(this, DictationRecordActivity.class);
+			 if (ListeningQuestionList.Record_Count ==
+			 ListeningQuestionList.listeningList
+			 .size()||hw.isWork_history()) {
+			 intent.setClass(this, DictationRecordActivity.class);
+			 } else {
+			 intent.setClass(this, DictationBeginActivity.class);
+			 }
 			startActivity(intent);
 			break;
 		case R.id.question_dictation_exit:
