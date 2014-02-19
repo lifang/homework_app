@@ -7,6 +7,10 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 
+import org.apache.http.HttpResponse;
+import org.apache.http.client.HttpClient;
+import org.apache.http.client.methods.HttpGet;
+import org.apache.http.impl.client.DefaultHttpClient;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -20,6 +24,9 @@ import android.content.DialogInterface;
 import android.content.SharedPreferences;
 import android.content.SharedPreferences.Editor;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.graphics.drawable.BitmapDrawable;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
@@ -387,9 +394,10 @@ public class Classxinxiliu extends Activity implements OnHeaderRefreshListener,
 		if (mess.getAvatar_url().equals("")
 				|| mess.getAvatar_url().equals("null")) {
 		} else {
-			 face.setScaleType(ImageView.ScaleType.FIT_CENTER);
-			imageLoader.displayImage(IP + mess.getAvatar_url(), face, options,
-					animateFirstListener);
+//			 face.setScaleType(ImageView.ScaleType.FIT_CENTER);
+//			imageLoader.displayImage(IP + mess.getAvatar_url(), face, options,
+//					animateFirstListener);
+			 set_background(IP + mess.getAvatar_url(), face);
 		}
 
 		Micropost_senderName.setText(mess.getName()); // 发消息的人
@@ -580,9 +588,10 @@ public class Classxinxiliu extends Activity implements OnHeaderRefreshListener,
 			final Child_Micropost child_Micropost = child_list.get(position2);
 			if (child_Micropost.getSender_avatar_url() != null) { // 设置头像
 				// face.setScaleType(ImageView.ScaleType.FIT_XY);
-				imageLoader.displayImage(IP
-						+ child_list.get(position2).getSender_avatar_url(),
-						face, options, animateFirstListener);
+//				imageLoader.displayImage(IP
+//						+ child_list.get(position2).getSender_avatar_url(),
+//						face, options, animateFirstListener);
+				set_background(IP + child_Micropost.getSender_avatar_url(), face);
 			}
 			Micropost_whoToWho.setText(child_Micropost.getSender_name()
 					+ "  回复   " + child_Micropost.getReciver_name()); //
@@ -1730,5 +1739,56 @@ public class Classxinxiliu extends Activity implements OnHeaderRefreshListener,
 		ziAdapter_list.clear();
 		list_list.clear();
 	}
+	/*
+	 * 设置头像
+	 */
+	public void set_background(final String uri, final ImageView imageView) {
+		
+		
+		final Handler mHandler = new Handler() {
+			public void handleMessage(android.os.Message msg) {
+				switch (msg.what) {
+				case 0:
+					Drawable drawable = (Drawable) msg.obj;
+					imageView.setBackgroundDrawable(drawable);
+					break;
+				default:
+					break;
+				}
+			}
+		};
 
+		
+		Thread thread = new Thread() {
+			public void run() {
+				HttpClient hc = new DefaultHttpClient();
+
+				HttpGet hg = new HttpGet(uri);//
+				 Drawable face_drawable;
+				try {
+					HttpResponse hr = hc.execute(hg);
+					Bitmap bm = BitmapFactory.decodeStream(hr.getEntity()
+							.getContent());
+					face_drawable = new BitmapDrawable(bm);
+					Message msg = new Message();// 创建Message 对象
+					msg.what = 0;
+					msg.obj = face_drawable;
+					mHandler.sendMessage(msg);
+				} catch (Exception e) {
+
+				}
+				
+			}
+		};
+		if (HomeWorkTool.isConnect(Classxinxiliu.this)) {
+
+			thread.start();
+		} else {
+			Toast.makeText(getApplicationContext(),
+					HomeWorkParams.INTERNET, 0).show();
+		}
+		
+		
+	}
+	
 }
