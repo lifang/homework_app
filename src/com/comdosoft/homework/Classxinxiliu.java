@@ -141,6 +141,8 @@ public class Classxinxiliu extends Activity implements OnHeaderRefreshListener,
 				list.clear();
 				click_list();
 				final String json_all = (String) msg.obj;
+//				Toast.makeText(getApplicationContext(),
+//						json_all, Toast.LENGTH_SHORT).show();
 				if (micropost_type == 0) {// 0全部 1自己
 					parseJson_all(json_all);
 				} else {
@@ -176,6 +178,7 @@ public class Classxinxiliu extends Activity implements OnHeaderRefreshListener,
 				break;
 
 			case 6:
+				prodialog.dismiss();
 				focus = -1;
 				list.clear();
 				click_list();
@@ -226,7 +229,6 @@ public class Classxinxiliu extends Activity implements OnHeaderRefreshListener,
 				}
 				Log.i("linshi", lookStr_micropost.toString());
 				int a = 0;
-				if (list.size() != 0) {
 
 					for (int i = 0; i < list.size(); i++) {
 						if (list.get(i).getId().equals(lookStr_micropost_id)) {
@@ -245,7 +247,6 @@ public class Classxinxiliu extends Activity implements OnHeaderRefreshListener,
 						list.add(lookStr_micropost);
 					}
 
-				}
 				Log.i("linshi", list.size() + "");
 
 				for (int i = 0; i < list.size(); i++) {
