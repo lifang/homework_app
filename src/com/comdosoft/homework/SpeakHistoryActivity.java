@@ -115,7 +115,7 @@ public class SpeakHistoryActivity extends Activity implements Urlinterface,
 		question_history = homework.getQuestion_history();
 		question_history_size = homework.getQuestion_history().size();
 		// 添加错词提示
-		if (question_history_size < (homework.getQuestion_index() + 1)) {
+		if (question_history_size < (homework.getQuestion_index() + 1)||question_history.size()==0) {
 			setTishi("暂无错误词汇");
 		} else {
 			setTishi(question_history.get(homework.getQuestion_index()).get(0));
