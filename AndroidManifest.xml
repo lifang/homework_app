@@ -77,7 +77,7 @@
         </activity>
         <activity
             android:name="com.comdosoft.homework.SwitchClassActivity"
-            android:theme="@style/Transparent"
+            android:theme="@android:style/Theme.Translucent"
             android:windowSoftInputMode="adjustUnspecified|stateHidden" >
         </activity>
         <activity android:name="com.comdosoft.homework.AboutMeActivity" >
@@ -97,9 +97,11 @@
             </intent-filter>
         </activity>
      <activity android:name=".SettingPhoto" 
-            android:theme="@style/Transparent"
+            android:theme="@android:style/Theme.Translucent"
             android:windowSoftInputMode="adjustUnspecified|stateHidden"/>
- <activity android:name=".ErrorDisplay" />
+ <activity android:name=".ErrorDisplay" 
+     android:theme="@android:style/Theme.Translucent"
+            android:windowSoftInputMode="adjustUnspecified|stateHidden"/>
     </application>
 
 </manifest>
