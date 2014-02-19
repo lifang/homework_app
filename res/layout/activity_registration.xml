@@ -33,7 +33,9 @@
             android:layout_marginTop="13px"
             android:gravity="center"
             android:maxLength="8"
-            android:textSize="24px" />
+            android:textSize="24px" 
+           android:maxLines="1"
+            android:singleLine="true"/>
 
         <TextView
             android:layout_width="wrap_content"
@@ -50,7 +52,9 @@
             android:layout_marginTop="13px"
             android:gravity="center"
             android:maxLength="8"
-            android:textSize="24px" />
+            android:textSize="24px"
+            android:maxLines="1"
+            android:singleLine="true" />
 
         <TextView
             android:layout_width="wrap_content"
@@ -66,7 +70,9 @@
             android:layout_height="50px"
             android:layout_marginTop="13px"
             android:gravity="center"
-            android:textSize="24px" />
+            android:textSize="24px" 
+            android:maxLines="1"
+            android:singleLine="true"/>
 
         <Button
             android:layout_width="320px"

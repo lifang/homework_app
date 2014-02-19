@@ -7,10 +7,6 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 
-import org.apache.http.HttpResponse;
-import org.apache.http.client.HttpClient;
-import org.apache.http.client.methods.HttpGet;
-import org.apache.http.impl.client.DefaultHttpClient;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -24,9 +20,6 @@ import android.content.DialogInterface;
 import android.content.SharedPreferences;
 import android.content.SharedPreferences.Editor;
 import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
-import android.graphics.drawable.BitmapDrawable;
-import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
@@ -253,7 +246,6 @@ public class Classxinxiliu extends Activity implements OnHeaderRefreshListener,
 				}
 				break;
 			case 7:
-
 				Toast.makeText(getApplicationContext(),
 						HomeWorkParams.INTERNET, Toast.LENGTH_SHORT).show();
 				break;
@@ -308,6 +300,11 @@ public class Classxinxiliu extends Activity implements OnHeaderRefreshListener,
 				.cacheOnDisc(false).build();
 		lass_count = 1;
 		lass_count2 = 2;
+	}
+
+	protected void onResume() {
+		super.onResume();
+
 		if (HomeWorkTool.isConnect(Classxinxiliu.this)) {
 			prodialog = new ProgressDialog(Classxinxiliu.this);
 			prodialog.setMessage(HomeWorkParams.PD_CLASS_INFO);
@@ -315,25 +312,6 @@ public class Classxinxiliu extends Activity implements OnHeaderRefreshListener,
 			prodialog.show();
 			Thread thread = new Thread(new get_class_info());
 			thread.start();
-
-		} else {
-			Toast.makeText(getApplicationContext(), HomeWorkParams.INTERNET, 0)
-					.show();
-		}
-		lass_count2 = 1;
-	}
-
-	@Override
-	protected void onResume() {
-		super.onResume();
-
-		if (HomeWorkTool.isConnect(Classxinxiliu.this)) {
-			// lass_count = lass_count + 1;
-			Thread thread = new Thread(new get_class_info());
-			// if (lass_count != 2) {
-
-			thread.start();
-			// }
 
 		} else {
 			Toast.makeText(getApplicationContext(), HomeWorkParams.INTERNET, 0)
@@ -349,6 +327,7 @@ public class Classxinxiliu extends Activity implements OnHeaderRefreshListener,
 		mPullToRefreshView.setOnFooterRefreshListener(this);
 		Linear_layout = (LinearLayout) findViewById(R.id.layout);
 		click_list();
+		Log.i("aaa", list.size() + "====");
 		if (list.size() != 0) {
 			for (int i = 0; i < list.size(); i++) {
 				setlayout(i);
@@ -1203,6 +1182,9 @@ public class Classxinxiliu extends Activity implements OnHeaderRefreshListener,
 							String notice = array2.getString("notice");
 							if ("success".equals(status)) {
 								Reply_edit.setText("");
+								micropost_id = mess.getId();// 点击 回复 默认 给主消息回复 记录 主消息 id
+								reciver_id = mess.getUser_id();
+								reciver_types = mess.getUser_types();
 								Toast.makeText(getApplicationContext(), notice,
 										Toast.LENGTH_SHORT).show();
 								final Handler mHandler = new Handler() {

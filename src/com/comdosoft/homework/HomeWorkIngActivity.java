@@ -72,9 +72,9 @@ public class HomeWorkIngActivity extends Activity implements Urlinterface {
 					p_q_package_id = list.get(homework.getWork_date_item())
 							.getId();
 					if (list.get(homework.getWork_date_item()).isType()) {
-						homework.setWork_history(false);
-					} else {
 						homework.setWork_history(true);
+					} else {
+						homework.setWork_history(false);
 					}
 					prodialog = new ProgressDialog(HomeWorkIngActivity.this);
 					prodialog.setMessage(HomeWorkParams.PD_QUESTION_INFO);
@@ -129,9 +129,9 @@ public class HomeWorkIngActivity extends Activity implements Urlinterface {
 					public void onItemClick(AdapterView<?> parent, View view,
 							int position, long id) {
 						if (list.get(homework.getWork_date_item()).isType()) {
-							homework.setWork_history(false);
-						} else {
 							homework.setWork_history(true);
+						} else {
+							homework.setWork_history(false);
 						}
 						Log.i("suanfa", homework.isWork_history()+"");
 						homework.setWork_date_item(position);

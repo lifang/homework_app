@@ -34,7 +34,9 @@ import android.os.Handler;
 import android.os.Message;
 import android.provider.MediaStore;
 import android.util.Log;
+import android.view.KeyEvent;
 import android.view.View;
+import android.view.View.OnKeyListener;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.Toast;
@@ -97,13 +99,9 @@ public class SettingActivity extends Activity implements Urlinterface {
 		name.setText(nameS);
 		nickname.setText(nicknameS);
 		if (HomeWorkTool.isConnect(getApplicationContext())) {
-
 			if (avatar_url != null || avatar_url.length() != 0) { // 设置头像
-
 				GetCSDNLogoTask task = new GetCSDNLogoTask();
 				task.execute(Urlinterface.IP + avatar_url);//
-
-				
 			}
 		} else {
 			Toast.makeText(getApplicationContext(), HomeWorkParams.INTERNET, 0)
