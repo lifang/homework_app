@@ -4,7 +4,27 @@
     android:layout_height="fill_parent"
     android:background="#f6f2f3"
     android:orientation="horizontal" >
+    <RelativeLayout
+        android:id="@+id/classRelativeLayout_left"
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent" >
 
+        <EditText
+            android:id="@+id/class_left"
+            android:layout_width="3.34px"
+            android:layout_height="fill_parent"
+            android:background="#FFFFFF"
+            android:focusable="false" />
+
+        <EditText
+            android:id="@+id/class_right"
+            android:layout_width="3.34px"
+            android:layout_height="fill_parent"
+            android:layout_alignParentRight="true"
+            android:layout_alignParentTop="true"
+            android:background="#FFFFFF"
+            android:focusable="false" >
+        </EditText>
     <LinearLayout
         android:layout_width="fill_parent"
         android:layout_height="fill_parent"
@@ -171,4 +191,5 @@
 
     </LinearLayout>
          -->
+         </RelativeLayout>
 </LinearLayout>

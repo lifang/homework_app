@@ -7,11 +7,6 @@ import java.util.List;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
-import com.comdosoft.homework.pojo.ClassPojo;
-import com.comdosoft.homework.tools.HomeWork;
-import com.comdosoft.homework.tools.HomeWorkTool;
-import com.comdosoft.homework.tools.Urlinterface;
-
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
@@ -20,19 +15,24 @@ import android.content.SharedPreferences.Editor;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
-import android.util.Log;
 import android.view.Gravity;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewGroup;
 import android.view.View.OnClickListener;
+import android.view.ViewGroup;
+import android.view.Window;
 import android.widget.BaseAdapter;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import com.comdosoft.homework.pojo.ClassPojo;
+import com.comdosoft.homework.tools.HomeWork;
+import com.comdosoft.homework.tools.HomeWorkTool;
+import com.comdosoft.homework.tools.Urlinterface;
 
 public class SwitchClassActivity extends Activity {
 	private EditText SwitchClass_Et;
@@ -45,7 +45,7 @@ public class SwitchClassActivity extends Activity {
 
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-
+		requestWindowFeature(Window.FEATURE_NO_TITLE);//去掉标题栏
 		setContentView(R.layout.switchclass);
 		hw = (HomeWork) getApplication();
 		SwitchClass_Et = (EditText) findViewById(R.id.SwitchClass_Et);

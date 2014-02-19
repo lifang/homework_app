@@ -33,6 +33,7 @@ import android.os.Handler;
 import android.os.Message;
 import android.provider.MediaStore;
 import android.view.View;
+import android.view.Window;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.Toast;
@@ -64,7 +65,9 @@ public class SettingPhoto extends Activity implements Urlinterface {
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
+		
 		super.onCreate(savedInstanceState);
+		requestWindowFeature(Window.FEATURE_NO_TITLE);//去掉标题栏
 		setContentView(R.layout.settingphoto);
 
 
