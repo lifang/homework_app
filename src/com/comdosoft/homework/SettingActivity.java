@@ -165,8 +165,7 @@ public class SettingActivity extends Activity implements Urlinterface {
 									SHARED, Context.MODE_PRIVATE);
 							Editor editor = preferences.edit();
 							editor.putString("name", nameS);
-							editor.putString("user_id", user_id);
-							editor.putString("id", id);
+
 							editor.putString("nickname", nicknameS);
 
 							editor.commit();

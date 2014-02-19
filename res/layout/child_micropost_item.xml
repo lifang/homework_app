@@ -14,7 +14,7 @@
             android:id="@+id/child_user_face"
             android:layout_width="65px"
             android:layout_height="65px"
-            android:scaleType="fitXY"
+            android:scaleType="fitCenter"
             android:background="@drawable/moren" />
 
         <RelativeLayout

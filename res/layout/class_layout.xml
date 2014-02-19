@@ -15,8 +15,8 @@
             android:id="@+id/user_face"
             android:layout_width="65px"
             android:layout_height="65px"
-            android:scaleType="centerCrop"
-            android:src="@drawable/moren" />
+            android:scaleType="fitCenter"
+            android:background="@drawable/moren" />
 
         <RelativeLayout
             android:id="@+id/relativeLayout1"
