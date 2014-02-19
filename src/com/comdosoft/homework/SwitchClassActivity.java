@@ -83,8 +83,12 @@ public class SwitchClassActivity extends Activity {
 					public void run() {
 						try {
 							HashMap<String, String> mp = new HashMap<String, String>();
-							mp.put("verification_code", SwitchClass_Et
-									.getText().toString());
+							String class_code = SwitchClass_Et
+									.getText().toString();
+							if (!class_code.equals("")) {
+								class_code = class_code.replaceAll(" ", "");
+							}
+							mp.put("verification_code", class_code);
 							mp.put("student_id", id);
 							String json = HomeWorkTool.doPost(
 									Urlinterface.Validation_into_class, mp);

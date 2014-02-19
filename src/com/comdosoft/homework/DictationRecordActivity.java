@@ -24,6 +24,8 @@ import android.widget.LinearLayout.LayoutParams;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
+
 import com.comdosoft.homework.tools.HomeWork;
 import com.comdosoft.homework.tools.ListeningQuestionList;
 import com.comdosoft.homework.tools.Urlinterface;
@@ -46,7 +48,7 @@ public class DictationRecordActivity extends Activity implements
 	private HomeWork homeWork;
 	private ProgressDialog mPd;
 	private ImageView mPlayImg;
-	private int width;
+	private int width,bigSize,smallSize;
 	private Handler handler = new Handler() {
 		public void handleMessage(Message msg) {
 			super.handleMessage(msg);
@@ -93,26 +95,35 @@ public class DictationRecordActivity extends Activity implements
 		linearLayout.removeAllViews();
 		playFlag = false;
 		handler.sendEmptyMessage(3);
+		
+		bigSize= ListeningQuestionList.getListeningPojoList()
+				.size();
+		smallSize = ListeningQuestionList.getListeningPojo(bigIndex)
+				.getQuesttionList().size();
 
-		if (smallIndex == smallList.size() && bigIndex < bigList.size() - 1) {
+		if (smallIndex ==smallSize
+				&& bigIndex <bigSize - 1) {
 			bigIndex++;
 			smallIndex = 0;
 		}
 
 		bigList = ListeningQuestionList.getAnswerList();
-		smallList = bigList.get(bigIndex);
-
-		errorList.add("你需要多听,多写的词:");
-
-		String answer = smallList.get(smallIndex);
-		if (answer != null && !answer.equals("")) {
-			String[] sArr = answer.split("-!-");
-			for (int i = 0; i < sArr.length; i++) {
-				errorList.add(sArr[i]);
+		if(bigList.size()!=0){
+			smallList = bigList.get(bigIndex);
+			if(smallList.size()!=0){
+				errorList.add("你需要多听,多写的词:");
+				String answer = smallList.get(smallIndex);
+				if (answer != null && !answer.equals("")) {
+					String[] sArr = answer.split("-!-");
+					for (int i = 0; i < sArr.length; i++) {
+						errorList.add(sArr[i]);
+					}
+				}
 			}
 		}
+		
 
-		if (smallIndex < smallList.size()) {
+		if (smallIndex < smallSize) {
 			smallIndex++;
 		}
 
@@ -122,14 +133,14 @@ public class DictationRecordActivity extends Activity implements
 				initView(i);
 			}
 		} else {
-			linearLayout.setVisibility(LinearLayout.GONE);
+			linearLayout.setVisibility(View.GONE);
 		}
 
 		mp3URL = ListeningQuestionList.getListeningPojo(bigIndex)
 				.getQuesttionList().get(smallIndex - 1).getUrl();
 		topic.setText(ListeningQuestionList.getListeningPojo(bigIndex)
 				.getQuesttionList().get(smallIndex - 1).getContent());
-		page.setText(smallIndex + "/" + smallList.size());
+		page.setText(smallIndex + "/" + smallSize);
 	}
 
 	public void initView(int i) {
@@ -184,11 +195,11 @@ public class DictationRecordActivity extends Activity implements
 			MyDialog("确认要退出吗?", "确认", "取消", 0);
 			break;
 		case R.id.question_dictation_check:
-			if (smallIndex == smallList.size()
-					&& bigIndex == bigList.size() - 1) {
+			if (smallIndex == smallSize
+					&& bigIndex == bigSize - 1) {
 				MyDialog("确认要退出吗?", "确认", "取消", 0);
-			} else if (smallIndex <= smallList.size()
-					&& bigIndex < bigList.size()) {
+			} else if (smallIndex <= smallSize
+					&& bigIndex < bigSize) {
 				initData();
 			}
 			break;

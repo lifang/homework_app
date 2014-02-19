@@ -53,7 +53,7 @@ public class HomeWorkMainActivity extends TabActivity implements Urlinterface {
 	private String num = "0";
 	private int hw_num = 0;
 	private int width;
-	private List<Integer> new_idlist;
+	private List<Integer> new_idlist = new ArrayList<Integer>();
 	public static HomeWorkMainActivity instance = null;
 
 	public void onCreate(Bundle savedInstanceState) {
@@ -223,7 +223,7 @@ public class HomeWorkMainActivity extends TabActivity implements Urlinterface {
 					msg.obj = count;
 					Log.i("aaa", count+"");
 					handler.sendMessage(msg);
-					thread.sleep(6000);
+					thread.sleep(60000);
 				} catch (Exception e) {
 //					handler.sendEmptyMessage(2);
 					
@@ -233,12 +233,9 @@ public class HomeWorkMainActivity extends TabActivity implements Urlinterface {
 	}
 
 	public void getHomeWork() {
-		new_idlist = new ArrayList<Integer>();
 		SharedPreferences sp = getSharedPreferences(Urlinterface.SHARED, 0);
 		String id = sp.getString("id", "null");
 		String school_class_id = sp.getString("school_class_id", "null");
-		homework.setHw_number(0);
-		homework.setNew_id_list(new_idlist);
 		while (flag_hw) {
 			if (HomeWorkTool.isConnect(getApplicationContext())) {
 				HashMap<String, String> mp = new HashMap<String, String>();
@@ -247,6 +244,8 @@ public class HomeWorkMainActivity extends TabActivity implements Urlinterface {
 				try {
 					String json = HomeWorkTool.sendGETRequest(
 							Urlinterface.NEW_HOMEWORK, mp);
+					homework.setHw_number(0);
+					homework.setNew_id_list(new_idlist);
 					JSONObject obj = new JSONObject(json);
 					JSONArray arr = obj.getJSONArray("new_id");
 					hw_num = arr.length();
@@ -257,7 +256,7 @@ public class HomeWorkMainActivity extends TabActivity implements Urlinterface {
 					homework.setHw_number(hw_num);
 					homework.setNew_id_list(new_idlist);
 					handler.sendEmptyMessage(1);
-					thread_work.sleep(6000);
+					thread_work.sleep(60000);
 				} catch (Exception e) {
 //					handler.sendEmptyMessage(2);
 				}

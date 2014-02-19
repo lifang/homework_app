@@ -7,10 +7,6 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 
-import org.apache.http.HttpResponse;
-import org.apache.http.client.HttpClient;
-import org.apache.http.client.methods.HttpGet;
-import org.apache.http.impl.client.DefaultHttpClient;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -24,9 +20,6 @@ import android.content.DialogInterface;
 import android.content.SharedPreferences;
 import android.content.SharedPreferences.Editor;
 import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
-import android.graphics.drawable.BitmapDrawable;
-import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
@@ -253,7 +246,6 @@ public class Classxinxiliu extends Activity implements OnHeaderRefreshListener,
 				}
 				break;
 			case 7:
-
 				Toast.makeText(getApplicationContext(),
 						HomeWorkParams.INTERNET, Toast.LENGTH_SHORT).show();
 				break;
@@ -306,12 +298,8 @@ public class Classxinxiliu extends Activity implements OnHeaderRefreshListener,
 				.showImageOnFail(R.drawable.moren).considerExifParams(true)
 				.displayer(new RoundedBitmapDisplayer(0)).cacheInMemory(false)
 				.cacheOnDisc(false).build();
-		lass_count = 1;
-		lass_count2 = 2;
-	
 	}
 
-	@Override
 	protected void onResume() {
 		super.onResume();
 
@@ -337,6 +325,7 @@ public class Classxinxiliu extends Activity implements OnHeaderRefreshListener,
 		mPullToRefreshView.setOnFooterRefreshListener(this);
 		Linear_layout = (LinearLayout) findViewById(R.id.layout);
 		click_list();
+		Log.i("aaa", list.size() + "====");
 		if (list.size() != 0) {
 			for (int i = 0; i < list.size(); i++) {
 				setlayout(i);

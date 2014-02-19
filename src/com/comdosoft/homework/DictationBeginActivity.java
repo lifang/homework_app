@@ -195,7 +195,7 @@ public class DictationBeginActivity extends Activity implements
 	public void initView(int i) {
 		EditText et = new EditText(getApplicationContext());
 		String value = dictationList.get(i).getValue();
-		// et.setText(value);
+//		 et.setText(value);
 		int width = value.length() * 20 + 80;
 		et.setWidth(width > 200 ? 200 : width);
 		et.setHeight(40);
@@ -285,7 +285,7 @@ public class DictationBeginActivity extends Activity implements
 						dictationList.get(i).setFlag(1);
 						tvList.get(i).setVisibility(View.INVISIBLE);
 						etList.get(i).setTextColor(Color.rgb(146, 184, 27));
-					} else if (value > 5) {
+					} else if (value > 6) {
 						// 半对
 						mesFlag = true;
 						dictationList.get(i).setFlag(1);

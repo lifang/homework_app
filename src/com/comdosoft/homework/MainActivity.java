@@ -33,8 +33,6 @@ public class MainActivity extends Activity implements OnClickListener {
 	private String openid;
 	private ProgressDialog mPd;
 	private Handler mHandler = new Handler() {
-
-		@Override
 		public void handleMessage(Message msg) {
 			super.handleMessage(msg);
 			mPd.dismiss();
@@ -65,9 +63,7 @@ public class MainActivity extends Activity implements OnClickListener {
 		mPd.setMessage("正在登陆...");
 
 		btn3 = (Button) findViewById(R.id.button3);
-		// this.finish();
 		btn3.setOnClickListener(new OnClickListener() {
-			@Override
 			public void onClick(View v) {
 				Intent intent = new Intent(MainActivity.this,
 						SwitchClassActivity.class);
@@ -77,7 +73,6 @@ public class MainActivity extends Activity implements OnClickListener {
 	}
 
 	public void HomeWorkIngActivity(View v) {
-
 		Intent intent = new Intent(MainActivity.this,
 				HomeWorkMainActivity.class);
 		startActivity(intent);
@@ -85,10 +80,8 @@ public class MainActivity extends Activity implements OnClickListener {
 	}
 
 	public void xinxiliu(View v) {
-
 		Intent intent = new Intent(MainActivity.this, Classxinxiliu.class);
 		startActivity(intent);
-
 	}
 
 	public void RegistrationActivity(View v) {
@@ -126,13 +119,11 @@ public class MainActivity extends Activity implements OnClickListener {
 		}
 	}
 
-	@Override
 	public void onClick(View v) {
 		onClickLogin();
 	}
 
 	class MyThread extends Thread {
-		@Override
 		public void run() {
 			super.run();
 			Map<String, String> map = new HashMap<String, String>();
@@ -143,13 +134,11 @@ public class MainActivity extends Activity implements OnClickListener {
 		}
 	}
 
-	@Override
 	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
 		mTencent.onActivityResult(requestCode, resultCode, data);
 	}
 
 	private class BaseUiListener implements IUiListener {
-		@Override
 		public void onComplete(JSONObject response) {
 			doComplete(response);
 		}
@@ -164,11 +153,9 @@ public class MainActivity extends Activity implements OnClickListener {
 			}
 		}
 
-		@Override
 		public void onError(UiError e) {
 		}
 
-		@Override
 		public void onCancel() {
 		}
 
