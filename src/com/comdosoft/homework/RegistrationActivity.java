@@ -67,7 +67,6 @@ public class RegistrationActivity extends Activity implements Urlinterface {
 
 		if (file.exists()) {
 			file.delete();
-
 		}
 		// Date d = new Date();
 		// open_id = d.toString();

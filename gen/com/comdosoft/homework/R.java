@@ -11,6 +11,7 @@ public final class R {
     public static final class attr {
     }
     public static final class color {
+        public static final int button_hui=0x7f04000b;
         public static final int dialog_text=0x7f04000a;
         public static final int juhuang=0x7f040006;
         public static final int lvse=0x7f040003;
@@ -88,7 +89,7 @@ public final class R {
     }
     public static final class id {
         public static final int Button_huifu=0x7f090026;
-        public static final int SwitchClass_Et=0x7f090069;
+        public static final int SwitchClass_Et=0x7f09006a;
         public static final int aa=0x7f090027;
         public static final int aboutmeLv=0x7f090000;
         public static final int aboutme_oneIb=0x7f090004;
@@ -98,7 +99,7 @@ public final class R {
         public static final int aboutme_oneTv3=0x7f090005;
         public static final int aboutme_oneTv4=0x7f090006;
         public static final int aboutme_oneTv5=0x7f090007;
-        public static final int action_settings=0x7f090074;
+        public static final int action_settings=0x7f090075;
         public static final int button1=0x7f090009;
         public static final int button2=0x7f09000a;
         public static final int button3=0x7f09000b;
@@ -116,7 +117,7 @@ public final class R {
         public static final int class_ed1=0x7f09002d;
         public static final int class_fabiao_content=0x7f09002b;
         public static final int color=0x7f09005a;
-        public static final int congxiangce=0x7f090065;
+        public static final int congxiangce=0x7f090066;
         public static final int dialog_img=0x7f090040;
         public static final int dialog_no=0x7f090043;
         public static final int dialog_ok=0x7f090042;
@@ -142,16 +143,16 @@ public final class R {
         public static final int micropost_date=0x7f09002a;
         public static final int micropost_guanzhu=0x7f090029;
         public static final int micropost_huifu=0x7f090023;
-        public static final int newwork_img=0x7f090073;
-        public static final int newwork_text=0x7f09006c;
-        public static final int paizhaoshangchuan=0x7f090064;
-        public static final int pull_to_load_image=0x7f09005e;
-        public static final int pull_to_load_progress=0x7f09005d;
-        public static final int pull_to_load_text=0x7f09005f;
-        public static final int pull_to_refresh_header=0x7f09005c;
-        public static final int pull_to_refresh_image=0x7f090061;
-        public static final int pull_to_refresh_progress=0x7f090060;
-        public static final int pull_to_refresh_text=0x7f090062;
+        public static final int newwork_img=0x7f090074;
+        public static final int newwork_text=0x7f09006d;
+        public static final int paizhaoshangchuan=0x7f090065;
+        public static final int pull_to_load_image=0x7f09005f;
+        public static final int pull_to_load_progress=0x7f09005e;
+        public static final int pull_to_load_text=0x7f090060;
+        public static final int pull_to_refresh_header=0x7f09005d;
+        public static final int pull_to_refresh_image=0x7f090062;
+        public static final int pull_to_refresh_progress=0x7f090061;
+        public static final int pull_to_refresh_text=0x7f090063;
         public static final int qq_login=0x7f09000c;
         public static final int question_dictation_check=0x7f090046;
         public static final int question_dictation_check_next=0x7f090047;
@@ -182,28 +183,29 @@ public final class R {
         public static final int reply_edit=0x7f090025;
         public static final int set_name=0x7f090013;
         public static final int set_nickname=0x7f090012;
-        public static final int set_photolayout=0x7f090063;
+        public static final int set_photolayout=0x7f090064;
         public static final int set_touxiang=0x7f090011;
-        public static final int sign_img=0x7f09006e;
+        public static final int sign_img=0x7f09006f;
         public static final int speak=0x7f090057;
-        public static final int switchClassIB=0x7f09006a;
-        public static final int switchClassTv=0x7f090066;
-        public static final int switchClassll=0x7f090068;
-        public static final int switchclassLv=0x7f090067;
-        public static final int switchclass_oneTv=0x7f09006b;
+        public static final int switchClassIB=0x7f09006b;
+        public static final int switchClassTv=0x7f090067;
+        public static final int switchClassll=0x7f090069;
+        public static final int switchclassLv=0x7f090068;
+        public static final int switchclass_oneTv=0x7f09006c;
         public static final int text=0x7f090059;
         public static final int textView1=0x7f090008;
         public static final int title=0x7f090016;
         public static final int tou=0x7f09005b;
+        public static final int tvll=0x7f09005c;
         public static final int user_face=0x7f09001f;
         public static final int work_content_img=0x7f090015;
-        public static final int work_question_case=0x7f090071;
-        public static final int work_question_end=0x7f090072;
-        public static final int work_question_img=0x7f090070;
-        public static final int work_start_date=0x7f09006d;
+        public static final int work_question_case=0x7f090072;
+        public static final int work_question_end=0x7f090073;
+        public static final int work_question_img=0x7f090071;
+        public static final int work_start_date=0x7f09006e;
         public static final int working_content_list=0x7f090017;
         public static final int working_date_list=0x7f090014;
-        public static final int zill=0x7f09006f;
+        public static final int zill=0x7f090070;
     }
     public static final class layout {
         public static final int aboutme=0x7f030000;
@@ -235,9 +237,10 @@ public final class R {
         public static final int settingphoto=0x7f03001a;
         public static final int switchclass=0x7f03001b;
         public static final int switchclass_one=0x7f03001c;
-        public static final int work_date_adapter=0x7f03001d;
-        public static final int work_question_adapter=0x7f03001e;
-        public static final int working_adapter=0x7f03001f;
+        public static final int text_view=0x7f03001d;
+        public static final int work_date_adapter=0x7f03001e;
+        public static final int work_question_adapter=0x7f03001f;
+        public static final int working_adapter=0x7f030020;
     }
     public static final class menu {
         public static final int main=0x7f080000;

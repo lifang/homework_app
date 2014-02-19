@@ -89,26 +89,28 @@
             android:layout_width="200dp"
             android:layout_height="200dp"
             android:layout_marginTop="30dp"
-            android:src="@drawable/dictation_laba1" 
-            android:onClick="onclicks"/>
+            android:onClick="onclicks"
+            android:src="@drawable/dictation_laba1" />
 
         <ScrollView
-            android:layout_width="fill_parent"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
             android:cacheColorHint="#00000000"
             android:fadingEdge="none"
             android:listSelector="#00000000"
+            android:gravity="center_horizontal"
             android:scrollbars="none" >
-            <TextView
-                android:id="@+id/question_speak_content"
-                android:layout_width="fill_parent"
+
+            <LinearLayout
+                android:id="@+id/tvll"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:gravity="center_horizontal"
-                android:layout_marginLeft="10dp"
-                android:layout_marginTop="40dp"
-                android:textColor="@color/question_title_bg1"
-                android:textSize="30sp"
-                android:textStyle="bold" />
+                android:orientation="vertical"
+                android:layout_marginTop="20dp" >
+            </LinearLayout>
         </ScrollView>
     </LinearLayout>
+
 </LinearLayout>

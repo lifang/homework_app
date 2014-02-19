@@ -23,14 +23,17 @@ import android.os.Handler;
 import android.os.Message;
 import android.util.Log;
 import android.view.Gravity;
+import android.view.KeyEvent;
 import android.view.View;
 import android.view.View.OnClickListener;
+import android.view.inputmethod.EditorInfo;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.LinearLayout.LayoutParams;
 import android.widget.TextView;
+import android.widget.TextView.OnEditorActionListener;
 
 import com.comdosoft.homework.pojo.DictationPojo;
 import com.comdosoft.homework.pojo.QuestionPojo;
@@ -46,6 +49,9 @@ public class DictationBeginActivity extends Activity implements
 		OnClickListener, HomeWorkParams, OnPreparedListener,
 		OnCompletionListener, Urlinterface {
 	private String REG = "(?i)[^a-zA-Z0-9\u4E00-\u9FA5]";
+	private String regEx = "[`~!@#$%^&*()+=|{}':;',\\[\\].<>/?~！@#￥%……&*（）——+|{}【】‘；：”“’。，、？]";
+	private String symbol;
+	private int editTextIndex = 0;
 	private int linearLayoutIndex = 0;
 	private int mesLinearLayoutIndex = 0;
 	private int smallIndex;
@@ -54,7 +60,6 @@ public class DictationBeginActivity extends Activity implements
 	private int student_id;
 	private int publish_question_package_id;
 	private String log;
-	private String symbol;
 	private String mp3URL;
 	private boolean mesFlag = false;
 	private boolean playFlag = false;
@@ -93,6 +98,12 @@ public class DictationBeginActivity extends Activity implements
 				mPd.setMessage("正在缓冲...");
 				mPd.show();
 				break;
+			case 5:
+				etList.get(editTextIndex)
+						.setWidth(
+								etList.get(editTextIndex).getText().toString()
+										.length() * 20 + 80);
+				break;
 			}
 		}
 	};
@@ -111,7 +122,6 @@ public class DictationBeginActivity extends Activity implements
 		mPlayImg.setOnClickListener(this);
 
 		mPd = new ProgressDialog(this);
-		mPd.setCanceledOnTouchOutside(false);
 		mPd.setMessage(HomeWorkParams.PD_FINISH_QUESTION);
 		homeWork = (HomeWork) getApplication();
 		homeWork.setNewsFlag(true);
@@ -154,7 +164,6 @@ public class DictationBeginActivity extends Activity implements
 		handler.sendEmptyMessage(3);
 
 		// 获取已答过题目记录数
-		// bigIndex = ListeningQuestionList.getRecordCount();
 		bigIndex = ListeningQuestionList.Record_Count;
 
 		// 获取小题数据
@@ -164,21 +173,11 @@ public class DictationBeginActivity extends Activity implements
 		// 获取当前大&小题数据
 		mp3URL = IP + qpList.get(smallIndex).getUrl();
 		String content = qpList.get(smallIndex).getContent();
-		String[] sArr = content.substring(0, content.length() - 1).split(" ");
+		String[] sArr = content.split(" ");
 		for (int i = 0; i < sArr.length; i++) {
 			String s = sArr[i];
-			s = s.replaceAll(REG, "");
-			String regEx = "[`~!@#$%^&*()+=|{}':;',\\[\\].<>/?~！@#￥%……&*（）——+|{}【】‘；：”“’。，、？]";
-			Pattern p = Pattern.compile(regEx);
-			Matcher m = p.matcher(s);
-			s = m.replaceAll("").trim();
-			if (s != null && !s.equals("")) {
-				dictationList.add(new DictationPojo(s, 0));
-			}
+			dictationList.add(new DictationPojo(s, 0));
 		}
-
-		// 获取标点
-		symbol = content.substring(content.length() - 1, content.length());
 
 		for (int i = 0; i < dictationList.size(); i++) {
 			initView(i);
@@ -191,11 +190,27 @@ public class DictationBeginActivity extends Activity implements
 		page.setText(1 + smallIndex++ + "/" + qpList.size());
 	}
 
-	// 动态添加答题格子
-	public void initView(int i) {
-		EditText et = new EditText(getApplicationContext());
+	// 添加答题格子
+	public void initView(final int i) {
 		String value = dictationList.get(i).getValue();
-//		 et.setText(value);
+		EditText et = new EditText(getApplicationContext());
+		// et.setText(filterString(value));
+		et.setImeOptions(EditorInfo.IME_ACTION_NEXT);
+		et.setOnEditorActionListener(new OnEditorActionListener() {
+			public boolean onEditorAction(TextView v, int actionId,
+					KeyEvent event) {
+				if (actionId == EditorInfo.IME_ACTION_NEXT) {
+					if (i + 1 >= etList.size()) {
+						v.setImeOptions(EditorInfo.IME_ACTION_DONE);
+					} else {
+						etList.get(i + 1).requestFocus();
+					}
+				}
+				return true;
+			}
+		});
+		et.setMaxLines(1);
+		et.setSingleLine(true);
 		int width = value.length() * 20 + 80;
 		et.setWidth(width > 200 ? 200 : width);
 		et.setHeight(40);
@@ -217,26 +232,36 @@ public class DictationBeginActivity extends Activity implements
 		etList.add(et);
 		linearLayoutList.get(linearLayoutIndex).addView(et);
 
-		// 最后的标点符号
-		// if (i == dictationList.size() - 1) {
-		// TextView tv = new TextView(getApplicationContext());
-		// tv.setText(symbol);
-		// tv.setTextSize(24);
-		// LayoutParams lp = new LayoutParams(LayoutParams.WRAP_CONTENT,
-		// LayoutParams.WRAP_CONTENT);
-		// lp.topMargin = 10;
-		// lp.leftMargin = 10;
-		// tv.setLayoutParams(lp);
-		// linearLayoutList.get(linearLayoutIndex).addView(tv);
-		// }
+		symbol = value.substring(value.length() - 1, value.length());
+		if (isEnglistPunctuation(symbol)
+				|| isChinesePunctuation(symbol.charAt(0))) {
+			initSymbol(symbol);
+		}
 
 		initMesView(i);
 	}
 
-	// 初始化不完全正确提示
+	// 添加标点符号
+	public void initSymbol(String symbol) {
+		TextView tv = new TextView(getApplicationContext());
+		tv.setText(symbol);
+		tv.setTextSize(24);
+		LayoutParams lp = new LayoutParams(LayoutParams.WRAP_CONTENT,
+				LayoutParams.WRAP_CONTENT);
+		lp.topMargin = 10;
+		lp.leftMargin = 10;
+		tv.setLayoutParams(lp);
+		linearLayoutList.get(linearLayoutIndex).addView(tv);
+	}
+
+	// 半对提示
 	public void initMesView(int i) {
 		TextView et = new TextView(getApplicationContext());
 		String value = dictationList.get(i).getValue();
+		String s = value.substring(value.length() - 1, value.length());
+		if (isChinesePunctuation(s.charAt(0)) || isEnglistPunctuation(s)) {
+			value = value.substring(0, value.length() - 1);
+		}
 		et.setText(value);
 		et.setWidth(value.length() * 20 + 80);
 		et.setHeight(20);
@@ -258,6 +283,39 @@ public class DictationBeginActivity extends Activity implements
 		mesLinearLayoutList.get(mesLinearLayoutIndex).addView(et);
 	}
 
+	// 判断是否英文符号
+	public boolean isEnglistPunctuation(String s) {
+		Pattern pattern4 = Pattern.compile("\\p{Punct}+");
+		Matcher matcher4 = pattern4.matcher(s);
+		if (matcher4.matches()) {
+			return true;
+		} else {
+			return false;
+		}
+	}
+
+	// 判断是否中文符号
+	public boolean isChinesePunctuation(char c) {
+		Character.UnicodeBlock ub = Character.UnicodeBlock.of(c);
+		if (ub == Character.UnicodeBlock.GENERAL_PUNCTUATION
+				|| ub == Character.UnicodeBlock.CJK_SYMBOLS_AND_PUNCTUATION
+				|| ub == Character.UnicodeBlock.HALFWIDTH_AND_FULLWIDTH_FORMS
+				|| ub == Character.UnicodeBlock.CJK_COMPATIBILITY_FORMS) {
+			return true;
+		} else {
+			return false;
+		}
+	}
+
+	// 过滤英文数字以外的字符
+	public String filterString(String s) {
+		s = s.replaceAll(REG, "");
+		Pattern p = Pattern.compile(regEx);
+		Matcher m = p.matcher(s);
+		s = m.replaceAll("").trim();
+		return s;
+	}
+
 	// 检查算法
 	public void check() {
 		mesFlag = false;
@@ -273,14 +331,12 @@ public class DictationBeginActivity extends Activity implements
 						tvList.get(i).setVisibility(View.INVISIBLE);
 						etList.get(i).setTextColor(Color.rgb(255, 0, 0));
 					}
-					s = s.replaceAll(REG, "");
-					String regEx = "[`~!@#$%^&*()+=|{}':;',\\[\\].<>/?~！@#￥%……&*（）——+|{}【】‘；：”“’。，、？]";
-					Pattern p = Pattern.compile(regEx);
-					Matcher m = p.matcher(s);
-					s = m.replaceAll("").trim();
-					int value = Soundex_Levenshtein.dragonEngine(s,
-							dictationList.get(i).getValue());
-					if (dictationList.get(i).getValue().equals(s)) {
+
+					int value = Soundex_Levenshtein.dragonEngine(
+							filterString(s), filterString(dictationList.get(i)
+									.getValue()));
+					if (filterString(dictationList.get(i).getValue()).equals(
+							filterString(s))) {
 						// 全对
 						dictationList.get(i).setFlag(1);
 						tvList.get(i).setVisibility(View.INVISIBLE);
@@ -320,10 +376,14 @@ public class DictationBeginActivity extends Activity implements
 				}
 				mesText.setVisibility(LinearLayout.VISIBLE);
 				Random r = new Random(System.currentTimeMillis());
-				sb.append("\n◆"
-						+ dictationList.get(
-								indexList.get(r.nextInt(indexList.size())))
-								.getValue());
+				String value = dictationList.get(
+						indexList.get(r.nextInt(indexList.size()))).getValue();
+				String s = value.substring(value.length() - 1, value.length());
+				if (isChinesePunctuation(s.charAt(0))
+						|| isEnglistPunctuation(s)) {
+					value = value.substring(0, value.length() - 1);
+				}
+				sb.append("\n◆" + value);
 				mesText.setText(sb.toString());
 			} else {
 				if (mesFlag) {
@@ -513,17 +573,17 @@ public class DictationBeginActivity extends Activity implements
 		}
 	}
 
+	public void stop() {
+		if (mediaPlayer.isPlaying()) {
+			mediaPlayer.pause();
+		}
+	}
+
 	class MyMediaPlay extends Thread {
 		@Override
 		public void run() {
 			super.run();
 			playerAmr();
-		}
-	}
-
-	public void stop() {
-		if (mediaPlayer.isPlaying()) {
-			mediaPlayer.pause();
 		}
 	}
 

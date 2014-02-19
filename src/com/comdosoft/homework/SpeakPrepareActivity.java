@@ -19,6 +19,7 @@ import android.view.KeyEvent;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -34,7 +35,8 @@ public class SpeakPrepareActivity extends Activity implements Urlinterface,
 	private int mp3Index = 0;
 	private String content = "";
 	private TextView question_speak_title;
-	private TextView question_speak_content;
+	private LinearLayout layout;
+//	private TextView question_speak_content;
 	private TextView img_title;
 	private MediaPlayer player;
 	private String message;
@@ -46,6 +48,8 @@ public class SpeakPrepareActivity extends Activity implements Urlinterface,
 	private List<String> mp3List;
 	private ImageView question_speak_img;
 	private boolean playFlag = false;
+	private int index;
+	private List<TextView> tvlist;
 	private Handler handler = new Handler() {
 		public void handleMessage(android.os.Message msg) {
 
@@ -77,6 +81,27 @@ public class SpeakPrepareActivity extends Activity implements Urlinterface,
 			case 6:
 				prodialog.dismiss();
 				break;
+			case 7:
+				prodialog = new ProgressDialog(SpeakPrepareActivity.this);
+				prodialog.setCanceledOnTouchOutside(false);
+				prodialog.setMessage("正在缓冲...");
+				prodialog.show();
+				break;
+			case 8:
+				for (int i = 0; i < tvlist.size(); i++) {
+					tvlist.get(i).setTextColor(getResources().getColor(R.color.question_title_bg1));
+				}
+				Toast.makeText(getApplicationContext(), "点击右上角开始按钮进入答题界面", Toast.LENGTH_SHORT).show();
+				break;
+			case 9:
+				for (int j = 0; j < tvlist.size(); j++) {
+					if (j==index) {
+						tvlist.get(index).setTextColor(getResources().getColor(R.color.lvse));
+					}else{
+						tvlist.get(j).setTextColor(getResources().getColor(R.color.question_title_bg1));
+					}
+				}
+				break;
 			}
 		};
 	};
@@ -88,11 +113,15 @@ public class SpeakPrepareActivity extends Activity implements Urlinterface,
 		initialize();
 		question_speak_title.setText("朗读题");
 		homework.setNewsFlag(true);
-		Log.i("suanfa", homework.isWork_history()+"=======");
+		tvlist = new ArrayList<TextView>();
+		Log.i("suanfa", homework.isWork_history() + "=======");
 		list = homework.getQuestion_list();
 		History_item = homework.getHistory_item();
 		Log.i("linshi", homework.getHistory_item() + "-=" + list.size());
-		if (History_item >= list.size()||homework.isWork_history()) {// 表示查看历史记录
+		if ((History_item >= list.size() && homework.getQuestion_history()
+				.get(History_item - 1).size() >= list.get(list.size() - 1)
+				.getQuesttionList().size())
+				|| homework.isWork_history()) {// 表示查看历史记录
 			questionlist = list.get(homework.getQuestion_index())
 					.getQuesttionList();
 			homework.setQ_package_id(list.get(homework.getQuestion_index())
@@ -135,18 +164,34 @@ public class SpeakPrepareActivity extends Activity implements Urlinterface,
 			}
 			img_title.setText("预听");
 		}
-		question_speak_content.setText(content);
+		
+		for (int i = 0; i < questionlist.size(); i++) {
+			setTextView(i);
+		}
+//		question_speak_content.setText(sp);
 	}
 
 	// 初始化
 	public void initialize() {
 		question_speak_title = (TextView) findViewById(R.id.question_speak_title);
-		question_speak_content = (TextView) findViewById(R.id.question_speak_content);
+		layout = (LinearLayout) findViewById(R.id.tvll);
+//		question_speak_content = (TextView) findViewById(R.id.question_speak_content);
 		question_speak_img = (ImageView) findViewById(R.id.question_speak_img);
 		img_title = (TextView) findViewById(R.id.tou);
 		player = new MediaPlayer();
 
 	}
+	
+	private void setTextView(int i){
+		View view1 = View.inflate(this, R.layout.text_view,
+				null);
+		TextView tv = (TextView) view1
+				.findViewById(R.id.question_speak_content);
+		tv.setText(questionlist.get(i).getContent());
+		tvlist.add(tv);
+		layout.addView(view1);
+	}
+	
 
 	public void onclicks(View v) {
 		Intent intent = new Intent();
@@ -156,7 +201,10 @@ public class SpeakPrepareActivity extends Activity implements Urlinterface,
 			break;
 		case R.id.question_speak_next:
 			stop();
-			if (homework.getHistory_item() >= list.size()||homework.isWork_history()) {// 进入答题历史页面
+			if ((History_item >= list.size() && homework.getQuestion_history()
+					.get(History_item - 1).size() >= list.get(list.size() - 1)
+					.getQuesttionList().size())
+					|| homework.isWork_history()) {// 进入答题历史页面
 				homework.setBranch_questions(list.get(
 						homework.getQuestion_index()).getQuesttionList());
 				intent.setClass(SpeakPrepareActivity.this,
@@ -215,16 +263,16 @@ public class SpeakPrepareActivity extends Activity implements Urlinterface,
 				if (player.isPlaying()) {// 暂停播放
 					stop();
 				} else {
-					if (playFlag) {
+					if (mp3Index >= mp3List.size()) {
+						mp3Index = 0;
+						handler.sendEmptyMessage(7);
+						new Thread(new setPlay()).start();
+					} else if (playFlag) {
 						handler.sendEmptyMessage(4);
 						player.start();
 					} else {
 						playFlag = true;
-						prodialog = new ProgressDialog(
-								SpeakPrepareActivity.this);
-						prodialog.setCanceledOnTouchOutside(false);
-						prodialog.setMessage("正在缓冲...");
-						prodialog.show();
+						handler.sendEmptyMessage(7);
 						new Thread(new setPlay()).start();
 					}
 				}
@@ -271,6 +319,8 @@ public class SpeakPrepareActivity extends Activity implements Urlinterface,
 	 */
 	class setPlay implements Runnable {
 		public void run() {
+			index = 0;
+			Log.i("aaa", index +"-index");
 			play(mp3List.get(mp3Index));
 		}
 	}
@@ -298,6 +348,7 @@ public class SpeakPrepareActivity extends Activity implements Urlinterface,
 	public void onPrepared(MediaPlayer mp) {
 		handler.sendEmptyMessage(6);
 		handler.sendEmptyMessage(4);
+		handler.sendEmptyMessage(9);
 		mp.start();
 	}
 
@@ -334,24 +385,26 @@ public class SpeakPrepareActivity extends Activity implements Urlinterface,
 
 	// 音频播放结束后继续播放下一个音频,直到所有音频播放完毕
 	public void onCompletion(MediaPlayer mp) {
-		Log.i("linshi", mp3List.get(mp3Index));
-		handler.sendEmptyMessage(5);
-		if (mp3List.size() > 1) {
-			try {
-				if (++mp3Index < mp3List.size()) {
-					mp.reset();
-					mp.setDataSource(mp3List.get(mp3Index));
-					mp.prepare();
-					mp.setOnPreparedListener(this);
-					mp.setOnCompletionListener(this);
-				}
-			} catch (IllegalArgumentException e) {
-				e.printStackTrace();
-			} catch (IllegalStateException e) {
-				e.printStackTrace();
-			} catch (IOException e) {
-				e.printStackTrace();
+		try {
+			if (++mp3Index < mp3List.size()) {
+				index = mp3Index;
+				Log.i("aaa", index+"-index");
+				mp.reset();
+				mp.setDataSource(mp3List.get(mp3Index));
+				mp.prepare();
+				mp.setOnPreparedListener(this);
+				mp.setOnCompletionListener(this);
+//				handler.sendEmptyMessage(9);
+			} else {
+				handler.sendEmptyMessage(5);
+				handler.sendEmptyMessage(8);
 			}
+		} catch (IllegalArgumentException e) {
+			e.printStackTrace();
+		} catch (IllegalStateException e) {
+			e.printStackTrace();
+		} catch (IOException e) {
+			e.printStackTrace();
 		}
 	}
 

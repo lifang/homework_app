@@ -45,7 +45,10 @@
             android:background="@null"
             android:gravity="center"
             android:hint="@string/SwitchClass_Et"
-            android:textSize="20px" />
+            android:textSize="20px" 
+            android:maxLines="1"
+            android:singleLine="true"
+            />
 
         <ImageButton
             android:id="@+id/switchClassIB"

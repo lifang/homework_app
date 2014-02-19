@@ -12,5 +12,6 @@
     <color name="question_speak_bg">#F4F4F4</color>
     <color name="transparent">#e0000000</color>
     <color name="dialog_text">#FCE3CE</color>
-
+    <color name="button_hui">#B3B3B3</color>
+	
 </resources>

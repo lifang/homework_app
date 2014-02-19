@@ -67,12 +67,12 @@ public class SpeakBeginActivity extends Activity implements Urlinterface,
 	private String message;
 	public String error_str = "";// 记录错误的词
 	private ProgressDialog prodialog;
-	private int speak_number;
 	private int over_static;
 	private ImageView question_speak_img;
 	private String path;
 	private boolean playFlag = false;
 	private int width;
+	private LinearLayout question_speak_next;
 	private Handler handler = new Handler() {
 		public void handleMessage(Message msg) {
 			Intent intent = new Intent();
@@ -95,7 +95,7 @@ public class SpeakBeginActivity extends Activity implements Urlinterface,
 			case 2:
 				prodialog.dismiss();
 				homework.setQuestion_index(homework.getQuestion_index() + 1);
-				homework.setHistory_item(homework.getHistory_item()+1);
+				homework.setHistory_item(homework.getHistory_item() + 1);
 				SpeakBeginActivity.this.finish();
 				intent.setClass(SpeakBeginActivity.this,
 						SpeakPrepareActivity.class);
@@ -136,6 +136,12 @@ public class SpeakBeginActivity extends Activity implements Urlinterface,
 			case 9:
 				prodialog.dismiss();
 				break;
+			case 10:
+				question_speak_next.setBackgroundColor(getResources().getColor(R.color.juhuang));
+				break;
+			case 11:
+				question_speak_next.setBackgroundColor(getResources().getColor(R.color.button_hui));
+				break;
 			}
 			super.handleMessage(msg);
 		}
@@ -168,6 +174,7 @@ public class SpeakBeginActivity extends Activity implements Urlinterface,
 		question_speak_tishi = (TextView) findViewById(R.id.question_speak_tishi);
 		question_speak_tishi.setVisibility(View.GONE);
 		question_speak_img = (ImageView) findViewById(R.id.question_speak_img);
+		question_speak_next = (LinearLayout)findViewById(R.id.question_speak_next);
 		player = new MediaPlayer();
 		ok_speak = new HashMap<Integer, String>();// 用于记录正确的词
 	}
@@ -198,11 +205,11 @@ public class SpeakBeginActivity extends Activity implements Urlinterface,
 			break;
 		case R.id.question_speak_next:
 			if (HomeWorkTool.isConnect(getApplicationContext())) {
-				if (speak_number == 4 || Speak_type == true) {
-					speak_number = 0;
+				if (Speak_type == true) {
 					stop();
 					playFlag = false;
 					Speak_type = false;
+					handler.sendEmptyMessage(11);
 					question_speak_tishi.setVisibility(View.GONE);
 					int ye = 0;
 					if (homework.getHistory_item() >= homework
@@ -275,61 +282,51 @@ public class SpeakBeginActivity extends Activity implements Urlinterface,
 			}
 			break;
 		case R.id.speak:// 语音
-			if (speak_number < 4) {
-				speak_number += 1;
-				Toast.makeText(SpeakBeginActivity.this,
-						"第" + speak_number + "次答题", Toast.LENGTH_SHORT).show();
-				try {
-					// 通过Intent传递语音识别的模式，开启语音
-					Intent speak_intent = new Intent(
-							RecognizerIntent.ACTION_RECOGNIZE_SPEECH);
-					// 语言模式和自由模式的语音识别
-					intent.putExtra(RecognizerIntent.EXTRA_LANGUAGE_MODEL,
-							RecognizerIntent.LANGUAGE_MODEL_FREE_FORM);
-					// 提示语音开始
-					intent.putExtra(RecognizerIntent.EXTRA_PROMPT, "开始语音");
-					// 开始语音识别
+			try {
+				// 通过Intent传递语音识别的模式，开启语音
+				Intent speak_intent = new Intent(
+						RecognizerIntent.ACTION_RECOGNIZE_SPEECH);
+				// 语言模式和自由模式的语音识别
+				intent.putExtra(RecognizerIntent.EXTRA_LANGUAGE_MODEL,
+						RecognizerIntent.LANGUAGE_MODEL_FREE_FORM);
+				// 提示语音开始
+				intent.putExtra(RecognizerIntent.EXTRA_PROMPT, "开始语音");
+				// 开始语音识别
 
-					startActivityForResult(speak_intent,
-							VOICE_RECOGNITION_REQUEST_CODE);
+				startActivityForResult(speak_intent,
+						VOICE_RECOGNITION_REQUEST_CODE);
 
-				} catch (Exception e) {
-					Builder builder = new Builder(SpeakBeginActivity.this);
-					builder.setTitle("提示");
-					builder.setMessage("您的设备未安装语音引擎,点击确定开始安装。");
-					builder.setPositiveButton("确定",
-							new DialogInterface.OnClickListener() {
-								public void onClick(DialogInterface dialog,
-										int which) {
-									if (HomeWorkTool
-											.copyApkFromAssets(
-													SpeakBeginActivity.this,
-													"VoiceSearch.apk",
-													Environment
+			} catch (Exception e) {
+				Builder builder = new Builder(SpeakBeginActivity.this);
+				builder.setTitle("提示");
+				builder.setMessage("您的设备未安装语音引擎,点击确定开始安装。");
+				builder.setPositiveButton("确定",
+						new DialogInterface.OnClickListener() {
+							public void onClick(DialogInterface dialog,
+									int which) {
+								if (HomeWorkTool.copyApkFromAssets(
+										SpeakBeginActivity.this,
+										"VoiceSearch.apk", Environment
+												.getExternalStorageDirectory()
+												.getAbsolutePath()
+												+ "/VoiceSearch.apk")) {
+									Intent intent = new Intent(
+											Intent.ACTION_VIEW);
+									intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+									intent.setDataAndType(
+											Uri.parse("file://"
+													+ Environment
 															.getExternalStorageDirectory()
 															.getAbsolutePath()
-															+ "/VoiceSearch.apk")) {
-										Intent intent = new Intent(
-												Intent.ACTION_VIEW);
-										intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-										intent.setDataAndType(
-												Uri.parse("file://"
-														+ Environment
-																.getExternalStorageDirectory()
-																.getAbsolutePath()
-														+ "/VoiceSearch.apk"),
-												"application/vnd.android.package-archive");
-										SpeakBeginActivity.this
-												.startActivity(intent);
-									}
+													+ "/VoiceSearch.apk"),
+											"application/vnd.android.package-archive");
+									SpeakBeginActivity.this
+											.startActivity(intent);
 								}
-							});
-					builder.setNegativeButton("取消", null);
-					builder.show();
-				}
-			} else {
-				Toast.makeText(SpeakBeginActivity.this, "本题的回答次数已经用完了,请继续下一题!",
-						Toast.LENGTH_SHORT).show();
+							}
+						});
+				builder.setNegativeButton("取消", null);
+				builder.show();
 			}
 			break;
 		}
@@ -347,7 +344,9 @@ public class SpeakBeginActivity extends Activity implements Urlinterface,
 			String speak = results.get(0);// 用户语音返回的字符串
 			Log.i("suanfa", "语音返回--->" + speak);
 			str_list = new ArrayList<String>();
-			content = content.replaceAll("'s","s");
+			content = content.replaceAll("'s", "s");
+			content = content.replaceAll("'m", "m");
+			content = content.replaceAll("'re", "re");
 			content = content.replaceAll("(?i)[^a-zA-Z0-9\u4E00-\u9FA5]", " ");// 去除标点符号
 			content = content.replaceAll("  ", " ");
 			String[] ok_arr = content.split(" ");
@@ -356,7 +355,7 @@ public class SpeakBeginActivity extends Activity implements Urlinterface,
 			for (int i = 0; i < item.length; i++) {
 				str_list.add(item[i]);
 			}
-			
+
 			List<int[]> code_list = Soundex_Levenshtein.Engine2(content,
 					str_list);
 			Log.i("suanfa", code_list.size() + "");
@@ -388,14 +387,17 @@ public class SpeakBeginActivity extends Activity implements Urlinterface,
 			question_speak_tishi.setVisibility(View.VISIBLE);
 			if (ok_speak.size() == ok_arr.length) {
 				question_speak_tishi.setText(R.string.question_speak_tishi_ok);
-				Speak_type = true;
 			} else {
 				question_speak_tishi.setText(R.string.question_speak_tishi);
 			}
-		} else {
-			if (speak_number > 0) {
-				speak_number -= 1;
+			if ((ok_speak.size() * 2) >= ok_arr.length) {//设置如果正确率为50%就可以下一题
+				Speak_type = true;
+				handler.sendEmptyMessage(10);
+			}else{
+				Speak_type = false;
+				handler.sendEmptyMessage(11);
 			}
+			Log.i("aaa", ok_speak.size()+"/"+ok_arr.length+"/"+Speak_type);
 		}
 		super.onActivityResult(requestCode, resultCode, data);
 	}

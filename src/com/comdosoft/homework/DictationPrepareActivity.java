@@ -24,6 +24,7 @@ import android.view.View.OnClickListener;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 // 拼写准备    马龙    2014年2月12日
 public class DictationPrepareActivity extends Activity implements
@@ -143,7 +144,11 @@ public class DictationPrepareActivity extends Activity implements
 				stop();
 			} else {
 				mHandler.sendEmptyMessage(1);
-				if (playFlag) {
+				if (mp3Index >= mp3List.size()) {
+					mp3Index = 0;
+					mHandler.sendEmptyMessage(3);
+					new MyMediaPlay().start();
+				} else if (playFlag) {
 					mediaPlayer.start();
 				} else {
 					playFlag = true;
@@ -156,13 +161,12 @@ public class DictationPrepareActivity extends Activity implements
 			finish();
 			Intent intent = new Intent();
 			intent.setClass(this, DictationRecordActivity.class);
-			 if (ListeningQuestionList.Record_Count ==
-			 ListeningQuestionList.listeningList
-			 .size()||hw.isWork_history()) {
-			 intent.setClass(this, DictationRecordActivity.class);
-			 } else {
-			 intent.setClass(this, DictationBeginActivity.class);
-			 }
+			if (ListeningQuestionList.Record_Count == ListeningQuestionList.listeningList
+					.size() || hw.isWork_history()) {
+				intent.setClass(this, DictationRecordActivity.class);
+			} else {
+				intent.setClass(this, DictationBeginActivity.class);
+			}
 			startActivity(intent);
 			break;
 		case R.id.question_dictation_exit:
@@ -199,26 +203,24 @@ public class DictationPrepareActivity extends Activity implements
 	// 音频播放结束后继续播放下一个音频,直到所有音频播放完毕
 	@Override
 	public void onCompletion(MediaPlayer mp) {
-		if (mp3List.size() > 1) {
-			try {
-				if (++mp3Index < mp3List.size()) {
-					mp.reset();
-					mp.setDataSource(mp3List.get(mp3Index));
-					mp.prepare();
-					mp.setOnPreparedListener(this);
-					mp.setOnCompletionListener(this);
-				} else {
-					mHandler.sendEmptyMessage(2);
-				}
-			} catch (IllegalArgumentException e) {
-				e.printStackTrace();
-			} catch (IllegalStateException e) {
-				e.printStackTrace();
-			} catch (IOException e) {
-				e.printStackTrace();
+		try {
+			if (++mp3Index < mp3List.size()) {
+				mp.reset();
+				mp.setDataSource(mp3List.get(mp3Index));
+				mp.prepare();
+				mp.setOnPreparedListener(this);
+				mp.setOnCompletionListener(this);
+			} else {
+				Toast.makeText(getApplicationContext(), "点击右上角开始按钮进入答题界面", 0)
+						.show();
+				mHandler.sendEmptyMessage(2);
 			}
-		}else{
-			mHandler.sendEmptyMessage(2);
+		} catch (IllegalArgumentException e) {
+			e.printStackTrace();
+		} catch (IllegalStateException e) {
+			e.printStackTrace();
+		} catch (IOException e) {
+			e.printStackTrace();
 		}
 	}
 
