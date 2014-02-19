@@ -308,19 +308,7 @@ public class Classxinxiliu extends Activity implements OnHeaderRefreshListener,
 				.cacheOnDisc(false).build();
 		lass_count = 1;
 		lass_count2 = 2;
-		if (HomeWorkTool.isConnect(Classxinxiliu.this)) {
-			prodialog = new ProgressDialog(Classxinxiliu.this);
-			prodialog.setMessage(HomeWorkParams.PD_CLASS_INFO);
-			prodialog.setCanceledOnTouchOutside(false);
-			prodialog.show();
-			Thread thread = new Thread(new get_class_info());
-			thread.start();
-
-		} else {
-			Toast.makeText(getApplicationContext(), HomeWorkParams.INTERNET, 0)
-					.show();
-		}
-		lass_count2 = 1;
+	
 	}
 
 	@Override
@@ -328,12 +316,12 @@ public class Classxinxiliu extends Activity implements OnHeaderRefreshListener,
 		super.onResume();
 
 		if (HomeWorkTool.isConnect(Classxinxiliu.this)) {
-			// lass_count = lass_count + 1;
+			prodialog = new ProgressDialog(Classxinxiliu.this);
+			prodialog.setMessage(HomeWorkParams.PD_CLASS_INFO);
+			prodialog.setCanceledOnTouchOutside(false);
+			prodialog.show();
 			Thread thread = new Thread(new get_class_info());
-			// if (lass_count != 2) {
-
 			thread.start();
-			// }
 
 		} else {
 			Toast.makeText(getApplicationContext(), HomeWorkParams.INTERNET, 0)
@@ -410,7 +398,7 @@ public class Classxinxiliu extends Activity implements OnHeaderRefreshListener,
 		if (mess.getAvatar_url().equals("")
 				|| mess.getAvatar_url().equals("null")) {
 		} else {
-			// face.setScaleType(ImageView.ScaleType.FIT_XY);
+			 face.setScaleType(ImageView.ScaleType.FIT_CENTER);
 			imageLoader.displayImage(IP + mess.getAvatar_url(), face, options,
 					animateFirstListener);
 		}
@@ -1203,6 +1191,9 @@ public class Classxinxiliu extends Activity implements OnHeaderRefreshListener,
 							String notice = array2.getString("notice");
 							if ("success".equals(status)) {
 								Reply_edit.setText("");
+								micropost_id = mess.getId();// 点击 回复 默认 给主消息回复 记录 主消息 id
+								reciver_id = mess.getUser_id();
+								reciver_types = mess.getUser_types();
 								Toast.makeText(getApplicationContext(), notice,
 										Toast.LENGTH_SHORT).show();
 								final Handler mHandler = new Handler() {

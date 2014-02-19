@@ -23,7 +23,7 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="18px"
             android:text="@string/setting_tishi"
-          
+          android:maxLines="1"
             android:textSize="20px" />
 
         <TextView
