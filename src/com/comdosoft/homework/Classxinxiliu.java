@@ -141,8 +141,8 @@ public class Classxinxiliu extends Activity implements OnHeaderRefreshListener,
 				list.clear();
 				click_list();
 				final String json_all = (String) msg.obj;
-//				Toast.makeText(getApplicationContext(),
-//						json_all, Toast.LENGTH_SHORT).show();
+				// Toast.makeText(getApplicationContext(),
+				// json_all, Toast.LENGTH_SHORT).show();
 				if (micropost_type == 0) {// 0全部 1自己
 					parseJson_all(json_all);
 				} else {
@@ -230,22 +230,22 @@ public class Classxinxiliu extends Activity implements OnHeaderRefreshListener,
 				Log.i("linshi", lookStr_micropost.toString());
 				int a = 0;
 
-					for (int i = 0; i < list.size(); i++) {
-						if (list.get(i).getId().equals(lookStr_micropost_id)) {
-							focus = i; // 要展开的 主消息 的 位置
-							break;
-						} else {
-							a = i + 1;
-						}
+				for (int i = 0; i < list.size(); i++) {
+					if (list.get(i).getId().equals(lookStr_micropost_id)) {
+						focus = i; // 要展开的 主消息 的 位置
+						break;
+					} else {
+						a = i + 1;
 					}
-					//
-					// Log.i("linshi", a + "/" + focus);
-					if (a == list.size()) {// 若第一页主消息中没有 提示信息所在，则
-						pages_count = 1; // 0 标记 用于表示从别的页面跳到本页面，在上拉加载时会用到
-						list.clear();
-						focus = 0; // 要展开的 主消息 的 位置
-						list.add(lookStr_micropost);
-					}
+				}
+				//
+				// Log.i("linshi", a + "/" + focus);
+				if (a == list.size()) {// 若第一页主消息中没有 提示信息所在，则
+					pages_count = 1; // 0 标记 用于表示从别的页面跳到本页面，在上拉加载时会用到
+					list.clear();
+					focus = 0; // 要展开的 主消息 的 位置
+					list.add(lookStr_micropost);
+				}
 
 				Log.i("linshi", list.size() + "");
 
@@ -395,10 +395,11 @@ public class Classxinxiliu extends Activity implements OnHeaderRefreshListener,
 		if (mess.getAvatar_url().equals("")
 				|| mess.getAvatar_url().equals("null")) {
 		} else {
-//			 face.setScaleType(ImageView.ScaleType.FIT_CENTER);
-//			imageLoader.displayImage(IP + mess.getAvatar_url(), face, options,
-//					animateFirstListener);
-			 set_background(IP + mess.getAvatar_url(), face);
+			// face.setScaleType(ImageView.ScaleType.FIT_CENTER);
+			// imageLoader.displayImage(IP + mess.getAvatar_url(), face,
+			// options,
+			// animateFirstListener);
+			set_background(IP + mess.getAvatar_url(), face);
 		}
 
 		Micropost_senderName.setText(mess.getName()); // 发消息的人
@@ -589,10 +590,11 @@ public class Classxinxiliu extends Activity implements OnHeaderRefreshListener,
 			final Child_Micropost child_Micropost = child_list.get(position2);
 			if (child_Micropost.getSender_avatar_url() != null) { // 设置头像
 				// face.setScaleType(ImageView.ScaleType.FIT_XY);
-//				imageLoader.displayImage(IP
-//						+ child_list.get(position2).getSender_avatar_url(),
-//						face, options, animateFirstListener);
-				set_background(IP + child_Micropost.getSender_avatar_url(), face);
+				// imageLoader.displayImage(IP
+				// + child_list.get(position2).getSender_avatar_url(),
+				// face, options, animateFirstListener);
+				set_background(IP + child_Micropost.getSender_avatar_url(),
+						face);
 			}
 			Micropost_whoToWho.setText(child_Micropost.getSender_name()
 					+ "  回复   " + child_Micropost.getReciver_name()); //
@@ -1190,9 +1192,6 @@ public class Classxinxiliu extends Activity implements OnHeaderRefreshListener,
 							String notice = array2.getString("notice");
 							if ("success".equals(status)) {
 								Reply_edit.setText("");
-								micropost_id = mess.getId();// 点击 回复 默认 给主消息回复 记录 主消息 id
-								reciver_id = mess.getUser_id();
-								reciver_types = mess.getUser_types();
 								Toast.makeText(getApplicationContext(), notice,
 										Toast.LENGTH_SHORT).show();
 								final Handler mHandler = new Handler() {
@@ -1740,12 +1739,12 @@ public class Classxinxiliu extends Activity implements OnHeaderRefreshListener,
 		ziAdapter_list.clear();
 		list_list.clear();
 	}
+
 	/*
 	 * 设置头像
 	 */
 	public void set_background(final String uri, final ImageView imageView) {
-		
-		
+
 		final Handler mHandler = new Handler() {
 			public void handleMessage(android.os.Message msg) {
 				switch (msg.what) {
@@ -1759,13 +1758,12 @@ public class Classxinxiliu extends Activity implements OnHeaderRefreshListener,
 			}
 		};
 
-		
 		Thread thread = new Thread() {
 			public void run() {
 				HttpClient hc = new DefaultHttpClient();
 
 				HttpGet hg = new HttpGet(uri);//
-				 Drawable face_drawable;
+				Drawable face_drawable;
 				try {
 					HttpResponse hr = hc.execute(hg);
 					Bitmap bm = BitmapFactory.decodeStream(hr.getEntity()
@@ -1778,18 +1776,17 @@ public class Classxinxiliu extends Activity implements OnHeaderRefreshListener,
 				} catch (Exception e) {
 
 				}
-				
+
 			}
 		};
 		if (HomeWorkTool.isConnect(Classxinxiliu.this)) {
 
 			thread.start();
 		} else {
-			Toast.makeText(getApplicationContext(),
-					HomeWorkParams.INTERNET, 0).show();
+			Toast.makeText(getApplicationContext(), HomeWorkParams.INTERNET, 0)
+					.show();
 		}
-		
-		
+
 	}
-	
+
 }
