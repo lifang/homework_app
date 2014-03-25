@@ -34,6 +34,7 @@ public class HomeWork extends Application {
 	private int work_date_item;
 	private int history_item;
 	private List<Integer> new_id_list;
+	private boolean Update;
 	public int getLastcount() {
 		return lastcount;
 	}
@@ -59,6 +60,7 @@ public class HomeWork extends Application {
 		this.setMainItem(0);
 		this.setMessage_id(-1);
 		this.setWork_date_item(0);
+		this.setUpdate(true);
 	}
 
 	public int getNewCount() {
@@ -212,6 +214,16 @@ public class HomeWork extends Application {
 	public void setNew_id_list(List<Integer> new_id_list) {
 		this.new_id_list = new_id_list;
 	}
+
+	public boolean isUpdate() {
+		return Update;
+	}
+
+
+	public void setUpdate(boolean update) {
+		Update = update;
+	}
+
 
 	public void onCreate() {
 		super.onCreate();

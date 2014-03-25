@@ -102,7 +102,7 @@ public class Classxinxiliu extends Activity implements OnHeaderRefreshListener,
 	public List<Button> button_list;// 隐藏内容中的 回复 集合
 	private int micropost_type;// 微博类型 0表是全部 1表示我的
 	private List<Micropost> list;
-	private List<String> care;
+	private List<String> care = new ArrayList<String>();;
 	private List<Button> guanzhu_list;
 	private List<ListView> list_list;
 	private List<Button> btlist;
@@ -406,10 +406,13 @@ public class Classxinxiliu extends Activity implements OnHeaderRefreshListener,
 		Micropost_content.setText(mess.getContent()); // 消息内容
 		Micropost_date.setText(divisionTime(mess.getCreated_at())); // 消息日期
 		String mic_id = mess.getId();
-		for (int j = 0; j < care.size(); j++) {
-			String a = (String) care.get(j);
-			if (a.equals(mic_id)) {
-				guanzhu.setText("已关注"); // 显示 已关注
+		if (care.size() != 0) {
+
+			for (int j = 0; j < care.size(); j++) {
+				String a = (String) care.get(j);
+				if (a.equals(mic_id)) {
+					guanzhu.setText("已关注"); // 显示 已关注
+				}
 			}
 		}
 		/**
@@ -789,7 +792,7 @@ public class Classxinxiliu extends Activity implements OnHeaderRefreshListener,
 				}
 			}
 			Log.i("linshi", stuList.size() + "");
-			care = new ArrayList<String>();
+			care.clear();
 			JSONArray follow_microposts_id = obj
 					.getJSONArray("follow_microposts_id");
 			for (int i = 0; i < follow_microposts_id.length(); ++i) {

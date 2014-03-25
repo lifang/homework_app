@@ -3,14 +3,19 @@ package com.comdosoft.homework.tools;
 public interface Urlinterface {
 	static final String tag = "homework";
 	static final String SHARED = "HW";
-
-//	static final String IP = "http://www.cjzyb.com";
-//	 static final String IP = "http://192.168.0.250:3004";
-
+	static final double current_version = 0.7;// 应用版本号
+	
+	static String fileurl = "http://116.255.202.123:3011/downloads/cjzyb.apk";
+	static String filename = "cjzyb.apk";
+	
+	// static final String IP = "http://www.cjzyb.com";
+	// static final String IP = "http://192.168.0.250:3004";
+//	static final String IP = "http://58.240.210.42:3004";
 	 static final String IP = "http://116.255.202.123:3011";
 	// static final String IP = "http://192.168.0.101:3004";
 	// static final String IP = "http://192.168.0.127:3000";
-
+	// 获取版本号
+	static final String version = IP + "/api/current_version";
 	// 获取新作业数量
 	static final String NEW_HOMEWORK = IP + "/api/students/new_homework";
 

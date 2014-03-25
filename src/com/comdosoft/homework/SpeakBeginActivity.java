@@ -3,6 +3,7 @@ package com.comdosoft.homework;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 
 import org.json.JSONObject;
@@ -24,6 +25,9 @@ import android.os.Handler;
 import android.os.Looper;
 import android.os.Message;
 import android.speech.RecognizerIntent;
+import android.speech.tts.TextToSpeech;
+import android.speech.tts.TextToSpeech.OnInitListener;
+import android.speech.tts.TextToSpeech.OnUtteranceCompletedListener;
 import android.util.Log;
 import android.view.Display;
 import android.view.KeyEvent;
@@ -44,13 +48,16 @@ import com.comdosoft.homework.tools.Soundex_Levenshtein;
 import com.comdosoft.homework.tools.Urlinterface;
 
 public class SpeakBeginActivity extends Activity implements Urlinterface,
-		OnPreparedListener, OnCompletionListener {
+		OnPreparedListener, OnCompletionListener, OnInitListener,
+		OnUtteranceCompletedListener {
 	public String content;// 记录本题正确答案
 	private TextView question_speak_title;
 	private MediaPlayer player;
 	private PredicateLayout PredicateLayout;
 	public List<View> view_list;
 	private static final int VOICE_RECOGNITION_REQUEST_CODE = 1234;// 语音code
+	private static final int REQ_TTS_STATUS_CHECK = 0;// tts code
+	private TextToSpeech mTts;
 	public List<String> str_list;
 	public int number;// 播放次数
 	private TextView question_speak_tishi;
@@ -73,6 +80,7 @@ public class SpeakBeginActivity extends Activity implements Urlinterface,
 	private boolean playFlag = false;
 	private int width;
 	private LinearLayout question_speak_next;
+	private int size = 0;
 	private Handler handler = new Handler() {
 		public void handleMessage(Message msg) {
 			Intent intent = new Intent();
@@ -137,16 +145,17 @@ public class SpeakBeginActivity extends Activity implements Urlinterface,
 				prodialog.dismiss();
 				break;
 			case 10:
-				question_speak_next.setBackgroundColor(getResources().getColor(R.color.juhuang));
+				question_speak_next.setBackgroundColor(getResources().getColor(
+						R.color.juhuang));
 				break;
 			case 11:
-				question_speak_next.setBackgroundColor(getResources().getColor(R.color.button_hui));
+				question_speak_next.setBackgroundColor(getResources().getColor(
+						R.color.button_hui));
 				break;
 			}
 			super.handleMessage(msg);
 		}
 	};
-	
 
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -174,9 +183,9 @@ public class SpeakBeginActivity extends Activity implements Urlinterface,
 		question_speak_tishi = (TextView) findViewById(R.id.question_speak_tishi);
 		question_speak_tishi.setVisibility(View.GONE);
 		question_speak_img = (ImageView) findViewById(R.id.question_speak_img);
-		question_speak_next = (LinearLayout)findViewById(R.id.question_speak_next);
+		question_speak_next = (LinearLayout) findViewById(R.id.question_speak_next);
 		player = new MediaPlayer();
-		ok_speak = new HashMap<Integer, String>();// 用于记录正确的词
+
 	}
 
 	// 设置textview
@@ -204,12 +213,13 @@ public class SpeakBeginActivity extends Activity implements Urlinterface,
 			MyDialog("你还没有做完题,确认要退出吗?", "确认", "取消", 0);
 			break;
 		case R.id.question_speak_next:
+			handler.sendEmptyMessage(11);
 			if (HomeWorkTool.isConnect(getApplicationContext())) {
-				if (Speak_type == true) {
+				if (Speak_type == true || size >= 4) {
+					size = 0;
 					stop();
 					playFlag = false;
 					Speak_type = false;
-					handler.sendEmptyMessage(11);
 					question_speak_tishi.setVisibility(View.GONE);
 					int ye = 0;
 					if (homework.getHistory_item() >= homework
@@ -260,20 +270,45 @@ public class SpeakBeginActivity extends Activity implements Urlinterface,
 		case R.id.question_speak_img:// 播放音频
 			if (HomeWorkTool.isConnect(getApplicationContext())) {
 				// 从文件系统播放
-				path = IP + branch_questions.get(index).getUrl();
-				if (player.isPlaying()) {// 正在播放
-					stop();
-				} else {
-					if (playFlag) {
-						handler.sendEmptyMessage(7);
-						player.start();
+				if (branch_questions.get(index).getUrl() != "") {
+					path = IP + branch_questions.get(index).getUrl();
+					if (player.isPlaying()) {// 正在播放
+						stop();
 					} else {
-						playFlag = true;
-						prodialog = new ProgressDialog(SpeakBeginActivity.this);
-						prodialog.setCanceledOnTouchOutside(false);
-						prodialog.setMessage("正在缓冲...");
-						prodialog.show();
-						new Thread(new setPlay()).start();
+						if (playFlag) {
+							handler.sendEmptyMessage(7);
+							player.start();
+						} else {
+							playFlag = true;
+							prodialog = new ProgressDialog(
+									SpeakBeginActivity.this);
+							prodialog.setCanceledOnTouchOutside(false);
+							prodialog.setMessage("正在缓冲...");
+							prodialog.show();
+							new Thread(new setPlay()).start();
+						}
+					}
+				} else {// 如果音频为空 就使用TTS朗读
+					// 检查TTS数据是否已经安装并且可用
+					if (mTts != null) {
+						if (mTts.isSpeaking()) {
+							handler.sendEmptyMessage(8);
+							onPause();
+						} else {
+							handler.sendEmptyMessage(7);
+							Intent checkIntent = new Intent();
+							checkIntent
+									.setAction(TextToSpeech.Engine.ACTION_CHECK_TTS_DATA);
+							startActivityForResult(checkIntent,
+									REQ_TTS_STATUS_CHECK);
+						}
+					} else {
+						handler.sendEmptyMessage(7);
+						Intent checkIntent = new Intent();
+						checkIntent
+								.setAction(TextToSpeech.Engine.ACTION_CHECK_TTS_DATA);
+						startActivityForResult(checkIntent,
+								REQ_TTS_STATUS_CHECK);
 					}
 				}
 			} else {
@@ -284,6 +319,7 @@ public class SpeakBeginActivity extends Activity implements Urlinterface,
 		case R.id.speak:// 语音
 			try {
 				// 通过Intent传递语音识别的模式，开启语音
+				size += 1;
 				Intent speak_intent = new Intent(
 						RecognizerIntent.ACTION_RECOGNIZE_SPEECH);
 				// 语言模式和自由模式的语音识别
@@ -334,78 +370,127 @@ public class SpeakBeginActivity extends Activity implements Urlinterface,
 
 	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
 		// 回调获取从谷歌得到的数据
-		if (requestCode == VOICE_RECOGNITION_REQUEST_CODE
-				&& resultCode == RESULT_OK) {
-			// stopService(service_intent);
-			// 取得语音的字符
-			ArrayList<String> results = data
-					.getStringArrayListExtra(RecognizerIntent.EXTRA_RESULTS);
+		if (requestCode == VOICE_RECOGNITION_REQUEST_CODE) {
+			if (resultCode == RESULT_OK) {
+				// stopService(service_intent);
+				// 取得语音的字符
+				ok_speak = new HashMap<Integer, String>();// 用于记录正确的词
+				ArrayList<String> results = data
+						.getStringArrayListExtra(RecognizerIntent.EXTRA_RESULTS);
 
-			String speak = results.get(0);// 用户语音返回的字符串
-			Log.i("suanfa", "语音返回--->" + speak);
-			str_list = new ArrayList<String>();
-			content = content.replaceAll("'s", "s");
-			content = content.replaceAll("'m", "m");
-			content = content.replaceAll("'re", "re");
-			content = content.replaceAll("(?i)[^a-zA-Z0-9\u4E00-\u9FA5]", " ");// 去除标点符号
-			content = content.replaceAll("  ", " ");
-			String[] ok_arr = content.split(" ");
-			Log.i("suanfa", "正确答案->" + content);
-			String[] item = speak.split(" ");
-			for (int i = 0; i < item.length; i++) {
-				str_list.add(item[i]);
-			}
+				String speak = results.get(0);// 用户语音返回的字符串
+				Log.i("suanfa", "语音返回--->" + speak);
+				str_list = new ArrayList<String>();
+				content = content.replaceAll(
+						"(?i)[^a-zA-Z0-9\u4E00-\u9FA5\\s]", "");
+				;// 去除标点符号
+				content = content.replaceAll("  ", " ");
+				String[] ok_arr = content.split(" ");
+				Log.i("suanfa", "正确答案->" + content);
+				String[] item = speak.split(" ");
+				for (int i = 0; i < item.length; i++) {
+					str_list.add(item[i]);
+				}
 
-			List<int[]> code_list = Soundex_Levenshtein.Engine2(content,
-					str_list);
-			Log.i("suanfa", code_list.size() + "");
-			if (code_list.size() > 0) {
-				for (int i = 0; i < code_list.size(); i++) {
-					// Log.i(tag, str_list.get(code_list.get(i)[0]) + "->相似度:"
-					// + code_list.get(i)[1]);
-					if (code_list.get(i)[1] >= 7) {
-						ok_speak.put(code_list.get(i)[0],
-								ok_arr[code_list.get(i)[0]]);
-						view_list.get(code_list.get(i)[0]).setBackgroundColor(
-								getResources().getColor(R.color.lvse));
-					} else {
-						if (!error_str.contains(ok_arr[code_list.get(i)[0]])) {
-							error_str += ok_arr[code_list.get(i)[0]] + "-!-";
+				List<int[]> code_list = Soundex_Levenshtein.Engine2(content,
+						str_list);
+				Log.i("suanfa", code_list.size() + "");
+				if (code_list.size() > 0) {
+					for (int i = 0; i < code_list.size(); i++) {
+						// Log.i(tag, str_list.get(code_list.get(i)[0]) +
+						// "->相似度:"
+						// + code_list.get(i)[1]);
+						if (code_list.get(i)[1] >= 7) {
+							ok_speak.put(code_list.get(i)[0],
+									ok_arr[code_list.get(i)[0]]);
+							view_list.get(code_list.get(i)[0])
+									.setBackgroundColor(
+											getResources().getColor(
+													R.color.lvse));
+						} else {
+							if (!error_str
+									.contains(ok_arr[code_list.get(i)[0]])) {
+								Log.i("aaa", "1");
+								error_str += ok_arr[code_list.get(i)[0]]
+										+ "-!-";
+							}
+							Log.i("aaa", "1");
+							view_list.get(code_list.get(i)[0])
+									.setBackgroundColor(
+											getResources().getColor(
+													R.color.juhuang));
 						}
-						view_list.get(code_list.get(i)[0]).setBackgroundColor(
+					}
+
+				} else {
+					for (int i = 0; i < str_list.size(); i++) {
+						view_list.get(i).setBackgroundColor(
 								getResources().getColor(R.color.juhuang));
 					}
 				}
-
-			} else {
-				for (int i = 0; i < code_list.size(); i++) {
-					view_list.get(code_list.get(i)[0]).setBackgroundColor(
-							getResources().getColor(R.color.juhuang));
+				Log.i(tag, ok_speak.size() + "-" + str_list.size());
+				question_speak_tishi.setVisibility(View.VISIBLE);
+				if (ok_speak.size() == ok_arr.length) {
+					question_speak_tishi
+							.setText(R.string.question_speak_tishi_ok);
+				} else {
+					question_speak_tishi.setText(R.string.question_speak_tishi);
 				}
-			}
-			Log.i(tag, ok_speak.size() + "-" + str_list.size());
-			question_speak_tishi.setVisibility(View.VISIBLE);
-			if (ok_speak.size() == ok_arr.length) {
-				question_speak_tishi.setText(R.string.question_speak_tishi_ok);
+				if ((ok_speak.size() * 2) >= ok_arr.length || size >= 4) {// 设置如果正确率为50%就可以下一题
+					Speak_type = true;
+					handler.sendEmptyMessage(10);
+				} else {
+					Speak_type = false;
+					handler.sendEmptyMessage(11);
+				}
+				Log.i("aaa", ok_speak.size() + "/" + ok_arr.length + "/"
+						+ Speak_type);
 			} else {
-				question_speak_tishi.setText(R.string.question_speak_tishi);
+				size -= 1;
 			}
-			if ((ok_speak.size() * 2) >= ok_arr.length) {//设置如果正确率为50%就可以下一题
-				Speak_type = true;
-				handler.sendEmptyMessage(10);
-			}else{
-				Speak_type = false;
-				handler.sendEmptyMessage(11);
+		}
+
+		if (requestCode == REQ_TTS_STATUS_CHECK) {
+			switch (resultCode) {
+			case TextToSpeech.Engine.CHECK_VOICE_DATA_PASS:
+			// 这个返回结果表明TTS Engine可以用
+			{
+				mTts = new TextToSpeech(this, this);
+				Toast.makeText(SpeakBeginActivity.this, "TTS语音正常启动..",
+						Toast.LENGTH_SHORT).show();
 			}
-			Log.i("aaa", ok_speak.size()+"/"+ok_arr.length+"/"+Speak_type);
+				break;
+			case TextToSpeech.Engine.CHECK_VOICE_DATA_BAD_DATA:
+				// 需要的语音数据已损坏
+			case TextToSpeech.Engine.CHECK_VOICE_DATA_MISSING_DATA:
+				// 缺少需要语言的语音数据
+			case TextToSpeech.Engine.CHECK_VOICE_DATA_MISSING_VOLUME:
+			// 缺少需要语言的发音数据
+			{
+				// 这三种情况都表明数据有错,重新下载安装需要的数据
+				Toast.makeText(SpeakBeginActivity.this, "您需要安装TTS框架",
+						Toast.LENGTH_SHORT).show();
+				Intent dataIntent = new Intent();
+				dataIntent
+						.setAction(TextToSpeech.Engine.ACTION_INSTALL_TTS_DATA);
+				startActivity(dataIntent);
+			}
+				break;
+			case TextToSpeech.Engine.CHECK_VOICE_DATA_FAIL:
+				// 检查失败
+			default:
+				Toast.makeText(SpeakBeginActivity.this, "TTS语音启动失败..",
+						Toast.LENGTH_SHORT).show();
+				break;
+			}
 		}
 		super.onActivityResult(requestCode, resultCode, data);
 	}
 
 	// 自定义dialog设置
-	private void MyDialog(String title, String btn_one, String Btn_two,
-			final int type) {
-		final Intent intent = new Intent();
+	private void MyDialog(String title, String Btn_text_one,
+			String Btn_Text_two, final int type) {
+		// type :0表示退出 1表示结束
 		final Dialog dialog = new Dialog(this, R.style.Transparent);
 		dialog.setContentView(R.layout.my_dialog);
 		dialog.setCancelable(true);
@@ -415,49 +500,17 @@ public class SpeakBeginActivity extends Activity implements Urlinterface,
 		TextView title_tv = (TextView) dialog.findViewById(R.id.dialog_title);
 		title_tv.setText(title);
 		Button dialog_ok = (Button) dialog.findViewById(R.id.dialog_ok);
-		dialog_ok.setText(btn_one);
+		dialog_ok.setText(Btn_text_one);
 		Button dialog_no = (Button) dialog.findViewById(R.id.dialog_no);
-		dialog_no.setText(Btn_two);
+		dialog_no.setText(Btn_Text_two);
 		dialog_ok.setOnClickListener(new View.OnClickListener() {
 			public void onClick(View v) {
-				switch (type) {
-				case 0:
-					dialog.dismiss();
-					SpeakBeginActivity.this.finish();
-					intent.setClass(SpeakBeginActivity.this,
-							HomeWorkMainActivity.class);
-					startActivity(intent);
-					break;
-				case 1:
-					dialog.dismiss();
-					handler.sendEmptyMessage(2);
 
-					break;
-				case 2:
-					dialog.dismiss();
-					homework.setQuestion_index(0);
-					SpeakBeginActivity.this.finish();
-					intent.setClass(SpeakBeginActivity.this,
-							HomeWorkMainActivity.class);
-					startActivity(intent);
-					break;
-				}
 			}
 		});
 		dialog_no.setOnClickListener(new View.OnClickListener() {
 			public void onClick(View v) {
-				switch (type) {
-				case 0:
-					dialog.dismiss();
-					break;
-				case 1:
-					dialog.dismiss();
-					SpeakBeginActivity.this.finish();
-					intent.setClass(SpeakBeginActivity.this,
-							HomeWorkMainActivity.class);
-					startActivity(intent);
-					break;
-				}
+
 			}
 		});
 		if (type == 2) {
@@ -613,12 +666,25 @@ public class SpeakBeginActivity extends Activity implements Urlinterface,
 		super.onStop();
 	}
 
+	protected void onPause() {
+		super.onPause();
+		if (mTts != null)
+		// activity暂停时也停止TTS
+		{
+			mTts.stop();
+		}
+	}
+
 	// 销毁音频
 	protected void onDestroy() {
 		if (player != null) {
 			player.stop();
 			player.release();
 			player = null;
+		}
+		if (mTts != null) {
+			mTts.stop();
+			mTts.shutdown();
 		}
 		super.onDestroy();
 	}
@@ -633,6 +699,33 @@ public class SpeakBeginActivity extends Activity implements Urlinterface,
 
 	public void onCompletion(MediaPlayer mp) {
 		Log.i("linshi", "over");
+		handler.sendEmptyMessage(8);
+	}
+
+	public void onInit(int status) {
+		if (status == TextToSpeech.SUCCESS) {
+			int result = mTts.setLanguage(Locale.US);
+			mTts.setSpeechRate(0.5f);
+			// 设置发音语言
+			if (result == TextToSpeech.LANG_MISSING_DATA
+					|| result == TextToSpeech.LANG_NOT_SUPPORTED)
+			// 判断语言是否可用
+			{
+
+				Toast.makeText(SpeakBeginActivity.this, "语音不可用",
+						Toast.LENGTH_SHORT).show();
+				// speakBtn.setEnabled(false);
+			} else {
+				HashMap<String, String> params = new HashMap<String, String>();
+				params.put(TextToSpeech.Engine.KEY_PARAM_UTTERANCE_ID, "0");
+				mTts.speak(content, TextToSpeech.QUEUE_ADD, params);
+				// speakBtn.setEnabled(true);
+				mTts.setOnUtteranceCompletedListener(this);
+			}
+		}
+	}
+
+	public void onUtteranceCompleted(String utteranceId) {
 		handler.sendEmptyMessage(8);
 	}
 }

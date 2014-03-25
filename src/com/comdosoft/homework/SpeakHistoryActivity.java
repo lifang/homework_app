@@ -1,6 +1,8 @@
 package com.comdosoft.homework;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Locale;
 
 import android.app.Activity;
 import android.app.Dialog;
@@ -13,6 +15,9 @@ import android.media.MediaPlayer.OnPreparedListener;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
+import android.speech.tts.TextToSpeech;
+import android.speech.tts.TextToSpeech.OnInitListener;
+import android.speech.tts.TextToSpeech.OnUtteranceCompletedListener;
 import android.util.Log;
 import android.view.Display;
 import android.view.Gravity;
@@ -32,7 +37,8 @@ import com.comdosoft.homework.tools.HomeWorkTool;
 import com.comdosoft.homework.tools.Urlinterface;
 
 public class SpeakHistoryActivity extends Activity implements Urlinterface,
-		OnPreparedListener, OnCompletionListener {
+		OnPreparedListener, OnCompletionListener, OnInitListener,
+		OnUtteranceCompletedListener {
 
 	public String content;// 记录本题正确答案
 	private TextView question_speak_title;
@@ -46,6 +52,8 @@ public class SpeakHistoryActivity extends Activity implements Urlinterface,
 	private int index = 0;
 	private int question_history_size;
 	private ImageView question_speak_img;
+	private static final int REQ_TTS_STATUS_CHECK = 0;// tts code
+	private TextToSpeech mTts;
 	private String path;
 	public String error_str = "";// 记录错误的词
 	private ProgressDialog prodialog;
@@ -94,7 +102,7 @@ public class SpeakHistoryActivity extends Activity implements Urlinterface,
 		homework = (HomeWork) getApplication();
 		Display display = this.getWindowManager().getDefaultDisplay();
 		width = display.getWidth();
-		
+
 		homework.setNewsFlag(true);
 		initialize();
 
@@ -115,7 +123,7 @@ public class SpeakHistoryActivity extends Activity implements Urlinterface,
 		question_history = homework.getQuestion_history();
 		question_history_size = homework.getQuestion_history().size();
 		// 添加错词提示
-		if (question_history_size < (homework.getQuestion_index() + 1)||question_history.size()==0) {
+		if (question_history_size < (homework.getQuestion_index() + 1)) {
 			setTishi("暂无错误词汇");
 		} else {
 			setTishi(question_history.get(homework.getQuestion_index()).get(0));
@@ -156,21 +164,45 @@ public class SpeakHistoryActivity extends Activity implements Urlinterface,
 		case R.id.question_speak_img:// 播放音频
 			if (HomeWorkTool.isConnect(getApplicationContext())) {
 				// 从文件系统播放
-				path = IP + branch_questions.get(index).getUrl();
-				if (player.isPlaying()) {// 正在播放
-					stop();
-				} else {
-					if (playFlag) {
-						handler.sendEmptyMessage(1);
-						player.start();
+				if (branch_questions.get(index).getUrl() != "") {
+					path = IP + branch_questions.get(index).getUrl();
+					if (player.isPlaying()) {// 正在播放
+						stop();
 					} else {
-						playFlag = true;
-						prodialog = new ProgressDialog(
-								SpeakHistoryActivity.this);
-						prodialog.setCanceledOnTouchOutside(false);
-						prodialog.setMessage("正在缓冲...");
-						prodialog.show();
-						new Thread(new setPlay()).start();
+						if (playFlag) {
+							handler.sendEmptyMessage(1);
+							player.start();
+						} else {
+							playFlag = true;
+							prodialog = new ProgressDialog(
+									SpeakHistoryActivity.this);
+							prodialog.setCanceledOnTouchOutside(false);
+							prodialog.setMessage("正在缓冲...");
+							prodialog.show();
+							new Thread(new setPlay()).start();
+						}
+					}
+				} else {
+					// 检查TTS数据是否已经安装并且可用
+					if (mTts != null) {
+						if (mTts.isSpeaking()) {
+							handler.sendEmptyMessage(2);
+							onPause();
+						} else {
+							handler.sendEmptyMessage(1);
+							Intent checkIntent = new Intent();
+							checkIntent
+									.setAction(TextToSpeech.Engine.ACTION_CHECK_TTS_DATA);
+							startActivityForResult(checkIntent,
+									REQ_TTS_STATUS_CHECK);
+						}
+					} else {
+						handler.sendEmptyMessage(1);
+						Intent checkIntent = new Intent();
+						checkIntent
+								.setAction(TextToSpeech.Engine.ACTION_CHECK_TTS_DATA);
+						startActivityForResult(checkIntent,
+								REQ_TTS_STATUS_CHECK);
 					}
 				}
 			} else {
@@ -196,9 +228,9 @@ public class SpeakHistoryActivity extends Activity implements Urlinterface,
 	public void initView(String str, int i) {
 		TextView tv = new TextView(getApplicationContext());
 		LayoutParams lp;
-		if (width<=800) {
+		if (width <= 800) {
 			lp = new LayoutParams(LayoutParams.FILL_PARENT, 60);
-		}else{
+		} else {
 			lp = new LayoutParams(LayoutParams.FILL_PARENT, 80);
 		}
 		tv.setLayoutParams(lp);
@@ -313,6 +345,67 @@ public class SpeakHistoryActivity extends Activity implements Urlinterface,
 		}
 	}
 
+	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+		// 回调获取从谷歌得到的数据
+		if (requestCode == REQ_TTS_STATUS_CHECK) {
+			switch (resultCode) {
+			case TextToSpeech.Engine.CHECK_VOICE_DATA_PASS:
+			// 这个返回结果表明TTS Engine可以用
+			{
+				mTts = new TextToSpeech(this, this);
+			}
+				break;
+			case TextToSpeech.Engine.CHECK_VOICE_DATA_BAD_DATA:
+				// 需要的语音数据已损坏
+			case TextToSpeech.Engine.CHECK_VOICE_DATA_MISSING_DATA:
+				// 缺少需要语言的语音数据
+			case TextToSpeech.Engine.CHECK_VOICE_DATA_MISSING_VOLUME:
+			// 缺少需要语言的发音数据
+			{
+				// 这三种情况都表明数据有错,重新下载安装需要的数据
+				Toast.makeText(SpeakHistoryActivity.this, "您需要安装TTS框架",
+						Toast.LENGTH_SHORT).show();
+				Intent dataIntent = new Intent();
+				dataIntent
+						.setAction(TextToSpeech.Engine.ACTION_INSTALL_TTS_DATA);
+				startActivity(dataIntent);
+			}
+				break;
+			case TextToSpeech.Engine.CHECK_VOICE_DATA_FAIL:
+				// 检查失败
+			default:
+				Toast.makeText(SpeakHistoryActivity.this, "TTS语音启动失败..",
+						Toast.LENGTH_SHORT).show();
+				break;
+			}
+		}
+		super.onActivityResult(requestCode, resultCode, data);
+	}
+
+	public void onInit(int status) {
+		if (status == TextToSpeech.SUCCESS) {
+			int result = mTts.setLanguage(Locale.US);
+			mTts.setSpeechRate(0.5f);
+			// 设置发音语言
+			if (result == TextToSpeech.LANG_MISSING_DATA
+					|| result == TextToSpeech.LANG_NOT_SUPPORTED)
+			// 判断语言是否可用
+			{
+
+				Toast.makeText(SpeakHistoryActivity.this, "语音不可用",
+						Toast.LENGTH_SHORT).show();
+				// speakBtn.setEnabled(false);
+			} else {
+				HashMap<String, String> params = new HashMap<String, String>();
+				params.put(TextToSpeech.Engine.KEY_PARAM_UTTERANCE_ID, "0");
+				mTts.speak(content, TextToSpeech.QUEUE_ADD, params);
+				// speakBtn.setEnabled(true);
+				mTts.setOnUtteranceCompletedListener(this);
+				// speakBtn.setEnabled(true);
+			}
+		}
+	}
+
 	public void onPrepared(MediaPlayer mp) {
 		handler.sendEmptyMessage(1);
 		handler.sendEmptyMessage(3);
@@ -340,12 +433,25 @@ public class SpeakHistoryActivity extends Activity implements Urlinterface,
 		super.onStop();
 	}
 
+	protected void onPause() {
+		super.onPause();
+		if (mTts != null)
+		// activity暂停时也停止TTS
+		{
+			mTts.stop();
+		}
+	}
+
 	// 销毁音频
 	protected void onDestroy() {
 		if (player != null) {
 			player.stop();
 			player.release();
 			player = null;
+		}
+		if (mTts != null) {
+			mTts.stop();
+			mTts.shutdown();
 		}
 		super.onDestroy();
 	}
@@ -360,5 +466,9 @@ public class SpeakHistoryActivity extends Activity implements Urlinterface,
 			return true;
 		}
 		return super.onKeyDown(keyCode, event);
+	}
+
+	public void onUtteranceCompleted(String utteranceId) {
+		handler.sendEmptyMessage(2);
 	}
 }

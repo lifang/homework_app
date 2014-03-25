@@ -11,6 +11,7 @@ import java.net.HttpURLConnection;
 import java.net.URL;
 import java.net.URLEncoder;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
@@ -40,6 +41,20 @@ public class HomeWorkTool implements Urlinterface {
 	private static int connectTimeOut = 5000;
 	private static int readTimeOut = 10000;
 	private static String requestEncoding = "UTF-8";
+
+	// 返回calendar格式的时间
+	public Calendar getCalender_time(String date) {
+		Calendar wrok_day = Calendar.getInstance();
+		String day = date.split(" ")[0];
+		String[] dayarr = day.split("-");
+		String t = date.split(" ")[1];
+		String[] timearr = t.split(":");
+		wrok_day.set(Integer.valueOf(dayarr[0]),
+				Integer.valueOf(dayarr[1]), Integer.valueOf(dayarr[2]),
+				Integer.valueOf(timearr[0]), Integer.valueOf(timearr[1]),
+				Integer.valueOf(timearr[2]));
+		return wrok_day;
+	}
 
 	// 分割时间 带时分秒
 	public static String divisionTime(String timeStr) {
@@ -221,7 +236,7 @@ public class HomeWorkTool implements Urlinterface {
 			url.append("&");
 		}
 		url.deleteCharAt(url.length() - 1);
-		Log.i("homework", url.toString());
+		Log.i("aaa", url.toString());
 		HttpURLConnection conn = (HttpURLConnection) new URL(url.toString())
 				.openConnection();
 		conn.setConnectTimeout(8000);
@@ -233,7 +248,7 @@ public class HomeWorkTool implements Urlinterface {
 			is.close();
 			json = new String(data);
 		}
-		Log.i("homework", json);
+		Log.i("aaa", json);
 		return json;
 	}
 
@@ -274,7 +289,7 @@ public class HomeWorkTool implements Urlinterface {
 		post.setEntity(entity);
 		DefaultHttpClient httpClient = new DefaultHttpClient();
 		HttpResponse response;
-		Log.i("linshi", url + "");
+		Log.i("aaa", url + "");
 		try {
 			response = httpClient.execute(post);
 			int stateCode = response.getStatusLine().getStatusCode();
@@ -297,7 +312,7 @@ public class HomeWorkTool implements Urlinterface {
 
 	public static String doPost(String reqUrl, Map parameters) {
 		String tempLine = "";
-		Log.i(tag, "doPost方法");
+		Log.i("aaa", "doPost方法");
 		HttpURLConnection url_con = null;
 		String responseContent = null;
 		try {
@@ -335,7 +350,7 @@ public class HomeWorkTool implements Urlinterface {
 		} catch (IOException e) {
 
 		}
-		Log.i("linshi", tempLine);
+		Log.i("aaa", tempLine);
 		return tempLine;
 	}
 

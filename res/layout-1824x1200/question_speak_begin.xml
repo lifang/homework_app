@@ -5,7 +5,8 @@
     android:gravity="center_horizontal"
     android:orientation="vertical" >
 
-    <RelativeLayout
+        <RelativeLayout
+        android:id="@+id/rl"
         android:layout_width="fill_parent"
         android:layout_height="50dp"
         android:background="@color/question_title_bg1" >
@@ -15,6 +16,7 @@
             android:layout_width="100dp"
             android:layout_height="fill_parent"
             android:layout_alignParentLeft="true"
+            android:background="@color/question_title_bg1"
             android:gravity="center"
             android:onClick="onclicks"
             android:orientation="horizontal" >
@@ -34,20 +36,12 @@
                 android:textSize="18sp" />
         </LinearLayout>
 
-        <TextView
-            android:id="@+id/question_speak_title"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_centerInParent="true"
-            android:textColor="@color/white"
-            android:textSize="18sp" />
-
         <LinearLayout
             android:id="@+id/question_speak_next"
             android:layout_width="100dp"
             android:layout_height="fill_parent"
             android:layout_alignParentRight="true"
-            android:background="@color/juhuang"
+            android:background="@color/button_hui"
             android:gravity="center"
             android:onClick="onclicks"
             android:orientation="horizontal" >
@@ -66,6 +60,18 @@
                 android:contentDescription="@string/app_name"
                 android:src="@drawable/right" />
         </LinearLayout>
+
+        <TextView
+            android:id="@+id/question_speak_title"
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent"
+            android:layout_centerInParent="true"
+            android:layout_toLeftOf="@id/question_speak_next"
+            android:layout_toRightOf="@id/question_speak_exit"
+            android:background="@color/question_title_bg1"
+            android:gravity="center"
+            android:textColor="@color/white"
+            android:textSize="18sp" />
     </RelativeLayout>
 
     <LinearLayout
@@ -102,16 +108,17 @@
         android:onClick="onclicks"
         android:src="@drawable/unmake" />
 
-    <TextView 
+    <TextView
         android:id="@+id/question_speak_tishi"
         android:layout_width="400dp"
         android:layout_height="wrap_content"
         android:layout_marginTop="40dp"
-        android:padding="15dp"
         android:background="@drawable/textview_border"
         android:gravity="center"
-        android:textSize="18sp"
-        android:textColor="#6E6B6B"
+        android:lineSpacingExtra="15dp"
+        android:padding="15dp"
         android:text="@string/question_speak_tishi"
-        android:lineSpacingExtra="15dp"/>
+        android:textColor="#6E6B6B"
+        android:textSize="18sp" />
+
 </LinearLayout>

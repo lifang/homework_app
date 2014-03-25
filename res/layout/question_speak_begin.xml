@@ -6,6 +6,7 @@
     android:orientation="vertical" >
 
     <RelativeLayout
+        android:id="@+id/rl"
         android:layout_width="fill_parent"
         android:layout_height="50dp"
         android:background="@color/question_title_bg1" >
@@ -15,6 +16,7 @@
             android:layout_width="100dp"
             android:layout_height="fill_parent"
             android:layout_alignParentLeft="true"
+            android:background="@color/question_title_bg1"
             android:gravity="center"
             android:onClick="onclicks"
             android:orientation="horizontal" >
@@ -33,14 +35,6 @@
                 android:textColor="@color/white"
                 android:textSize="18sp" />
         </LinearLayout>
-
-        <TextView
-            android:id="@+id/question_speak_title"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_centerInParent="true"
-            android:textColor="@color/white"
-            android:textSize="18sp" />
 
         <LinearLayout
             android:id="@+id/question_speak_next"
@@ -66,6 +60,18 @@
                 android:contentDescription="@string/app_name"
                 android:src="@drawable/right" />
         </LinearLayout>
+
+        <TextView
+            android:id="@+id/question_speak_title"
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent"
+            android:layout_centerInParent="true"
+            android:layout_toLeftOf="@id/question_speak_next"
+            android:layout_toRightOf="@id/question_speak_exit"
+            android:background="@color/question_title_bg1"
+            android:gravity="center"
+            android:textColor="@color/white"
+            android:textSize="18sp" />
     </RelativeLayout>
 
     <LinearLayout
@@ -88,8 +94,8 @@
             android:layout_width="430dp"
             android:layout_height="wrap_content"
             android:layout_marginLeft="10dp"
-            android:layout_marginTop="20dp">
-       </com.comdosoft.homework.tools.PredicateLayout>
+            android:layout_marginTop="20dp" >
+        </com.comdosoft.homework.tools.PredicateLayout>
     </LinearLayout>
 
     <ImageView

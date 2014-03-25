@@ -50,6 +50,7 @@ public class DictationBeginActivity extends Activity implements
 		OnCompletionListener, Urlinterface {
 	private String REG = "(?i)[^a-zA-Z0-9\u4E00-\u9FA5]";
 	private String regEx = "[`~!@#$%^&*()+=|{}':;',\\[\\].<>/?~！@#￥%……&*（）——+|{}【】‘；：”“’。，、？]";
+	private String vowelREG = "[aeiouAEIOU]";
 	private String symbol;
 	private int editTextIndex = 0;
 	private int linearLayoutIndex = 0;
@@ -176,7 +177,9 @@ public class DictationBeginActivity extends Activity implements
 		String[] sArr = content.split(" ");
 		for (int i = 0; i < sArr.length; i++) {
 			String s = sArr[i];
-			dictationList.add(new DictationPojo(s, 0));
+			if (s != null && !s.equals("") && !isEnglistPunctuation(s)) {
+				dictationList.add(new DictationPojo(s, 0));
+			}
 		}
 
 		for (int i = 0; i < dictationList.size(); i++) {
@@ -383,7 +386,10 @@ public class DictationBeginActivity extends Activity implements
 						|| isEnglistPunctuation(s)) {
 					value = value.substring(0, value.length() - 1);
 				}
-				sb.append("\n◆" + value);
+
+				Pattern p = Pattern.compile(vowelREG);
+				Matcher m = p.matcher(value);
+				sb.append("\n◆" + (m.replaceAll("_")));
 				mesText.setText(sb.toString());
 			} else {
 				if (mesFlag) {

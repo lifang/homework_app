@@ -128,12 +128,12 @@ public class HomeWorkIngActivity extends Activity implements Urlinterface {
 				.setOnItemClickListener(new AdapterView.OnItemClickListener() {
 					public void onItemClick(AdapterView<?> parent, View view,
 							int position, long id) {
-						if (list.get(homework.getWork_date_item()).isType()) {
+						if (list.get(position).isType()) {
 							homework.setWork_history(true);
 						} else {
 							homework.setWork_history(false);
 						}
-						Log.i("suanfa", homework.isWork_history()+"");
+						Log.i("suanfa", homework.isWork_history() + "");
 						homework.setWork_date_item(position);
 						p_q_package_id = list.get(position).getId();
 						homework.setP_q_package_id(p_q_package_id);
@@ -357,6 +357,7 @@ public class HomeWorkIngActivity extends Activity implements Urlinterface {
 			map.put("student_id", student_id + "");
 			String json;
 			try {
+				Log.i("linshi", "1");
 				json = HomeWorkTool.sendGETRequest(CLASS_INFO, map);
 				JSONObject obj = new JSONObject(json);
 				if (obj.getString("status").equals("success")) {
@@ -415,7 +416,7 @@ public class HomeWorkIngActivity extends Activity implements Urlinterface {
 					String t = date.split(" ")[1];
 					String[] timearr = t.split(":");
 					wrok_day.set(Integer.valueOf(dayarr[0]),
-							Integer.valueOf(dayarr[1])-1,
+							Integer.valueOf(dayarr[1]) - 1,
 							Integer.valueOf(dayarr[2]),
 							Integer.valueOf(timearr[0]),
 							Integer.valueOf(timearr[1]),
@@ -429,7 +430,7 @@ public class HomeWorkIngActivity extends Activity implements Urlinterface {
 					} else {
 						type = true;
 					}
-					Log.i("suanfa","任务状态:"+type);
+					Log.i("suanfa", "任务状态:" + type);
 					String start_time = returnDATE(item.getString("start_time"));
 					String end_day = returnDATE(item.getString("end_time"));
 					String end_time = HomeWorkTool.divisionTime(item
@@ -471,9 +472,10 @@ public class HomeWorkIngActivity extends Activity implements Urlinterface {
 					List<QuestionPojo> question = new ArrayList<QuestionPojo>();
 					for (int j = 0; j < jArr.length(); j++) {
 						JSONObject jb = jArr.getJSONObject(j);
+						String str = jb.getString("resource_url").replaceAll(
+								" ", "");
 						question.add(new QuestionPojo(jb.getInt("id"), jb
-								.getString("content"), jb
-								.getString("resource_url")));
+								.getString("content"), str));
 					}
 					questionlist.add(new ListeningPojo(id, question));
 				}
