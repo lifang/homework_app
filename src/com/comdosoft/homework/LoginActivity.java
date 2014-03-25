@@ -59,7 +59,7 @@ public class LoginActivity extends Activity implements OnClickListener,
 			case 2:
 				LoginActivity.this.finish();
 				intent.setClass(getApplicationContext(),
-						HomeWorkMainActivity.class);
+						Appstart.class);
 				break;
 			}
 			LoginActivity.this.finish();
@@ -82,7 +82,7 @@ public class LoginActivity extends Activity implements OnClickListener,
 				&& !sp.getString("school_class_id", "").equals("")) {
 			LoginActivity.this.finish();
 			Intent intent = new Intent(getApplicationContext(),
-					HomeWorkMainActivity.class);
+					Appstart.class);
 			startActivity(intent);
 			// onClickLogin();
 		}

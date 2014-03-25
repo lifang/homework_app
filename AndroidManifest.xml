@@ -109,6 +109,9 @@
  <activity android:name=".ErrorDisplay" 
      android:theme="@android:style/Theme.Translucent"
             android:windowSoftInputMode="adjustUnspecified|stateHidden"/>
+  <activity android:name=".Appstart" 
+     android:theme="@android:style/Theme.Translucent"
+            android:windowSoftInputMode="adjustUnspecified|stateHidden"/>
     </application>
 
 </manifest>

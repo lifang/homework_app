@@ -51,5 +51,10 @@
     <string name="senderError">发表失败</string>
 	<string name="question_speak_tishi_ok">你的发音真的很不错哦,让我们再来读读其它的句子吧！</string>
      <string name="reg_info">登记信息</string>
+     
+     <string name="set1">版本信息</string>
+     <string name="set2">超级作业本 翰文版 v0.5x</string>
+     <string name="set3">阳光翰文（北京）国际教育科技中心 发行</string>
+     <string name="set4">苏州协创软件技术有限公司 提供技术支持</string>
     
 </resources>

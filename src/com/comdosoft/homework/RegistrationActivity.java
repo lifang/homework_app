@@ -171,7 +171,7 @@ public class RegistrationActivity extends Activity implements Urlinterface {
 							Intent intent = new Intent();
 							intent.setClass(
 									RegistrationActivity.this,
-									com.comdosoft.homework.HomeWorkMainActivity.class);//
+									Appstart.class);//
 							startActivity(intent);
 							RegistrationActivity.this.finish();
 

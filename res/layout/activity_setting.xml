@@ -96,6 +96,38 @@
             android:text="@string/exit_user"
             android:textColor="#FFFFFF"
             android:textSize="20px" />
+        
+         <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="330px"
+            android:text="@string/set1"
+            android:textColor="#000000"
+            android:textSize="20px" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8px"
+            android:text="@string/set2"
+            android:textColor="#5E5D5D"
+            android:textSize="18px" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8px"
+            android:text="@string/set3"
+            android:textColor="#5E5D5D"
+            android:textSize="18px" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8px"
+            android:text="@string/set4"
+            android:textColor="#5E5D5D"
+            android:textSize="18px" />
     </LinearLayout>
 
 </RelativeLayout>
